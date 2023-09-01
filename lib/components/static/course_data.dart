@@ -1,0 +1,70 @@
+import 'package:project_tc/models/course.dart';
+
+List<Course> courses = [
+  Course(
+      image: '',
+      typeCourse: 'Online course',
+      title: 'Junior web developer',
+      isBundle: true,
+      price: '400.000',
+      totalCourse: '5 Courses',
+      discount: '10'),
+  Course(
+      image: '',
+      typeCourse: 'Online course',
+      title: 'Junior web developer',
+      isBundle: true,
+      price: '400.000',
+      totalCourse: '5 Courses',
+      discount: '10'),
+  Course(
+      image: '',
+      typeCourse: 'Online course',
+      title: 'Junior web developer',
+      isBundle: true,
+      price: '400.000',
+      totalCourse: '5 Courses',
+      discount: '10'),
+  Course(
+      image: '',
+      typeCourse: 'Online course',
+      title: 'Learn Basic HTML',
+      isBundle: false,
+      price: '100.000',
+      discount: '10'),
+  Course(
+    image: '',
+    typeCourse: 'Online course',
+    title: 'Learn Basic CSS',
+    isBundle: false,
+    price: '100.000',
+  ),
+  Course(
+    image: '',
+    typeCourse: 'Online course',
+    title: 'Learn Basic Javascript',
+    isBundle: false,
+    price: '100.000',
+  ),
+  Course(
+    image: '',
+    typeCourse: 'Online course',
+    title: 'Learn Basic PHP',
+    isBundle: false,
+    price: '100.000',
+  ),
+  Course(
+    image: '',
+    typeCourse: 'Online course',
+    title: 'Learn Basic MySql',
+    isBundle: false,
+    price: '100.000',
+  ),
+  Course(
+    image: '',
+    typeCourse: 'Online course',
+    title: 'Learn Basic Flutter',
+    isBundle: false,
+    price: '100.000',
+  ),
+];

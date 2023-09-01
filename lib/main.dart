@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:project_tc/models/user.dart';
-import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
-import 'package:project_tc/screens/wrapper.dart';
+import 'package:project_tc/routes/router_generator.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -24,9 +24,12 @@ class MyApp extends StatelessWidget {
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,
-      child: const GetMaterialApp(
+      child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Wrapper(),
+        initialRoute: routeHome,
+        navigatorKey: navKey,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        // home: Wrapper(),
       ),
     );
   }

@@ -6,6 +6,10 @@ class CusColors {
   static Color subHeader = const Color(0xFF676767);
   static Color footer = const Color(0xFF94A3B8);
   static Color text = const Color(0XFF2C2C2C);
+  static Color secondaryText = const Color(0XFF828282);
+  static Color title = const Color(0XFF363636);
+  static Color inactive = const Color(0XFF7D7987);
+  static Color accentBlue = const Color(0XFF86B1F2);
 }
 
 InputDecoration textInputDecoration = InputDecoration(
