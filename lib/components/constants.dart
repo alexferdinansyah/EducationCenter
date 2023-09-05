@@ -10,6 +10,7 @@ class CusColors {
   static Color title = const Color(0XFF363636);
   static Color inactive = const Color(0XFF7D7987);
   static Color accentBlue = const Color(0XFF86B1F2);
+  static Color bg = const Color(0XFFFAFAFA);
 }
 
 InputDecoration textInputDecoration = InputDecoration(

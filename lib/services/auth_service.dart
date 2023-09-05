@@ -39,14 +39,30 @@ class AuthService {
 
   // register with email and password
   Future registerWithEmailAndPassword(
-      String name, String email, String password) async {
+    String name,
+    String noWhatsapp,
+    String address,
+    String education,
+    String working,
+    String email,
+    String password,
+    String reason,
+  ) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
 
       // create a new document for the user with uid
-      await FirestoreService(uid: user!.uid).updateUserData(name, 'member');
+      await FirestoreService(uid: user!.uid).updateUserData(
+        name,
+        'member',
+        noWhatsapp,
+        address,
+        education,
+        working,
+        reason,
+      );
 
       return _userFromFirebaseUser(user);
     } catch (e) {

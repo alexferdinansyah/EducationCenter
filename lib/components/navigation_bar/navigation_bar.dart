@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_item.dart';
@@ -18,6 +19,11 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    if (Get.currentRoute == '/detail-bundle-courses') {
+      setState(() {
+        index = 1;
+      });
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -35,7 +41,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         NavigationItem(
           selected: index == 1,
           title: 'Courses',
-          routeName: routeBundleCourses,
+          routeName: routeCourses,
           onHighlight: onHighlight,
         ),
         NavigationItem(

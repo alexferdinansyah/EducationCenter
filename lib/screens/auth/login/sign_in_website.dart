@@ -37,6 +37,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
             Container(
                 padding: EdgeInsets.symmetric(
                     horizontal: width * .045, vertical: height * .018),
+                color: CusColors.bg,
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

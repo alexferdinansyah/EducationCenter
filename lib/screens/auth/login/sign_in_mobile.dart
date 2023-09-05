@@ -37,6 +37,7 @@ class _SignInMobileState extends State<SignInMobile> {
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: width * .045, vertical: height * .018),
+              color: CusColors.bg,
               alignment: Alignment.centerLeft,
               child: Form(
                 key: _formKey,
