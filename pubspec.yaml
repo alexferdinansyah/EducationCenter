@@ -44,6 +44,11 @@ dependencies:
   cloud_firestore: ^4.8.5
   provider: ^6.0.5
   flutter_spinkit: ^5.2.0
+  universal_html: ^2.2.3
+  auto_animated: ^3.2.0
+  visibility_detector: ^0.4.0+2
+  flutter_staggered_animations: ^1.1.1
+  flutter_animator: ^3.2.2
 
 dev_dependencies:
   flutter_test:

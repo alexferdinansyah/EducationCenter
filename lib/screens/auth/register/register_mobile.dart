@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
-import 'package:project_tc/screens/wrapper.dart';
 import 'package:project_tc/services/auth_service.dart';
 
 class RegisterMobile extends StatefulWidget {
@@ -23,6 +22,22 @@ class _RegisterMobileState extends State<RegisterMobile> {
   // text field state
   String name = '';
   String email = '';
+  String noWhatsapp = '';
+  String address = '';
+  String lastEducation = 'Select last education';
+  List lastEducations = [
+    'Select last education',
+    'SMA/SMK',
+    'D3',
+    'S1',
+  ];
+  String workingStatus = 'Have been working?';
+  List working = [
+    'Have been working?',
+    'Yes',
+    'No',
+  ];
+  String reason = '';
   String password = '';
   String error = '';
   @override
@@ -39,6 +54,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: width * .045, vertical: height * .018),
+              color: CusColors.bg,
               alignment: Alignment.centerLeft,
               child: Form(
                 key: _formKey,
@@ -91,6 +107,171 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           onChanged: (val) {
                             setState(() => name = val);
                           },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: CusColors.subHeader),
+                          decoration: textInputDecoration.copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 15),
+                            prefixIcon: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, right: 15),
+                              child: Icon(
+                                IconlyLight.call,
+                                size: width * .05,
+                                color: CusColors.mainColor,
+                              ),
+                            ),
+                            hintText: "No. Whatsapp",
+                            hintStyle: GoogleFonts.mulish(
+                              color: CusColors.subHeader.withOpacity(.5),
+                              fontSize: width * .032,
+                            ),
+                          ),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter an No. Whatsapp' : null,
+                          onChanged: (val) {
+                            setState(() => noWhatsapp = val);
+                          },
+                        ),
+                      ),
+                      Container(
+                        child: TextFormField(
+                          autocorrect: true,
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: CusColors.subHeader),
+                          decoration: textInputDecoration.copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 15),
+                            prefixIcon: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, right: 15),
+                              child: Icon(
+                                IconlyLight.location,
+                                size: width * .05,
+                                color: CusColors.mainColor,
+                              ),
+                            ),
+                            hintText: "Address",
+                            hintStyle: GoogleFonts.mulish(
+                              color: CusColors.subHeader.withOpacity(.5),
+                              fontSize: width * .032,
+                            ),
+                          ),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter an address' : null,
+                          onChanged: (val) {
+                            setState(() => address = val);
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: DropdownButtonFormField<String>(
+                          value:
+                              lastEducation, // Make sure to define 'selectedValue' as a state variable.
+                          decoration: textInputDecoration.copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 15),
+                            prefixIcon: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, right: 15),
+                              child: Icon(
+                                IconlyLight.work,
+                                size: width * .05,
+                                color: CusColors.mainColor,
+                              ),
+                            ),
+                            hintText: "Last education",
+                            hintStyle: GoogleFonts.mulish(
+                              color: CusColors.subHeader.withOpacity(.5),
+                              fontSize: width * .032,
+                            ),
+                          ),
+                          validator: (val) => val == null ||
+                                  val.isEmpty ||
+                                  val == 'Select last education'
+                              ? 'Please select a education'
+                              : null,
+                          onChanged: (val) {
+                            setState(() {
+                              lastEducation = val!; // Update the selected value
+                            });
+                          },
+                          items: lastEducations.map((education) {
+                            return DropdownMenuItem<String>(
+                              value: education,
+                              child: education == 'Select last education'
+                                  ? Text(
+                                      education,
+                                      style: GoogleFonts.mulish(
+                                          color: CusColors.subHeader
+                                              .withOpacity(.5),
+                                          fontSize: width * .032),
+                                    )
+                                  : Text(
+                                      education,
+                                      style: GoogleFonts.mulish(
+                                          fontSize: width * .032),
+                                    ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        child: DropdownButtonFormField<String>(
+                          value:
+                              workingStatus, // Make sure to define 'selectedValue' as a state variable.
+                          decoration: textInputDecoration.copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 15),
+                            prefixIcon: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, right: 15),
+                              child: Icon(
+                                IconlyLight.activity,
+                                size: width * .05,
+                                color: CusColors.mainColor,
+                              ),
+                            ),
+                            hintText: "Have been working?",
+                            hintStyle: GoogleFonts.mulish(
+                              color: CusColors.subHeader.withOpacity(.5),
+                              fontSize: width * .032,
+                            ),
+                          ),
+                          validator: (val) => val == null ||
+                                  val.isEmpty ||
+                                  val == 'Have been working?'
+                              ? 'Please select working status'
+                              : null,
+                          onChanged: (val) {
+                            setState(() {
+                              workingStatus = val!; // Update the selected value
+                            });
+                          },
+                          items: working.map((work) {
+                            return DropdownMenuItem<String>(
+                              value: work,
+                              child: work == 'Have been working?'
+                                  ? Text(
+                                      work,
+                                      style: GoogleFonts.mulish(
+                                          color: CusColors.subHeader
+                                              .withOpacity(.5),
+                                          fontSize: width * .032),
+                                    )
+                                  : Text(
+                                      work,
+                                      style: GoogleFonts.mulish(
+                                          fontSize: width * .032),
+                                    ),
+                            );
+                          }).toList(),
                         ),
                       ),
                       Container(
@@ -169,6 +350,37 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         ),
                       ),
                       Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFormField(
+                          autocorrect: true,
+                          keyboardType: TextInputType.text,
+                          style: TextStyle(color: CusColors.subHeader),
+                          decoration: textInputDecoration.copyWith(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 15),
+                            prefixIcon: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, right: 15),
+                              child: Icon(
+                                IconlyLight.document,
+                                size: width * .05,
+                                color: CusColors.mainColor,
+                              ),
+                            ),
+                            hintText: "Reason why join education center",
+                            hintStyle: GoogleFonts.mulish(
+                              color: CusColors.subHeader.withOpacity(.5),
+                              fontSize: width * .032,
+                            ),
+                          ),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter an reason' : null,
+                          onChanged: (val) {
+                            setState(() => reason = val);
+                          },
+                        ),
+                      ),
+                      Container(
                         width: double.infinity,
                         alignment: Alignment.centerLeft,
                         padding:
@@ -230,7 +442,15 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                     // Call your registration function here
                                     dynamic result = await _auth
                                         .registerWithEmailAndPassword(
-                                            name, email, password);
+                                      name,
+                                      noWhatsapp,
+                                      address,
+                                      lastEducation,
+                                      workingStatus,
+                                      email,
+                                      password,
+                                      reason,
+                                    );
 
                                     setState(() {
                                       if (result == null) {
