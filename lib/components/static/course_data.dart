@@ -2,7 +2,7 @@ import 'package:project_tc/models/course.dart';
 
 List<Course> courses = [
   Course(
-      image: '',
+      image: 'assets/images/web_dev.jpeg',
       typeCourse: 'Online course',
       title: 'Junior web developer',
       description:
@@ -70,12 +70,20 @@ List<Course> courses = [
       totalCourse: '5 Courses',
       discount: '10'),
   Course(
-      image: '',
-      typeCourse: 'Online course',
-      title: 'Learn Basic HTML',
-      isBundle: false,
-      price: '100.000',
-      discount: '10'),
+    image: '',
+    typeCourse: 'Online course',
+    title: 'Learn Basic HTML',
+    isBundle: false,
+    price: '100.000',
+    discount: '10',
+    completionBenefits: [
+      'Be able to understand HTML',
+      'Be able to create a web',
+      'Understanding HTML request',
+      'Understanding HTML elements',
+      'Understanding HTML attributes',
+    ],
+  ),
   Course(
     image: '',
     typeCourse: 'Online course',

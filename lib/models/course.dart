@@ -37,3 +37,13 @@ class ListCourse {
     required this.price,
   });
 }
+
+class ChapterList {
+  String? chapter;
+  List<String>? subChapter;
+
+  ChapterList({
+    required this.chapter,
+    List<String>? subChapter,
+  }) : subChapter = subChapter ?? [];
+}

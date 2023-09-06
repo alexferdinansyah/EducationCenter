@@ -512,14 +512,15 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                               // Call your registration function here
                                               dynamic result = await _auth
                                                   .registerWithEmailAndPassword(
-                                                      name,
-                                                      noWhatsapp,
-                                                      address,
-                                                      lastEducation,
-                                                      workingStatus,
-                                                      email,
-                                                      password,
-                                                      reason,);
+                                                name,
+                                                noWhatsapp,
+                                                address,
+                                                lastEducation,
+                                                workingStatus,
+                                                email,
+                                                password,
+                                                reason,
+                                              );
 
                                               setState(() {
                                                 if (result == null) {

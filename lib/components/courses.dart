@@ -28,15 +28,15 @@ class Courses extends StatelessWidget {
         child: Column(children: [
           Container(
             width: double.infinity,
-            height: 156,
+            height: height * .2,
             decoration: course.image != ''
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     color: const Color(0xFFD9D9D9),
                     image: DecorationImage(
-                      image: AssetImage(course.image!),
-                      fit: BoxFit.cover, // Adjust the fit as needed
-                    ),
+                        image: AssetImage(course.image!),
+                        fit: BoxFit.cover, // Adjust the fit as needed
+                        alignment: Alignment.topCenter),
                   )
                 : BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
@@ -139,6 +139,11 @@ class Courses extends StatelessWidget {
                       if (course.isBundle == true) {
                         Get.toNamed(
                           routeDetailBundleCourse,
+                          arguments: {'course': course},
+                        );
+                      } else {
+                        Get.toNamed(
+                          routeDetailSingleCourse,
                           arguments: {'course': course},
                         );
                       }

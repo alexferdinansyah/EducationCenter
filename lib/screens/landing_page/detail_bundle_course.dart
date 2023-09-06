@@ -157,25 +157,35 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
               ),
               const Spacer(),
               AnimateIfVisible(
-                reAnimateOnVisibility: true,
-                key: const Key('item.2'),
-                builder: (
-                  BuildContext context,
-                  Animation<double> animation,
-                ) =>
-                    FadeTransition(
-                        opacity: Tween<double>(
-                          begin: 0,
-                          end: 1,
-                        ).animate(animation),
-                        child: Container(
+                  reAnimateOnVisibility: true,
+                  key: const Key('item.2'),
+                  builder: (
+                    BuildContext context,
+                    Animation<double> animation,
+                  ) =>
+                      FadeTransition(
+                          opacity: Tween<double>(
+                            begin: 0,
+                            end: 1,
+                          ).animate(animation),
+                          child: Container(
                             width: width / 2.7,
-                            height: height / 2.3,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26),
-                              color: const Color.fromRGBO(217, 217, 217, 1),
-                            ))),
-              )
+                            height: height / 2.1,
+                            decoration: widget.course.image != ''
+                                ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    // color: const Color(0xFFD9D9D9),
+                                    image: DecorationImage(
+                                        image: AssetImage(widget.course.image!),
+                                        fit: BoxFit
+                                            .contain, // Adjust the fit as needed
+                                        alignment: Alignment.topCenter),
+                                  )
+                                : BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    color: const Color(0xFFD9D9D9),
+                                  ),
+                          )))
             ],
           ),
         ),

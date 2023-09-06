@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_item.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/wrapper.dart';
 
 class CusNavigationBar extends StatefulWidget {
   const CusNavigationBar({super.key});
@@ -75,7 +76,9 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
                     offset: const Offset(0, 4))
               ]),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(const Wrapper());
+            },
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(

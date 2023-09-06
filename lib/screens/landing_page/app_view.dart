@@ -33,7 +33,10 @@ class _AppViewState extends State<AppView> {
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [const CusNavigationBar(), widget.child],
+                    children: [
+                      const CusNavigationBar(),
+                      widget.child,
+                    ],
                   ),
                 ),
               ),

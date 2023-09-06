@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/router_generator.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
