@@ -24,7 +24,7 @@ class Courses extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
         child: Column(children: [
           Container(
             width: double.infinity,
@@ -32,11 +32,10 @@ class Courses extends StatelessWidget {
             decoration: course.image != ''
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
                     image: DecorationImage(
-                        image: AssetImage(course.image!),
-                        fit: BoxFit.cover, // Adjust the fit as needed
-                        alignment: Alignment.topCenter),
+                      image: AssetImage(course.image!),
+                      fit: BoxFit.contain, // Adjust the fit as needed
+                    ),
                   )
                 : BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
@@ -44,7 +43,7 @@ class Courses extends StatelessWidget {
                   ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: height * .01),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,7 +56,7 @@ class Courses extends StatelessWidget {
                       height: 1.5),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: height * .006),
                   child: Text(
                     course.title!,
                     style: GoogleFonts.mulish(
@@ -77,7 +76,7 @@ class Courses extends StatelessWidget {
                       )
                     : const SizedBox(),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding: EdgeInsets.symmetric(vertical: height * .022),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -99,9 +98,10 @@ class Courses extends StatelessWidget {
                                   width: 1,
                                 ),
                               ),
-                              margin: const EdgeInsets.only(left: 10),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 3),
+                              margin: EdgeInsets.only(left: height * .01),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: height * .005,
+                                  vertical: height * .004),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -124,7 +124,7 @@ class Courses extends StatelessWidget {
                 Container(
                     width: double.infinity,
                     height: 1,
-                    margin: const EdgeInsets.only(bottom: 10),
+                    margin: EdgeInsets.only(bottom: height * .01),
                     decoration: const BoxDecoration(
                       color: Color(0xFFCCCCCC),
                     )),
@@ -176,7 +176,10 @@ class Courses extends StatelessWidget {
                             fontSize: width * 0.01,
                           ),
                         ),
-                        const Icon(Icons.arrow_outward_rounded)
+                        Icon(
+                          Icons.arrow_outward_rounded,
+                          size: height * .025,
+                        )
                       ],
                     ),
                   ),

@@ -20,7 +20,8 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    if (Get.currentRoute == '/detail-bundle-courses') {
+    if (Get.currentRoute == '/detail-bundle-courses' ||
+        Get.currentRoute == '/detail-single-courses') {
       setState(() {
         index = 1;
       });
@@ -42,7 +43,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         NavigationItem(
           selected: index == 1,
           title: 'Courses',
-          routeName: routeCourses,
+          routeName: routeBundleCourses,
           onHighlight: onHighlight,
         ),
         NavigationItem(

@@ -70,9 +70,9 @@ List<Course> courses = [
       totalCourse: '5 Courses',
       discount: '10'),
   Course(
-    image: '',
+    image: 'assets/images/vbNet.jpeg',
     typeCourse: 'Online course',
-    title: 'Learn Basic HTML',
+    title: 'Introduction to VB.NET',
     isBundle: false,
     price: '100.000',
     discount: '10',

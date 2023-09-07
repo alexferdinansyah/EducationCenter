@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
+import 'package:project_tc/screens/landing_page/bundle_course_list.dart';
+import 'package:project_tc/screens/landing_page/detail_article.dart';
 import 'package:project_tc/screens/landing_page/detail_bundle_course.dart';
 import 'package:project_tc/screens/landing_page/detail_single_course.dart';
-import 'package:project_tc/screens/landing_page/test_animation.dart';
+import 'package:project_tc/screens/landing_page/landing_page.dart';
 import 'package:project_tc/screens/wrapper.dart';
 
 class RouteGenerator {
@@ -21,14 +24,28 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            return wrapWithAppView(const TestAnimation());
+            return wrapWithAppView(const LandingPage());
           },
         );
       case routeCourses:
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            return wrapWithAppView(const Wrapper());
+            return const Wrapper();
+          },
+        );
+      case routeBundleCourses:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            return wrapWithAppView(const BundleCourseList());
+          },
+        );
+      case routeArticle:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            return const Wrapper();
           },
         );
       case routeDetailSingleCourse:
@@ -43,10 +60,18 @@ class RouteGenerator {
             return wrapWithAppView(DetailSingleCourse(course: course));
           },
         );
-      case routeArticle:
+      case routeDetailArticle:
+        // Extract the arguments passed to the route.
+        final args = settings.arguments as Map<String, dynamic>;
+        // Get the 'course' argument.
+        final Article article = args['article'];
         return MaterialPageRoute(
-          builder: (_) => const Wrapper(),
           settings: settings,
+          builder: (BuildContext context) {
+            return wrapWithAppView(DetailArticle(
+              article: article,
+            ));
+          },
         );
       case routeDetailBundleCourse:
         // Extract the arguments passed to the route.
@@ -65,7 +90,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            return wrapWithAppView(const TestAnimation());
+            return wrapWithAppView(const LandingPage());
           },
         );
     }

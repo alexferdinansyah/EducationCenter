@@ -6,7 +6,7 @@ class Course {
   bool? isBundle;
   String? totalCourse;
   List<ListCourse>? listCourse;
-  List<String>? completionBenefits;
+  List<String>? completionBenefits; // MAKE THIS NOT OPTIONAL
   String? price;
   String? discount;
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/article.dart';
+import 'package:project_tc/routes/routes.dart';
 
 class Articles extends StatelessWidget {
   final Article article;
@@ -36,7 +38,7 @@ class Articles extends StatelessWidget {
               ),
             ),
             child: Text(
-              'UI/UX',
+              article.category!,
               textAlign: TextAlign.center,
               style: GoogleFonts.mulish(
                   color: const Color(0xFF2501FF),
@@ -79,6 +81,7 @@ class Articles extends StatelessWidget {
                 ),
                 Text(
                   article.description!,
+                  maxLines: 2,
                   style: GoogleFonts.mulish(
                       color: CusColors.inactive,
                       fontSize: width * .01,
@@ -87,13 +90,24 @@ class Articles extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    'Read more...',
-                    style: GoogleFonts.mulish(
-                        color: const Color(0xFF86B1F2),
-                        fontSize: width * .01,
-                        fontWeight: FontWeight.w300,
-                        height: 1.5),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(
+                          routeDetailArticle,
+                          arguments: {'article': article},
+                        );
+                      },
+                      child: Text(
+                        'Read more...',
+                        style: GoogleFonts.mulish(
+                            color: const Color(0xFF86B1F2),
+                            fontSize: width * .01,
+                            fontWeight: FontWeight.w300,
+                            height: 1.5),
+                      ),
+                    ),
                   ),
                 ),
                 Container(

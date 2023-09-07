@@ -4,6 +4,7 @@ class Article {
   String? title;
   String? description;
   String? date;
+  List<ArticleContent>? articleContent;
 
   Article({
     required this.image,
@@ -11,5 +12,18 @@ class Article {
     required this.title,
     required this.description,
     required this.date,
+    this.articleContent,
+  });
+}
+
+class ArticleContent {
+  String? subTitle;
+  String? image;
+  String? subTitleDescription;
+
+  ArticleContent({
+    required this.subTitle,
+    this.image,
+    required this.subTitleDescription,
   });
 }

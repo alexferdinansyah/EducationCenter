@@ -1,24 +1,18 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:project_tc/components/bullet_list.dart';
+import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/course.dart';
 
-class DetailSingleCourse extends StatefulWidget {
+class DetailSingleCourse extends StatelessWidget {
   final Course course;
   const DetailSingleCourse({super.key, required this.course});
 
   @override
-  State<DetailSingleCourse> createState() => _DetailSingleCourseState();
-}
-
-class _DetailSingleCourseState extends State<DetailSingleCourse> {
-  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(widget.course.title);
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.only(top: 100, bottom: 200),
@@ -185,7 +179,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                       ),
                     ),
                     BulletList(
-                      widget.course.completionBenefits!,
+                      course.completionBenefits!,
                       border: true,
                     )
                   ],
@@ -245,14 +239,14 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Rp. ${widget.course.price!}',
+                          'Rp. ${course.price!}',
                           style: GoogleFonts.mulish(
                               color: CusColors.title,
                               fontSize: width * .015,
                               fontWeight: FontWeight.bold,
                               height: 1.5),
                         ),
-                        widget.course.discount != ''
+                        course.discount != ''
                             ? Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4),
@@ -269,7 +263,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      '${widget.course.discount}% Off',
+                                      '${course.discount}% Off',
                                       textAlign: TextAlign.left,
                                       style: GoogleFonts.inter(
                                         color: const Color(0xFF2501FF),
@@ -310,9 +304,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                             MaterialStateProperty.all(Colors.transparent),
                       ),
                       child: Text(
-                        widget.course.isBundle!
-                            ? 'Buy Courses Bundle'
-                            : 'Buy Course',
+                        course.isBundle! ? 'Buy Courses Bundle' : 'Buy Course',
                         style: GoogleFonts.mulish(
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
