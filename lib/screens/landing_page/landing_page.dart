@@ -7,6 +7,7 @@ import 'package:project_tc/components/animation/animation_function.dart';
 import 'package:project_tc/components/articles.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
+import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/components/static/article_data.dart';
 import 'package:project_tc/components/static/course_data.dart';
 
@@ -21,15 +22,12 @@ class _LandingPageState extends State<LandingPage> {
   final bundleCourses =
       courses.where((course) => course.isBundle == true).take(3).toList();
 
-  // First Row course
+  // list course
   final listCourses =
       courses.where((course) => course.isBundle == false).take(6).toList();
 
-  // First Row article
-  final firstRowArticles = articles.take(3).toList();
-
-// Second Row article
-  final secondRowArticles = articles.skip(3).take(3).toList();
+  // list article
+  final listArticles = articles.take(6).toList();
 
   List<bool> isHovered = [false, false, false];
 
@@ -476,30 +474,22 @@ class _LandingPageState extends State<LandingPage> {
                     borderRadius: BorderRadius.circular(5),
                     color: const Color.fromRGBO(0, 0, 0, 1),
                   )),
-              Row(
-                children: firstRowArticles
-                    .map(
-                      (article) => Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: width * .012), // Add right padding
-                        child: Articles(article: article),
-                      ),
-                    )
-                    .toList(),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: secondRowArticles
-                    .map(
-                      (article) => Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: width * .012), // Add right padding
-                        child: Articles(article: article),
-                      ),
-                    )
-                    .toList(),
+              SizedBox(
+                height: (height / 1.6) * (listArticles.length / 3),
+                width: width / 1.5,
+                child: LiveGrid(
+                    reAnimateOnVisibility: true,
+                    itemCount: listArticles.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisExtent: height * .59,
+                      crossAxisCount: 3, // Number of items per row
+                      crossAxisSpacing: width *
+                          .02, // Adjust spacing between items horizontally
+                      mainAxisSpacing:
+                          16.0, // Adjust spacing between rows vertically
+                    ),
+                    itemBuilder: animationBuilder(
+                        (index) => Articles(article: listArticles[index]))),
               ),
               SizedBox(
                 height: height / 10,
@@ -578,134 +568,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ],
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 100, bottom: 30),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 50),
-              height: 2,
-              decoration: const BoxDecoration(
-                color: Color(0xFF0081FE),
-              ),
-            ),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/logo_dac.png',
-                  width: width * .14,
-                ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Icon(
-                            Icons.location_on,
-                            color: Color(0xFF0081FE),
-                          ),
-                        ),
-                        Text(
-                          'Jl. Karet Hijau no.52 Beji Timur,Depok - Jawa Barat 16421',
-                          style: GoogleFonts.assistant(
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xFF0A142F),
-                            fontSize: width * 0.01,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 35),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.phone,
-                            color: Color(0xFF0081FE),
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: 10, right: width * .05),
-                            child: Text(
-                              '+62-21-7721-0358',
-                              style: GoogleFonts.assistant(
-                                fontWeight: FontWeight.w500,
-                                color: const Color(0xFF0A142F),
-                                fontSize: width * 0.01,
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.mail,
-                              color: Color(0xFF0081FE),
-                            ),
-                          ),
-                          Text(
-                            'info@dac-solution.com',
-                            style: GoogleFonts.assistant(
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF0A142F),
-                              fontSize: width * 0.01,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Social Media',
-                          style: GoogleFonts.assistant(
-                            fontWeight: FontWeight.w500,
-                            color: CusColors.inactive,
-                            fontSize: width * 0.01,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 40),
-                          child: SvgPicture.asset('assets/svg/facebook.svg'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: SvgPicture.asset('assets/svg/instagram.svg'),
-                        ),
-                        SvgPicture.asset('assets/svg/whatsapp.svg'),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(top: 80, bottom: 25),
-              height: 2,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0081FE).withOpacity(0.2),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  '© Copyright PT DAC Solution Informatika',
-                  style: GoogleFonts.assistant(
-                    fontWeight: FontWeight.w500,
-                    color: CusColors.inactive,
-                    fontSize: width * 0.01,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      )
+      const Footer()
     ]);
   }
 }

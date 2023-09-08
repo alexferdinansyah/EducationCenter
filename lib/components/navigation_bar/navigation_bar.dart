@@ -43,7 +43,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         NavigationItem(
           selected: index == 1,
           title: 'Courses',
-          routeName: routeBundleCourses,
+          routeName: routeCourses,
           onHighlight: onHighlight,
         ),
         NavigationItem(

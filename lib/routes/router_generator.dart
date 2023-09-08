@@ -3,11 +3,13 @@ import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
+import 'package:project_tc/screens/landing_page/article_list.dart';
 import 'package:project_tc/screens/landing_page/bundle_course_list.dart';
 import 'package:project_tc/screens/landing_page/detail_article.dart';
 import 'package:project_tc/screens/landing_page/detail_bundle_course.dart';
 import 'package:project_tc/screens/landing_page/detail_single_course.dart';
 import 'package:project_tc/screens/landing_page/landing_page.dart';
+import 'package:project_tc/screens/landing_page/single_course_list.dart';
 import 'package:project_tc/screens/wrapper.dart';
 
 class RouteGenerator {
@@ -31,7 +33,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            return const Wrapper();
+            return wrapWithAppView(const SingleCourseList());
           },
         );
       case routeBundleCourses:
@@ -45,7 +47,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            return const Wrapper();
+            return wrapWithAppView(const ArticleList());
           },
         );
       case routeDetailSingleCourse:

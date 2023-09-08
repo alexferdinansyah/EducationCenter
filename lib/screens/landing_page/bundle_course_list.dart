@@ -22,9 +22,6 @@ class _BundleCourseListState extends State<BundleCourseList> {
   final bundleCourses =
       courses.where((course) => course.isBundle == true).toList();
 
-// Calculate the number of items to show in each row
-  int itemsPerRow = 3;
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

@@ -33,7 +33,15 @@ class FirestoreService {
 
   // userData from snapshots
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(uid: uid, name: snapshot['name'], role: snapshot['role']);
+    return UserData(
+        uid: uid,
+        name: snapshot['name'],
+        role: snapshot['role'],
+        noWhatsapp: snapshot['noWhatsapp'],
+        address: snapshot['address'],
+        education: snapshot['education'],
+        working: snapshot['working'],
+        reason: snapshot['reason']);
   }
 
   // get user docs stream
