@@ -23,15 +23,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -65,5 +59,25 @@ class DefaultFirebaseOptions {
     messagingSenderId: '22726237797',
     projectId: 'education-center-dac',
     storageBucket: 'education-center-dac.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAwRdfUGMPInfRwpG7Up9loGEiWCIIL8bA',
+    appId: '1:22726237797:ios:1974fc494d61664f6cb08c',
+    messagingSenderId: '22726237797',
+    projectId: 'education-center-dac',
+    storageBucket: 'education-center-dac.appspot.com',
+    iosClientId: '22726237797-8avue7a2t0jekbu01mfrq1qu4dqfo376.apps.googleusercontent.com',
+    iosBundleId: 'com.example.projectTc',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAwRdfUGMPInfRwpG7Up9loGEiWCIIL8bA',
+    appId: '1:22726237797:ios:85989baba9b7154d6cb08c',
+    messagingSenderId: '22726237797',
+    projectId: 'education-center-dac',
+    storageBucket: 'education-center-dac.appspot.com',
+    iosClientId: '22726237797-u76ldv8cd61mm2hhvvhuqe9l5pgnhqch.apps.googleusercontent.com',
+    iosBundleId: 'com.example.projectTc.RunnerTests',
   );
 }

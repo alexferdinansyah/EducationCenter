@@ -20,7 +20,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "22726237797-3irnskgal2ljrc8lcicpuvk6av28794a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "22726237797-8avue7a2t0jekbu01mfrq1qu4dqfo376.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.projectTc"
+              }
+            }
+          ]
         }
       }
     }
