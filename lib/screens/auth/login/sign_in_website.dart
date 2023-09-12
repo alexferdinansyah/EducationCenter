@@ -304,7 +304,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                 SizedBox(
                                   width: width / 3.5,
                                   child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await AuthService().signInWithGoogle();
+                                      },
                                       style: ButtonStyle(
                                           padding: MaterialStateProperty.all<
                                                   EdgeInsetsGeometry>(

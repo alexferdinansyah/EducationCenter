@@ -274,7 +274,9 @@ class _SignInMobileState extends State<SignInMobile> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await AuthService().signInWithGoogle();
+                            },
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(

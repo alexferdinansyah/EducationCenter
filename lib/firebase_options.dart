@@ -23,9 +23,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,39 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCGYhC8jPDv9g08k1GwQcHcC1clnlXwCNk',
-    appId: '1:42079161450:web:55ae4af228886ad2e4ce13',
-    messagingSenderId: '42079161450',
-    projectId: 'project-tc-00',
-    authDomain: 'project-tc-00.firebaseapp.com',
-    storageBucket: 'project-tc-00.appspot.com',
+    apiKey: 'AIzaSyBk8Czk_IxOLIMNtqaEkysBPoXhRihLYS0',
+    appId: '1:22726237797:web:1ea79c50d62ec4876cb08c',
+    messagingSenderId: '22726237797',
+    projectId: 'education-center-dac',
+    authDomain: 'education-center-dac.firebaseapp.com',
+    storageBucket: 'education-center-dac.appspot.com',
+    measurementId: 'G-F8NXX2XJ3C',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDHBQB1XZPWbvVNzbQyJbEENirE-yNp0Z4',
-    appId: '1:42079161450:android:aa9ab73babfc3cdbe4ce13',
-    messagingSenderId: '42079161450',
-    projectId: 'project-tc-00',
-    storageBucket: 'project-tc-00.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAN5E9kVaUpzyu2Bc7kFtQKLtlH7Y_Lr4c',
-    appId: '1:42079161450:ios:4d5749146bdd65cfe4ce13',
-    messagingSenderId: '42079161450',
-    projectId: 'project-tc-00',
-    storageBucket: 'project-tc-00.appspot.com',
-    iosClientId: '42079161450-gq7h8nj0unpn7qvsloe0f8mse07pmdkt.apps.googleusercontent.com',
-    iosBundleId: 'com.example.projectTc',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAN5E9kVaUpzyu2Bc7kFtQKLtlH7Y_Lr4c',
-    appId: '1:42079161450:ios:a8ca669663027eefe4ce13',
-    messagingSenderId: '42079161450',
-    projectId: 'project-tc-00',
-    storageBucket: 'project-tc-00.appspot.com',
-    iosClientId: '42079161450-20er5d8fodmdd60qdr1pj5g5gqg0bcds.apps.googleusercontent.com',
-    iosBundleId: 'com.example.projectTc.RunnerTests',
+    apiKey: 'AIzaSyCB9MCHEBpP6t22Y-i6eOkFA_Lco7rYLrE',
+    appId: '1:22726237797:android:823da1f17e1feb8a6cb08c',
+    messagingSenderId: '22726237797',
+    projectId: 'education-center-dac',
+    storageBucket: 'education-center-dac.appspot.com',
   );
 }

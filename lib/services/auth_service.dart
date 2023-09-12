@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/firestore_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final GoogleAuthProvider _authProvider = GoogleAuthProvider();
 
   // create user object based on user
   UserModel? _userFromFirebaseUser(User? user) {
@@ -62,6 +64,46 @@ class AuthService {
         education,
         working,
         reason,
+      );
+
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      // final UserCredential userCredential =
+      //     await _auth.signInWithPopup(_authProvider);
+      // User? user = userCredential.user;
+
+      // create a new document for the user with uid
+      await FirestoreService(uid: user!.uid).updateUserData(
+        user.displayName!,
+        'member',
+        '',
+        '',
+        '',
+        '',
+        '',
       );
 
       return _userFromFirebaseUser(user);

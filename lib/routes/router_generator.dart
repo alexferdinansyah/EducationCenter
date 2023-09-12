@@ -16,12 +16,19 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Helper function to wrap a page with AppView
     Widget wrapWithAppView(Widget page) {
-      return AppView(
+      return AppViewWrapper(
         child: page,
       );
     }
 
     switch (settings.name) {
+      case routeLogin:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            return const Wrapper();
+          },
+        );
       case routeHome:
         return MaterialPageRoute(
           settings: settings,

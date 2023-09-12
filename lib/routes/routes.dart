@@ -8,5 +8,6 @@ const String routeDetailBundleCourse = '/detail-bundle-courses';
 const String routeArticle = '/article';
 const String routeDetailArticle = '/detail-article';
 const String routeContacts = '/contact';
+const String routeLogin = '/login';
 
 final navKey = GlobalKey<NavigatorState>();

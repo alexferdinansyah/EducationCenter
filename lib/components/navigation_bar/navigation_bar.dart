@@ -78,7 +78,141 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
               ]),
           child: ElevatedButton(
             onPressed: () {
-              Get.to(const Wrapper());
+              Get.toNamed(routeLogin);
+            },
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8))),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.symmetric(
+                  vertical: height * .025,
+                )),
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                shadowColor: MaterialStateProperty.all(Colors.transparent)),
+            child: Text(
+              'Login',
+              style: GoogleFonts.mulish(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: width * .012,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void onHighlight(String route) {
+    switch (route) {
+      case routeHome:
+        changeHighlight(0);
+        break;
+      case routeCourses:
+        changeHighlight(1);
+        break;
+      case routeArticle:
+        changeHighlight(2);
+        break;
+      case routeContacts:
+        changeHighlight(3);
+        break;
+    }
+  }
+
+  void changeHighlight(int newIndex) {
+    setState(() {
+      index = newIndex;
+    });
+  }
+}
+
+class CusNavigationBarMobile extends StatefulWidget {
+  const CusNavigationBarMobile({super.key});
+
+  @override
+  State<CusNavigationBarMobile> createState() => _CusNavigationBarMobileState();
+}
+
+class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
+  int index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    if (Get.currentRoute == '/detail-bundle-courses' ||
+        Get.currentRoute == '/detail-single-courses') {
+      setState(() {
+        index = 1;
+      });
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: width * .03, vertical: height * .015),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/logo_dac.png',
+                width: width * .3,
+              ),
+              const Spacer(),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(Icons.close, color: Color(0xFF458FF6)))
+            ],
+          ),
+        ),
+        NavigationItem(
+          selected: index == 0,
+          title: 'Home',
+          routeName: routeHome,
+          onHighlight: onHighlight,
+        ),
+        NavigationItem(
+          selected: index == 1,
+          title: 'Courses',
+          routeName: routeCourses,
+          onHighlight: onHighlight,
+        ),
+        NavigationItem(
+          selected: index == 2,
+          title: 'Article',
+          routeName: routeArticle,
+          onHighlight: onHighlight,
+        ),
+        NavigationItem(
+          selected: index == 3,
+          title: 'Contact',
+          routeName: routeContacts,
+          onHighlight: onHighlight,
+        ),
+        Container(
+          margin: EdgeInsets.only(left: width * .03),
+          width: width * .09,
+          decoration: BoxDecoration(
+              gradient:
+                  LinearGradient(begin: const Alignment(-1.2, 0.0), colors: [
+                const Color(0xFF00C8FF),
+                CusColors.mainColor,
+              ]),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(.25),
+                    spreadRadius: 0,
+                    blurRadius: 20,
+                    offset: const Offset(0, 4))
+              ]),
+          child: ElevatedButton(
+            onPressed: () {
+              Get.to(() => const Wrapper());
             },
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

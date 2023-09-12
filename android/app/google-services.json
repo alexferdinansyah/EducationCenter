@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "42079161450",
-    "project_id": "project-tc-00",
-    "storage_bucket": "project-tc-00.appspot.com"
+    "project_number": "22726237797",
+    "project_id": "education-center-dac",
+    "storage_bucket": "education-center-dac.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:42079161450:android:aa9ab73babfc3cdbe4ce13",
+        "mobilesdk_app_id": "1:22726237797:android:823da1f17e1feb8a6cb08c",
         "android_client_info": {
           "package_name": "com.example.project_tc"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "42079161450-bitm6e2clqa0ec85rqgtr049mfcle2dv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDHBQB1XZPWbvVNzbQyJbEENirE-yNp0Z4"
+          "current_key": "AIzaSyCB9MCHEBpP6t22Y-i6eOkFA_Lco7rYLrE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "42079161450-bitm6e2clqa0ec85rqgtr049mfcle2dv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

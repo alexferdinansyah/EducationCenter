@@ -82,10 +82,19 @@ class DetailSingleCourse extends StatelessWidget {
                 child: Container(
                   width: width / 2.7,
                   height: height / 2.3,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(26),
-                    color: const Color.fromRGBO(217, 217, 217, 1),
-                  ),
+                  decoration: course.image != ''
+                      ? BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          // color: const Color(0xFFD9D9D9),
+                          image: DecorationImage(
+                              image: AssetImage(course.image!),
+                              fit: BoxFit.contain, // Adjust the fit as needed
+                              alignment: Alignment.topCenter),
+                        )
+                      : BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          color: const Color(0xFFD9D9D9),
+                        ),
                 ),
               ),
             )

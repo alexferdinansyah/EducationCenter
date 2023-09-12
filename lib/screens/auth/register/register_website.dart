@@ -606,7 +606,10 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                 SizedBox(
                                   width: width / 3.5,
                                   child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await AuthService().signInWithGoogle();
+                                        Get.back();
+                                      },
                                       style: ButtonStyle(
                                           padding: MaterialStateProperty.all<
                                                   EdgeInsetsGeometry>(
