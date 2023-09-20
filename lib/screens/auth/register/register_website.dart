@@ -132,7 +132,7 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                 SizedBox(
                                   width: width / 3.5,
                                   child: TextFormField(
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.phone,
                                     style:
                                         TextStyle(color: CusColors.subHeader),
                                     decoration: textInputDecoration.copyWith(

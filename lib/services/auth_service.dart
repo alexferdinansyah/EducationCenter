@@ -9,7 +9,7 @@ class AuthService {
 
   // create user object based on user
   UserModel? _userFromFirebaseUser(User? user) {
-    return user != null ? UserModel(uid: user.uid) : null;
+    return user != null ? UserModel(uid: user.uid, email: user.email!) : null;
   }
 
   // auth changes user stream
@@ -58,6 +58,7 @@ class AuthService {
       // create a new document for the user with uid
       await FirestoreService(uid: user!.uid).updateUserData(
         name,
+        'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF',
         'member',
         noWhatsapp,
         address,
@@ -95,16 +96,23 @@ class AuthService {
       //     await _auth.signInWithPopup(_authProvider);
       // User? user = userCredential.user;
 
-      // create a new document for the user with uid
-      await FirestoreService(uid: user!.uid).updateUserData(
-        user.displayName!,
-        'member',
-        '',
-        '',
-        '',
-        '',
-        '',
-      );
+      // Check if the user exists in Firestore
+      final userExists =
+          await FirestoreService(uid: user!.uid).checkUserExists();
+
+      if (!userExists) {
+        // If the user doesn't exist in Firestore, create a new document for them
+        await FirestoreService(uid: user.uid).updateUserData(
+          user.displayName!,
+          user.photoURL!,
+          'member',
+          '',
+          '',
+          'Select last education',
+          'Have been working?',
+          '',
+        );
+      }
 
       return _userFromFirebaseUser(user);
     } catch (e) {

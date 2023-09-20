@@ -11,8 +11,22 @@ class FirestoreService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
+  Future<bool> checkUserExists() async {
+    try {
+      final DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
+      if (userSnapshot.exists) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
   Future updateUserData(
     String name,
+    String photoUrl,
     String role,
     String noWhatsapp,
     String address,
@@ -22,6 +36,7 @@ class FirestoreService {
   ) async {
     return await userCollection.doc(uid).set({
       'name': name,
+      'photoUrl': photoUrl,
       'role': role,
       'noWhatsapp': noWhatsapp,
       'address': address,
@@ -36,6 +51,7 @@ class FirestoreService {
     return UserData(
         uid: uid,
         name: snapshot['name'],
+        photoUrl: snapshot['photoUrl'],
         role: snapshot['role'],
         noWhatsapp: snapshot['noWhatsapp'],
         address: snapshot['address'],

@@ -13,6 +13,11 @@ class CusColors {
   static Color inactive = const Color(0XFF7D7987);
   static Color accentBlue = const Color(0XFF86B1F2);
   static Color bg = const Color(0XFFFAFAFA);
+  static Color bgSideBar = const Color(0XFFF1F2F7);
+  static Color sidebarInactive = const Color(0XFF787f89);
+  static Color sidebarActive = const Color(0XFF5A6ACF);
+  static Color sidebarIconInactive = const Color(0XFFA6ABC8);
+  static Color sidebarIconActive = const Color(0XFF707FDD);
 }
 
 InputDecoration textInputDecoration = InputDecoration(
@@ -29,6 +34,18 @@ InputDecoration textInputDecoration = InputDecoration(
   filled: true,
   fillColor: const Color(0xFFF6F7F9),
 );
+
+InputDecoration editProfileDecoration = InputDecoration(
+    focusedBorder: OutlineInputBorder(
+      borderSide:
+          BorderSide(color: CusColors.subHeader.withOpacity(.5), width: 1.0),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide:
+          BorderSide(color: CusColors.subHeader.withOpacity(.2), width: 1.0),
+    ),
+    isCollapsed: true,
+    contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15));
 
 class CusSearchBar extends StatelessWidget {
   const CusSearchBar({super.key});
