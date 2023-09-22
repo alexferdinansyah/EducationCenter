@@ -4,6 +4,7 @@ import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -17,30 +18,32 @@ class Wrapper extends StatelessWidget {
       return const ResponsiveSignIn();
     } else {
       // User is signed in
-      return FutureBuilder<bool>(
-        // Check if it's the user's first sign-in
-        future: FirestoreService(uid: user.uid).checkUserExists(),
+      return FutureBuilder<Map<String, dynamic>>(
+        // Check if it's the user's first sign-in and if they are an admin
+        future: FirestoreService(uid: user.uid).checkUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Loading state
-            return const CircularProgressIndicator(); // You can use a different loading indicator
+            return const SpinKitWanderingCubes(
+              color: Colors.blue,
+            ); // You can use a different loading indicator
           } else if (snapshot.hasError) {
             // Error occurred while checking
-            return const Text('Error checking first sign-in');
+            return const Text('Error checking user data');
           } else {
-            // Check the result and decide where to navigate
-            final bool isFirstSignIn = snapshot.data ?? false;
+            // Check the results and decide where to navigate
+            final Map<String, dynamic> userData = snapshot.data ?? {};
+            final bool exists = userData['exists'] ?? false;
+            final bool isAdmin = userData['isAdmin'] ?? false;
 
-            if (!isFirstSignIn) {
-              // User is signing in for the first time
-              return const DashboardApp(
-                selected: 'Settings',
-              ); // Navigate to the edit profile page
+            if (!exists) {
+              // User data doesn't exist (first sign-in)
+              return const DashboardApp(selected: 'Settings');
             } else {
-              // User has signed in before
-              return const DashboardApp(
-                selected: 'My Courses',
-              ); // Navigate to the dashboard
+              // User data exists
+              return isAdmin
+                  ? const DashboardApp(selected: 'Transaction') // Admin
+                  : const DashboardApp(selected: 'My Courses'); // Non-admin
             }
           }
         },

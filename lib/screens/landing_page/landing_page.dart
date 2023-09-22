@@ -1,6 +1,7 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/advantage.dart';
 import 'package:project_tc/components/animation/animation_function.dart';
@@ -10,6 +11,7 @@ import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/components/static/article_data.dart';
 import 'package:project_tc/components/static/course_data.dart';
+import 'package:project_tc/routes/routes.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -287,7 +289,9 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.toNamed(routeBundleCourses);
+                    },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -403,7 +407,9 @@ class _LandingPageState extends State<LandingPage> {
                       ),
                     ),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(routeCourses);
+                      },
                       style: ButtonStyle(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -519,7 +525,9 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.toNamed(routeArticle);
+                    },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(

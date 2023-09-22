@@ -11,16 +11,34 @@ class FirestoreService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future<bool> checkUserExists() async {
+  Future<Map<String, dynamic>> checkUser() async {
     try {
       final DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
+      final result = <String, dynamic>{
+        'exists': false,
+        'isAdmin': false,
+      };
+
       if (userSnapshot.exists) {
-        return true;
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        final userRole =
+            userData['role']; // Assuming the role field is named 'role'
+
+        // Check if the user's role is 'admin'
+        if (userRole == 'admin') {
+          result['isAdmin'] = true;
+        }
+
+        result['exists'] = true;
       }
-      return false;
+
+      return result;
     } catch (e) {
       print(e.toString());
-      return false;
+      return {
+        'exists': false,
+        'isAdmin': false,
+      };
     }
   }
 

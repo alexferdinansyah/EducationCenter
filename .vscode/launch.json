@@ -8,7 +8,7 @@
             "name": "project_tc",
             "request": "launch",
             "type": "dart",
-            "args": ["--web-port", "7357", "--web-renderer", "html"]
+            "args": ["--web-port", "7357"]
         },
         {
             "name": "project_tc (profile mode)",

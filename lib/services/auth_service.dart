@@ -97,16 +97,16 @@ class AuthService {
       // User? user = userCredential.user;
 
       // Check if the user exists in Firestore
-      final userExists =
-          await FirestoreService(uid: user!.uid).checkUserExists();
+      final userExists = await FirestoreService(uid: user!.uid).checkUser();
 
-      if (!userExists) {
+      if (!userExists['exists']) {
         // If the user doesn't exist in Firestore, create a new document for them
         await FirestoreService(uid: user.uid).updateUserData(
           user.displayName!,
-          user.photoURL!,
+          user.photoURL ??
+              'https://ui-avatars.com/api/?name=${user.displayName}&color=7F9CF5&background=EBF4FF',
           'member',
-          '',
+          user.phoneNumber ?? '',
           '',
           'Select last education',
           'Have been working?',

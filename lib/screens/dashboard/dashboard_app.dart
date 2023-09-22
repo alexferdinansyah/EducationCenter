@@ -182,7 +182,7 @@ class _DashboardAppState extends State<DashboardApp> {
               stream: FirestoreService(uid: user!.uid).userData,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  UserData? userData = snapshot.data;
+                  UserData userData = snapshot.data!;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -237,9 +237,8 @@ class _DashboardAppState extends State<DashboardApp> {
                                     color: Colors.grey,
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      image: NetworkImage(userData!.photoUrl),
-                                      fit: BoxFit.cover,
-                                    ),
+                                        image: NetworkImage(userData.photoUrl),
+                                        fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(

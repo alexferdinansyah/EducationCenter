@@ -2,12 +2,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/firestore_service.dart';
-import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   final UserData userData;
@@ -78,7 +78,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -158,18 +157,21 @@ class _EditProfileState extends State<EditProfile> {
                         const Spacer(),
                         GestureDetector(
                           onTap: () async {
-                            await deleteExistingPhoto();
-                            await FirestoreService(uid: widget.user.uid)
-                                .updateUserData(
-                              widget.userData.name,
-                              'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF', // Set this to the new image URL
-                              widget.userData.role,
-                              widget.userData.noWhatsapp,
-                              widget.userData.address,
-                              widget.userData.education,
-                              widget.userData.working,
-                              widget.userData.reason,
-                            );
+                            if (!widget.userData.photoUrl.contains(
+                                'https://lh3.googleusercontent.com')) {
+                              await deleteExistingPhoto();
+                              await FirestoreService(uid: widget.user.uid)
+                                  .updateUserData(
+                                widget.userData.name,
+                                'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF', // Set this to the new image URL
+                                widget.userData.role,
+                                widget.userData.noWhatsapp,
+                                widget.userData.address,
+                                widget.userData.education,
+                                widget.userData.working,
+                                widget.userData.reason,
+                              );
+                            }
                           },
                           child: Text(
                             'Delete Photo',
@@ -331,6 +333,7 @@ class _EditProfileState extends State<EditProfile> {
                           DropdownButtonFormField<String>(
                             value: widget.userData
                                 .education, // Make sure to define 'selectedValue' as a state variable.
+                            icon: const Icon(IconlyLight.arrow_down_2),
                             decoration: editProfileDecoration.copyWith(
                               hintText: 'Last Education',
                               hintStyle: GoogleFonts.poppins(
@@ -338,8 +341,6 @@ class _EditProfileState extends State<EditProfile> {
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
-                              // suffixIcon:
-                              //     const Icon(IconlyLight.arrow_down_2),
                             ),
                             validator: (val) => val == null ||
                                     val.isEmpty ||
@@ -467,8 +468,8 @@ class _EditProfileState extends State<EditProfile> {
                             onPressed: () async {
                               if (image != null) {
                                 await uploadToFirebase(image);
+                                await deleteExistingPhoto();
                               }
-                              await deleteExistingPhoto();
                               if (_formKey.currentState!.validate()) {
                                 String updatedName =
                                     name ?? widget.userData.name;
@@ -478,7 +479,9 @@ class _EditProfileState extends State<EditProfile> {
                                 // Check if the name changed and no image URL is provided
                                 if (name != null &&
                                     name != widget.userData.name &&
-                                    downloadURL == null) {
+                                    downloadURL == null &&
+                                    !widget.userData.photoUrl.contains(
+                                        'https://lh3.googleusercontent.com')) {
                                   // Set a default image URL here
                                   updatedPhotoUrl =
                                       'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
@@ -539,11 +542,12 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  deleteExistingPhoto() async {
-    // Delete the previous image from Firebase Storage
+  Future<void> deleteExistingPhoto() async {
+    // Check if the previous image URL is not the default URL and contains a specific string
     if (widget.userData.photoUrl !=
-        'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF') {
-      // Check if the previous image URL is not the default URL
+            'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF' &&
+        !widget.userData.photoUrl
+            .contains('https://lh3.googleusercontent.com')) {
       try {
         // Define a regular expression to match the filename
         RegExp regExp = RegExp(r'[^\/]+(?=\?)');
@@ -564,6 +568,8 @@ class _EditProfileState extends State<EditProfile> {
       } catch (e) {
         print('Error deleting previous image: $e');
       }
+    } else {
+      print('default google');
     }
   }
 }
