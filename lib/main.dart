@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         initialRoute: routeHome,
         navigatorKey: navKey,
         onGenerateRoute: RouteGenerator.generateRoute,
+        defaultTransition: Transition.fadeIn,
         // home: Wrapper(),
       ),
     );

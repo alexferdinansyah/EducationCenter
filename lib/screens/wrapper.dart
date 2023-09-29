@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
+import 'package:project_tc/screens/dashboard/home.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -38,12 +39,15 @@ class Wrapper extends StatelessWidget {
 
             if (!exists) {
               // User data doesn't exist (first sign-in)
-              return const DashboardApp(selected: 'Settings');
+              return DashboardApp(
+                selected: 'Edit-Profile',
+                optionalSelected: 'Settings',
+              );
             } else {
               // User data exists
               return isAdmin
-                  ? const DashboardApp(selected: 'Transaction') // Admin
-                  : const DashboardApp(selected: 'My Courses'); // Non-admin
+                  ? const Home() // Admin
+                  : DashboardApp(selected: 'Newsflash'); // Non-admin
             }
           }
         },

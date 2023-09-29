@@ -9,5 +9,6 @@ const String routeArticle = '/article';
 const String routeDetailArticle = '/detail-article';
 const String routeContacts = '/contact';
 const String routeLogin = '/login';
+const String routeEditProfile = '/edit-profile';
 
 final navKey = GlobalKey<NavigatorState>();

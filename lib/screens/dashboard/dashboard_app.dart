@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/edit_profile.dart';
+import 'package:project_tc/screens/dashboard/my_course.dart';
+import 'package:project_tc/screens/dashboard/newsflash.dart';
+import 'package:project_tc/screens/dashboard/setting.dart';
 import 'package:project_tc/services/auth_service.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class DashboardApp extends StatefulWidget {
-  final String selected;
-  const DashboardApp({super.key, required this.selected});
+  late String selected;
+  String? optionalSelected;
+  DashboardApp({super.key, required this.selected, this.optionalSelected});
 
   @override
   State<DashboardApp> createState() => _DashboardAppState();
@@ -19,6 +26,7 @@ class DashboardApp extends StatefulWidget {
 
 class _DashboardAppState extends State<DashboardApp> {
   final List<SideItem> sidebarItems = [
+    const SideItem(icon: IconlyBold.category, title: 'Newsflash'),
     const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
     const SideItem(icon: IconlyBold.buy, title: 'Transaction'),
     const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
@@ -36,14 +44,23 @@ class _DashboardAppState extends State<DashboardApp> {
   @override
   void initState() {
     super.initState();
+    String currentRoute = Get.currentRoute;
     setState(() {
-      selectedSidebarItem = widget.selected;
+      if (currentRoute == "/edit-profile") {
+        widget.optionalSelected = 'Settings';
+        widget.selected = 'Edit-Profile';
+      }
+      if (widget.optionalSelected == null) {
+        selectedSidebarItem = widget.selected;
+      } else {
+        selectedSidebarItem = widget.optionalSelected!;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context);
+    final user = Provider.of<UserModel?>(context, listen: false);
     double width = MediaQuery.of(context).size.width;
 
     void selectSidebarItem(String itemTitle) {
@@ -55,8 +72,10 @@ class _DashboardAppState extends State<DashboardApp> {
     // Function to build content based on the selected sidebar item
     Widget buildContent(dataUser, user) {
       switch (selectedSidebarItem) {
+        case 'Newsflash':
+          return const Newsflash();
         case 'My Courses':
-          return Container();
+          return const MyCourses();
         case 'Transaction':
           return Container(
             height: 50,
@@ -76,7 +95,11 @@ class _DashboardAppState extends State<DashboardApp> {
             color: Colors.blue,
           );
         case 'Settings':
-          return EditProfile(userData: dataUser, user: user);
+          if (widget.selected == 'Edit-Profile') {
+            return EditProfile(userData: dataUser, user: user);
+          } else {
+            return const Settings();
+          }
         // case 'Help':
         //   return HelpWidget();
         default:
@@ -271,7 +294,16 @@ class _DashboardAppState extends State<DashboardApp> {
                     ],
                   );
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      SpinKitDualRing(
+                        color: Colors.blue,
+                      ),
+                    ],
+                  );
                 }
               }),
         ],

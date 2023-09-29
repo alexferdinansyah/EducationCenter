@@ -48,7 +48,7 @@ class Courses extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  course.typeCourse!,
+                  course.courseCategory!,
                   style: GoogleFonts.mulish(
                       color: CusColors.inactive,
                       fontSize: width * .011,
@@ -289,6 +289,119 @@ class ListCourses extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MyCourse extends StatelessWidget {
+  final Course course;
+
+  const MyCourse({super.key, required this.course});
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      width: width * .15,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        color: Colors.white,
+        border: Border.all(
+          color: const Color(0xFFCCCCCC),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        child: Column(children: [
+          Container(
+            width: double.infinity,
+            height: height * .16,
+            decoration: course.image != ''
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    image: DecorationImage(
+                      image: AssetImage(course.image!),
+                      fit: BoxFit.contain, // Adjust the fit as needed
+                    ),
+                  )
+                : BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: const Color(0xFFD9D9D9),
+                  ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: height * .01),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  course.courseCategory!,
+                  style: GoogleFonts.mulish(
+                      color: CusColors.inactive,
+                      fontSize: width * .009,
+                      fontWeight: FontWeight.w300,
+                      height: 1.5),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: height * .006),
+                  child: Text(
+                    course.title!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.mulish(
+                        color: CusColors.title,
+                        fontSize: width * .012,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                    width: double.infinity,
+                    height: 1,
+                    margin: EdgeInsets.symmetric(vertical: height * .012),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFCCCCCC),
+                    )),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF86B1F2),
+                    borderRadius: BorderRadius.circular(64),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(
+                          vertical: height * 0.022,
+                        ),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                    ),
+                    child: Text(
+                      'Learn Course',
+                      style: GoogleFonts.mulish(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        fontSize: width * 0.01,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ]),
       ),
     );
   }

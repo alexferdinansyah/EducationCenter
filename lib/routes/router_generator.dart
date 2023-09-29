@@ -25,6 +25,7 @@ class RouteGenerator {
       case routeLogin:
         return MaterialPageRoute(
           settings: settings,
+          maintainState: true,
           builder: (BuildContext context) {
             return const Wrapper();
           },
@@ -94,6 +95,12 @@ class RouteGenerator {
             return wrapWithAppView(DetailBundleCourse(course: course));
           },
         );
+      case routeEditProfile:
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (BuildContext context) {
+              return const Wrapper();
+            });
       default:
         // Return a default route or handle unknown routes here
         return MaterialPageRoute(

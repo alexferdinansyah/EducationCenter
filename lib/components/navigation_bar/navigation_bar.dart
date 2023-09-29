@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_item.dart';
+import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/wrapper.dart';
+import 'package:provider/provider.dart';
 
 class CusNavigationBar extends StatefulWidget {
   const CusNavigationBar({super.key});
@@ -26,6 +28,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         index = 1;
       });
     }
+    final user = Provider.of<UserModel?>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -61,7 +64,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         const Spacer(),
         Container(
           margin: EdgeInsets.only(left: width * .03),
-          width: width * .09,
+          width: user != null ? width * .09 : width * .1,
           decoration: BoxDecoration(
               gradient:
                   LinearGradient(begin: const Alignment(-1.2, 0.0), colors: [
@@ -91,7 +94,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 shadowColor: MaterialStateProperty.all(Colors.transparent)),
             child: Text(
-              'Login',
+              user != null ? 'Login' : 'Dashboard',
               style: GoogleFonts.mulish(
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
