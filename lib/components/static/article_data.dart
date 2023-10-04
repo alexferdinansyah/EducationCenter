@@ -2,7 +2,7 @@ import 'package:project_tc/models/article.dart';
 
 List<Article> articles = [
   Article(
-      image: '',
+      image: 'assets/images/micomet.jpg',
       category: 'UI/UX',
       title: 'Tips to learn Figma from Profesional',
       description:
@@ -28,7 +28,7 @@ List<Article> articles = [
                 "In conclusion, learning Figma from professionals involves a combination of mastering the tool's features and understanding the broader principles of design. By starting with the basics, leveraging official resources, and embracing collaboration and feedback, you can rapidly progress from a novice to a proficient Figma user. Remember that patience and persistence are key, and as you refine your skills, you'll find yourself creating stunning designs with ease and confidence.")
       ]),
   Article(
-    image: '',
+    image: 'assets/images/suichan-car.jpg',
     category: 'UI/UX',
     title: 'Tips to learn Figma from Profesional',
     description:

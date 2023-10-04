@@ -34,108 +34,112 @@ class _HomeState extends State<Home> {
         ),
       ]),
       body: SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: ListView(children: [
+        height: double.infinity,
+        width: double.infinity,
+        child: ListView(
+          children: [
             Container(
-                // padding: EdgeInsets.symmetric(
-                //     horizontal: width * .045, vertical: height * .018),
-                color: CusColors.bg,
-                alignment: Alignment.centerLeft,
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 4000,
-                        width: 400,
-                        color: const Color(0xFFF6F7F9),
-                        child: Column(children: [
-                          Image.asset(
-                            'assets/images/logo_dac.png',
-                            width: width * .14,
-                          ),
-                        ]),
+              // padding: EdgeInsets.symmetric(
+              //     horizontal: width * .045, vertical: height * .018),
+              color: CusColors.bg,
+              alignment: Alignment.centerLeft,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 4000,
+                    width: 400,
+                    color: const Color(0xFFF6F7F9),
+                    child: Column(children: [
+                      Image.asset(
+                        'assets/images/logo_dac.png',
+                        width: width * .14,
                       ),
-                      Container(
-                        width: 530,
-                        height: 270,
-                        margin: const EdgeInsets.all(30),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/micomet.jpg'),
-                              fit: BoxFit.cover,
-                              alignment: Alignment.topCenter),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              height: 90,
-                              width: double.infinity - 10,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      blurRadius: 12,
-                                      spreadRadius: 1,
-                                      color: Colors.black.withOpacity(.3))
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 3),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                    ]),
+                  ),
+                  Container(
+                    width: 530,
+                    height: 270,
+                    margin: const EdgeInsets.all(30),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/micomet.jpg'),
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          height: 90,
+                          width: double.infinity - 10,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 12,
+                                  spreadRadius: 1,
+                                  color: Colors.black.withOpacity(.3))
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 3),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tips to learn Figma from Profesional',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: width * .013),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
                                     children: [
-                                      Text(
-                                        'Tips to learn Figma from Profesional',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: width * .013),
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/suichan.jpg'),
+                                              fit: BoxFit.cover),
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        height: 10,
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          'Admin - 23 August 2023',
+                                          style: GoogleFonts.poppins(
+                                              fontSize: width * .008,
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.grey,
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/suichan.jpg'),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Admin - 23 August 2023',
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: width * .008,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ]),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ]))
-          ])),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

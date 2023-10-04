@@ -7,9 +7,12 @@ import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/edit_profile.dart';
+import 'package:project_tc/screens/dashboard/membership_info.dart';
+import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
 import 'package:project_tc/screens/dashboard/setting.dart';
+import 'package:project_tc/screens/dashboard/transaction.dart';
 import 'package:project_tc/services/auth_service.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +52,12 @@ class _DashboardAppState extends State<DashboardApp> {
       if (currentRoute == "/edit-profile") {
         widget.optionalSelected = 'Settings';
         widget.selected = 'Edit-Profile';
+      } else if (currentRoute == "/membership-info") {
+        widget.optionalSelected = 'Settings';
+        widget.selected = 'Membership';
+      } else if (currentRoute == "/membership-upgrade") {
+        widget.optionalSelected = 'Settings';
+        widget.selected = 'Membership-Upgrade';
       }
       if (widget.optionalSelected == null) {
         selectedSidebarItem = widget.selected;
@@ -77,11 +86,7 @@ class _DashboardAppState extends State<DashboardApp> {
         case 'My Courses':
           return const MyCourses();
         case 'Transaction':
-          return Container(
-            height: 50,
-            width: 50,
-            color: Colors.amber,
-          );
+          return const TransactionTable();
         case 'Free Tutorial':
           return Container(
             height: 50,
@@ -97,6 +102,10 @@ class _DashboardAppState extends State<DashboardApp> {
         case 'Settings':
           if (widget.selected == 'Edit-Profile') {
             return EditProfile(userData: dataUser, user: user);
+          } else if (widget.selected == 'Membership') {
+            return const MembershipInfo();
+          } else if (widget.selected == 'Membership-Upgrade') {
+            return const MembershipUpgrade();
           } else {
             return const Settings();
           }

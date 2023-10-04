@@ -101,6 +101,18 @@ class RouteGenerator {
             builder: (BuildContext context) {
               return const Wrapper();
             });
+      case routeMembershipInfo:
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (BuildContext context) {
+              return const Wrapper();
+            });
+      case routeMembershipUpgrade:
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (BuildContext context) {
+              return const Wrapper();
+            });
       default:
         // Return a default route or handle unknown routes here
         return MaterialPageRoute(

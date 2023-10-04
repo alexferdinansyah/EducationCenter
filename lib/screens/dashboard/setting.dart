@@ -182,10 +182,12 @@ class _SettingsState extends State<Settings> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Get.to(() => DashboardApp(
-                                  //       selected: 'Edit-Profile',
-                                  //       optionalSelected: 'Settings',
-                                  //     ));
+                                  Get.to(
+                                      () => DashboardApp(
+                                            selected: 'Membership',
+                                            optionalSelected: 'Settings',
+                                          ),
+                                      routeName: 'membership-info');
                                 },
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<

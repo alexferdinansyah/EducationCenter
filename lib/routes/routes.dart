@@ -10,5 +10,7 @@ const String routeDetailArticle = '/detail-article';
 const String routeContacts = '/contact';
 const String routeLogin = '/login';
 const String routeEditProfile = '/edit-profile';
+const String routeMembershipInfo = '/membership-info';
+const String routeMembershipUpgrade = '/membership-upgrade';
 
 final navKey = GlobalKey<NavigatorState>();
