@@ -3,10 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  final UserModel user;
+  const Settings({super.key, required this.user});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -270,10 +272,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Get.to(() => DashboardApp(
-                                  //       selected: 'Edit-Profile',
-                                  //       optionalSelected: 'Settings',
-                                  //     ));
+                                  showModalResetPassword(width);
                                 },
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
@@ -312,6 +311,94 @@ class _SettingsState extends State<Settings> {
           ),
         ],
       ),
+    );
+  }
+
+  void showModalResetPassword(width) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Color(0xFFCCCCCC),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              'Reset your password',
+              style: GoogleFonts.poppins(
+                fontSize: width * .014,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF1F384C),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "We will send you an email with a link to reset your password, please check if the email is correct.",
+              style: GoogleFonts.poppins(
+                fontSize: width * .008,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF7d848c),
+              ),
+            )
+          ]),
+          content: SingleChildScrollView(
+            child: TextFormField(
+              initialValue: widget.user.email,
+              decoration: editProfileDecoration,
+            ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(
+                  fontSize: width * .01,
+                  fontWeight: FontWeight.w500,
+                  color: CusColors.secondaryText,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            ElevatedButton(
+              onPressed: () async {},
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    const Color(0xFF4351FF),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF4351FF),
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  )),
+              child: Text(
+                'Send link',
+                style: GoogleFonts.poppins(
+                  fontSize: width * .01,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            )
+          ],
+        );
+      },
     );
   }
 }

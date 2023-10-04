@@ -22,13 +22,24 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    if (Get.currentRoute == '/detail-bundle-courses' ||
-        Get.currentRoute == '/detail-single-courses') {
+    final user = Provider.of<UserModel?>(context);
+    if (Get.currentRoute == routeDetailBundleCourse ||
+        Get.currentRoute == routeDetailSingleCourse ||
+        Get.currentRoute == routeBundleCourses ||
+        Get.currentRoute == routeCourses) {
       setState(() {
         index = 1;
       });
+    } else if (Get.currentRoute == routeArticle ||
+        Get.currentRoute == routeDetailArticle) {
+      setState(() {
+        index = 2;
+      });
+    } else if (Get.currentRoute == routeContacts) {
+      setState(() {
+        index = 3;
+      });
     }
-    final user = Provider.of<UserModel?>(context, listen: false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

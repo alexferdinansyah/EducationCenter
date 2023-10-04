@@ -1,9 +1,11 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/edit_profile.dart';
@@ -13,7 +15,6 @@ import 'package:project_tc/screens/dashboard/my_course.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
 import 'package:project_tc/screens/dashboard/setting.dart';
 import 'package:project_tc/screens/dashboard/transaction.dart';
-import 'package:project_tc/services/auth_service.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 
@@ -107,7 +108,9 @@ class _DashboardAppState extends State<DashboardApp> {
           } else if (widget.selected == 'Membership-Upgrade') {
             return const MembershipUpgrade();
           } else {
-            return const Settings();
+            return Settings(
+              user: user,
+            );
           }
         // case 'Help':
         //   return HelpWidget();
@@ -199,12 +202,6 @@ class _DashboardAppState extends State<DashboardApp> {
                         );
                       },
                     ),
-                    TextButton(
-                        onPressed: () async {
-                          final auth = AuthService();
-                          await auth.signOut();
-                        },
-                        child: const Text('logut'))
                   ],
                 )
               ],
@@ -282,14 +279,67 @@ class _DashboardAppState extends State<DashboardApp> {
                                         color: const Color(0xFF1F384C)),
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Icon(
-                                    Icons.keyboard_arrow_down_rounded,
-                                    size: 24,
-                                    color: Color(0xFF8d99a3),
-                                  ),
-                                ),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2(
+                                        isDense: true,
+                                        customButton: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: 24,
+                                        ),
+                                        items: [
+                                          ...MenuItems.firstItems.map(
+                                            (item) =>
+                                                DropdownMenuItem<MenuItem>(
+                                              value: item,
+                                              child: MenuItems.buildItem(item),
+                                            ),
+                                          ),
+                                          const DropdownMenuItem<Divider>(
+                                              enabled: false, child: Divider()),
+                                          ...MenuItems.secondItems.map(
+                                            (item) =>
+                                                DropdownMenuItem<MenuItem>(
+                                              value: item,
+                                              child: MenuItems.buildItem(item),
+                                            ),
+                                          ),
+                                        ],
+                                        onChanged: (value) {
+                                          MenuItems.onChanged(
+                                              context, value! as MenuItem);
+                                        },
+                                        dropdownStyleData: DropdownStyleData(
+                                          width: 160,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 6),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            border: Border.all(
+                                                color: const Color(0xFFCCCCCC),
+                                                width: 1),
+                                            color: Colors.white,
+                                          ),
+                                          offset: const Offset(0, 3),
+                                        ),
+                                        menuItemStyleData: MenuItemStyleData(
+                                          customHeights: [
+                                            ...List<double>.filled(
+                                                MenuItems.firstItems.length,
+                                                48),
+                                            8,
+                                            ...List<double>.filled(
+                                                MenuItems.secondItems.length,
+                                                48),
+                                          ],
+                                          padding: const EdgeInsets.only(
+                                              left: 16, right: 16),
+                                        ),
+                                      ),
+                                    )),
                               ],
                             ),
                             const Icon(

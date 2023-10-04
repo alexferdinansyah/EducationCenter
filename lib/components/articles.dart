@@ -152,7 +152,10 @@ class _ArticleListsState extends State<ArticleLists> {
       onEnter: (_) => _hovered(),
       onExit: (_) => _hovered(),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Get.toNamed(routeDetailArticle,
+              arguments: {'article': widget.article});
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: width / 2,
