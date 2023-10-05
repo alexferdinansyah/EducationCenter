@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/services/auth_service.dart';
@@ -178,11 +180,16 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       const EdgeInsets.only(top: 15, right: 5),
                                   child: Row(
                                     children: [
-                                      Text('Forgot password ?',
-                                          style: GoogleFonts.mulish(
-                                            color: CusColors.mainColor,
-                                            fontSize: width * .0095,
-                                          ))
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(routeForgotPassword);
+                                        },
+                                        child: Text('Forgot password ?',
+                                            style: GoogleFonts.mulish(
+                                              color: CusColors.mainColor,
+                                              fontSize: width * .0095,
+                                            )),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -374,11 +381,8 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                   MaterialStateMouseCursor
                                                       .clickable,
                                               recognizer: TapGestureRecognizer()
-                                                ..onTap = () => Get.to(
-                                                      const ResponsiveRegister(),
-                                                      transition:
-                                                          Transition.fadeIn,
-                                                    ))
+                                                ..onTap = () =>
+                                                    Get.toNamed(routeRegister))
                                         ]),
                                   ),
                                 ),

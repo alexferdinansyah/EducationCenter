@@ -121,6 +121,17 @@ class AuthService {
     }
   }
 
+  //forgot password
+  Future forgotPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return 'Link has been send into $email';
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   //sign out
   Future signOut() async {
     try {

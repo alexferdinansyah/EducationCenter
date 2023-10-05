@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
+import 'package:project_tc/services/auth_service.dart';
 
 class Settings extends StatefulWidget {
   final UserModel user;
@@ -15,6 +16,16 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  String error = '';
+  String email = '';
+  @override
+  void initState() {
+    email = widget.user.email;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -347,9 +358,24 @@ class _SettingsState extends State<Settings> {
             )
           ]),
           content: SingleChildScrollView(
-            child: TextFormField(
-              initialValue: widget.user.email,
-              decoration: editProfileDecoration,
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                initialValue: email,
+                keyboardType: TextInputType.emailAddress,
+                decoration: editProfileDecoration,
+                validator: (val) {
+                  if (val!.isEmpty) {
+                    return 'Enter an email';
+                  } else if (!_auth.isValidEmail(val)) {
+                    return 'Enter a valid email';
+                  }
+                  return null;
+                },
+                onChanged: (val) {
+                  setState(() => email = val);
+                },
+              ),
             ),
           ),
           actions: [
@@ -368,7 +394,34 @@ class _SettingsState extends State<Settings> {
               width: 5,
             ),
             ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  // Call your registration function here
+                  dynamic result = await _auth.forgotPassword(email);
+
+                  setState(() {
+                    if (result != null) {
+                      Get.snackbar(
+                        'Success',
+                        result,
+                        snackbarStatus: (status) {
+                          switch (status) {
+                            case SnackbarStatus.CLOSED:
+                              Get.back(closeOverlays: true);
+                              break;
+                            default:
+                          }
+                        },
+                      );
+                    } else {
+                      Get.snackbar(
+                        'Failed',
+                        'Email is not valid',
+                      );
+                    }
+                  });
+                }
+              },
               style: ButtonStyle(
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 18),

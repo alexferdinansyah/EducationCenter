@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -156,11 +158,16 @@ class _SignInMobileState extends State<SignInMobile> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('Forgot password ?',
-                                style: GoogleFonts.mulish(
-                                  color: CusColors.mainColor,
-                                  fontSize: width * .028,
-                                ))
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(routeForgotPassword);
+                              },
+                              child: Text('Forgot password ?',
+                                  style: GoogleFonts.mulish(
+                                    color: CusColors.mainColor,
+                                    fontSize: width * .028,
+                                  )),
+                            )
                           ],
                         ),
                       ),
@@ -337,10 +344,8 @@ class _SignInMobileState extends State<SignInMobile> {
                                     mouseCursor:
                                         MaterialStateMouseCursor.clickable,
                                     recognizer: TapGestureRecognizer()
-                                      ..onTap = () => Get.to(
-                                            const ResponsiveRegister(),
-                                            transition: Transition.fadeIn,
-                                          ))
+                                      ..onTap =
+                                          () => Get.toNamed(routeRegister))
                               ]),
                         ),
                       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_tc/screens/auth/forgot_password.dart';
+import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
 import 'package:project_tc/screens/landing_page/bundle_course_list.dart';
@@ -20,6 +22,8 @@ const String routeArticle = '/article';
 const String routeDetailArticle = '/detail-article';
 const String routeContacts = '/contact';
 const String routeLogin = '/login';
+const String routeRegister = '/register';
+const String routeForgotPassword = '/forgot-password';
 const String routeEditProfile = '/edit-profile';
 const String routeMembershipInfo = '/membership-info';
 const String routeMembershipUpgrade = '/membership-upgrade';
@@ -40,6 +44,14 @@ final getPages = [
   GetPage(
     name: routeLogin,
     page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeRegister,
+    page: () => const ResponsiveRegister(),
+  ),
+  GetPage(
+    name: routeForgotPassword,
+    page: () => const ForgotPassword(),
   ),
   GetPage(
     name: routeCourses,
