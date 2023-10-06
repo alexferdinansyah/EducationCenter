@@ -43,6 +43,7 @@ class _DashboardAppState extends State<DashboardApp> {
     // Add other "OTHERS" items as needed
   ];
 
+  MembershipModel? membershipData;
   String selectedSidebarItem = '';
 
   @override
@@ -80,7 +81,7 @@ class _DashboardAppState extends State<DashboardApp> {
     }
 
     // Function to build content based on the selected sidebar item
-    Widget buildContent(dataUser, user) {
+    Widget buildContent(dataUser, user, membershipData) {
       switch (selectedSidebarItem) {
         case 'Newsflash':
           return const Newsflash();
@@ -104,9 +105,9 @@ class _DashboardAppState extends State<DashboardApp> {
           if (widget.selected == 'Edit-Profile') {
             return EditProfile(userData: dataUser, user: user);
           } else if (widget.selected == 'Membership') {
-            return const MembershipInfo();
+            return MembershipInfo(membershipData: membershipData);
           } else if (widget.selected == 'Membership-Upgrade') {
-            return const MembershipUpgrade();
+            return MembershipUpgrade(membershipData: membershipData);
           } else {
             return Settings(
               user: user,
@@ -211,7 +212,10 @@ class _DashboardAppState extends State<DashboardApp> {
               stream: FirestoreService(uid: user!.uid).userData,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  UserData userData = snapshot.data!;
+                  UserData? userData = snapshot.data;
+                  if (userData != null) {
+                    membershipData = userData.membership;
+                  }
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -266,7 +270,7 @@ class _DashboardAppState extends State<DashboardApp> {
                                     color: Colors.grey,
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                        image: NetworkImage(userData.photoUrl),
+                                        image: NetworkImage(userData!.photoUrl),
                                         fit: BoxFit.cover),
                                   ),
                                 ),
@@ -349,7 +353,7 @@ class _DashboardAppState extends State<DashboardApp> {
                           ],
                         ),
                       ),
-                      buildContent(userData, user),
+                      buildContent(userData, user, membershipData),
                     ],
                   );
                 } else {

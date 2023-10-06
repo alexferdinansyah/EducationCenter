@@ -42,7 +42,7 @@ class FirestoreService {
     }
   }
 
-  Future updateUserData(
+  Future<void> updateUserData(
     String name,
     String photoUrl,
     String role,
@@ -52,7 +52,7 @@ class FirestoreService {
     String working,
     String reason,
   ) async {
-    return await userCollection.doc(uid).set({
+    final userData = {
       'name': name,
       'photoUrl': photoUrl,
       'role': role,
@@ -61,25 +61,54 @@ class FirestoreService {
       'education': education,
       'working': working,
       'reason': reason,
-    });
+    };
+
+    final membershipData = {'type': 'Basic', 'join_since': Timestamp.now()};
+
+    // Update user data
+    await userCollection.doc(uid).set(userData);
+
+    // Update membership data under the 'membership' subcollection
+    await userCollection
+        .doc(uid)
+        .collection('membership')
+        .doc('information')
+        .set(membershipData);
   }
 
   // userData from snapshots
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(
-        uid: uid,
-        name: snapshot['name'],
-        photoUrl: snapshot['photoUrl'],
-        role: snapshot['role'],
-        noWhatsapp: snapshot['noWhatsapp'],
-        address: snapshot['address'],
-        education: snapshot['education'],
-        working: snapshot['working'],
-        reason: snapshot['reason']);
+  Future<UserData> _userDataFromSnapshot(DocumentSnapshot snapshot) async {
+    UserData userData = UserData(
+      uid: uid,
+      name: snapshot['name'],
+      photoUrl: snapshot['photoUrl'],
+      role: snapshot['role'],
+      noWhatsapp: snapshot['noWhatsapp'],
+      address: snapshot['address'],
+      education: snapshot['education'],
+      working: snapshot['working'],
+      reason: snapshot['reason'],
+    );
+
+    // Fetch membership data from the 'membership/information' document
+    final membershipSnapshot = await userCollection
+        .doc(uid)
+        .collection('membership')
+        .doc('information')
+        .get();
+
+    if (membershipSnapshot.exists) {
+      userData.membership = MembershipModel(
+        memberType: membershipSnapshot['type'],
+        joinSince: membershipSnapshot['join_since'].toDate(),
+      );
+    }
+
+    return userData;
   }
 
   // get user docs stream
   Stream<UserData> get userData {
-    return userCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
+    return userCollection.doc(uid).snapshots().asyncMap(_userDataFromSnapshot);
   }
 }

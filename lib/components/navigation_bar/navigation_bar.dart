@@ -75,7 +75,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         const Spacer(),
         Container(
           margin: EdgeInsets.only(left: width * .03),
-          width: user != null ? width * .09 : width * .1,
+          width: user == null ? width * .09 : width * .1,
           decoration: BoxDecoration(
               gradient:
                   LinearGradient(begin: const Alignment(-1.2, 0.0), colors: [
@@ -105,7 +105,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 shadowColor: MaterialStateProperty.all(Colors.transparent)),
             child: Text(
-              user != null ? 'Login' : 'Dashboard',
+              user == null ? 'Login' : 'Dashboard',
               style: GoogleFonts.mulish(
                 fontWeight: FontWeight.w700,
                 color: Colors.white,

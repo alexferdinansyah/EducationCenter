@@ -36,7 +36,6 @@ class DetailBundleCourse extends StatelessWidget {
           child: Row(
             children: [
               AnimateIfVisible(
-                reAnimateOnVisibility: true,
                 key: const Key('item.1'),
                 builder: (
                   BuildContext context,
@@ -154,7 +153,6 @@ class DetailBundleCourse extends StatelessWidget {
               ),
               const Spacer(),
               AnimateIfVisible(
-                  reAnimateOnVisibility: true,
                   key: const Key('item.2'),
                   builder: (
                     BuildContext context,
@@ -240,7 +238,6 @@ class DetailBundleCourse extends StatelessWidget {
                 child: LiveList(
                   showItemInterval: const Duration(milliseconds: 150),
                   showItemDuration: const Duration(milliseconds: 350),
-                  reAnimateOnVisibility: true,
                   scrollDirection: Axis.vertical,
                   itemCount: course.listCourse!.length,
                   itemBuilder: animationBuilder(

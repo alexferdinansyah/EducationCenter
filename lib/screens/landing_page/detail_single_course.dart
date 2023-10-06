@@ -15,13 +15,13 @@ class DetailSingleCourse extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     var argument = Get.arguments;
     Course course = argument['course'];
+
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.only(top: 100, bottom: 200),
         child: Row(
           children: [
             AnimateIfVisible(
-              reAnimateOnVisibility: true,
               key: const Key('item.1'),
               builder: (
                 BuildContext context,
@@ -38,7 +38,7 @@ class DetailSingleCourse extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Online Courses',
+                        course.courseCategory!,
                         style: GoogleFonts.mulish(
                           color: CusColors.accentBlue,
                           fontSize: width * .012,
@@ -48,7 +48,7 @@ class DetailSingleCourse extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
-                          'Learn Basic HTML',
+                          course.title!,
                           style: GoogleFonts.mulish(
                               color: CusColors.header,
                               fontSize: width * .028,
@@ -56,7 +56,7 @@ class DetailSingleCourse extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Learn Basic HTML to understand how websites are created.',
+                        course.description!,
                         style: GoogleFonts.mulish(
                             color: CusColors.inactive,
                             fontSize: width * .012,
@@ -70,7 +70,6 @@ class DetailSingleCourse extends StatelessWidget {
             ),
             const Spacer(),
             AnimateIfVisible(
-              reAnimateOnVisibility: true,
               key: const Key('item.2'),
               builder: (
                 BuildContext context,

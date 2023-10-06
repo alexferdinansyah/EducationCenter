@@ -2,8 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/auth/forgot_password.dart';
-import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';

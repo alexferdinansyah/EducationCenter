@@ -33,7 +33,6 @@ class _BundleCourseListState extends State<BundleCourseList> {
         child: Row(
           children: [
             AnimateIfVisible(
-              reAnimateOnVisibility: true,
               key: const Key('item.1'),
               builder: (
                 BuildContext context,
@@ -82,7 +81,6 @@ class _BundleCourseListState extends State<BundleCourseList> {
             ),
             const Spacer(),
             AnimateIfVisible(
-              reAnimateOnVisibility: true,
               key: const Key('item.2'),
               builder: (
                 BuildContext context,
@@ -122,7 +120,6 @@ class _BundleCourseListState extends State<BundleCourseList> {
             height: (height / 1.9) * (bundleCourses.length / 3),
             width: width / 1.7,
             child: LiveGrid(
-                reAnimateOnVisibility: true,
                 itemCount: bundleCourses.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisExtent: height * .51,
@@ -161,7 +158,6 @@ class _BundleCourseListState extends State<BundleCourseList> {
             height: (height / 2) * (reviews.length / 4),
             width: width / 1.5,
             child: LiveGrid(
-                reAnimateOnVisibility: true,
                 itemCount: reviews.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisExtent: height * .4,

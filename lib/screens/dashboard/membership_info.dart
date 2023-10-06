@@ -3,10 +3,13 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:project_tc/components/constants.dart";
+import "package:project_tc/models/user.dart";
 import "package:project_tc/screens/dashboard/dashboard_app.dart";
+import "package:project_tc/services/extension.dart";
 
 class MembershipInfo extends StatefulWidget {
-  const MembershipInfo({super.key});
+  final MembershipModel membershipData;
+  const MembershipInfo({super.key, required this.membershipData});
 
   @override
   State<MembershipInfo> createState() => _MembershipInfoState();
@@ -78,7 +81,7 @@ class _MembershipInfoState extends State<MembershipInfo> {
                               ),
                               SvgPicture.asset('assets/svg/member_type.svg'),
                               Text(
-                                'Basic',
+                                widget.membershipData.memberType,
                                 style: GoogleFonts.poppins(
                                   fontSize: width * .013,
                                   fontWeight: FontWeight.w400,
@@ -102,7 +105,7 @@ class _MembershipInfoState extends State<MembershipInfo> {
                               ),
                               SvgPicture.asset('assets/svg/join_since.svg'),
                               Text(
-                                '28 August 2023',
+                                widget.membershipData.joinSince.formatDate(),
                                 style: GoogleFonts.poppins(
                                   fontSize: width * .013,
                                   fontWeight: FontWeight.w400,

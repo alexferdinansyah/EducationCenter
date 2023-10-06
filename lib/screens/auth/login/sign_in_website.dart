@@ -5,8 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/auth/forgot_password.dart';
-import 'package:project_tc/screens/auth/register/register_responsive.dart';
+
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/services/auth_service.dart';
 

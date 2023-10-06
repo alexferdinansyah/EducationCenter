@@ -43,7 +43,6 @@ class _LandingPageState extends State<LandingPage> {
         child: Row(
           children: [
             AnimateIfVisible(
-              reAnimateOnVisibility: true,
               key: const Key('item.1'),
               builder: (
                 BuildContext context,
@@ -90,7 +89,9 @@ class _LandingPageState extends State<LandingPage> {
                                   offset: const Offset(0, 4))
                             ]),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed(routeLogin);
+                          },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
@@ -126,7 +127,6 @@ class _LandingPageState extends State<LandingPage> {
             ),
             const Spacer(),
             AnimateIfVisible(
-              reAnimateOnVisibility: true,
               key: const Key('item.2'),
               builder: (
                 BuildContext context,
@@ -151,7 +151,6 @@ class _LandingPageState extends State<LandingPage> {
         child: Column(
           children: [
             AnimateIfVisible(
-                reAnimateOnVisibility: true,
                 key: const Key('item.3'),
                 builder: (
                   BuildContext context,
@@ -248,7 +247,6 @@ class _LandingPageState extends State<LandingPage> {
                 height: height / 1.9,
                 width: width / 1.7,
                 child: LiveGrid(
-                    reAnimateOnVisibility: true,
                     itemCount: bundleCourses.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       mainAxisExtent: height * .51,
@@ -366,7 +364,6 @@ class _LandingPageState extends State<LandingPage> {
                   height: (height / 2) * (listCourses.length / 3),
                   width: width / 1.7,
                   child: LiveGrid(
-                      reAnimateOnVisibility: true,
                       itemCount: listCourses.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         mainAxisExtent: height * .48,
@@ -484,7 +481,6 @@ class _LandingPageState extends State<LandingPage> {
                 height: (height / 1.6) * (listArticles.length / 3),
                 width: width / 1.5,
                 child: LiveGrid(
-                    reAnimateOnVisibility: true,
                     itemCount: listArticles.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       mainAxisExtent: height * .59,

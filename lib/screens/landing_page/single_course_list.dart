@@ -43,7 +43,6 @@ class SingleCourseList extends StatelessWidget {
               height: (height / 2) * (listCourses.length / 3),
               width: width / 1.7,
               child: LiveGrid(
-                  reAnimateOnVisibility: true,
                   itemCount: listCourses.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     mainAxisExtent: height * .48,

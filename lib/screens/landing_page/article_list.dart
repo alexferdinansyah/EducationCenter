@@ -28,7 +28,6 @@ class ArticleList extends StatelessWidget {
                 child: LiveList(
                   showItemInterval: const Duration(milliseconds: 150),
                   showItemDuration: const Duration(milliseconds: 350),
-                  reAnimateOnVisibility: true,
                   scrollDirection: Axis.vertical,
                   itemCount: articles.length,
                   itemBuilder: animationBuilder(

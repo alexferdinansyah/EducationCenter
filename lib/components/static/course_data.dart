@@ -81,6 +81,8 @@ List<Course> courses = [
     isBundle: false,
     price: '100.000',
     discount: '10',
+    description:
+        "Learn VB.NET to create application that are fully object-oriented",
     completionBenefits: [
       'Be able to understand HTML',
       'Be able to create a web',

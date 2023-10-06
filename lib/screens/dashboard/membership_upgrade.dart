@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/models/user.dart';
 
 class MembershipUpgrade extends StatefulWidget {
-  const MembershipUpgrade({super.key});
+  final MembershipModel membershipData;
+  const MembershipUpgrade({super.key, required this.membershipData});
 
   @override
   State<MembershipUpgrade> createState() => _MembershipUpgradeState();
@@ -240,14 +242,25 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Current Membership',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: width * .01,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xFF4351FF),
-                                          ),
-                                        ),
+                                        widget.membershipData.memberType ==
+                                                'Basic'
+                                            ? Text(
+                                                'Current Membership',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: width * .01,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      const Color(0xFF4351FF),
+                                                ),
+                                              )
+                                            : Text(
+                                                'Already join pro member',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: width * .01,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: CusColors.inactive,
+                                                ),
+                                              )
                                       ],
                                     ),
                                   ]),
@@ -425,48 +438,71 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 10,
+                                    SizedBox(
+                                      height:
+                                          widget.membershipData.memberType !=
+                                                  'Basic'
+                                              ? 25
+                                              : 10,
                                     ),
-                                    Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF4351FF),
-                                        borderRadius: BorderRadius.circular(64),
-                                      ),
-                                      child: ElevatedButton(
-                                        onPressed: () {},
-                                        style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
+                                    widget.membershipData.memberType != 'Basic'
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Current Membership',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: width * .01,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      const Color(0xFF4351FF),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFF4351FF),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(64),
+                                            ),
+                                            child: ElevatedButton(
+                                              onPressed: () {},
+                                              style: ButtonStyle(
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
+                                                ),
+                                                padding: MaterialStateProperty
+                                                    .all<EdgeInsetsGeometry>(
+                                                  EdgeInsets.symmetric(
+                                                    vertical: height * 0.025,
+                                                  ),
+                                                ),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.transparent),
+                                                shadowColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.transparent),
+                                              ),
+                                              child: Text(
+                                                'Get started',
+                                                style: GoogleFonts.mulish(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white,
+                                                  fontSize: width * 0.01,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          padding: MaterialStateProperty.all<
-                                              EdgeInsetsGeometry>(
-                                            EdgeInsets.symmetric(
-                                              vertical: height * 0.025,
-                                            ),
-                                          ),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.transparent),
-                                          shadowColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.transparent),
-                                        ),
-                                        child: Text(
-                                          'Get started',
-                                          style: GoogleFonts.mulish(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white,
-                                            fontSize: width * 0.01,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ]),
                             ),
                           ],
