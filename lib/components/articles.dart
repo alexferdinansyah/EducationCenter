@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/article.dart';
+import 'package:project_tc/routes/routes.dart';
 
 class Articles extends StatelessWidget {
   final Article article;
@@ -36,7 +38,7 @@ class Articles extends StatelessWidget {
               ),
             ),
             child: Text(
-              'UI/UX',
+              article.category!,
               textAlign: TextAlign.center,
               style: GoogleFonts.mulish(
                   color: const Color(0xFF2501FF),
@@ -79,6 +81,7 @@ class Articles extends StatelessWidget {
                 ),
                 Text(
                   article.description!,
+                  maxLines: 2,
                   style: GoogleFonts.mulish(
                       color: CusColors.inactive,
                       fontSize: width * .01,
@@ -87,13 +90,24 @@ class Articles extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    'Read more...',
-                    style: GoogleFonts.mulish(
-                        color: const Color(0xFF86B1F2),
-                        fontSize: width * .01,
-                        fontWeight: FontWeight.w300,
-                        height: 1.5),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(
+                          routeDetailArticle,
+                          arguments: {'article': article},
+                        );
+                      },
+                      child: Text(
+                        'Read more...',
+                        style: GoogleFonts.mulish(
+                            color: const Color(0xFF86B1F2),
+                            fontSize: width * .01,
+                            fontWeight: FontWeight.w300,
+                            height: 1.5),
+                      ),
+                    ),
                   ),
                 ),
                 Container(
@@ -117,5 +131,139 @@ class Articles extends StatelessWidget {
         ]),
       ),
     );
+  }
+}
+
+class ArticleLists extends StatefulWidget {
+  final Article article;
+  const ArticleLists({super.key, required this.article});
+
+  @override
+  State<ArticleLists> createState() => _ArticleListsState();
+}
+
+class _ArticleListsState extends State<ArticleLists> {
+  bool _hovering = false;
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return MouseRegion(
+      onEnter: (_) => _hovered(),
+      onExit: (_) => _hovered(),
+      child: GestureDetector(
+        onTap: () {
+          Get.toNamed(routeDetailArticle,
+              arguments: {'article': widget.article});
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: width / 2,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            border: Border.all(
+              color: const Color(0xFFCCCCCC),
+              width: 1,
+            ),
+            boxShadow: [
+              _hovering
+                  ? BoxShadow(
+                      color: const Color(0xFFCCCCCC).withOpacity(.3),
+                      offset: const Offset(6, 6),
+                      blurRadius: 8)
+                  : const BoxShadow(
+                      color: Colors.transparent,
+                      offset: Offset(0, 0),
+                      blurRadius: 0)
+            ],
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              width: double.infinity,
+              height: height * .32,
+              margin: EdgeInsets.only(bottom: height * .03),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                color: const Color(0xFFD9D9D9),
+              ),
+            ),
+            Text(
+              widget.article.title!,
+              style: GoogleFonts.mulish(
+                  color: CusColors.title,
+                  fontSize: width * .016,
+                  fontWeight: FontWeight.bold),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: height * .01),
+              child: Text(
+                widget.article.description!,
+                maxLines: 2,
+                style: GoogleFonts.mulish(
+                    color: CusColors.inactive,
+                    fontSize: width * .01,
+                    fontWeight: FontWeight.w300,
+                    height: 1.5),
+              ),
+            ),
+            Container(
+              width: width * .1,
+              margin: const EdgeInsets.only(right: 20),
+              height: 25,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: Colors.transparent,
+                border: Border.all(
+                  color: const Color(0xFF2501FF),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.article.category!,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.mulish(
+                      color: const Color(0xFF2501FF),
+                      fontSize: width * .011,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1,
+              margin: EdgeInsets.symmetric(vertical: height * .013),
+              decoration: const BoxDecoration(
+                color: Color(0xFFCCCCCC),
+              ),
+            ),
+            Text(
+              widget.article.date!,
+              maxLines: 1,
+              style: GoogleFonts.mulish(
+                color: CusColors.inactive,
+                fontSize: width * .01,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  _hovered() {
+    setState(() {
+      _hovering = !_hovering;
+    });
   }
 }

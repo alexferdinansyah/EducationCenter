@@ -4,7 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:project_tc/screens/auth/register/register_responsive.dart';
+import 'package:project_tc/routes/routes.dart';
+
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/services/auth_service.dart';
 
@@ -43,8 +44,8 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset(
-                      'assets/images/logo_dac.png',
-                      height: width * .05,
+                      'assets/images/dec_logo2.png',
+                      width: width * .06,
                     ),
                     const SizedBox(
                       height: 30,
@@ -178,11 +179,16 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       const EdgeInsets.only(top: 15, right: 5),
                                   child: Row(
                                     children: [
-                                      Text('Forgot password ?',
-                                          style: GoogleFonts.mulish(
-                                            color: CusColors.mainColor,
-                                            fontSize: width * .0095,
-                                          ))
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(routeForgotPassword);
+                                        },
+                                        child: Text('Forgot password ?',
+                                            style: GoogleFonts.mulish(
+                                              color: CusColors.mainColor,
+                                              fontSize: width * .0095,
+                                            )),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -304,7 +310,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                 SizedBox(
                                   width: width / 3.5,
                                   child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await AuthService().signInWithGoogle();
+                                      },
                                       style: ButtonStyle(
                                           padding: MaterialStateProperty.all<
                                                   EdgeInsetsGeometry>(
@@ -372,11 +380,8 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                   MaterialStateMouseCursor
                                                       .clickable,
                                               recognizer: TapGestureRecognizer()
-                                                ..onTap = () => Get.to(
-                                                      const ResponsiveRegister(),
-                                                      transition:
-                                                          Transition.fadeIn,
-                                                    ))
+                                                ..onTap = () =>
+                                                    Get.toNamed(routeRegister))
                                         ]),
                                   ),
                                 ),

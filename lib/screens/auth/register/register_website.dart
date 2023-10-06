@@ -60,8 +60,8 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset(
-                      'assets/images/logo_dac.png',
-                      height: width * .05,
+                      'assets/images/dec_logo2.png',
+                      width: width * .06,
                     ),
                     const SizedBox(
                       height: 30,
@@ -132,7 +132,7 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                 SizedBox(
                                   width: width / 3.5,
                                   child: TextFormField(
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.phone,
                                     style:
                                         TextStyle(color: CusColors.subHeader),
                                     decoration: textInputDecoration.copyWith(
@@ -512,14 +512,15 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                               // Call your registration function here
                                               dynamic result = await _auth
                                                   .registerWithEmailAndPassword(
-                                                      name,
-                                                      noWhatsapp,
-                                                      address,
-                                                      lastEducation,
-                                                      workingStatus,
-                                                      email,
-                                                      password,
-                                                      reason,);
+                                                name,
+                                                noWhatsapp,
+                                                address,
+                                                lastEducation,
+                                                workingStatus,
+                                                email,
+                                                password,
+                                                reason,
+                                              );
 
                                               setState(() {
                                                 if (result == null) {
@@ -605,7 +606,10 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                 SizedBox(
                                   width: width / 3.5,
                                   child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await AuthService().signInWithGoogle();
+                                        Get.back();
+                                      },
                                       style: ButtonStyle(
                                           padding: MaterialStateProperty.all<
                                                   EdgeInsetsGeometry>(

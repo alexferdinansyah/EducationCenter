@@ -2,20 +2,15 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/animation/animation_function.dart';
-import 'package:project_tc/components/bullet_list.dart';
+import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
+import 'package:project_tc/components/static/course_data.dart';
 import 'package:project_tc/models/course.dart';
 
-class DetailBundleCourse extends StatefulWidget {
-  final Course course;
-  const DetailBundleCourse({super.key, required this.course});
+class DetailBundleCourse extends StatelessWidget {
+  const DetailBundleCourse({super.key});
 
-  @override
-  State<DetailBundleCourse> createState() => _DetailBundleCourseState();
-}
-
-class _DetailBundleCourseState extends State<DetailBundleCourse> {
   List<Widget> generateListCourses(List<ListCourse> courses) {
     return courses.asMap().entries.map((entry) {
       final index = entry.key;
@@ -31,6 +26,9 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    // var argument = Get.arguments;
+    // Course course = argument['course'];
+    Course course = courses[0];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,7 +37,6 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
           child: Row(
             children: [
               AnimateIfVisible(
-                reAnimateOnVisibility: true,
                 key: const Key('item.1'),
                 builder: (
                   BuildContext context,
@@ -66,7 +63,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 8),
                           child: Text(
-                            widget.course.title!,
+                            course.title!,
                             style: GoogleFonts.mulish(
                                 color: CusColors.header,
                                 fontSize: width * .028,
@@ -74,7 +71,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                           ),
                         ),
                         Text(
-                          '(Contains ${widget.course.totalCourse!} Courses)',
+                          '(Contains ${course.totalCourse!} Courses)',
                           style: GoogleFonts.mulish(
                             color: CusColors.accentBlue,
                             fontSize: width * .011,
@@ -143,7 +140,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                           ),
                         ),
                         Text(
-                          widget.course.description!,
+                          course.description!,
                           style: GoogleFonts.mulish(
                               color: CusColors.inactive,
                               fontSize: width * .012,
@@ -157,25 +154,34 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
               ),
               const Spacer(),
               AnimateIfVisible(
-                reAnimateOnVisibility: true,
-                key: const Key('item.2'),
-                builder: (
-                  BuildContext context,
-                  Animation<double> animation,
-                ) =>
-                    FadeTransition(
-                        opacity: Tween<double>(
-                          begin: 0,
-                          end: 1,
-                        ).animate(animation),
-                        child: Container(
+                  key: const Key('item.2'),
+                  builder: (
+                    BuildContext context,
+                    Animation<double> animation,
+                  ) =>
+                      FadeTransition(
+                          opacity: Tween<double>(
+                            begin: 0,
+                            end: 1,
+                          ).animate(animation),
+                          child: Container(
                             width: width / 2.7,
-                            height: height / 2.3,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26),
-                              color: const Color.fromRGBO(217, 217, 217, 1),
-                            ))),
-              )
+                            height: height / 2.1,
+                            decoration: course.image != ''
+                                ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    // color: const Color(0xFFD9D9D9),
+                                    image: DecorationImage(
+                                        image: AssetImage(course.image!),
+                                        fit: BoxFit
+                                            .contain, // Adjust the fit as needed
+                                        alignment: Alignment.topCenter),
+                                  )
+                                : BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    color: const Color(0xFFD9D9D9),
+                                  ),
+                          )))
             ],
           ),
         ),
@@ -229,16 +235,15 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
               ),
               SizedBox(
                 width: width / 1.6,
-                height: height * .13 * widget.course.listCourse!.length + 150,
+                height: height * .13 * course.listCourse!.length + 150,
                 child: LiveList(
                   showItemInterval: const Duration(milliseconds: 150),
                   showItemDuration: const Duration(milliseconds: 350),
-                  reAnimateOnVisibility: true,
                   scrollDirection: Axis.vertical,
-                  itemCount: widget.course.listCourse!.length,
+                  itemCount: course.listCourse!.length,
                   itemBuilder: animationBuilder(
                     (index) => ListCourses(
-                      listCourse: widget.course.listCourse![index],
+                      listCourse: course.listCourse![index],
                       index: index,
                     ),
                   ),
@@ -272,7 +277,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                         ),
                       ),
                       BulletList(
-                        widget.course.completionBenefits!,
+                        course.completionBenefits!,
                         border: true,
                       )
                     ],
@@ -332,14 +337,14 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Rp. ${widget.course.price!}',
+                            'Rp. ${course.price!}',
                             style: GoogleFonts.mulish(
                                 color: CusColors.title,
                                 fontSize: width * .015,
                                 fontWeight: FontWeight.bold,
                                 height: 1.5),
                           ),
-                          widget.course.discount != ''
+                          course.discount != ''
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(4),
@@ -356,7 +361,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        '${widget.course.discount}% Off',
+                                        '${course.discount}% Off',
                                         textAlign: TextAlign.left,
                                         style: GoogleFonts.inter(
                                           color: const Color(0xFF2501FF),
@@ -398,7 +403,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                               MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Text(
-                          widget.course.isBundle!
+                          course.isBundle!
                               ? 'Buy Courses Bundle'
                               : 'Buy Course',
                           style: GoogleFonts.mulish(

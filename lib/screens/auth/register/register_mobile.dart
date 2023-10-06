@@ -526,7 +526,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await AuthService().signInWithGoogle();
+                              Get.back();
+                            },
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(

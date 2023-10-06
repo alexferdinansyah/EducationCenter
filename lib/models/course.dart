@@ -1,18 +1,20 @@
 class Course {
   String? image;
-  String? typeCourse;
+  String? courseCategory;
   String? title;
   String? description;
   bool? isBundle;
   String? totalCourse;
   List<ListCourse>? listCourse;
-  List<String>? completionBenefits;
+  List<String>? completionBenefits; // MAKE THIS NOT OPTIONAL
   String? price;
   String? discount;
+  String? courseType;
+  String? status;
 
   Course({
     required this.image,
-    required this.typeCourse,
+    required this.courseCategory,
     required this.title,
     required this.isBundle,
     this.totalCourse = "",
@@ -21,6 +23,8 @@ class Course {
     this.completionBenefits,
     required this.price,
     this.discount = "",
+    this.courseType,
+    this.status,
   });
 }
 
@@ -36,4 +40,14 @@ class ListCourse {
     required this.description,
     required this.price,
   });
+}
+
+class ChapterList {
+  String? chapter;
+  List<String>? subChapter;
+
+  ChapterList({
+    required this.chapter,
+    List<String>? subChapter,
+  }) : subChapter = subChapter ?? [];
 }

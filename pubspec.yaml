@@ -47,8 +47,15 @@ dependencies:
   universal_html: ^2.2.3
   auto_animated: ^3.2.0
   visibility_detector: ^0.4.0+2
-  flutter_staggered_animations: ^1.1.1
-  flutter_animator: ^3.2.2
+  google_sign_in: ^6.1.5
+  firebase_storage: ^11.2.6
+  image_picker: ^1.0.4
+  mime: ^1.0.4
+  flutter_staggered_grid_view: ^0.7.0
+  data_table_2: ^2.5.8
+  dropdown_button2: ^2.3.9
+  intl: ^0.18.1
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

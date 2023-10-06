@@ -7,13 +7,14 @@
         {
             "name": "project_tc",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": ["--web-port", "7357"]
         },
         {
             "name": "project_tc (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
         },
         {
             "name": "project_tc (release mode)",
