@@ -44,8 +44,8 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
-          'assets/images/logo_dac.png',
-          width: width * .14,
+          'assets/images/dec_logo2.png',
+          width: width * .07,
         ),
         const Spacer(),
         NavigationItem(

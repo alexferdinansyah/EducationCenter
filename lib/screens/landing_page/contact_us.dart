@@ -22,12 +22,15 @@ class _ContactUsState extends State<ContactUs> {
         children: [
           Column(
             children: [
-              Text(
-                'Contact Us',
-                style: GoogleFonts.poppins(
-                  fontSize: width * .02,
-                  fontWeight: FontWeight.w700,
-                  color: CusColors.text,
+              Padding(
+                padding: const EdgeInsets.only(top: 25),
+                child: Text(
+                  'Contact Us',
+                  style: GoogleFonts.poppins(
+                    fontSize: width * .02,
+                    fontWeight: FontWeight.w700,
+                    color: CusColors.text,
+                  ),
                 ),
               ),
               Padding(

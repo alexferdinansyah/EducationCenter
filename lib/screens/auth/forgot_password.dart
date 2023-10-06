@@ -41,8 +41,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset(
-                      'assets/images/logo_dac.png',
-                      height: width * .05,
+                      'assets/images/dec_logo2.png',
+                      width: width * .06,
                     ),
                     const SizedBox(
                       height: 30,

@@ -1,11 +1,11 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/animation/animation_function.dart';
 import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
+import 'package:project_tc/components/static/course_data.dart';
 import 'package:project_tc/models/course.dart';
 
 class DetailBundleCourse extends StatelessWidget {
@@ -26,8 +26,9 @@ class DetailBundleCourse extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    var argument = Get.arguments;
-    Course course = argument['course'];
+    // var argument = Get.arguments;
+    // Course course = argument['course'];
+    Course course = courses[0];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

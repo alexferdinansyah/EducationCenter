@@ -135,10 +135,10 @@ class _DashboardAppState extends State<DashboardApp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 10, bottom: 60),
+                  padding: const EdgeInsets.only(left: 60, top: 10, bottom: 50),
                   child: Image.asset(
-                    'assets/images/logo_dac.png',
-                    width: width * .13,
+                    'assets/images/dec_logo2.png',
+                    width: width * .06,
                   ),
                 ),
                 Column(

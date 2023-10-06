@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/footer.dart';
+import 'package:project_tc/components/static/article_data.dart';
 import 'package:project_tc/models/article.dart';
 
 class DetailArticle extends StatelessWidget {
@@ -12,8 +12,9 @@ class DetailArticle extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    var argument = Get.arguments;
-    Article article = argument['article'];
+    // var argument = Get.arguments;
+    // Article article = argument['article'];
+    Article article = articles[0];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
