@@ -23,8 +23,8 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final user = Provider.of<UserModel?>(context);
-    if (Get.currentRoute == routeDetailBundleCourse ||
-        Get.currentRoute == routeDetailSingleCourse ||
+    if (Get.currentRoute.contains(routeDetailSingleCourse) ||
+        Get.currentRoute.contains(routeDetailBundleCourse) ||
         Get.currentRoute == routeBundleCourses ||
         Get.currentRoute == routeCourses) {
       setState(() {
@@ -74,7 +74,6 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         ),
         const Spacer(),
         Container(
-          margin: EdgeInsets.only(left: width * .03),
           width: user == null ? width * .09 : width * .1,
           decoration: BoxDecoration(
               gradient:

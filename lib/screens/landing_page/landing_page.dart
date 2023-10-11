@@ -11,7 +11,10 @@ import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/components/static/article_data.dart';
 import 'package:project_tc/components/static/course_data.dart';
+import 'package:project_tc/models/article.dart';
+import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/services/firestore_service.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -222,356 +225,442 @@ class _LandingPageState extends State<LandingPage> {
           ],
         ),
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: width / 1.2,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: const Color(0xFFF6F7F9),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 50),
-                child: Text(
-                  'Bundle Course',
-                  style: GoogleFonts.mulish(
-                      color: CusColors.header,
-                      fontSize: width * .018,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: height / 1.9,
-                width: width / 1.7,
-                child: LiveGrid(
-                    itemCount: bundleCourses.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisExtent: height * .51,
-                      crossAxisCount: 3, // Number of items per row
-                      crossAxisSpacing: width *
-                          .02, // Adjust spacing between items horizontally
-                      mainAxisSpacing:
-                          16.0, // Adjust spacing between rows vertically
-                    ),
-                    itemBuilder: animationBuilder(
-                        (index) => Courses(course: bundleCourses[index]))),
-              ),
-              SizedBox(
-                height: height / 10,
-              ),
-              MouseRegion(
-                onEnter: (_) {
-                  // Set the hover state
-                  setState(() {
-                    isHovered[0] = true;
-                  });
-                },
-                onExit: (_) {
-                  // Reset the hover state
-                  setState(() {
-                    isHovered[0] = false;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: width / 5,
-                  decoration: BoxDecoration(
-                    color: isHovered[0] ? CusColors.accentBlue : Colors.white,
-                    borderRadius: BorderRadius.circular(64),
-                    border: Border.all(
-                      color: CusColors.accentBlue,
-                      width: 1,
-                    ),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed(routeBundleCourses);
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+      StreamBuilder(
+          stream: FirestoreService.withoutUID().getCombinedStream(),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.hasData) {
+              final List<Map> dataMaps = snapshot.data!;
+
+              final List<Map> bundleCourses = dataMaps
+                  .where((courseMap) {
+                    final dynamic data = courseMap['course'];
+                    return data is Course && data.isBundle == true;
+                  })
+                  .map((courseMap) {
+                    final Course course = courseMap['course'];
+                    final String id = courseMap['id'];
+                    return {'course': course, 'id': id};
+                  })
+                  .take(3)
+                  .toList();
+
+              final List<Map> singleCourses = dataMaps
+                  .where((courseMap) {
+                    final dynamic data = courseMap['course'];
+                    return data is Course && data.isBundle == false;
+                  })
+                  .map((courseMap) {
+                    final Course course = courseMap['course'];
+                    final String id = courseMap['id'];
+                    return {'course': course, 'id': id};
+                  })
+                  .take(6)
+                  .toList();
+
+              final List<Map> articles = dataMaps.where((articleData) {
+                final dynamic data = articleData['article'];
+                return data is Article;
+              }).map((articleData) {
+                final Article article = articleData['article'];
+                final String id = articleData['id'];
+                return {'article': article, 'id': id};
+              }).toList();
+
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: width / 1.2,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: const Color(0xFFF6F7F9),
                         ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.symmetric(
-                          vertical: height * 0.025,
-                        ),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Text(
-                            'See More Bundle',
-                            style: GoogleFonts.mulish(
-                              fontWeight: FontWeight.w700,
-                              color: isHovered[0]
-                                  ? Colors.white
-                                  : CusColors.accentBlue,
-                              fontSize: width * 0.01,
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        child: Column(children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 50),
+                            child: Text(
+                              'Bundle Course',
+                              style: GoogleFonts.mulish(
+                                  color: CusColors.header,
+                                  fontSize: width * .018,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
+                          SizedBox(
+                            height: height / 1.9,
+                            width: width / 1.7,
+                            child: LiveGrid(
+                                itemCount: bundleCourses.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: height * .51,
+                                  crossAxisCount: 3, // Number of items per row
+                                  crossAxisSpacing: width *
+                                      .02, // Adjust spacing between items horizontally
+                                  mainAxisSpacing:
+                                      16.0, // Adjust spacing between rows vertically
+                                ),
+                                itemBuilder: animationBuilder((index) =>
+                                    Courses(
+                                        course: bundleCourses[index]['course'],
+                                        id: bundleCourses[index]['id']))),
+                          ),
+                          SizedBox(
+                            height: height / 10,
+                          ),
+                          MouseRegion(
+                            onEnter: (_) {
+                              // Set the hover state
+                              setState(() {
+                                isHovered[0] = true;
+                              });
+                            },
+                            onExit: (_) {
+                              // Reset the hover state
+                              setState(() {
+                                isHovered[0] = false;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: width / 5,
+                              decoration: BoxDecoration(
+                                color: isHovered[0]
+                                    ? CusColors.accentBlue
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(64),
+                                border: Border.all(
+                                  color: CusColors.accentBlue,
+                                  width: 1,
+                                ),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Get.toNamed(routeBundleCourses);
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                      vertical: height * 0.025,
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                  shadowColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Text(
+                                        'See More Bundle',
+                                        style: GoogleFonts.mulish(
+                                          fontWeight: FontWeight.w700,
+                                          color: isHovered[0]
+                                              ? Colors.white
+                                              : CusColors.accentBlue,
+                                          fontSize: width * 0.01,
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_outward_rounded,
+                                      color: isHovered[0]
+                                          ? Colors.white
+                                          : CusColors.accentBlue,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ]),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 100),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              'Courses',
+                              style: GoogleFonts.mulish(
+                                  color: CusColors.header,
+                                  fontSize: width * .018,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                                margin:
+                                    const EdgeInsets.only(top: 26, bottom: 70),
+                                width: 56,
+                                height: 2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: const Color.fromRGBO(0, 0, 0, 1),
+                                )),
+                            SizedBox(
+                              height: (height / 2) * (singleCourses.length / 3),
+                              width: width / 1.7,
+                              child: LiveGrid(
+                                  itemCount: singleCourses.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisExtent: height * .48,
+                                    crossAxisCount:
+                                        3, // Number of items per row
+                                    crossAxisSpacing: width *
+                                        .02, // Adjust spacing between items horizontally
+                                    mainAxisSpacing:
+                                        16.0, // Adjust spacing between rows vertically
+                                  ),
+                                  itemBuilder: animationBuilder((index) =>
+                                      Courses(
+                                          course: singleCourses[index]
+                                              ['course'],
+                                          id: singleCourses[index]['id']))),
+                            ),
+                            SizedBox(
+                              height: height / 10,
+                            ),
+                            MouseRegion(
+                              onEnter: (_) {
+                                // Set the hover state
+                                setState(() {
+                                  isHovered[1] = true;
+                                });
+                              },
+                              onExit: (_) {
+                                // Reset the hover state
+                                setState(() {
+                                  isHovered[1] = false;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: width / 5,
+                                decoration: BoxDecoration(
+                                  color: isHovered[1]
+                                      ? CusColors.accentBlue
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(64),
+                                  border: Border.all(
+                                    color: CusColors.accentBlue,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.toNamed(routeCourses);
+                                  },
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                      EdgeInsets.symmetric(
+                                        vertical: height * 0.025,
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                    shadowColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: Text(
+                                          'See More Courses',
+                                          style: GoogleFonts.mulish(
+                                            fontWeight: FontWeight.w700,
+                                            color: isHovered[1]
+                                                ? Colors.white
+                                                : CusColors.accentBlue,
+                                            fontSize: width * 0.01,
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_outward_rounded,
+                                        color: isHovered[1]
+                                            ? Colors.white
+                                            : CusColors.accentBlue,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        Icon(
-                          Icons.arrow_outward_rounded,
-                          color: isHovered[0]
-                              ? Colors.white
-                              : CusColors.accentBlue,
-                        )
                       ],
                     ),
                   ),
-                ),
-              )
-            ]),
-          ),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 100),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Text(
-                  'Courses',
-                  style: GoogleFonts.mulish(
-                      color: CusColors.header,
-                      fontSize: width * .018,
-                      fontWeight: FontWeight.bold),
-                ),
-                Container(
-                    margin: const EdgeInsets.only(top: 26, bottom: 70),
-                    width: 56,
-                    height: 2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: const Color.fromRGBO(0, 0, 0, 1),
-                    )),
-                SizedBox(
-                  height: (height / 2) * (listCourses.length / 3),
-                  width: width / 1.7,
-                  child: LiveGrid(
-                      itemCount: listCourses.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisExtent: height * .48,
-                        crossAxisCount: 3, // Number of items per row
-                        crossAxisSpacing: width *
-                            .02, // Adjust spacing between items horizontally
-                        mainAxisSpacing:
-                            16.0, // Adjust spacing between rows vertically
-                      ),
-                      itemBuilder: animationBuilder(
-                          (index) => Courses(course: listCourses[index]))),
-                ),
-                SizedBox(
-                  height: height / 10,
-                ),
-                MouseRegion(
-                  onEnter: (_) {
-                    // Set the hover state
-                    setState(() {
-                      isHovered[1] = true;
-                    });
-                  },
-                  onExit: (_) {
-                    // Reset the hover state
-                    setState(() {
-                      isHovered[1] = false;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: width / 5,
-                    decoration: BoxDecoration(
-                      color: isHovered[1] ? CusColors.accentBlue : Colors.white,
-                      borderRadius: BorderRadius.circular(64),
-                      border: Border.all(
-                        color: CusColors.accentBlue,
-                        width: 1,
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed(routeCourses);
-                      },
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.symmetric(
-                            vertical: height * 0.025,
-                          ),
-                        ),
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Text(
-                              'See More Courses',
-                              style: GoogleFonts.mulish(
-                                fontWeight: FontWeight.w700,
-                                color: isHovered[1]
-                                    ? Colors.white
-                                    : CusColors.accentBlue,
-                                fontSize: width * 0.01,
+                          Text(
+                            'Articles',
+                            style: GoogleFonts.mulish(
+                                color: CusColors.header,
+                                fontSize: width * .018,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                              margin:
+                                  const EdgeInsets.only(top: 26, bottom: 70),
+                              width: 56,
+                              height: 2,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: const Color.fromRGBO(0, 0, 0, 1),
+                              )),
+                          SizedBox(
+                            height: (height / 1.6) * (articles.length / 3),
+                            width: width / 1.5,
+                            child: LiveGrid(
+                                itemCount: articles.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: height * .59,
+                                  crossAxisCount: 3, // Number of items per row
+                                  crossAxisSpacing: width *
+                                      .02, // Adjust spacing between items horizontally
+                                  mainAxisSpacing:
+                                      16.0, // Adjust spacing between rows vertically
+                                ),
+                                itemBuilder:
+                                    animationBuilder((index) => Articles(
+                                          article: articles[index]['article'],
+                                          id: articles[index]['id'],
+                                        ))),
+                          ),
+                          SizedBox(
+                            height: height / 10,
+                          ),
+                          MouseRegion(
+                            onEnter: (_) {
+                              // Set the hover state
+                              setState(() {
+                                isHovered[2] = true;
+                              });
+                            },
+                            onExit: (_) {
+                              // Reset the hover state
+                              setState(() {
+                                isHovered[2] = false;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: width / 5,
+                              decoration: BoxDecoration(
+                                color: isHovered[2]
+                                    ? CusColors.accentBlue
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(64),
+                                border: Border.all(
+                                  color: CusColors.accentBlue,
+                                  width: 1,
+                                ),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Get.toNamed(routeArticle);
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                      vertical: height * 0.025,
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                  shadowColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Text(
+                                        'See More Article',
+                                        style: GoogleFonts.mulish(
+                                          fontWeight: FontWeight.w700,
+                                          color: isHovered[2]
+                                              ? Colors.white
+                                              : CusColors.accentBlue,
+                                          fontSize: width * 0.01,
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_outward_rounded,
+                                      color: isHovered[2]
+                                          ? Colors.white
+                                          : CusColors.accentBlue,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Icon(
-                            Icons.arrow_outward_rounded,
-                            color: isHovered[1]
-                                ? Colors.white
-                                : CusColors.accentBlue,
                           )
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Text(
-                'Articles',
-                style: GoogleFonts.mulish(
-                    color: CusColors.header,
-                    fontSize: width * .018,
-                    fontWeight: FontWeight.bold),
-              ),
-              Container(
-                  margin: const EdgeInsets.only(top: 26, bottom: 70),
-                  width: 56,
-                  height: 2,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: const Color.fromRGBO(0, 0, 0, 1),
-                  )),
-              SizedBox(
-                height: (height / 1.6) * (listArticles.length / 3),
-                width: width / 1.5,
-                child: LiveGrid(
-                    itemCount: listArticles.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisExtent: height * .59,
-                      crossAxisCount: 3, // Number of items per row
-                      crossAxisSpacing: width *
-                          .02, // Adjust spacing between items horizontally
-                      mainAxisSpacing:
-                          16.0, // Adjust spacing between rows vertically
-                    ),
-                    itemBuilder: animationBuilder(
-                        (index) => Articles(article: listArticles[index]))),
-              ),
-              SizedBox(
-                height: height / 10,
-              ),
-              MouseRegion(
-                onEnter: (_) {
-                  // Set the hover state
-                  setState(() {
-                    isHovered[2] = true;
-                  });
-                },
-                onExit: (_) {
-                  // Reset the hover state
-                  setState(() {
-                    isHovered[2] = false;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: width / 5,
-                  decoration: BoxDecoration(
-                    color: isHovered[2] ? CusColors.accentBlue : Colors.white,
-                    borderRadius: BorderRadius.circular(64),
-                    border: Border.all(
-                      color: CusColors.accentBlue,
-                      width: 1,
-                    ),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed(routeArticle);
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.symmetric(
-                          vertical: height * 0.025,
-                        ),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Text(
-                            'See More Article',
-                            style: GoogleFonts.mulish(
-                              fontWeight: FontWeight.w700,
-                              color: isHovered[2]
-                                  ? Colors.white
-                                  : CusColors.accentBlue,
-                              fontSize: width * 0.01,
-                            ),
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_outward_rounded,
-                          color: isHovered[2]
-                              ? Colors.white
-                              : CusColors.accentBlue,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
+                ],
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text('No courses available.'),
+              );
+            } else {
+              return const Center(
+                child: Text('kok iso.'),
+              );
+            }
+          }),
       const Footer()
     ]);
   }

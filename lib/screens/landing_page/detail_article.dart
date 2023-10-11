@@ -1,86 +1,104 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/footer.dart';
-import 'package:project_tc/components/static/article_data.dart';
+import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/article.dart';
 
-class DetailArticle extends StatelessWidget {
+class DetailArticle extends StatefulWidget {
   const DetailArticle({super.key});
+
+  @override
+  State<DetailArticle> createState() => _DetailArticleState();
+}
+
+class _DetailArticleState extends State<DetailArticle> {
+  String id = '';
+
+  final DetailArticleController controller = Get.put(DetailArticleController());
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    // var argument = Get.arguments;
-    // Article article = argument['article'];
-    Article article = articles[0];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 100, bottom: 20),
-          child: Text(
-            article.title!,
+    var argument = Get.parameters;
+    id = argument['id']!;
+    controller.fetchDocument(id);
+
+    return Obx(() {
+      final article = controller.documentSnapshot.value;
+
+      if (article == null) {
+        return const Center(child: Text('Loading...'));
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 100, bottom: 20),
+            child: Text(
+              article.title!,
+              style: GoogleFonts.mulish(
+                  color: CusColors.header,
+                  fontSize: width * .023,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(
+            'Created by Admin - ${article.date}',
             style: GoogleFonts.mulish(
-                color: CusColors.header,
-                fontSize: width * .023,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        Text(
-          'Created by Admin - ${article.date}',
-          style: GoogleFonts.mulish(
-            color: CusColors.inactive,
-            fontSize: width * .011,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 5),
-          width: double.infinity,
-          height: 1,
-          color: CusColors.accentBlue,
-        ),
-        Container(
-          width: double.infinity,
-          height: height / 1.6,
-          margin: const EdgeInsets.only(top: 30, bottom: 30),
-          decoration: article.image! != ''
-              ? BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  color: const Color(0xFFD9D9D9),
-                  image: DecorationImage(
-                      image: AssetImage(article.image!),
-                      fit: BoxFit.cover, // Adjust the fit as needed
-                      alignment: Alignment.topCenter),
-                )
-              : BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  color: const Color(0xFFD9D9D9),
-                ),
-        ),
-        Text(
-          article.description!,
-          style: GoogleFonts.mulish(
               color: CusColors.inactive,
-              fontSize: width * .012,
+              fontSize: width * .011,
               fontWeight: FontWeight.w300,
-              height: 1.5),
-        ),
-        Column(
-          children: article.articleContent!
-              .map((article) => ArticleContentWidget(
-                    articleContent: article,
-                  ))
-              .toList(),
-        ),
-        const SizedBox(
-          height: 100,
-        ),
-        const Footer(),
-      ],
-    );
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 5),
+            width: double.infinity,
+            height: 1,
+            color: CusColors.accentBlue,
+          ),
+          Container(
+            width: double.infinity,
+            height: height / 1.6,
+            margin: const EdgeInsets.only(top: 30, bottom: 30),
+            decoration: article.image! != ''
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: const Color(0xFFD9D9D9),
+                    image: DecorationImage(
+                        image: AssetImage(article.image!),
+                        fit: BoxFit.cover, // Adjust the fit as needed
+                        alignment: Alignment.topCenter),
+                  )
+                : BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: const Color(0xFFD9D9D9),
+                  ),
+          ),
+          Text(
+            article.description!,
+            style: GoogleFonts.mulish(
+                color: CusColors.inactive,
+                fontSize: width * .012,
+                fontWeight: FontWeight.w300,
+                height: 1.5),
+          ),
+          Column(
+            children: article.articleContent!
+                .map((article) => ArticleContentWidget(
+                      articleContent: article,
+                    ))
+                .toList(),
+          ),
+          const SizedBox(
+            height: 100,
+          ),
+          const Footer(),
+        ],
+      );
+    });
   }
 }
 

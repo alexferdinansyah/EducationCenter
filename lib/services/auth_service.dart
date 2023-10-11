@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_tc/models/user.dart';
@@ -57,15 +58,15 @@ class AuthService {
 
       // create a new document for the user with uid
       await FirestoreService(uid: user!.uid).updateUserData(
-        name,
-        'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF',
-        'member',
-        noWhatsapp,
-        address,
-        education,
-        working,
-        reason,
-      );
+          name,
+          'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF',
+          'member',
+          noWhatsapp,
+          address,
+          education,
+          working,
+          reason,
+          {'type': 'Basic', 'join_since': Timestamp.now()});
 
       return _userFromFirebaseUser(user);
     } catch (e) {
@@ -102,16 +103,16 @@ class AuthService {
       if (!userExists['exists']) {
         // If the user doesn't exist in Firestore, create a new document for them
         await FirestoreService(uid: user.uid).updateUserData(
-          user.displayName!,
-          user.photoURL ??
-              'https://ui-avatars.com/api/?name=${user.displayName}&color=7F9CF5&background=EBF4FF',
-          'member',
-          user.phoneNumber ?? '',
-          '',
-          'Select last education',
-          'Have been working?',
-          '',
-        );
+            user.displayName!,
+            user.photoURL ??
+                'https://ui-avatars.com/api/?name=${user.displayName}&color=7F9CF5&background=EBF4FF',
+            'member',
+            user.phoneNumber ?? '',
+            '',
+            'Select last education',
+            'Have been working?',
+            '',
+            {'type': 'Basic', 'join_since': Timestamp.now()});
       }
 
       return _userFromFirebaseUser(user);

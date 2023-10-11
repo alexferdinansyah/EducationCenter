@@ -7,7 +7,8 @@ import 'package:project_tc/routes/routes.dart';
 
 class Articles extends StatelessWidget {
   final Article article;
-  const Articles({super.key, required this.article});
+  final String id;
+  const Articles({super.key, required this.article, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +95,7 @@ class Articles extends StatelessWidget {
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(
-                          routeDetailArticle,
-                          arguments: {'article': article},
-                        );
+                        Get.toNamed(routeDetailArticle, parameters: {'id': id});
                       },
                       child: Text(
                         'Read more...',
@@ -136,7 +134,8 @@ class Articles extends StatelessWidget {
 
 class ArticleLists extends StatefulWidget {
   final Article article;
-  const ArticleLists({super.key, required this.article});
+  final String id;
+  const ArticleLists({super.key, required this.article, required this.id});
 
   @override
   State<ArticleLists> createState() => _ArticleListsState();
@@ -153,8 +152,7 @@ class _ArticleListsState extends State<ArticleLists> {
       onExit: (_) => _hovered(),
       child: GestureDetector(
         onTap: () {
-          Get.toNamed(routeDetailArticle,
-              arguments: {'article': widget.article});
+          Get.toNamed(routeDetailArticle, parameters: {'id': widget.id});
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -188,7 +186,10 @@ class _ArticleListsState extends State<ArticleLists> {
               margin: EdgeInsets.only(bottom: height * .03),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: const Color(0xFFD9D9D9),
+                image: DecorationImage(
+                    image: AssetImage(widget.article.image!),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter),
               ),
             ),
             Text(

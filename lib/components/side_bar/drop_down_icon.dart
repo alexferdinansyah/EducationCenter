@@ -55,6 +55,7 @@ abstract class MenuItems {
         break;
       case MenuItems.logout:
         logout();
+        Get.offAndToNamed(routeLogin);
         break;
     }
   }

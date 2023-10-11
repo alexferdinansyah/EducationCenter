@@ -7,7 +7,8 @@ import 'package:project_tc/routes/routes.dart';
 
 class Courses extends StatelessWidget {
   final Course course;
-  const Courses({super.key, required this.course});
+  final String id;
+  const Courses({super.key, required this.course, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +140,12 @@ class Courses extends StatelessWidget {
                       if (course.isBundle == true) {
                         Get.toNamed(
                           routeDetailBundleCourse,
-                          arguments: {'course': course},
+                          parameters: {'id': id},
                         );
                       } else {
                         Get.toNamed(
                           routeDetailSingleCourse,
-                          arguments: {'course': course},
+                          parameters: {'id': id},
                         );
                       }
                     },

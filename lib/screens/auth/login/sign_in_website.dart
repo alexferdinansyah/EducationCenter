@@ -61,7 +61,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                       height: 14,
                     ),
                     Text(
-                      'Start your training center faster and better',
+                      'Start your education center faster and better',
                       style: GoogleFonts.mulish(
                           fontSize: width * .01,
                           color: CusColors.subHeader.withOpacity(0.7)),

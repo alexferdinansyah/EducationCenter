@@ -162,15 +162,16 @@ class _EditProfileState extends State<EditProfile> {
                               await deleteExistingPhoto();
                               await FirestoreService(uid: widget.user.uid)
                                   .updateUserData(
-                                widget.userData.name,
-                                'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF', // Set this to the new image URL
-                                widget.userData.role,
-                                widget.userData.noWhatsapp,
-                                widget.userData.address,
-                                widget.userData.education,
-                                widget.userData.working,
-                                widget.userData.reason,
-                              );
+                                      widget.userData.name,
+                                      'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF', // Set this to the new image URL
+                                      widget.userData.role,
+                                      widget.userData.noWhatsapp,
+                                      widget.userData.address,
+                                      widget.userData.education,
+                                      widget.userData.working,
+                                      widget.userData.reason,
+                                      widget.userData.membership
+                                          .toFirestoreMap());
                             }
                           },
                           child: Text(
@@ -476,16 +477,16 @@ class _EditProfileState extends State<EditProfile> {
                                 String updatedPhotoUrl =
                                     downloadURL ?? widget.userData.photoUrl;
 
-                                // Check if the name changed and no image URL is provided
-                                if (name != null &&
-                                    name != widget.userData.name &&
-                                    downloadURL == null &&
-                                    !widget.userData.photoUrl.contains(
-                                        'https://lh3.googleusercontent.com')) {
-                                  // Set a default image URL here
-                                  updatedPhotoUrl =
-                                      'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
-                                }
+                                // // Check if the name changed and no image URL is provided
+                                // if (name != null &&
+                                //     name != widget.userData.name &&
+                                //     downloadURL == null &&
+                                //     !widget.userData.photoUrl.contains(
+                                //         'https://lh3.googleusercontent.com')) {
+                                //   // Set a default image URL here
+                                //   updatedPhotoUrl =
+                                //       'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
+                                // }
                                 await FirestoreService(uid: widget.user.uid)
                                     .updateUserData(
                                         updatedName,
@@ -498,7 +499,9 @@ class _EditProfileState extends State<EditProfile> {
                                             widget.userData.education,
                                         workingStatus ??
                                             widget.userData.working,
-                                        reason ?? widget.userData.reason);
+                                        reason ?? widget.userData.reason,
+                                        widget.userData.membership
+                                            .toFirestoreMap());
                                 setState(() {
                                   image = null;
                                 });

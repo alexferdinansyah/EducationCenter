@@ -43,7 +43,6 @@ class _DashboardAppState extends State<DashboardApp> {
     // Add other "OTHERS" items as needed
   ];
 
-  MembershipModel? membershipData;
   String selectedSidebarItem = '';
 
   @override
@@ -213,9 +212,7 @@ class _DashboardAppState extends State<DashboardApp> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserData? userData = snapshot.data;
-                  if (userData != null) {
-                    membershipData = userData.membership;
-                  }
+                  MembershipModel membershipData = userData!.membership;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -270,7 +267,7 @@ class _DashboardAppState extends State<DashboardApp> {
                                     color: Colors.grey,
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                        image: NetworkImage(userData!.photoUrl),
+                                        image: NetworkImage(userData.photoUrl),
                                         fit: BoxFit.cover),
                                   ),
                                 ),

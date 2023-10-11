@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String uid;
   final String email;
@@ -15,7 +17,7 @@ class UserData {
   final String education;
   final String working;
   final String reason;
-  MembershipModel? membership;
+  final MembershipModel membership;
 
   UserData({
     required this.uid,
@@ -27,8 +29,28 @@ class UserData {
     required this.education,
     required this.working,
     required this.reason,
-    this.membership,
+    required this.membership,
   });
+
+  factory UserData.fromFirestore(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+    final membershipData = data['membership'] as Map<String, dynamic>?;
+
+    return UserData(
+        uid: snapshot.id,
+        name: data['name'],
+        photoUrl: data['photoUrl'],
+        role: data['role'],
+        noWhatsapp: data['noWhatsapp'],
+        address: data['address'],
+        education: data['education'],
+        working: data['working'],
+        reason: data['reason'],
+        membership: MembershipModel(
+          memberType: membershipData!['type'],
+          joinSince: membershipData['join_since'].toDate(),
+        ));
+  }
 }
 
 class MembershipModel {
@@ -36,4 +58,12 @@ class MembershipModel {
   final DateTime joinSince;
 
   MembershipModel({required this.memberType, required this.joinSince});
+
+  Map<String, dynamic> toFirestoreMap() {
+    return {
+      'type': memberType,
+      'join_since': Timestamp.fromDate(
+          joinSince), // Assuming Firestore uses Timestamp for DateTime
+    };
+  }
 }

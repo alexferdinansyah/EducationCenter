@@ -5,7 +5,8 @@ import 'package:project_tc/components/animation/animation_function.dart';
 import 'package:project_tc/components/articles.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/footer.dart';
-import 'package:project_tc/components/static/article_data.dart';
+import 'package:project_tc/models/article.dart';
+import 'package:project_tc/services/firestore_service.dart';
 
 class ArticleList extends StatelessWidget {
   const ArticleList({super.key});
@@ -22,21 +23,50 @@ class ArticleList extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: width / 1.6,
-                height: height * .62 * articles.length + 150,
-                child: LiveList(
-                  showItemInterval: const Duration(milliseconds: 150),
-                  showItemDuration: const Duration(milliseconds: 350),
-                  scrollDirection: Axis.vertical,
-                  itemCount: articles.length,
-                  itemBuilder: animationBuilder(
-                    (index) => ArticleLists(
-                      article: articles[index],
-                    ),
-                  ),
-                ),
-              ),
+              StreamBuilder(
+                  stream: FirestoreService.withoutUID().allArticle,
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<Map> dataMaps = snapshot.data!;
+
+                      final List<Map> articles = dataMaps.where((articleData) {
+                        final dynamic data = articleData['article'];
+                        return data is Article;
+                      }).map((articleData) {
+                        final Article article = articleData['article'];
+                        final String id = articleData['id'];
+                        return {'article': article, 'id': id};
+                      }).toList();
+                      return SizedBox(
+                        width: width / 1.6,
+                        height: height * .64 * articles.length + 150,
+                        child: LiveList(
+                          showItemInterval: const Duration(milliseconds: 150),
+                          showItemDuration: const Duration(milliseconds: 350),
+                          scrollDirection: Axis.vertical,
+                          itemCount: articles.length,
+                          itemBuilder: animationBuilder(
+                            (index) => ArticleLists(
+                                article: articles[index]['article'],
+                                id: articles[index]['id']),
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text('No courses available.'),
+                      );
+                    } else {
+                      return const Center(
+                        child: Text('kok iso.'),
+                      );
+                    }
+                  }),
               const Spacer(),
               Container(
                 width: width / 4.5,
