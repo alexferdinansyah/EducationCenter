@@ -8,6 +8,8 @@ import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/user.dart';
+import 'package:provider/provider.dart';
 
 class DetailBundleCourse extends StatefulWidget {
   const DetailBundleCourse({
@@ -35,6 +37,8 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context, listen: false);
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var argument = Get.parameters;
@@ -42,9 +46,9 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
     controller.fetchDocument(id);
     // Course course = courses[0];
     return Obx(() {
-      final document = controller.documentSnapshot.value;
+      final course = controller.documentSnapshot.value;
 
-      if (document == null) {
+      if (course == null) {
         return const Center(child: Text('Loading...'));
       }
 
@@ -83,7 +87,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10, bottom: 8),
                             child: Text(
-                              document.title!,
+                              course.title!,
                               style: GoogleFonts.mulish(
                                   color: CusColors.header,
                                   fontSize: width * .028,
@@ -91,7 +95,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                             ),
                           ),
                           Text(
-                            '(Contains ${document.totalCourse} Courses)',
+                            '(Contains ${course.totalCourse} Courses)',
                             style: GoogleFonts.mulish(
                               color: CusColors.accentBlue,
                               fontSize: width * .011,
@@ -160,7 +164,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                             ),
                           ),
                           Text(
-                            document.description!,
+                            course.description!,
                             style: GoogleFonts.mulish(
                                 color: CusColors.inactive,
                                 fontSize: width * .012,
@@ -187,12 +191,12 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                             child: Container(
                               width: width / 2.7,
                               height: height / 2.1,
-                              decoration: document.image != ''
+                              decoration: course.image != ''
                                   ? BoxDecoration(
                                       borderRadius: BorderRadius.circular(24),
                                       // color: const Color(0xFFD9D9D9),
                                       image: DecorationImage(
-                                          image: AssetImage(document.image!),
+                                          image: AssetImage(course.image!),
                                           fit: BoxFit
                                               .contain, // Adjust the fit as needed
                                           alignment: Alignment.topCenter),
@@ -255,15 +259,15 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                 ),
                 SizedBox(
                   width: width / 1.6,
-                  height: height * .13 * document.listCourse!.length + 150,
+                  height: height * .13 * course.listCourse!.length + 150,
                   child: LiveList(
                     showItemInterval: const Duration(milliseconds: 150),
                     showItemDuration: const Duration(milliseconds: 350),
                     scrollDirection: Axis.vertical,
-                    itemCount: document.listCourse!.length,
+                    itemCount: course.listCourse!.length,
                     itemBuilder: animationBuilder(
                       (index) => ListCourses(
-                        listCourse: document.listCourse![index],
+                        listCourse: course.listCourse![index],
                         index: index,
                       ),
                     ),
@@ -297,7 +301,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                           ),
                         ),
                         BulletList(
-                          document.completionBenefits!,
+                          course.completionBenefits!,
                           border: true,
                         )
                       ],
@@ -357,14 +361,14 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Rp. ${document.price}',
+                              'Rp. ${course.price}',
                               style: GoogleFonts.mulish(
                                   color: CusColors.title,
                                   fontSize: width * .015,
                                   fontWeight: FontWeight.bold,
                                   height: 1.5),
                             ),
-                            document.discount != ''
+                            course.discount != ''
                                 ? Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
@@ -381,7 +385,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          '${document.discount}% Off',
+                                          '${course.discount}% Off',
                                           textAlign: TextAlign.left,
                                           style: GoogleFonts.inter(
                                             color: const Color(0xFF2501FF),
@@ -396,44 +400,10 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: width * .2,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF86B1F2),
-                          borderRadius: BorderRadius.circular(64),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
-                              EdgeInsets.symmetric(
-                                vertical: height * 0.025,
-                              ),
-                            ),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                          ),
-                          child: Text(
-                            document.isBundle!
-                                ? 'Buy Courses Bundle'
-                                : 'Buy Course',
-                            style: GoogleFonts.mulish(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              fontSize: width * 0.01,
-                            ),
-                          ),
-                        ),
-                      ),
+                      user != null
+                          ? cusPaymentWidgetOn(
+                              width, height, id, user.uid, course.isBundle)
+                          : cusPaymentWidgetOff(width, height, course.isBundle)
                     ],
                   ),
                 ],

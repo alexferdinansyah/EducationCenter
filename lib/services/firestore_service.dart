@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,6 +18,8 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('courses');
   final CollectionReference articleCollection =
       FirebaseFirestore.instance.collection('articles');
+  final CollectionReference transactionCollection =
+      FirebaseFirestore.instance.collection('transactions');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -47,6 +50,10 @@ class FirestoreService {
         'isAdmin': false,
       };
     }
+  }
+
+  Future updateUserPhoto(String photoUrl) {
+    return userCollection.doc(uid).update({'photoUrl': photoUrl});
   }
 
   Future updateUserData(
@@ -102,6 +109,20 @@ class FirestoreService {
     }
   }
 
+  //get course data by reference
+  Future getCourseData(DocumentReference course) async {
+    // Get Reference Courses Data
+    final courseDoc = await course.get();
+
+    if (courseDoc.exists) {
+      final courseData =
+          Course.fromFirestore(courseDoc.data() as Map<String, dynamic>);
+      return courseData;
+    } else {
+      throw Exception('Course not found.');
+    }
+  }
+
   // Add a new Course document to Firestore
   Future addCourse(Course course) async {
     try {
@@ -109,6 +130,56 @@ class FirestoreService {
     } catch (e) {
       print('Error adding course: $e');
       // Handle the error as needed
+    }
+  }
+
+  // Add my courses sub collection
+  Future addMyCourse(String courseId) async {
+    try {
+      final myCoursesCollection =
+          userCollection.doc(uid).collection('my_courses');
+      final courseReference = courseCollection.doc(courseId);
+
+      // 1. Input Data into Subcollection
+      await myCoursesCollection.add({
+        'course': courseReference,
+        'isPaid': true,
+      });
+    } catch (e) {
+      print('Error adding course to my courses: $e');
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>?> get allMyCourses {
+    try {
+      final myCoursesCollection =
+          userCollection.doc(uid).collection('my_courses');
+      return myCoursesCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> myCourses = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          final courseReference = data['course'] as DocumentReference;
+          final isPaid = data['isPaid'] as bool;
+
+          try {
+            final Course courseData = await getCourseData(courseReference);
+            myCourses.add({
+              'course': courseData,
+              'isPaid': isPaid,
+            });
+          } catch (error) {
+            print('Error getting course data: $error');
+          }
+        }
+
+        return myCourses;
+      });
+    } catch (error) {
+      print('Error streaming my courses: $error');
+      return Stream.value([]); // Return an empty list in case of an error
     }
   }
 
@@ -124,7 +195,7 @@ class FirestoreService {
         }).toList();
       });
     } catch (error) {
-      print('Error streaming courses: $error');
+      print('Error streaming articles: $error');
       return Stream.value([]); // Return an empty list in case of an error
     }
   }
@@ -139,7 +210,7 @@ class FirestoreService {
     }
   }
 
-  Stream<List<Map>> getCombinedStream() {
+  Stream<List<Map>> courseArticleStream() {
     final courseStream = allCourses;
     final articleStream = allArticle;
 
@@ -147,5 +218,69 @@ class FirestoreService {
       [courseStream, articleStream],
       (values) => values.first + values.last,
     );
+  }
+
+  //create transaction
+  Future<String> createTransaction(TransactionModel transactionData) async {
+    final DocumentReference docRef =
+        await transactionCollection.add(transactionData.toFirestore());
+    return docRef.id;
+  }
+
+  // create user transaction
+  Future<void> updateUserTransaction(String transactionId) async {
+    final CollectionReference transactionRef =
+        userCollection.doc(uid).collection('transactions');
+    final DocumentReference transactionDocRef =
+        transactionCollection.doc(transactionId);
+
+    // Add a reference to the transaction document in the user's "transactions" subcollection
+    await transactionRef.add({'transaction': transactionDocRef});
+  }
+
+  //get transaction data by reference
+  Future getTransactionData(DocumentReference transaction) async {
+    // Get Reference Transaction Data
+    final transactionDoc = await transaction.get();
+
+    if (transactionDoc.exists) {
+      final transactionData = TransactionModel.fromFirestore(
+          transactionDoc.data() as Map<String, dynamic>);
+      return transactionData;
+    } else {
+      throw Exception('transaction not found.');
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>?> get userTransaction {
+    try {
+      final myTransactionCollection =
+          userCollection.doc(uid).collection('transactions');
+      return myTransactionCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> myTransaction = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          final transactionReference = data['transaction'] as DocumentReference;
+
+          try {
+            final TransactionModel transactionData =
+                await getTransactionData(transactionReference);
+            myTransaction.add({
+              'transaction': transactionData,
+            });
+          } catch (error) {
+            print('Error getting transaction data: $error');
+          }
+        }
+
+        return myTransaction;
+      });
+    } catch (error) {
+      print('Error streaming my transaction: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
   }
 }

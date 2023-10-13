@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/services/firestore_service.dart';
 
 class CusColors {
   static Color mainColor = const Color(0xFF19A7CE);
@@ -92,4 +95,79 @@ class CusSearchBar extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle) {
+  return Container(
+    width: width * .2,
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () async {
+        final firestore = FirestoreService(uid: userId);
+        await firestore.addMyCourse(courseId);
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(
+            vertical: height * 0.025,
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        isBundle ? 'Buy Courses Bundle' : 'Buy Course',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: width * 0.01,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget cusPaymentWidgetOff(width, height, isBundle) {
+  return Container(
+    width: width * .2,
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () {
+        Get.toNamed(routeLogin);
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(
+            vertical: height * 0.025,
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        isBundle ? 'Buy Courses Bundle' : 'Buy Course',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: width * 0.01,
+        ),
+      ),
+    ),
+  );
 }

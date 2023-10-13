@@ -226,7 +226,7 @@ class _LandingPageState extends State<LandingPage> {
         ),
       ),
       StreamBuilder(
-          stream: FirestoreService.withoutUID().getCombinedStream(),
+          stream: FirestoreService.withoutUID().courseArticleStream(),
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
               final List<Map> dataMaps = snapshot.data!;
@@ -653,7 +653,7 @@ class _LandingPageState extends State<LandingPage> {
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(
-                child: Text('No courses available.'),
+                child: Text('No data available.'),
               );
             } else {
               return const Center(

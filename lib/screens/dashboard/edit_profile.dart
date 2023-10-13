@@ -161,17 +161,8 @@ class _EditProfileState extends State<EditProfile> {
                                 'https://lh3.googleusercontent.com')) {
                               await deleteExistingPhoto();
                               await FirestoreService(uid: widget.user.uid)
-                                  .updateUserData(
-                                      widget.userData.name,
-                                      'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF', // Set this to the new image URL
-                                      widget.userData.role,
-                                      widget.userData.noWhatsapp,
-                                      widget.userData.address,
-                                      widget.userData.education,
-                                      widget.userData.working,
-                                      widget.userData.reason,
-                                      widget.userData.membership
-                                          .toFirestoreMap());
+                                  .updateUserPhoto(
+                                      'https://ui-avatars.com/api/?name=${widget.userData.name}&color=7F9CF5&background=EBF4FF');
                             }
                           },
                           child: Text(

@@ -25,7 +25,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         title: const Text('Admin Dashboard'),
       ),
       body: StreamBuilder(
-        stream: FirestoreService.withoutUID().getCombinedStream(),
+        stream: FirestoreService.withoutUID().courseArticleStream(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             final List<Map> dataMaps = snapshot.data!;

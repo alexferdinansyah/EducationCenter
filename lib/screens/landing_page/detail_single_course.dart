@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
+import 'package:project_tc/models/user.dart';
+import 'package:provider/provider.dart';
 
 class DetailSingleCourse extends StatefulWidget {
   const DetailSingleCourse({super.key});
@@ -19,6 +21,8 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
   final DetailCourseController controller = Get.put(DetailCourseController());
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context, listen: false);
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -297,44 +301,10 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: width * .2,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF86B1F2),
-                        borderRadius: BorderRadius.circular(64),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                              vertical: height * 0.025,
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                        ),
-                        child: Text(
-                          course.isBundle!
-                              ? 'Buy Courses Bundle'
-                              : 'Buy Course',
-                          style: GoogleFonts.mulish(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            fontSize: width * 0.01,
-                          ),
-                        ),
-                      ),
-                    ),
+                    user != null
+                        ? cusPaymentWidgetOn(
+                            width, height, id, user.uid, course.isBundle)
+                        : cusPaymentWidgetOff(width, height, course.isBundle)
                   ],
                 ),
               ],

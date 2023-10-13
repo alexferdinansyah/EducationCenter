@@ -14,7 +14,7 @@ import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
 import 'package:project_tc/screens/dashboard/setting.dart';
-import 'package:project_tc/screens/dashboard/transaction.dart';
+import 'package:project_tc/screens/dashboard/transaction_table.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 
@@ -85,9 +85,13 @@ class _DashboardAppState extends State<DashboardApp> {
         case 'Newsflash':
           return const Newsflash();
         case 'My Courses':
-          return const MyCourses();
+          return MyCourses(
+            user: user,
+          );
         case 'Transaction':
-          return const TransactionTable();
+          return TransactionTable(
+            user: user,
+          );
         case 'Free Tutorial':
           return Container(
             height: 50,
