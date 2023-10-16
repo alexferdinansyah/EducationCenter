@@ -36,7 +36,7 @@ class TransactionModel {
       'uid': uid,
       'item': item!.toFirestore(),
       'invoice_date': invoiceDate,
-      'date': Timestamp.now(),
+      'date': Timestamp.fromDate(date!),
       'price': price,
       'status': status,
       'invoice': invoice

@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/animation/animation_function.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
+import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
@@ -20,8 +21,8 @@ class MyCourses extends StatefulWidget {
 }
 
 class _MyCoursesState extends State<MyCourses> {
-  List<Course> courses = [];
-  List<Course> filteredCourses = [];
+  List<Map> courses = [];
+  List<Map> filteredCourses = [];
   bool initCourse = false;
 
   void filterCourses(String criteria) {
@@ -30,11 +31,11 @@ class _MyCoursesState extends State<MyCourses> {
         if (criteria == 'All Courses') {
           return true;
         } else if (criteria == 'Free Courses') {
-          return course.courseType == 'Free';
+          return course['course'].courseType == 'Free';
         } else if (criteria == 'Premium') {
-          return course.courseType == 'Premium';
+          return course['course'].courseType == 'Premium';
         } else if (criteria == 'Finished') {
-          return course.status == 'Finished';
+          return course['status'] == 'Finished';
         }
         return false;
       }).toList();
@@ -68,8 +69,12 @@ class _MyCoursesState extends State<MyCourses> {
           }
           if (snapshot.hasData) {
             final List<Map<String, dynamic>?> dataMaps = snapshot.data!;
-            final dataCourses =
-                dataMaps.map((data) => data!['course'] as Course).toList();
+            final dataCourses = dataMaps.map((data) {
+              return {
+                'course': data!['course'] as Course,
+                'status': data['status'],
+              };
+            }).toList();
 
             courses = List.from(dataCourses);
 
@@ -308,7 +313,8 @@ class _MyCoursesState extends State<MyCourses> {
                                   ),
                                   itemBuilder: animationBuilder((index) =>
                                       MyCourse(
-                                          course: filteredCourses[index]))),
+                                          course: filteredCourses[index]
+                                              ['course']))),
                         ),
                       ],
                     ),
@@ -317,9 +323,7 @@ class _MyCoursesState extends State<MyCourses> {
               ),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Loading();
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text('No courses available.'),

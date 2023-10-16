@@ -196,7 +196,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                                       borderRadius: BorderRadius.circular(24),
                                       // color: const Color(0xFFD9D9D9),
                                       image: DecorationImage(
-                                          image: AssetImage(course.image!),
+                                          image: NetworkImage(course.image!),
                                           fit: BoxFit
                                               .contain, // Adjust the fit as needed
                                           alignment: Alignment.topCenter),

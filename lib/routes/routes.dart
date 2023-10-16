@@ -27,6 +27,7 @@ const String routeForgotPassword = '/forgot-password';
 const String routeEditProfile = '/edit-profile';
 const String routeMembershipInfo = '/membership-info';
 const String routeMembershipUpgrade = '/membership-upgrade';
+const String routeMembershipUpgradePayment = '/membership-upgrade-payment';
 
 final navKey = GlobalKey<NavigatorState>();
 
@@ -91,6 +92,10 @@ final getPages = [
   ),
   GetPage(
     name: routeMembershipUpgrade,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeMembershipUpgradePayment,
     page: () => const Wrapper(),
   ),
 ];

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 
 class MembershipUpgrade extends StatefulWidget {
   final MembershipModel membershipData;
@@ -469,7 +471,17 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                                   BorderRadius.circular(64),
                                             ),
                                             child: ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Get.to(
+                                                    () => DashboardApp(
+                                                          selected:
+                                                              'Membership-Payment',
+                                                          optionalSelected:
+                                                              'Settings',
+                                                        ),
+                                                    routeName:
+                                                        'membership-upgrade-payment');
+                                              },
                                               style: ButtonStyle(
                                                 shape:
                                                     MaterialStateProperty.all<

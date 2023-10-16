@@ -155,14 +155,26 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    if (Get.currentRoute == '/detail-bundle-courses' ||
-        Get.currentRoute == '/detail-single-courses') {
+    if (Get.currentRoute.contains(routeDetailSingleCourse) ||
+        Get.currentRoute.contains(routeDetailBundleCourse) ||
+        Get.currentRoute == routeBundleCourses ||
+        Get.currentRoute == routeCourses) {
       setState(() {
         index = 1;
+      });
+    } else if (Get.currentRoute == routeArticle ||
+        Get.currentRoute == routeDetailArticle) {
+      setState(() {
+        index = 2;
+      });
+    } else if (Get.currentRoute == routeContacts) {
+      setState(() {
+        index = 3;
       });
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.symmetric(
@@ -170,8 +182,8 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
           child: Row(
             children: [
               Image.asset(
-                'assets/images/logo_dac.png',
-                width: width * .3,
+                'assets/images/dec_logo2.png',
+                width: width * .13,
               ),
               const Spacer(),
               GestureDetector(
@@ -181,6 +193,9 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
                   child: const Icon(Icons.close, color: Color(0xFF458FF6)))
             ],
           ),
+        ),
+        SizedBox(
+          height: height * .05,
         ),
         NavigationItem(
           selected: index == 0,
@@ -207,8 +222,9 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
           onHighlight: onHighlight,
         ),
         Container(
-          margin: EdgeInsets.only(left: width * .03),
-          width: width * .09,
+          margin: EdgeInsets.symmetric(
+              horizontal: width * .04, vertical: height * .03),
+          width: double.infinity,
           decoration: BoxDecoration(
               gradient:
                   LinearGradient(begin: const Alignment(-1.2, 0.0), colors: [
@@ -233,7 +249,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
                         borderRadius: BorderRadius.circular(8))),
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                     EdgeInsets.symmetric(
-                  vertical: height * .025,
+                  vertical: height * .03,
                 )),
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 shadowColor: MaterialStateProperty.all(Colors.transparent)),
@@ -242,7 +258,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
               style: GoogleFonts.mulish(
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-                fontSize: width * .012,
+                fontSize: width * .03,
               ),
             ),
           ),

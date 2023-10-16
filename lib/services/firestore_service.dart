@@ -35,7 +35,7 @@ class FirestoreService {
             userData['role']; // Assuming the role field is named 'role'
 
         // Check if the user's role is 'admin'
-        if (userRole == 'admin') {
+        if (userRole == 'Admin') {
           result['isAdmin'] = true;
         }
 
@@ -90,6 +90,18 @@ class FirestoreService {
   // get user docs stream
   Stream<UserData> get userData {
     return userCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
+  }
+
+  Future getUserByUid(String uid) async {
+    // Get Reference Courses Data
+    final userDoc = await userCollection.doc(uid).get();
+
+    if (userDoc.exists) {
+      final userData = UserData.fromFirestore(userDoc);
+      return userData;
+    } else {
+      throw Exception('Course not found.');
+    }
   }
 
   Stream<List<Map>> get allCourses {
@@ -163,13 +175,12 @@ class FirestoreService {
           final data = document.data() as Map<String, dynamic>;
           final courseReference = data['course'] as DocumentReference;
           final isPaid = data['isPaid'] as bool;
+          final status = data['status'] as String;
 
           try {
             final Course courseData = await getCourseData(courseReference);
-            myCourses.add({
-              'course': courseData,
-              'isPaid': isPaid,
-            });
+            myCourses.add(
+                {'course': courseData, 'isPaid': isPaid, 'status': status});
           } catch (error) {
             print('Error getting course data: $error');
           }
@@ -281,6 +292,58 @@ class FirestoreService {
     } catch (error) {
       print('Error streaming my transaction: $error');
       return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Stream<List<Map>> get userRequestTransaction {
+    try {
+      return transactionCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> userTransaction = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+
+          try {
+            final UserData userData = await getUserByUid(data['uid']);
+            userTransaction.add({
+              'id': document.id,
+              'user': userData,
+              'transaction': TransactionModel.fromFirestore(data),
+            });
+          } catch (error) {
+            print('Error getting transaction data: $error');
+          }
+        }
+
+        return userTransaction;
+      });
+    } catch (error) {
+      print('Error streaming user transaction: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Future confirmTransactionUser(
+      transactionId, UserData user, TransactionModel transaction) async {
+    try {
+      if (transaction.item!.title == 'Membership') {
+        final upgradeMembership =
+            MembershipModel(memberType: 'Pro', joinSince: DateTime.now());
+        try {
+          await userCollection
+              .doc(user.uid)
+              .update({'membership': upgradeMembership.toFirestore()});
+          await transactionCollection
+              .doc(transactionId)
+              .update({'status': 'Success'});
+        } catch (e) {
+          print('Error updating user membership data $e');
+        }
+      }
+    } catch (e) {
+      print('Error getting transaction data $e');
     }
   }
 }

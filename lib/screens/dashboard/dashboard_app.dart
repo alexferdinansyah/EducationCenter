@@ -1,10 +1,10 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
@@ -13,6 +13,7 @@ import 'package:project_tc/screens/dashboard/membership_info.dart';
 import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
+import 'package:project_tc/screens/dashboard/payment_page.dart';
 import 'package:project_tc/screens/dashboard/setting.dart';
 import 'package:project_tc/screens/dashboard/transaction_table.dart';
 import 'package:project_tc/services/firestore_service.dart';
@@ -34,7 +35,6 @@ class _DashboardAppState extends State<DashboardApp> {
     const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
     const SideItem(icon: IconlyBold.buy, title: 'Transaction'),
     const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
-    const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];
 
   final List<SideItem> otherItems = [
@@ -59,6 +59,9 @@ class _DashboardAppState extends State<DashboardApp> {
       } else if (currentRoute == "/membership-upgrade") {
         widget.optionalSelected = 'Settings';
         widget.selected = 'Membership-Upgrade';
+      } else if (currentRoute == "/membership-upgrade-payment") {
+        widget.optionalSelected = 'Settings';
+        widget.selected = 'Membership-Payment';
       }
       if (widget.optionalSelected == null) {
         selectedSidebarItem = widget.selected;
@@ -111,6 +114,10 @@ class _DashboardAppState extends State<DashboardApp> {
             return MembershipInfo(membershipData: membershipData);
           } else if (widget.selected == 'Membership-Upgrade') {
             return MembershipUpgrade(membershipData: membershipData);
+          } else if (widget.selected == 'Membership-Payment') {
+            return PaymentPage(
+              user: user,
+            );
           } else {
             return Settings(
               user: user,
@@ -358,16 +365,7 @@ class _DashboardAppState extends State<DashboardApp> {
                     ],
                   );
                 } else {
-                  return const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      SpinKitDualRing(
-                        color: Colors.blue,
-                      ),
-                    ],
-                  );
+                  return const Loading();
                 }
               }),
         ],

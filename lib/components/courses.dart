@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
@@ -34,7 +35,7 @@ class Courses extends StatelessWidget {
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     image: DecorationImage(
-                      image: AssetImage(course.image!),
+                      image: NetworkImage(course.image!),
                       fit: BoxFit.contain, // Adjust the fit as needed
                     ),
                   )
@@ -60,6 +61,8 @@ class Courses extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: height * .006),
                   child: Text(
                     course.title!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.mulish(
                         color: CusColors.title,
                         fontSize: width * .012,
@@ -246,14 +249,26 @@ class ListCourses extends StatelessWidget {
             width: width * .1,
             height: height * .13,
             margin: EdgeInsets.only(right: width * .015),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(height * .03),
-              color: CusColors.inactive.withOpacity(0.4),
-              border: Border.all(
-                color: const Color(0xFF2501FF),
-                width: 1,
-              ),
-            ),
+            decoration: listCourse.image != ''
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.circular(height * .03),
+                    border: Border.all(
+                      color: const Color(0xFF2501FF),
+                      width: 1,
+                    ),
+                    image: DecorationImage(
+                      image: NetworkImage(listCourse.image!),
+                      fit: BoxFit.contain, // Adjust the fit as needed
+                    ),
+                  )
+                : BoxDecoration(
+                    borderRadius: BorderRadius.circular(height * .03),
+                    color: CusColors.inactive.withOpacity(0.4),
+                    border: Border.all(
+                      color: const Color(0xFF2501FF),
+                      width: 1,
+                    ),
+                  ),
           ),
           SizedBox(
             width: width * .33,
@@ -324,7 +339,7 @@ class MyCourse extends StatelessWidget {
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     image: DecorationImage(
-                      image: AssetImage(course.image!),
+                      image: NetworkImage(course.image!),
                       fit: BoxFit.contain, // Adjust the fit as needed
                     ),
                   )
@@ -365,39 +380,51 @@ class MyCourse extends StatelessWidget {
                     decoration: const BoxDecoration(
                       color: Color(0xFFCCCCCC),
                     )),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF86B1F2),
-                    borderRadius: BorderRadius.circular(64),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                Row(
+                  children: [
+                    Container(
+                      width: width * .1,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF86B1F2),
+                        borderRadius: BorderRadius.circular(64),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(
+                              vertical: height * 0.022,
+                            ),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                        ),
+                        child: Text(
+                          'Learn Course',
+                          style: GoogleFonts.mulish(
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                            fontSize: width * 0.01,
+                          ),
                         ),
                       ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.symmetric(
-                          vertical: height * 0.022,
-                        ),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
                     ),
-                    child: Text(
-                      'Learn Course',
-                      style: GoogleFonts.mulish(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: width * 0.01,
-                      ),
-                    ),
-                  ),
+                    const Spacer(),
+                    Icon(
+                      IconlyLight.chat,
+                      color: const Color(0xFF86B1F2),
+                      size: width * .02,
+                    )
+                  ],
                 ),
               ],
             ),

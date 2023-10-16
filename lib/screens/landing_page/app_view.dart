@@ -38,8 +38,7 @@ class _AppViewState extends State<AppView> {
                     ScreenTypeLayout.builder(
                         desktop: (BuildContext context) =>
                             const CusNavigationBar(),
-                        tablet: (BuildContext context) =>
-                            const CusNavigationBar(),
+                        tablet: (BuildContext context) => const SizedBox(),
                         mobile: (BuildContext context) => const SizedBox()),
                     widget.child,
                   ],
@@ -71,6 +70,9 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
         // Check the sizing information here and return your UI
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
           return _mobileNav(widget.child, width, height);
+        } else if (sizingInformation.deviceScreenType ==
+            DeviceScreenType.tablet) {
+          return _mobileNav(widget.child, width, height);
         } else {
           return _dekstopNav(widget.child);
         }
@@ -83,8 +85,8 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             title: Image.asset(
-              'assets/images/logo_dac.png',
-              width: width * .3,
+              'assets/images/dec_logo2.png',
+              width: width * .13,
             ),
             elevation: 0,
             backgroundColor: CusColors.bg,

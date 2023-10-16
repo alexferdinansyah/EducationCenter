@@ -492,7 +492,7 @@ class _EditProfileState extends State<EditProfile> {
                                             widget.userData.working,
                                         reason ?? widget.userData.reason,
                                         widget.userData.membership
-                                            .toFirestoreMap());
+                                            .toFirestore());
                                 setState(() {
                                   image = null;
                                 });

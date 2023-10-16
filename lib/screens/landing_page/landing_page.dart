@@ -9,8 +9,6 @@ import 'package:project_tc/components/articles.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/components/footer.dart';
-import 'package:project_tc/components/static/article_data.dart';
-import 'package:project_tc/components/static/course_data.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
@@ -24,16 +22,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  final bundleCourses =
-      courses.where((course) => course.isBundle == true).take(3).toList();
-
-  // list course
-  final listCourses =
-      courses.where((course) => course.isBundle == false).take(6).toList();
-
-  // list article
-  final listArticles = articles.take(6).toList();
-
   List<bool> isHovered = [false, false, false];
 
   @override

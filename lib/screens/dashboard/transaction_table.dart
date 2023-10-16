@@ -3,6 +3,7 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:project_tc/components/constants.dart";
+import "package:project_tc/components/loading.dart";
 import "package:project_tc/models/transaction.dart";
 import "package:project_tc/models/user.dart";
 import "package:project_tc/services/extension.dart";
@@ -115,41 +116,46 @@ class _TransactionTableState extends State<TransactionTable> {
                     ),
                   ),
                 )),
-                DataCell(Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                          color: const Color(0xFF121212).withOpacity(.03),
-                          offset: const Offset(0, 3),
-                          blurRadius: 6)
-                    ],
-                    border: Border.all(
-                      color: const Color(0xFF7D8398).withOpacity(.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.remove_red_eye_outlined,
-                          color: Color(0xFF121212),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'View Invoice',
-                          style: GoogleFonts.poppins(
-                              fontSize: width * .01,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF121212)),
-                        )
+                DataCell(GestureDetector(
+                  onTap: () {
+                    showModalInvoice(width, transaction.invoice);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                            color: const Color(0xFF121212).withOpacity(.03),
+                            offset: const Offset(0, 3),
+                            blurRadius: 6)
                       ],
+                      border: Border.all(
+                        color: const Color(0xFF7D8398).withOpacity(.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.remove_red_eye_outlined,
+                            color: Color(0xFF121212),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'View Invoice',
+                            style: GoogleFonts.poppins(
+                                fontSize: width * .01,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF121212)),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 )),
@@ -255,32 +261,6 @@ class _TransactionTableState extends State<TransactionTable> {
                               ],
                               rows: dataRows),
                         ),
-                        ElevatedButton(
-                            onPressed: () async {
-                              final firestoreService =
-                                  FirestoreService(uid: widget.user.uid);
-
-                              final data = TransactionModel(
-                                uid: widget.user.uid,
-                                item: TransactionItem(
-                                    id: '123456789',
-                                    title: 'Learn Basic HTML',
-                                    subTitle: 'Pro'),
-                                invoiceDate: 'sadasdas',
-                                date: DateTime.now(),
-                                price: '1000',
-                                status: 'Success',
-                                invoice: 'Image',
-                              );
-
-                              await firestoreService
-                                  .createTransaction(data)
-                                  .then((value) async {
-                                await firestoreService
-                                    .updateUserTransaction(value);
-                              });
-                            },
-                            child: const Text('ADD TRANSACTION'))
                       ],
                     ),
                   ),
@@ -288,9 +268,7 @@ class _TransactionTableState extends State<TransactionTable> {
               ),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Loading();
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text('No transaction available.'),
@@ -301,5 +279,53 @@ class _TransactionTableState extends State<TransactionTable> {
             );
           }
         });
+  }
+
+  void showModalInvoice(width, imageUrl) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Color(0xFFCCCCCC),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Text(
+              'Invoice',
+              style: GoogleFonts.poppins(
+                fontSize: width * .014,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF1F384C),
+              ),
+            ),
+          ]),
+          content: SingleChildScrollView(
+              child: Container(
+            width: 200,
+            height: 350,
+            decoration: BoxDecoration(
+                image: DecorationImage(image: NetworkImage(imageUrl))),
+          )),
+          actions: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(
+                  fontSize: width * .01,
+                  fontWeight: FontWeight.w500,
+                  color: CusColors.secondaryText,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

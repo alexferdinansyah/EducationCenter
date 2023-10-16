@@ -11,7 +11,6 @@ class Course {
   String? price;
   String? discount;
   String? courseType;
-  String? status;
 
   Course({
     required this.image,
@@ -26,7 +25,6 @@ class Course {
     required this.price,
     this.discount = "",
     this.courseType,
-    this.status,
   });
 
   // Convert Firestore data to Course object
@@ -56,7 +54,6 @@ class Course {
       price: data['price'],
       discount: data['discount'],
       courseType: data['course_type'],
-      status: data['status'],
     );
   }
 
@@ -76,7 +73,6 @@ class Course {
       'price': price,
       'discount': discount,
       'course_type': courseType,
-      'status': status,
     };
   }
 }

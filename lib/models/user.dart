@@ -59,7 +59,7 @@ class MembershipModel {
 
   MembershipModel({required this.memberType, required this.joinSince});
 
-  Map<String, dynamic> toFirestoreMap() {
+  Map<String, dynamic> toFirestore() {
     return {
       'type': memberType,
       'join_since': Timestamp.fromDate(
