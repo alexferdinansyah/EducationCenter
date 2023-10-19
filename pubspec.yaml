@@ -57,6 +57,9 @@ dependencies:
   intl: ^0.18.1
   get_storage: ^2.1.1
   rxdart: ^0.27.7
+  youtube_player_iframe: ^4.0.4
+  url_launcher: ^6.1.14
+  omni_datetime_picker: ^1.0.9
 
 dev_dependencies:
   flutter_test:

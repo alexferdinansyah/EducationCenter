@@ -7,7 +7,9 @@ class Course {
   String? totalCourse;
   List<ListCourse>? listCourse;
   List<ChapterList>? chapterList;
-  List<String>? completionBenefits; // MAKE THIS NOT OPTIONAL
+  List<String>? completionBenefits;
+  List<String>? tag;
+  String? learnLimit;
   String? price;
   String? discount;
   String? courseType;
@@ -21,7 +23,9 @@ class Course {
     this.description,
     this.listCourse,
     this.chapterList,
-    this.completionBenefits,
+    required this.completionBenefits,
+    this.tag,
+    this.learnLimit,
     required this.price,
     this.discount = "",
     this.courseType,
@@ -49,8 +53,10 @@ class Course {
       totalCourse: data['total_course'],
       listCourse: courseLists,
       chapterList: chapterLists,
-      completionBenefits: (data['completion_benefits'] as List<dynamic>)
-          .cast<String>(), // Ensure it's a List of Strings
+      completionBenefits:
+          (data['completion_benefits'] as List<dynamic>).cast<String>(),
+      tag: (data['tag'] as List<dynamic>).cast<String>(),
+      learnLimit: data['learn_limit'],
       price: data['price'],
       discount: data['discount'],
       courseType: data['course_type'],
@@ -70,6 +76,8 @@ class Course {
       'chapter_list':
           chapterList?.map((chapter) => chapter.toFirestore()).toList(),
       'completion_benefits': completionBenefits ?? [],
+      'tag': tag ?? [],
+      'learn_limit': learnLimit,
       'price': price,
       'discount': discount,
       'course_type': courseType,
@@ -135,5 +143,23 @@ class ChapterList {
       'chapter': chapter,
       'sub_chapter': subChapter ?? [],
     };
+  }
+}
+
+class LearnCourse {
+  String? title;
+  String? videoUrl;
+
+  LearnCourse({
+    required this.title,
+    required this.videoUrl,
+  });
+
+  factory LearnCourse.fromFirebase(Map<String, dynamic> data) {
+    return LearnCourse(title: data['title'], videoUrl: data['video_url']);
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {'title': title, 'video_url': videoUrl};
   }
 }

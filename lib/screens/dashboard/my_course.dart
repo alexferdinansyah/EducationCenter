@@ -71,7 +71,8 @@ class _MyCoursesState extends State<MyCourses> {
             final List<Map<String, dynamic>?> dataMaps = snapshot.data!;
             final dataCourses = dataMaps.map((data) {
               return {
-                'course': data!['course'] as Course,
+                'id': data!['id'],
+                'course': data['course'] as Course,
                 'status': data['status'],
               };
             }).toList();
@@ -311,10 +312,13 @@ class _MyCoursesState extends State<MyCourses> {
                                     mainAxisSpacing:
                                         16.0, // Adjust spacing between rows vertically
                                   ),
-                                  itemBuilder: animationBuilder((index) =>
-                                      MyCourse(
-                                          course: filteredCourses[index]
-                                              ['course']))),
+                                  itemBuilder: animationBuilder(
+                                    (index) => MyCourse(
+                                      course: filteredCourses[index]['course'],
+                                      id: filteredCourses[index]['id'],
+                                    ),
+                                  ),
+                                ),
                         ),
                       ],
                     ),

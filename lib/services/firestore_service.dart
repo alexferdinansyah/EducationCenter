@@ -179,8 +179,12 @@ class FirestoreService {
 
           try {
             final Course courseData = await getCourseData(courseReference);
-            myCourses.add(
-                {'course': courseData, 'isPaid': isPaid, 'status': status});
+            myCourses.add({
+              'id': courseReference.id,
+              'course': courseData,
+              'isPaid': isPaid,
+              'status': status
+            });
           } catch (error) {
             print('Error getting course data: $error');
           }

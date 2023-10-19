@@ -311,9 +311,10 @@ class ListCourses extends StatelessWidget {
 }
 
 class MyCourse extends StatelessWidget {
+  final String id;
   final Course course;
 
-  const MyCourse({super.key, required this.course});
+  const MyCourse({super.key, required this.course, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -389,7 +390,9 @@ class MyCourse extends StatelessWidget {
                         borderRadius: BorderRadius.circular(64),
                       ),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.toNamed(routeLearnCourse, parameters: {'id': id});
+                        },
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(

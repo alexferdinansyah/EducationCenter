@@ -9,6 +9,7 @@ import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/edit_profile.dart';
+import 'package:project_tc/screens/dashboard/help_page.dart';
 import 'package:project_tc/screens/dashboard/membership_info.dart';
 import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
@@ -123,8 +124,8 @@ class _DashboardAppState extends State<DashboardApp> {
               user: user,
             );
           }
-        // case 'Help':
-        //   return HelpWidget();
+        case 'Help':
+          return const HelpPage();
         default:
           return Container(); // Handle the default case here
       }
@@ -185,7 +186,7 @@ class _DashboardAppState extends State<DashboardApp> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(bottom: 21, top: 19, left: 40),
+                          const EdgeInsets.only(bottom: 21, top: 25, left: 40),
                       child: Text(
                         'OTHERS',
                         style: GoogleFonts.poppins(

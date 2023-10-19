@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
+import 'package:project_tc/screens/dashboard/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
 import 'package:project_tc/screens/landing_page/bundle_course_list.dart';
@@ -28,6 +29,7 @@ const String routeEditProfile = '/edit-profile';
 const String routeMembershipInfo = '/membership-info';
 const String routeMembershipUpgrade = '/membership-upgrade';
 const String routeMembershipUpgradePayment = '/membership-upgrade-payment';
+const String routeLearnCourse = '/learn-course';
 
 final navKey = GlobalKey<NavigatorState>();
 
@@ -97,5 +99,9 @@ final getPages = [
   GetPage(
     name: routeMembershipUpgradePayment,
     page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeLearnCourse,
+    page: () => const LearningCourse(),
   ),
 ];

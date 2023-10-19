@@ -104,7 +104,7 @@ class Footer extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: SvgPicture.asset('assets/svg/instagram.svg'),
+                        child: SvgPicture.asset('assets/svg/Instagram.svg'),
                       ),
                       SvgPicture.asset('assets/svg/whatsapp.svg'),
                     ],
