@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
@@ -265,6 +266,11 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                           ),
                           TextFormField(
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^[0-9\-\+\s()]*$')),
+                            ],
                             style: GoogleFonts.poppins(
                                 fontSize: width * .009,
                                 fontWeight: FontWeight.w500,

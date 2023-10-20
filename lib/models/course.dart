@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Course {
   String? image;
   String? courseCategory;
@@ -161,5 +163,39 @@ class LearnCourse {
 
   Map<String, dynamic> toFirestore() {
     return {'title': title, 'video_url': videoUrl};
+  }
+}
+
+class MeetModel {
+  String? noWhatsapp;
+  String? uid;
+  String? courseId;
+  DateTime? dateAndTime;
+  String? note;
+
+  MeetModel(
+      {required this.noWhatsapp,
+      required this.uid,
+      required this.courseId,
+      required this.dateAndTime,
+      this.note});
+
+  factory MeetModel.fromFirebase(Map<String, dynamic> data) {
+    return MeetModel(
+        noWhatsapp: data['no_whatsapp'],
+        uid: data['uid'],
+        courseId: data['course_id'],
+        dateAndTime: data['date_and_time'].toDate(),
+        note: data['note']);
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'no_whatsapp': noWhatsapp,
+      'uid': uid,
+      'course_id': courseId,
+      'date_and_time': Timestamp.fromDate(dateAndTime!),
+      'note': note
+    };
   }
 }

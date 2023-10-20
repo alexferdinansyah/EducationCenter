@@ -3,7 +3,9 @@ import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/services/extension.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FirestoreService {
   final String uid;
@@ -20,6 +22,8 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('articles');
   final CollectionReference transactionCollection =
       FirebaseFirestore.instance.collection('transactions');
+  final CollectionReference meetRequestCollection =
+      FirebaseFirestore.instance.collection('meet_request');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -348,6 +352,52 @@ class FirestoreService {
       }
     } catch (e) {
       print('Error getting transaction data $e');
+    }
+  }
+
+  // Add a new meet request document to Firestore
+  Future addMeetRequest(MeetModel meet, String courseId, String uid) async {
+    try {
+      // Reference to the Firestore collection
+
+      // Perform a query to count documents that match the criteria
+      QuerySnapshot query = await meetRequestCollection
+          .where('course_id', isEqualTo: courseId)
+          .where('uid', isEqualTo: uid)
+          .get();
+
+      // Check if the count is less than five
+      if (query.size < 5) {
+        // If there are fewer than five matching documents, add a new one
+        await meetRequestCollection.add(meet.toFirestore());
+        return true;
+      } else {
+        return false;
+        // Handle the case where you have reached the limit
+      }
+    } catch (e) {
+      print('Error adding meet: $e');
+      // Handle the error as needed
+    }
+  }
+
+  Future openWhatsapp(DateTime date, String? note, String courseName) async {
+    var countryCode = '+62';
+    var number = '81296177470';
+    String? message;
+    if (note != '') {
+      message = Uri.encodeComponent(
+          "Saya ingin mengajukan zoom meeting tentang course $courseName\nWaktu & Tanggal: ${date.formatDateAndTime()}\nnote: $note");
+    } else {
+      message = Uri.encodeComponent(
+          "Saya ingin mengajukan zoom meeting tentang course $courseName\nWaktu & Tanggal: ${date.formatDateAndTime()}");
+    }
+    var whatsappUrl =
+        Uri.parse("https://wa.me/${countryCode + number}?text=$message");
+    try {
+      launchUrl(whatsappUrl);
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

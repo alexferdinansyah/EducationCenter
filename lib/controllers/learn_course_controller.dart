@@ -17,6 +17,7 @@ class LearnCourseController extends GetxController {
         'learn_course': learnCourse.docs.map((learn) {
           return LearnCourse.fromFirebase(learn.data());
         }),
+        'course_name': courseData.title
       };
       documentSnapshot.value = learnData;
     } catch (e) {
