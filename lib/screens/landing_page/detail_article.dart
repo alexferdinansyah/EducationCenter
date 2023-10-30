@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/article.dart';
+import 'package:project_tc/services/extension.dart';
 
 class DetailArticle extends StatefulWidget {
   const DetailArticle({super.key});
@@ -46,7 +48,7 @@ class _DetailArticleState extends State<DetailArticle> {
             ),
           ),
           Text(
-            'Created by Admin - ${article.date}',
+            'Created by Admin - ${article.date?.formatDate()}',
             style: GoogleFonts.mulish(
               color: CusColors.inactive,
               fontSize: width * .011,
@@ -60,17 +62,14 @@ class _DetailArticleState extends State<DetailArticle> {
             color: CusColors.accentBlue,
           ),
           Container(
-            width: double.infinity,
             height: height / 1.6,
             margin: const EdgeInsets.only(top: 30, bottom: 30),
             decoration: article.image! != ''
                 ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
                     image: DecorationImage(
-                        image: AssetImage(article.image!),
-                        fit: BoxFit.cover, // Adjust the fit as needed
-                        alignment: Alignment.topCenter),
+                        image: NetworkImage(article.image!),
+                        fit: BoxFit.contain, // Adjust the fit as needed
+                        alignment: Alignment.topLeft),
                   )
                 : BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
@@ -78,7 +77,7 @@ class _DetailArticleState extends State<DetailArticle> {
                   ),
           ),
           Text(
-            article.description!,
+            article.description!.replaceAll('\\n', '\n'),
             style: GoogleFonts.mulish(
                 color: CusColors.inactive,
                 fontSize: width * .012,
@@ -110,6 +109,7 @@ class ArticleContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -136,7 +136,7 @@ class ArticleContentWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: Text(
-            articleContent.subTitleDescription!,
+            articleContent.subTitleDescription!.replaceAll('\\n', '\n'),
             style: GoogleFonts.mulish(
                 color: CusColors.inactive,
                 fontSize: width * .012,
@@ -144,6 +144,30 @@ class ArticleContentWidget extends StatelessWidget {
                 height: 1.5),
           ),
         ),
+        if (articleContent.bulletList != [])
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            width: width,
+            child: BulletList(
+              articleContent.bulletList!,
+              border: false,
+              textColor: CusColors.inactive,
+              fontWeight: FontWeight.w300,
+              fontSize: width * .012,
+            ),
+          ),
+        if (articleContent.textUnderList != '')
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              articleContent.textUnderList!.replaceAll('\\n', '\n'),
+              style: GoogleFonts.mulish(
+                  color: CusColors.inactive,
+                  fontSize: width * .012,
+                  fontWeight: FontWeight.w300,
+                  height: 1.5),
+            ),
+          ),
       ],
     );
   }

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/services/firestore_service.dart';
 
 class CusColors {
   static Color mainColor = const Color(0xFF19A7CE);
@@ -97,7 +96,8 @@ class CusSearchBar extends StatelessWidget {
   }
 }
 
-Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle) {
+Widget cusPaymentWidgetOn(
+    width, height, courseId, userId, isBundle, courseType, haveCourse) {
   return Container(
     width: width * .2,
     decoration: BoxDecoration(
@@ -106,8 +106,30 @@ Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle) {
     ),
     child: ElevatedButton(
       onPressed: () async {
-        final firestore = FirestoreService(uid: userId);
-        await firestore.addMyCourse(courseId);
+        if (haveCourse == null) {
+          if (courseType == 'Free') {
+            Get.toNamed(
+              routeOfferLearnCourse,
+              parameters: {'id': courseId},
+            );
+          } else {
+            // ganti jadi route payment
+            Get.toNamed(
+              routeBuyCourse,
+              parameters: {'id': courseId},
+            );
+          }
+        } else if (haveCourse == false) {
+          Get.toNamed(
+            routeOfferLearnCourse,
+            parameters: {'id': courseId},
+          );
+        } else {
+          Get.toNamed(
+            routeLearnCourse,
+            parameters: {'id': courseId},
+          );
+        }
       },
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -123,14 +145,23 @@ Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle) {
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
       ),
-      child: Text(
-        isBundle ? 'Buy Courses Bundle' : 'Buy Course',
-        style: GoogleFonts.mulish(
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-          fontSize: width * 0.01,
-        ),
-      ),
+      child: haveCourse != null
+          ? Text(
+              'Learn Courses',
+              style: GoogleFonts.mulish(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: width * 0.01,
+              ),
+            )
+          : Text(
+              isBundle ? 'Buy Courses Bundle' : 'Buy Course',
+              style: GoogleFonts.mulish(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: width * 0.01,
+              ),
+            ),
     ),
   );
 }

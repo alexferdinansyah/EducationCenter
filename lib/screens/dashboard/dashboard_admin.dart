@@ -71,7 +71,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                   ],
                 )),
                 DataCell(Text(
-                  transaction.invoiceDate!,
+                  transaction.invoiceDate!.formatDate(),
                   style: GoogleFonts.poppins(
                       fontSize: width * .01,
                       fontWeight: FontWeight.w400,
@@ -102,7 +102,9 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                   decoration: BoxDecoration(
                       color: transaction.status == 'Success'
                           ? const Color(0xFF91C561).withOpacity(.12)
-                          : const Color(0xFFD6A243).withOpacity(.12),
+                          : transaction.status == 'Pending'
+                              ? const Color(0xFFD6A243).withOpacity(.12)
+                              : Colors.red,
                       borderRadius: BorderRadius.circular(50)),
                   child: Padding(
                     padding:
@@ -116,10 +118,12 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                 Icons.done,
                                 color: Color(0xFF91C561),
                               )
-                            : const Icon(
-                                CupertinoIcons.rays,
-                                color: Color(0xFFD6A243),
-                              ),
+                            : transaction.status == 'Pending'
+                                ? const Icon(
+                                    CupertinoIcons.rays,
+                                    color: Color(0xFFD6A243),
+                                  )
+                                : const Icon(Icons.close, color: Colors.white),
                         const SizedBox(
                           width: 5,
                         ),
@@ -129,7 +133,9 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                 fontWeight: FontWeight.w400,
                                 color: transaction.status == 'Success'
                                     ? const Color(0xFF91C561)
-                                    : const Color(0xFFD6A243)))
+                                    : transaction.status == 'Pending'
+                                        ? const Color(0xFFD6A243)
+                                        : Colors.white))
                       ],
                     ),
                   ),

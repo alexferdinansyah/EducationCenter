@@ -14,7 +14,7 @@ import 'package:project_tc/screens/dashboard/membership_info.dart';
 import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
-import 'package:project_tc/screens/dashboard/payment_page.dart';
+import 'package:project_tc/screens/learning/payment_page.dart';
 import 'package:project_tc/screens/dashboard/setting.dart';
 import 'package:project_tc/screens/dashboard/transaction_table.dart';
 import 'package:project_tc/services/firestore_service.dart';
@@ -118,6 +118,9 @@ class _DashboardAppState extends State<DashboardApp> {
           } else if (widget.selected == 'Membership-Payment') {
             return PaymentPage(
               user: user,
+              price: 'Rp. 100.000',
+              title: 'Membership',
+              type: 'Pro',
             );
           } else {
             return Settings(

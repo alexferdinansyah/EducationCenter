@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TransactionModel {
   String? uid;
   TransactionItem? item;
-  String? invoiceDate;
+  DateTime? invoiceDate;
   DateTime? date;
   String? price;
   String? status;
@@ -23,7 +23,7 @@ class TransactionModel {
     return TransactionModel(
       uid: data['uid'],
       item: TransactionItem.fromFirestore(data['item']),
-      invoiceDate: data['invoice_date'],
+      invoiceDate: data['invoice_date'].toDate(),
       date: data['date'].toDate(),
       price: data['price'],
       status: data['status'],
@@ -35,7 +35,7 @@ class TransactionModel {
     return {
       'uid': uid,
       'item': item!.toFirestore(),
-      'invoice_date': invoiceDate,
+      'invoice_date': Timestamp.fromDate(invoiceDate!),
       'date': Timestamp.fromDate(date!),
       'price': price,
       'status': status,

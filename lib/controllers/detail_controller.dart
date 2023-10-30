@@ -15,6 +15,8 @@ class DetailCourseController extends GetxController {
       print('Error fetching document: $e');
     }
   }
+
+  getIsPaid(String? uid, String id) {}
 }
 
 class DetailArticleController extends GetxController {

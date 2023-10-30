@@ -7,9 +7,17 @@ class BulletList extends StatelessWidget {
   final List<String> strings;
   final bool border;
   final double padding;
+  final Color textColor;
+  final FontWeight fontWeight;
+  final double fontSize;
 
   const BulletList(this.strings,
-      {super.key, required this.border, this.padding = 5});
+      {super.key,
+      required this.border,
+      this.padding = 5,
+      this.textColor = const Color(0xFF676767),
+      this.fontWeight = FontWeight.w500,
+      required this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +47,15 @@ class BulletList extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '\u2022',
-                  style: GoogleFonts.mulish(
-                    color: CusColors.subHeader,
-                    fontSize: width * .011,
-                    fontWeight: FontWeight.w500,
+                if (str != '')
+                  Text(
+                    '\u2022',
+                    style: GoogleFonts.mulish(
+                      color: textColor,
+                      fontSize: width * .012,
+                      fontWeight: fontWeight,
+                    ),
                   ),
-                ),
                 const SizedBox(
                   width: 5,
                 ),
@@ -57,9 +66,9 @@ class BulletList extends StatelessWidget {
                       textAlign: TextAlign.left,
                       softWrap: true,
                       style: GoogleFonts.mulish(
-                        color: CusColors.subHeader,
-                        fontSize: width * .011,
-                        fontWeight: FontWeight.w500,
+                        color: textColor,
+                        fontSize: fontSize,
+                        fontWeight: fontWeight,
                       ),
                     ),
                   ),
@@ -175,6 +184,7 @@ class _BorderListState extends State<BorderList> {
                                 subChapter,
                                 border: false,
                                 padding: 2,
+                                fontSize: width * .011,
                               ),
                             ),
                         ],

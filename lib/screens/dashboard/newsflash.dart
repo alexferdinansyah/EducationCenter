@@ -5,6 +5,7 @@ import "package:project_tc/components/constants.dart";
 import "package:project_tc/components/loading.dart";
 import "package:project_tc/models/article.dart";
 import "package:project_tc/services/firestore_service.dart";
+import 'package:project_tc/services/extension.dart';
 
 class Newsflash extends StatefulWidget {
   const Newsflash({super.key});
@@ -174,7 +175,7 @@ class Newsflashes extends StatelessWidget {
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                        image: AssetImage(article.image!),
+                        image: NetworkImage(article.image!),
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter),
                   )
@@ -231,7 +232,7 @@ class Newsflashes extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Text(
-                                  'Admin - ${article.date}',
+                                  'Admin - ${article.date?.formatDate()}',
                                   style: GoogleFonts.poppins(
                                       fontSize: width * .008,
                                       color: Colors.white),
@@ -268,7 +269,7 @@ class Newsflashes extends StatelessWidget {
                             Radius.circular(20),
                           ),
                           image: DecorationImage(
-                              image: AssetImage(article.image!),
+                              image: NetworkImage(article.image!),
                               fit: BoxFit.cover,
                               alignment: Alignment.topCenter),
                         )
@@ -313,7 +314,7 @@ class Newsflashes extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(
-                                'Admin - ${article.date}',
+                                'Admin - ${article.date?.formatDate()}',
                                 style: GoogleFonts.poppins(
                                     fontSize: width * .008,
                                     color: CusColors.title),

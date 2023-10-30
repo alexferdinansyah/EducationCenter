@@ -1,10 +1,12 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
+import 'package:project_tc/controllers/learn_course_controller.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +21,11 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
   String id = '';
 
   final DetailCourseController controller = Get.put(DetailCourseController());
+  final LearnCourseController learnController =
+      Get.put(LearnCourseController());
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context, listen: false);
+    final user = Provider.of<UserModel?>(context);
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -204,6 +208,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                       BulletList(
                         course.completionBenefits!,
                         border: true,
+                        fontSize: width * .011,
                       )
                     ],
                   ),
@@ -250,11 +255,15 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                     Padding(
                       padding: EdgeInsets.only(
                           top: height * .015, bottom: height * .03),
-                      child: const BulletList([
-                        'Up-to-date Content',
-                        'Learn with study case',
-                        'Beginner friendly'
-                      ], border: false),
+                      child: BulletList(
+                        const [
+                          'Up-to-date Content',
+                          'Learn with study case',
+                          'Beginner friendly'
+                        ],
+                        border: false,
+                        fontSize: width * .011,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: height * .025),
@@ -302,8 +311,31 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                       ),
                     ),
                     user != null
-                        ? cusPaymentWidgetOn(
-                            width, height, id, user.uid, course.isBundle)
+                        ? FutureBuilder<bool?>(
+                            future: learnController.getIsPaid(user.uid,
+                                id), // Assuming `getIsPaid` returns a `Future<bool>`
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // You can return a loading indicator or placeholder widget here
+                                return const SpinKitCircle(
+                                  color: Colors.blue,
+                                ); // Replace with your loading widget
+                              } else if (snapshot.hasError) {
+                                // Handle error
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return cusPaymentWidgetOn(
+                                  width,
+                                  height,
+                                  id,
+                                  user.uid,
+                                  course.isBundle,
+                                  course.courseType,
+                                  snapshot.data,
+                                );
+                              }
+                            })
                         : cusPaymentWidgetOff(width, height, course.isBundle)
                   ],
                 ),

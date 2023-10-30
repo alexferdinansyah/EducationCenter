@@ -25,6 +25,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
   String email = '';
   String password = '';
   String error = '';
+  bool showPassword = false;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -152,11 +153,20 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       ),
                                       suffixIcon: Container(
                                         margin: const EdgeInsets.only(right: 8),
-                                        child: Icon(
-                                          Icons.remove_red_eye_outlined,
-                                          color: CusColors.subHeader
-                                              .withOpacity(0.5),
-                                          size: width * .015,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                            });
+                                          },
+                                          child: Icon(
+                                            showPassword
+                                                ? Icons.visibility_off_outlined
+                                                : Icons.remove_red_eye_outlined,
+                                            color: CusColors.subHeader
+                                                .withOpacity(0.5),
+                                            size: width * .015,
+                                          ),
                                         ),
                                       ),
                                       hintText: "password",
@@ -165,7 +175,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                               .withOpacity(.5),
                                           fontSize: width * .009),
                                     ),
-                                    obscureText: true,
+                                    obscureText: showPassword ? false : true,
                                     validator: (val) => val!.length < 6
                                         ? 'Enter an password 6 chars long'
                                         : null,

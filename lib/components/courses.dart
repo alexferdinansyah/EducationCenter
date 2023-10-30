@@ -5,6 +5,7 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class Courses extends StatelessWidget {
   final Course course;
@@ -26,26 +27,41 @@ class Courses extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+        padding: EdgeInsets.fromLTRB(
+            getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 15,
+              desktop: 20,
+            ),
+            getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 15,
+              desktop: 20,
+            ),
+            getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 15,
+              desktop: 20,
+            ),
+            10),
         child: Column(children: [
-          Container(
-            width: double.infinity,
-            height: height * .2,
-            decoration: course.image != ''
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    image: DecorationImage(
-                      image: NetworkImage(course.image!),
-                      fit: BoxFit.contain, // Adjust the fit as needed
-                    ),
-                  )
-                : BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
-                  ),
-          ),
+          course.image != ''
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(course.image!, width: double.infinity))
+              : const Text('No Image'),
           Padding(
-            padding: EdgeInsets.only(top: height * .01),
+            padding: EdgeInsets.only(
+              top: getValueForScreenType<double>(
+                context: context,
+                mobile: height * .011,
+                tablet: height * .01,
+                desktop: height * .01,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,7 +69,12 @@ class Courses extends StatelessWidget {
                   course.courseCategory!,
                   style: GoogleFonts.mulish(
                       color: CusColors.inactive,
-                      fontSize: width * .011,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .024,
+                        tablet: width * .014,
+                        desktop: width * .011,
+                      ),
                       fontWeight: FontWeight.w300,
                       height: 1.5),
                 ),
@@ -65,7 +86,12 @@ class Courses extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.mulish(
                         color: CusColors.title,
-                        fontSize: width * .012,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .028,
+                          tablet: width * .014,
+                          desktop: width * .012,
+                        ),
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -74,13 +100,25 @@ class Courses extends StatelessWidget {
                         '(${course.totalCourse!})',
                         style: GoogleFonts.mulish(
                             color: CusColors.inactive,
-                            fontSize: width * .011,
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .024,
+                              tablet: width * .014,
+                              desktop: width * .011,
+                            ),
                             fontWeight: FontWeight.w300,
                             height: 1.5),
                       )
                     : const SizedBox(),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: height * .022),
+                  padding: EdgeInsets.symmetric(
+                    vertical: getValueForScreenType<double>(
+                      context: context,
+                      mobile: height * .01,
+                      tablet: height * .014,
+                      desktop: height * .022,
+                    ),
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -88,7 +126,12 @@ class Courses extends StatelessWidget {
                         'Rp. ${course.price!}',
                         style: GoogleFonts.mulish(
                             color: CusColors.title,
-                            fontSize: width * .011,
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .024,
+                              tablet: width * .014,
+                              desktop: width * .011,
+                            ),
                             fontWeight: FontWeight.bold,
                             height: 1.5),
                       ),
@@ -114,7 +157,12 @@ class Courses extends StatelessWidget {
                                     textAlign: TextAlign.left,
                                     style: GoogleFonts.inter(
                                       color: const Color(0xFF2501FF),
-                                      fontSize: width * .009,
+                                      fontSize: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: width * .016,
+                                        tablet: width * .01,
+                                        desktop: width * .009,
+                                      ),
                                       fontWeight: FontWeight.normal,
                                     ),
                                   ),
@@ -134,6 +182,12 @@ class Courses extends StatelessWidget {
                     )),
                 Container(
                   width: double.infinity,
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 30,
+                    tablet: 35,
+                    desktop: 40,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF86B1F2),
                     borderRadius: BorderRadius.circular(64),
@@ -160,7 +214,12 @@ class Courses extends StatelessWidget {
                       ),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.symmetric(
-                          vertical: height * 0.025,
+                          vertical: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 0,
+                            tablet: height * .014,
+                            desktop: height * .025,
+                          ),
                         ),
                       ),
                       backgroundColor:
@@ -177,12 +236,22 @@ class Courses extends StatelessWidget {
                           style: GoogleFonts.mulish(
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
-                            fontSize: width * 0.01,
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .022,
+                              tablet: width * .014,
+                              desktop: width * .01,
+                            ),
                           ),
                         ),
                         Icon(
                           Icons.arrow_outward_rounded,
-                          size: height * .025,
+                          size: getValueForScreenType<double>(
+                            context: context,
+                            mobile: height * .02,
+                            tablet: height * .014,
+                            desktop: height * .025,
+                          ),
                         )
                       ],
                     ),
@@ -313,8 +382,13 @@ class ListCourses extends StatelessWidget {
 class MyCourse extends StatelessWidget {
   final String id;
   final Course course;
+  final bool isPaid;
 
-  const MyCourse({super.key, required this.course, required this.id});
+  const MyCourse(
+      {super.key,
+      required this.course,
+      required this.id,
+      required this.isPaid});
 
   @override
   Widget build(BuildContext context) {
@@ -391,7 +465,17 @@ class MyCourse extends StatelessWidget {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.toNamed(routeLearnCourse, parameters: {'id': id});
+                          if (isPaid == true) {
+                            Get.toNamed(
+                              routeLearnCourse,
+                              parameters: {'id': id},
+                            );
+                          } else {
+                            Get.toNamed(
+                              routeOfferLearnCourse,
+                              parameters: {'id': id},
+                            );
+                          }
                         },
                         style: ButtonStyle(
                           shape:

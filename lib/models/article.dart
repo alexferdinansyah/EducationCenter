@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Article {
   String? image;
   String? category;
   String? title;
   String? description;
-  String? date;
+  DateTime? date;
   List<ArticleContent>? articleContent;
 
   Article({
@@ -28,7 +30,7 @@ class Article {
         category: data['category'],
         title: data['title'],
         description: data['description'],
-        date: data['date'],
+        date: data['date'].toDate(),
         articleContent: articleContents);
   }
 
@@ -38,7 +40,7 @@ class Article {
       'category': category,
       'title': title,
       'description': description,
-      'date': date,
+      'date': Timestamp.fromDate(date!),
       'article_content':
           articleContent?.map((content) => content.toFirestore()).toList()
     };
@@ -49,11 +51,15 @@ class ArticleContent {
   String? subTitle;
   String? image;
   String? subTitleDescription;
+  List<String>? bulletList;
+  String? textUnderList;
 
   ArticleContent({
     required this.subTitle,
     this.image,
     required this.subTitleDescription,
+    this.bulletList,
+    this.textUnderList,
   });
 
   // Convert Firestore data to ArticleContent object
@@ -62,6 +68,8 @@ class ArticleContent {
       subTitle: data['sub_title'],
       image: data['image'],
       subTitleDescription: data['sub_title_description'],
+      bulletList: (data['bullet_list'] as List<dynamic>).cast<String>(),
+      textUnderList: data['text_under_list'],
     );
   }
 
@@ -71,6 +79,8 @@ class ArticleContent {
       'sub_title': subTitle,
       'image': image,
       'sub_title_description': subTitleDescription,
+      'bullet_list': bulletList ?? [],
+      'text_under_list': textUnderList,
     };
   }
 }

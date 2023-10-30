@@ -41,6 +41,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
   String reason = '';
   String password = '';
   String error = '';
+  bool showPassword = false;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -114,10 +115,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         child: TextFormField(
                           keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^[0-9\-\+\s()]*$')),
-                            ],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[0-9\-\+\s()]*$')),
+                          ],
                           style: TextStyle(color: CusColors.subHeader),
                           decoration: textInputDecoration.copyWith(
                             contentPadding: const EdgeInsets.symmetric(
@@ -318,7 +319,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       ),
                       Container(
                         child: TextFormField(
-                          obscureText: true,
+                          obscureText: showPassword ? false : true,
                           keyboardType: TextInputType.visiblePassword,
                           style: TextStyle(color: CusColors.subHeader),
                           decoration: textInputDecoration.copyWith(
@@ -335,9 +336,18 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             ),
                             suffixIcon: Container(
                               margin: const EdgeInsets.only(right: 8),
-                              child: Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: CusColors.subHeader.withOpacity(0.5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },
+                                child: Icon(
+                                  showPassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.remove_red_eye_outlined,
+                                  color: CusColors.subHeader.withOpacity(0.5),
+                                ),
                               ),
                             ),
                             hintText: "password",

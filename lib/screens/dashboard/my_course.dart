@@ -74,6 +74,7 @@ class _MyCoursesState extends State<MyCourses> {
                 'id': data!['id'],
                 'course': data['course'] as Course,
                 'status': data['status'],
+                'isPaid': data['isPaid']
               };
             }).toList();
 
@@ -314,9 +315,11 @@ class _MyCoursesState extends State<MyCourses> {
                                   ),
                                   itemBuilder: animationBuilder(
                                     (index) => MyCourse(
-                                      course: filteredCourses[index]['course'],
-                                      id: filteredCourses[index]['id'],
-                                    ),
+                                        course: filteredCourses[index]
+                                            ['course'],
+                                        id: filteredCourses[index]['id'],
+                                        isPaid: filteredCourses[index]
+                                            ['isPaid']),
                                   ),
                                 ),
                         ),

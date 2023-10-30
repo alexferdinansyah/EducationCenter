@@ -32,6 +32,7 @@ class _AppViewState extends State<AppView> {
             child: AnimateIfVisibleWrapper(
               showItemInterval: const Duration(milliseconds: 150),
               child: SingleChildScrollView(
+                physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -150,19 +150,30 @@ class FirestoreService {
   }
 
   // Add my courses sub collection
-  Future addMyCourse(String courseId) async {
-    try {
-      final myCoursesCollection =
-          userCollection.doc(uid).collection('my_courses');
-      final courseReference = courseCollection.doc(courseId);
+  Future<void> addMyCourse(String courseId, String userId, bool isPaid) async {
+    final myCoursesCollection =
+        userCollection.doc(userId).collection('my_courses');
+    final courseReference = courseCollection.doc(courseId);
 
-      // 1. Input Data into Subcollection
+    // Check if a document with the provided course reference exists in the sub-collection
+    final existingDocument = await myCoursesCollection
+        .where('course', isEqualTo: courseReference)
+        .get();
+
+    if (existingDocument.docs.isNotEmpty) {
+      // Document with the same course reference exists; update it
+      final documentId = existingDocument.docs.first.id;
+      await myCoursesCollection.doc(documentId).update({
+        'isPaid': isPaid,
+        // You can update other fields as needed
+      });
+    } else {
+      // Document with the provided course reference does not exist; add it
       await myCoursesCollection.add({
         'course': courseReference,
-        'isPaid': true,
+        'isPaid': isPaid,
+        'status': 'Not Finished',
       });
-    } catch (e) {
-      print('Error adding course to my courses: $e');
     }
   }
 
@@ -303,6 +314,30 @@ class FirestoreService {
     }
   }
 
+  Future<bool> checkTransaction(String? title) async {
+    DocumentReference userDoc = userCollection.doc(uid);
+    CollectionReference transactionCollection =
+        userDoc.collection('transactions');
+
+    // Query to get documents where the 'transaction' field is a reference to 'transactions'
+    QuerySnapshot querySnapshot = await transactionCollection
+        .where('transaction', isNotEqualTo: null)
+        .get();
+
+    // Check if any documents have the specified title within the 'transactions' collection
+    for (final transactionDocument in querySnapshot.docs) {
+      final data = transactionDocument.data() as Map<String, dynamic>;
+      final transactionData = await data['transaction'].get();
+
+      if (transactionData['item']['title'] == title) {
+        return true; // Title exists within 'transactions' collection
+      }
+    }
+
+    // Title does not exist within 'transactions' collection
+    return false;
+  }
+
   Stream<List<Map>> get userRequestTransaction {
     try {
       return transactionCollection
@@ -348,6 +383,15 @@ class FirestoreService {
               .update({'status': 'Success'});
         } catch (e) {
           print('Error updating user membership data $e');
+        }
+      } else {
+        try {
+          await addMyCourse(transaction.item!.id!, user.uid, true);
+          await transactionCollection
+              .doc(transactionId)
+              .update({'status': 'Success'});
+        } catch (e) {
+          print('Error updating user my course data $e');
         }
       }
     } catch (e) {

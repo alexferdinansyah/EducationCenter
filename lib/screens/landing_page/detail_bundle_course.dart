@@ -303,6 +303,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                         BulletList(
                           course.completionBenefits!,
                           border: true,
+                          fontSize: width * .011,
                         )
                       ],
                     ),
@@ -349,11 +350,15 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                       Padding(
                         padding: EdgeInsets.only(
                             top: height * .015, bottom: height * .03),
-                        child: const BulletList([
-                          'Up-to-date Content',
-                          'Learn with study case',
-                          'Beginner friendly'
-                        ], border: false),
+                        child: BulletList(
+                          const [
+                            'Up-to-date Content',
+                            'Learn with study case',
+                            'Beginner friendly'
+                          ],
+                          border: false,
+                          fontSize: width * .011,
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: height * .025),
@@ -401,8 +406,8 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                         ),
                       ),
                       user != null
-                          ? cusPaymentWidgetOn(
-                              width, height, id, user.uid, course.isBundle)
+                          ? cusPaymentWidgetOn(width, height, id, user.uid,
+                              course.isBundle, course.courseType, false)
                           : cusPaymentWidgetOff(width, height, course.isBundle)
                     ],
                   ),
