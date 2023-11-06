@@ -7,6 +7,7 @@ import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/services/extension.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class DetailArticle extends StatefulWidget {
   const DetailArticle({super.key});
@@ -38,12 +39,30 @@ class _DetailArticleState extends State<DetailArticle> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 100, bottom: 20),
+            padding: EdgeInsets.only(
+              top: getValueForScreenType<double>(
+                context: context,
+                mobile: 25,
+                tablet: 40,
+                desktop: 100,
+              ),
+              bottom: getValueForScreenType<double>(
+                context: context,
+                mobile: 5,
+                tablet: 10,
+                desktop: 20,
+              ),
+            ),
             child: Text(
               article.title!,
               style: GoogleFonts.mulish(
                   color: CusColors.header,
-                  fontSize: width * .023,
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .035,
+                    tablet: width * .024,
+                    desktop: width * .023,
+                  ),
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -51,7 +70,12 @@ class _DetailArticleState extends State<DetailArticle> {
             'Created by Admin - ${article.date?.formatDate()}',
             style: GoogleFonts.mulish(
               color: CusColors.inactive,
-              fontSize: width * .011,
+              fontSize: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .019,
+                tablet: width * .016,
+                desktop: width * .011,
+              ),
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -61,28 +85,34 @@ class _DetailArticleState extends State<DetailArticle> {
             height: 1,
             color: CusColors.accentBlue,
           ),
-          Container(
-            height: height / 1.6,
-            margin: const EdgeInsets.only(top: 30, bottom: 30),
-            decoration: article.image! != ''
-                ? BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(article.image!),
-                        fit: BoxFit.contain, // Adjust the fit as needed
-                        alignment: Alignment.topLeft),
-                  )
-                : BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
-                  ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                article.image!,
+                height: getValueForScreenType<double>(
+                  context: context,
+                  mobile: height / 3.7,
+                  tablet: height / 2.7,
+                  desktop: height / 1.6,
+                ),
+              ),
+            ),
           ),
           Text(
             article.description!.replaceAll('\\n', '\n'),
             style: GoogleFonts.mulish(
-                color: CusColors.inactive,
-                fontSize: width * .012,
-                fontWeight: FontWeight.w300,
-                height: 1.5),
+              color: CusColors.inactive,
+              fontSize: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .02,
+                tablet: width * .017,
+                desktop: width * .012,
+              ),
+              fontWeight: FontWeight.w300,
+              height: 1.5,
+            ),
           ),
           Column(
             children: article.articleContent!
@@ -91,8 +121,13 @@ class _DetailArticleState extends State<DetailArticle> {
                     ))
                 .toList(),
           ),
-          const SizedBox(
-            height: 100,
+          SizedBox(
+            height: getValueForScreenType<double>(
+              context: context,
+              mobile: 25,
+              tablet: 40,
+              desktop: 100,
+            ),
           ),
           const Footer(),
         ],
@@ -114,23 +149,44 @@ class ArticleContentWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 40, bottom: 20),
+          padding: EdgeInsets.only(
+            top: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 20,
+              desktop: 40,
+            ),
+            bottom: getValueForScreenType<double>(
+              context: context,
+              mobile: 8,
+              tablet: 10,
+              desktop: 20,
+            ),
+          ),
           child: Text(
             articleContent.subTitle!,
             style: GoogleFonts.mulish(
                 color: CusColors.header,
-                fontSize: width * .016,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .024,
+                  tablet: width * .021,
+                  desktop: width * .016,
+                ),
                 fontWeight: FontWeight.bold),
           ),
         ),
         if (articleContent.image != null)
-          Container(
-            margin: const EdgeInsets.only(left: 25, bottom: 20),
-            width: width / 3,
-            height: height / 2.5,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: const Color(0xFFD9D9D9),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              articleContent.image!,
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: height / 4.6,
+                tablet: height / 3.6,
+                desktop: height / 2.5,
+              ),
             ),
           ),
         Padding(
@@ -139,7 +195,12 @@ class ArticleContentWidget extends StatelessWidget {
             articleContent.subTitleDescription!.replaceAll('\\n', '\n'),
             style: GoogleFonts.mulish(
                 color: CusColors.inactive,
-                fontSize: width * .012,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .02,
+                  tablet: width * .017,
+                  desktop: width * .012,
+                ),
                 fontWeight: FontWeight.w300,
                 height: 1.5),
           ),
@@ -153,7 +214,12 @@ class ArticleContentWidget extends StatelessWidget {
               border: false,
               textColor: CusColors.inactive,
               fontWeight: FontWeight.w300,
-              fontSize: width * .012,
+              fontSize: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .02,
+                tablet: width * .017,
+                desktop: width * .012,
+              ),
             ),
           ),
         if (articleContent.textUnderList != '')
@@ -163,7 +229,12 @@ class ArticleContentWidget extends StatelessWidget {
               articleContent.textUnderList!.replaceAll('\\n', '\n'),
               style: GoogleFonts.mulish(
                   color: CusColors.inactive,
-                  fontSize: width * .012,
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .02,
+                    tablet: width * .017,
+                    desktop: width * .012,
+                  ),
                   fontWeight: FontWeight.w300,
                   height: 1.5),
             ),
