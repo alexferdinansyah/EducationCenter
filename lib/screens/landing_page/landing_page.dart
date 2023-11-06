@@ -205,7 +205,7 @@ class _LandingPageState extends State<LandingPage> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 50),
                             child: Text(
-                              'Best Sales',
+                              'Best Seller',
                               style: GoogleFonts.mulish(
                                   color: CusColors.header,
                                   fontSize: title,
@@ -308,7 +308,7 @@ class _LandingPageState extends State<LandingPage> {
                             SizedBox(
                               height: getValueForScreenType<double>(
                                 context: context,
-                                mobile: height / 10,
+                                mobile: height * .05,
                                 tablet: height / 10,
                                 desktop: 0,
                               ),
@@ -327,6 +327,12 @@ class _LandingPageState extends State<LandingPage> {
                                 });
                               },
                               child: AnimatedContainer(
+                                height: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 28,
+                                  tablet: 35,
+                                  desktop: 45,
+                                ),
                                 duration: const Duration(milliseconds: 300),
                                 decoration: BoxDecoration(
                                   color: isHovered[1]
@@ -352,16 +358,10 @@ class _LandingPageState extends State<LandingPage> {
                                     padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
                                       EdgeInsets.symmetric(
-                                        vertical: getValueForScreenType<double>(
-                                          context: context,
-                                          mobile: 0,
-                                          tablet: height * .014,
-                                          desktop: height * .025,
-                                        ),
                                         horizontal:
                                             getValueForScreenType<double>(
                                           context: context,
-                                          mobile: width * .02,
+                                          mobile: width * .022,
                                           tablet: width * .011,
                                           desktop: width * .013,
                                         ),
@@ -403,7 +403,7 @@ class _LandingPageState extends State<LandingPage> {
                                             : CusColors.accentBlue,
                                         size: getValueForScreenType<double>(
                                           context: context,
-                                          mobile: height * .02,
+                                          mobile: height * .018,
                                           tablet: height * .014,
                                           desktop: height * .025,
                                         ),
@@ -480,7 +480,12 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                           ),
                           SizedBox(
-                            height: height / 10,
+                            height: getValueForScreenType<double>(
+                              context: context,
+                              mobile: height * .05,
+                              tablet: height / 10,
+                              desktop: height / 10,
+                            ),
                           ),
                           MouseRegion(
                             onEnter: (_) {
@@ -496,6 +501,12 @@ class _LandingPageState extends State<LandingPage> {
                               });
                             },
                             child: AnimatedContainer(
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 28,
+                                tablet: 35,
+                                desktop: 45,
+                              ),
                               duration: const Duration(milliseconds: 300),
                               decoration: BoxDecoration(
                                 color: isHovered[2]
@@ -521,15 +532,9 @@ class _LandingPageState extends State<LandingPage> {
                                   padding: MaterialStateProperty.all<
                                       EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                      vertical: getValueForScreenType<double>(
-                                        context: context,
-                                        mobile: 0,
-                                        tablet: height * .014,
-                                        desktop: height * .025,
-                                      ),
                                       horizontal: getValueForScreenType<double>(
                                         context: context,
-                                        mobile: width * .02,
+                                        mobile: width * .022,
                                         tablet: width * .011,
                                         desktop: width * .013,
                                       ),
@@ -570,7 +575,7 @@ class _LandingPageState extends State<LandingPage> {
                                           : CusColors.accentBlue,
                                       size: getValueForScreenType<double>(
                                         context: context,
-                                        mobile: height * .02,
+                                        mobile: height * .018,
                                         tablet: height * .014,
                                         desktop: height * .025,
                                       ),
@@ -686,7 +691,7 @@ class HeaderLandingPage extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: 30,
+                            height: 28,
                             decoration: BoxDecoration(
                                 color: const Color(0xFF00C8FF),
                                 borderRadius: BorderRadius.circular(80),
@@ -803,7 +808,7 @@ class HeaderLandingPage extends StatelessWidget {
                           padding:
                               MaterialStateProperty.all<EdgeInsetsGeometry>(
                             EdgeInsets.symmetric(
-                              vertical: height * 0.025,
+                              vertical: height * 0.015,
                             ),
                           ),
                           backgroundColor:

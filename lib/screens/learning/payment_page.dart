@@ -11,6 +11,7 @@ import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -79,6 +80,9 @@ class _PaymentPageState extends State<PaymentPage> {
     final user = Provider.of<UserModel?>(context);
     var route = Get.currentRoute;
 
+    if (user == null) {
+      return const ResponsiveSignIn();
+    }
     if (route.contains('/checkout/course')) {
       var argument = Get.parameters;
       id = argument['id']!;
@@ -92,8 +96,8 @@ class _PaymentPageState extends State<PaymentPage> {
 
         return Scaffold(
           backgroundColor: CusColors.bg,
-          body: _default(width,
-              uid: user!.uid,
+          body: _default(width, height,
+              uid: user.uid,
               courseId: id,
               isCourse: true,
               title: course.title,
@@ -106,11 +110,12 @@ class _PaymentPageState extends State<PaymentPage> {
         width: width * .83,
         height: height - 60,
         color: CusColors.bg,
-        child: _default(width, isCourse: false));
+        child: _default(width, height, isCourse: false));
   }
 
   Widget _default(
-    double width, {
+    double width,
+    double height, {
     String? courseId,
     String? uid,
     bool? isCourse,
@@ -178,7 +183,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           ),
                         ),
                         Text(
-                          'Price : ${widget.price ?? price}',
+                          'Price : ${widget.price ?? "Rp $price"}',
                           style: GoogleFonts.poppins(
                             fontSize: width * .01,
                             fontWeight: FontWeight.w400,
@@ -215,7 +220,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             ),
                           ),
                           Text(
-                            'Account Number : 7243485198\nBank Name : Bank BSI\nAmount : ${widget.price ?? price}',
+                            'Account Number : 7243485198\nBank Name : Bank BSI\nAmount : ${widget.price ?? "Rp $price"}',
                             style: GoogleFonts.poppins(
                               fontSize: width * .01,
                               fontWeight: FontWeight.w400,
@@ -235,7 +240,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(
                             const EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 18),
+                                horizontal: 25, vertical: 10),
                           ),
                           foregroundColor: MaterialStateProperty.all(
                             const Color(0xFF4351FF),
@@ -350,7 +355,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             padding:
                                 MaterialStateProperty.all<EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                        vertical: width * .01,
+                                        vertical: height * .015,
                                         horizontal: width * .01)),
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.transparent),

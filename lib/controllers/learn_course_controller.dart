@@ -21,16 +21,24 @@ class LearnCourseController extends GetxController {
       // Reference to the my_course subcollection
       CollectionReference myCourseCollection = userDoc.collection('my_courses');
 
-      bool? isPaid;
-
       // Query to get the specific course document by ID
       QuerySnapshot querySnapshot =
           await myCourseCollection.where('course', isEqualTo: course).get();
+      DocumentSnapshot getUser = await userDoc.get();
+
+      bool? isPaid;
+      Map? memberType;
 
       if (querySnapshot.docs.isNotEmpty) {
         isPaid = querySnapshot.docs.first.get('isPaid');
       } else {
         isPaid = null;
+      }
+
+      if (getUser.exists) {
+        memberType = getUser.get('membership');
+      } else {
+        memberType = null;
       }
 
       Map learnData = {
@@ -40,7 +48,8 @@ class LearnCourseController extends GetxController {
         }),
         'course_name': courseData.title,
         'price': courseData.price,
-        'isPaid': isPaid
+        'isPaid': isPaid,
+        'user_membership': memberType
       };
       documentSnapshot.value = learnData;
     } catch (e) {

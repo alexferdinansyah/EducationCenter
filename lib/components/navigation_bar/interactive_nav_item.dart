@@ -58,15 +58,15 @@ class InteractiveTextState extends State<InteractiveText> {
         child: Text(widget.text,
             style: GoogleFonts.mulish(
               color: _hovering
-                  ? CusColors.subHeader.withOpacity(0.5)
+                  ? CusColors.accentBlue
                   : (widget.selected)
-                      ? CusColors.subHeader.withOpacity(0.5)
+                      ? CusColors.accentBlue
                       : CusColors.inactive.withOpacity(0.4),
               fontSize: getValueForScreenType<double>(
-                context: context,
-                mobile: width * .04,
-                desktop: width * .01,
-              ),
+                  context: context,
+                  mobile: width * .04,
+                  desktop: width * .01,
+                  tablet: width * .024),
               fontWeight: FontWeight.bold,
             )));
   }

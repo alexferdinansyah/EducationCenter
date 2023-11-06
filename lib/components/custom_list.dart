@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/course.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class BulletList extends StatelessWidget {
   final List<String> strings;
@@ -24,7 +25,14 @@ class BulletList extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.centerLeft,
-      width: border ? width / 1.7 : width * .13,
+      width: border
+          ? width / 1.7
+          : getValueForScreenType<double>(
+              context: context,
+              mobile: width * .3,
+              tablet: width * .18,
+              desktop: width * .13,
+            ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: strings.map((str) {
@@ -84,9 +92,21 @@ class BulletList extends StatelessWidget {
 
 class BorderList extends StatefulWidget {
   final List<ChapterList> chapterList;
+  final double padding;
+  final double subPadding;
+  final Color textColor;
+  final FontWeight fontWeight;
+  final double fontSize;
+  final double subFontSize;
 
   const BorderList({
     required this.chapterList,
+    this.padding = 5,
+    this.subPadding = 15,
+    this.textColor = const Color(0xFF676767),
+    this.fontWeight = FontWeight.w500,
+    required this.fontSize,
+    required this.subFontSize,
     Key? key,
   }) : super(key: key);
 
@@ -139,7 +159,7 @@ class _BorderListState extends State<BorderList> {
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.fastLinearToSlowEaseIn,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: widget.padding),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
@@ -156,8 +176,8 @@ class _BorderListState extends State<BorderList> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: widget.padding),
                                   child: Text(
                                     chapter,
                                     textAlign: TextAlign.left,
@@ -166,7 +186,7 @@ class _BorderListState extends State<BorderList> {
                                       color: expandStates[index]!
                                           ? CusColors.accentBlue
                                           : CusColors.subHeader,
-                                      fontSize: width * .012,
+                                      fontSize: widget.fontSize,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -179,12 +199,14 @@ class _BorderListState extends State<BorderList> {
                           ),
                           if (expandStates[index]!)
                             Padding(
-                              padding: const EdgeInsets.only(top: 15, left: 15),
+                              padding: EdgeInsets.only(
+                                  top: widget.subPadding,
+                                  left: widget.subPadding),
                               child: BulletList(
                                 subChapter,
                                 border: false,
                                 padding: 2,
-                                fontSize: width * .011,
+                                fontSize: widget.subFontSize,
                               ),
                             ),
                         ],
@@ -193,7 +215,7 @@ class _BorderListState extends State<BorderList> {
                   ),
                 )
               : Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: widget.padding),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -210,14 +232,15 @@ class _BorderListState extends State<BorderList> {
                         children: [
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: widget.padding),
                               child: Text(
                                 chapter,
                                 textAlign: TextAlign.left,
                                 softWrap: true,
                                 style: GoogleFonts.mulish(
                                   color: CusColors.subHeader,
-                                  fontSize: width * .012,
+                                  fontSize: widget.fontSize,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),

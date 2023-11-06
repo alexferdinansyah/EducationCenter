@@ -17,7 +17,7 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print('Current Widget in AppView: ${widget.child.runtimeType}');
+    // print('Current Widget in AppView: ${widget.child.runtimeType}');
 
     return SizedBox(
       height: double.infinity,
@@ -87,7 +87,12 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
         appBar: AppBar(
             title: Image.asset(
               'assets/images/dec_logo2.png',
-              width: width * .13,
+              width: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .13,
+                tablet: width * .1,
+                desktop: width * .02,
+              ),
             ),
             elevation: 0,
             backgroundColor: CusColors.bg,

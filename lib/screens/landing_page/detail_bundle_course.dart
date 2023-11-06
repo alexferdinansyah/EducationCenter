@@ -406,9 +406,17 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                         ),
                       ),
                       user != null
-                          ? cusPaymentWidgetOn(width, height, id, user.uid,
-                              course.isBundle, course.courseType, false)
-                          : cusPaymentWidgetOff(width, height, course.isBundle)
+                          ? cusPaymentWidgetOn(
+                              width,
+                              height,
+                              id,
+                              user.uid,
+                              course.isBundle,
+                              course.courseType,
+                              false,
+                              context)
+                          : cusPaymentWidgetOff(
+                              width, height, course.isBundle, context)
                     ],
                   ),
                 ],

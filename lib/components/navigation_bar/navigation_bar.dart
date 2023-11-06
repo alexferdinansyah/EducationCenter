@@ -7,6 +7,7 @@ import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/wrapper.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class CusNavigationBar extends StatefulWidget {
   const CusNavigationBar({super.key});
@@ -31,7 +32,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         index = 1;
       });
     } else if (Get.currentRoute == routeArticle ||
-        Get.currentRoute == routeDetailArticle) {
+        Get.currentRoute.contains(routeDetailArticle)) {
       setState(() {
         index = 2;
       });
@@ -45,7 +46,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
       children: [
         Image.asset(
           'assets/images/dec_logo2.png',
-          width: width * .07,
+          width: width * .06,
         ),
         const Spacer(),
         NavigationItem(
@@ -99,7 +100,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
                         borderRadius: BorderRadius.circular(8))),
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                     EdgeInsets.symmetric(
-                  vertical: height * .025,
+                  vertical: height * .015,
                 )),
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 shadowColor: MaterialStateProperty.all(Colors.transparent)),
@@ -153,6 +154,8 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context);
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     if (Get.currentRoute.contains(routeDetailSingleCourse) ||
@@ -163,7 +166,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
         index = 1;
       });
     } else if (Get.currentRoute == routeArticle ||
-        Get.currentRoute == routeDetailArticle) {
+        Get.currentRoute.contains(routeDetailArticle)) {
       setState(() {
         index = 2;
       });
@@ -183,7 +186,12 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
             children: [
               Image.asset(
                 'assets/images/dec_logo2.png',
-                width: width * .13,
+                width: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .13,
+                  tablet: width * .1,
+                  desktop: width * .019,
+                ),
               ),
               const Spacer(),
               GestureDetector(
@@ -224,6 +232,12 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
         Container(
           margin: EdgeInsets.symmetric(
               horizontal: width * .04, vertical: height * .03),
+          height: getValueForScreenType<double>(
+            context: context,
+            mobile: 40,
+            tablet: 48,
+            desktop: 45,
+          ),
           width: double.infinity,
           decoration: BoxDecoration(
               gradient:
@@ -247,14 +261,10 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8))),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(
-                  vertical: height * .03,
-                )),
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 shadowColor: MaterialStateProperty.all(Colors.transparent)),
             child: Text(
-              'Login',
+              user == null ? 'Login' : 'Dashboard',
               style: GoogleFonts.mulish(
                 fontWeight: FontWeight.w700,
                 color: Colors.white,

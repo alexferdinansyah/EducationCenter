@@ -156,7 +156,7 @@ class _MyCoursesState extends State<MyCourses> {
                                     padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
                                       EdgeInsets.symmetric(
-                                        vertical: height * 0.02,
+                                        vertical: height * 0.01,
                                       ),
                                     ),
                                     backgroundColor: MaterialStateProperty.all(
@@ -257,7 +257,7 @@ class _MyCoursesState extends State<MyCourses> {
                                             padding: MaterialStateProperty.all<
                                                 EdgeInsetsGeometry>(
                                               EdgeInsets.symmetric(
-                                                vertical: height * 0.025,
+                                                vertical: height * 0.01,
                                               ),
                                             ),
                                             backgroundColor:

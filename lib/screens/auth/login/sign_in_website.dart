@@ -26,6 +26,8 @@ class _SignInWebsiteState extends State<SignInWebsite> {
   String password = '';
   String error = '';
   bool showPassword = false;
+    bool onHover =false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -182,6 +184,29 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                     onChanged: (val) {
                                       setState(() => password = val);
                                     },
+                                    onFieldSubmitted: loading
+                                        ? null // Disable the button when loading is true
+                                        : (value) async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              setState(() => loading =
+                                                  true); // Set loading to true when pressed
+
+                                              // Call your registration function here
+                                              dynamic result = await _auth
+                                                  .signInWithEmailAndPassword(
+                                                      email, value);
+
+                                              setState(() {
+                                                if (result == null) {
+                                                  error =
+                                                      'Could not sign in with those credentials';
+                                                }
+                                                loading =
+                                                    false; // Set loading back to false
+                                              });
+                                            }
+                                          },
                                   ),
                                 ),
                                 Padding(
@@ -256,7 +281,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                         padding: MaterialStateProperty.all<
                                                 EdgeInsetsGeometry>(
                                             EdgeInsets.symmetric(
-                                          vertical: width * .014,
+                                          vertical: height * .018,
                                         )),
                                         backgroundColor:
                                             MaterialStateProperty.all(
@@ -323,11 +348,16 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       onPressed: () async {
                                         await AuthService().signInWithGoogle();
                                       },
+                                                                            onHover: (value) {
+                                        setState(() {
+                                          onHover = value;
+                                        });
+                                      },
                                       style: ButtonStyle(
                                           padding: MaterialStateProperty.all<
                                                   EdgeInsetsGeometry>(
                                               EdgeInsets.symmetric(
-                                                  vertical: width * .016)),
+                                                  vertical: height * .018)),
                                           shape: MaterialStatePropertyAll(
                                             RoundedRectangleBorder(
                                                 borderRadius:
@@ -338,8 +368,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                     width: 1.3)),
                                           ),
                                           backgroundColor:
-                                              const MaterialStatePropertyAll(
-                                                  Colors.white),
+                                               MaterialStatePropertyAll(
+                                                  onHover? Colors.grey.shade100
+                                                : Colors.white),
                                           shadowColor:
                                               const MaterialStatePropertyAll(
                                                   Colors.transparent)),

@@ -27,10 +27,7 @@ class NavigationItem extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: getValueForScreenType<double>(
-              context: context,
-              mobile: 20,
-              desktop: 10,
-            ),
+                context: context, mobile: 20, desktop: 10, tablet: 30),
             vertical: getValueForScreenType<double>(
               context: context,
               mobile: 8,

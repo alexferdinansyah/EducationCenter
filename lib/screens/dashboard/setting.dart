@@ -123,7 +123,7 @@ class _SettingsState extends State<Settings> {
                                   padding: MaterialStateProperty.all<
                                       EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                      vertical: height * 0.022,
+                                      vertical: height * 0.012,
                                     ),
                                   ),
                                   backgroundColor: MaterialStateProperty.all(
@@ -212,7 +212,7 @@ class _SettingsState extends State<Settings> {
                                   padding: MaterialStateProperty.all<
                                       EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                      vertical: height * 0.022,
+                                      vertical: height * 0.012,
                                     ),
                                   ),
                                   backgroundColor: MaterialStateProperty.all(
@@ -295,7 +295,7 @@ class _SettingsState extends State<Settings> {
                                   padding: MaterialStateProperty.all<
                                       EdgeInsetsGeometry>(
                                     EdgeInsets.symmetric(
-                                      vertical: height * 0.022,
+                                      vertical: height * 0.012,
                                     ),
                                   ),
                                   backgroundColor: MaterialStateProperty.all(
@@ -424,7 +424,7 @@ class _SettingsState extends State<Settings> {
               },
               style: ButtonStyle(
                   padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   ),
                   foregroundColor: MaterialStateProperty.all(
                     const Color(0xFF4351FF),

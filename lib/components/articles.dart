@@ -72,19 +72,26 @@ class Articles extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Text(
-              article.category!,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.mulish(
-                  color: const Color(0xFF2501FF),
-                  fontSize: getValueForScreenType<double>(
-                    context: context,
-                    mobile: width * .024,
-                    tablet: width * .014,
-                    desktop: width * .011,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  article.category!,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.mulish(
+                    color: const Color(0xFF2501FF),
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .024,
+                      tablet: width * .014,
+                      desktop: width * .011,
+                    ),
+                    fontWeight: FontWeight.bold,
                   ),
-                  fontWeight: FontWeight.bold,
-                  height: 1.35),
+                ),
+              ],
             ),
           ),
           article.image != ''
@@ -214,8 +221,28 @@ class _ArticleListsState extends State<ArticleLists> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: width / 2,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          margin: const EdgeInsets.symmetric(vertical: 20),
+          padding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 20,
+              desktop: 20,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 20,
+              desktop: 20,
+            ),
+          ),
+          margin: EdgeInsets.symmetric(
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 15,
+              desktop: 20,
+            ),
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: Colors.white,
@@ -244,16 +271,21 @@ class _ArticleListsState extends State<ArticleLists> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
                 image: DecorationImage(
-                    image: AssetImage(widget.article.image!),
+                    image: NetworkImage(widget.article.image!),
                     fit: BoxFit.cover,
-                    alignment: Alignment.topCenter),
+                    alignment: Alignment.center),
               ),
             ),
             Text(
               widget.article.title!,
               style: GoogleFonts.mulish(
                   color: CusColors.title,
-                  fontSize: width * .016,
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .032,
+                    tablet: width * .018,
+                    desktop: width * .016,
+                  ),
                   fontWeight: FontWeight.bold),
             ),
             Padding(
@@ -263,15 +295,25 @@ class _ArticleListsState extends State<ArticleLists> {
                 maxLines: 2,
                 style: GoogleFonts.mulish(
                     color: CusColors.inactive,
-                    fontSize: width * .01,
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .023,
+                      tablet: width * .013,
+                      desktop: width * .01,
+                    ),
                     fontWeight: FontWeight.w300,
                     height: 1.5),
               ),
             ),
             Container(
-              width: width * .1,
               margin: const EdgeInsets.only(right: 20),
-              height: 25,
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: 20,
+                tablet: 25,
+                desktop: 30,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 color: Colors.transparent,
@@ -283,13 +325,18 @@ class _ArticleListsState extends State<ArticleLists> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     widget.article.category!,
-                    textAlign: TextAlign.center,
                     style: GoogleFonts.mulish(
                       color: const Color(0xFF2501FF),
-                      fontSize: width * .011,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .023,
+                        tablet: width * .013,
+                        desktop: width * .01,
+                      ),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -309,7 +356,12 @@ class _ArticleListsState extends State<ArticleLists> {
               maxLines: 1,
               style: GoogleFonts.mulish(
                 color: CusColors.inactive,
-                fontSize: width * .01,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .023,
+                  tablet: width * .013,
+                  desktop: width * .01,
+                ),
                 fontWeight: FontWeight.w400,
               ),
             ),

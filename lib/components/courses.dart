@@ -123,7 +123,7 @@ class Courses extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Rp. ${course.price!}',
+                        'Rp ${course.price!}',
                         style: GoogleFonts.mulish(
                             color: CusColors.title,
                             fontSize: getValueForScreenType<double>(
@@ -138,7 +138,7 @@ class Courses extends StatelessWidget {
                       course.discount != ''
                           ? Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(6),
                                 color: Colors.transparent,
                                 border: Border.all(
                                   color: const Color(0xFF2501FF),
@@ -151,6 +151,8 @@ class Courses extends StatelessWidget {
                                   vertical: height * .004),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     '${course.discount}% Off',
@@ -184,7 +186,7 @@ class Courses extends StatelessWidget {
                   width: double.infinity,
                   height: getValueForScreenType<double>(
                     context: context,
-                    mobile: 30,
+                    mobile: 28,
                     tablet: 35,
                     desktop: 40,
                   ),
@@ -210,16 +212,6 @@ class Courses extends StatelessWidget {
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.symmetric(
-                          vertical: getValueForScreenType<double>(
-                            context: context,
-                            mobile: 0,
-                            tablet: height * .014,
-                            desktop: height * .025,
-                          ),
                         ),
                       ),
                       backgroundColor:
@@ -249,7 +241,7 @@ class Courses extends StatelessWidget {
                           size: getValueForScreenType<double>(
                             context: context,
                             mobile: height * .02,
-                            tablet: height * .014,
+                            tablet: height * .021,
                             desktop: height * .025,
                           ),
                         )
@@ -482,12 +474,6 @@ class MyCourse extends StatelessWidget {
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                              vertical: height * 0.022,
                             ),
                           ),
                           backgroundColor:

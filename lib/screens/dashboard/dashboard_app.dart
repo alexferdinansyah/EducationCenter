@@ -35,7 +35,8 @@ class _DashboardAppState extends State<DashboardApp> {
     const SideItem(icon: IconlyBold.category, title: 'Newsflash'),
     const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
     const SideItem(icon: IconlyBold.buy, title: 'Transaction'),
-    const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
+    // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
+    // const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];
 
   final List<SideItem> otherItems = [
@@ -118,7 +119,7 @@ class _DashboardAppState extends State<DashboardApp> {
           } else if (widget.selected == 'Membership-Payment') {
             return PaymentPage(
               user: user,
-              price: 'Rp. 100.000',
+              price: 'Rp 35.000',
               title: 'Membership',
               type: 'Pro',
             );

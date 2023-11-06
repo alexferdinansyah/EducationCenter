@@ -42,6 +42,8 @@ class _RegisterMobileState extends State<RegisterMobile> {
   String password = '';
   String error = '';
   bool showPassword = false;
+  bool onHover = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -484,7 +486,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                       borderRadius: BorderRadius.circular(8))),
                               padding:
                                   MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      const EdgeInsets.all(20)),
+                                      const EdgeInsets.all(10)),
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.transparent),
                               shadowColor: MaterialStateProperty.all(
@@ -545,10 +547,15 @@ class _RegisterMobileState extends State<RegisterMobile> {
                               await AuthService().signInWithGoogle();
                               Get.back();
                             },
+                            onHover: (value) {
+                              setState(() {
+                                onHover = value;
+                              });
+                            },
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
-                                    const EdgeInsets.all(20)),
+                                    const EdgeInsets.all(10)),
                                 shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -557,8 +564,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                               .withOpacity(.5),
                                           width: 1.3)),
                                 ),
-                                backgroundColor: const MaterialStatePropertyAll(
-                                    Colors.white),
+                                backgroundColor: MaterialStatePropertyAll(
+                                    onHover
+                                        ? Colors.grey.shade100
+                                        : Colors.white),
                                 shadowColor: const MaterialStatePropertyAll(
                                     Colors.transparent)),
                             child: Row(

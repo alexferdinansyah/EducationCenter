@@ -43,6 +43,7 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
   String error = '';
 
   bool showPassword = false;
+  bool onHover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -459,6 +460,38 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                     onChanged: (val) {
                                       setState(() => reason = val);
                                     },
+                                    onFieldSubmitted: loading
+                                        ? null // Disable the button when loading is true
+                                        : (value) async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              setState(() => loading =
+                                                  true); // Set loading to true when pressed
+
+                                              // Call your registration function here
+                                              dynamic result = await _auth
+                                                  .registerWithEmailAndPassword(
+                                                name,
+                                                noWhatsapp,
+                                                address,
+                                                lastEducation,
+                                                workingStatus,
+                                                email,
+                                                password,
+                                                value,
+                                              );
+
+                                              setState(() {
+                                                if (result == null) {
+                                                  error =
+                                                      'Please supply a valid email';
+                                                }
+                                                loading =
+                                                    false; // Set loading back to false
+                                              });
+                                              Get.back();
+                                            }
+                                          },
                                   ),
                                 ),
                                 Container(
@@ -557,7 +590,7 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                         padding: MaterialStateProperty.all<
                                                 EdgeInsetsGeometry>(
                                             EdgeInsets.symmetric(
-                                          vertical: width * .014,
+                                          vertical: height * .018,
                                         )),
                                         backgroundColor:
                                             MaterialStateProperty.all(
@@ -625,29 +658,37 @@ class _RegisterWebsiteState extends State<RegisterWebsite> {
                                         await AuthService().signInWithGoogle();
                                         Get.back();
                                       },
+                                      onHover: (value) {
+                                        setState(() {
+                                          onHover = value;
+                                        });
+                                      },
                                       style: ButtonStyle(
-                                          padding: MaterialStateProperty.all<
-                                                  EdgeInsetsGeometry>(
-                                              EdgeInsets.symmetric(
-                                                  vertical: width * .016)),
-                                          shape: MaterialStatePropertyAll(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                side: BorderSide(
-                                                    color: CusColors.subHeader
-                                                        .withOpacity(.5),
-                                                    width: 1.3)),
-                                          ),
-                                          backgroundColor:
-                                              const MaterialStatePropertyAll(
-                                                  Colors.white),
-                                          shadowColor:
-                                              const MaterialStatePropertyAll(
-                                                  Colors.transparent)),
+                                        padding: MaterialStateProperty.all<
+                                                EdgeInsetsGeometry>(
+                                            EdgeInsets.symmetric(
+                                                vertical: height * .018)),
+                                        shape: MaterialStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              side: BorderSide(
+                                                  color: CusColors.subHeader
+                                                      .withOpacity(.5),
+                                                  width: 1.3)),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(onHover
+                                                ? Colors.grey.shade100
+                                                : Colors.white),
+                                        shadowColor:
+                                            const MaterialStatePropertyAll(
+                                                Colors.transparent),
+                                      ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           SvgPicture.asset(
                                             "assets/svg/google.svg",

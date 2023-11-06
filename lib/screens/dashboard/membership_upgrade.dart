@@ -144,7 +144,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       padding: const EdgeInsets.only(
                                           top: 15, bottom: 20),
                                       child: Text(
-                                        'Rp. 0',
+                                        'Rp 0',
                                         style: GoogleFonts.poppins(
                                           fontSize: width * .02,
                                           fontWeight: FontWeight.w700,
@@ -220,22 +220,6 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     ),
                                     const SizedBox(
                                       height: 8,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
-                                        ),
-                                        Text(
-                                          "Whats",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color(0xFF170F49),
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                     const SizedBox(
                                       height: 25,
@@ -347,7 +331,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       padding: const EdgeInsets.only(
                                           top: 15, bottom: 20),
                                       child: Text(
-                                        'Rp. 100.000',
+                                        'Rp 35.000',
                                         style: GoogleFonts.poppins(
                                           fontSize: width * .02,
                                           fontWeight: FontWeight.w700,
@@ -424,22 +408,6 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     const SizedBox(
                                       height: 8,
                                     ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
-                                        ),
-                                        Text(
-                                          "Whats",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color(0xFF170F49),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
                                     SizedBox(
                                       height:
                                           widget.membershipData.memberType !=
@@ -495,7 +463,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                                 padding: MaterialStateProperty
                                                     .all<EdgeInsetsGeometry>(
                                                   EdgeInsets.symmetric(
-                                                    vertical: height * 0.025,
+                                                    vertical: height * 0.015,
                                                   ),
                                                 ),
                                                 backgroundColor:

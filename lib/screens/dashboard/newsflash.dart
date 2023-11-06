@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
+import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:project_tc/components/constants.dart";
 import "package:project_tc/components/loading.dart";
 import "package:project_tc/models/article.dart";
+import "package:project_tc/routes/routes.dart";
 import "package:project_tc/services/firestore_service.dart";
 import 'package:project_tc/services/extension.dart';
 
@@ -168,52 +170,144 @@ class Newsflashes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return isFullscreen
-        ? Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            decoration: article.image != ""
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: NetworkImage(article.image!),
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter),
+        ? GestureDetector(
+            onTap: () {
+              Get.toNamed(routeDetailArticle, parameters: {'id': id});
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              decoration: article.image != ""
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                          image: NetworkImage(article.image!),
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter),
+                    )
+                  : BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: CusColors.inactive),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    height: 90,
+                    width: double.infinity - 10,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 12,
+                            spreadRadius: 1,
+                            color: Colors.black.withOpacity(.3))
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 3),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              article.title!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: width * .013),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.grey,
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/suichan.jpg'),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Admin - ${article.date?.formatDate()}',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: width * .008,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]),
+                    ),
                   )
-                : BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: CusColors.inactive),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  height: 90,
-                  width: double.infinity - 10,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 12,
-                          spreadRadius: 1,
-                          color: Colors.black.withOpacity(.3))
-                    ],
+                ],
+              ),
+            ),
+          )
+        : GestureDetector(
+            onTap: () {
+              Get.toNamed(routeDetailArticle, parameters: {'id': id});
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: const Color(0xFFCCCCCC),
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 130,
+                    decoration: article.image != ''
+                        ? BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            image: DecorationImage(
+                                image: NetworkImage(article.image!),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter),
+                          )
+                        : BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: CusColors.inactive),
                   ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 13),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             article.title!,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
-                                color: Colors.white,
+                                color: CusColors.title,
                                 fontWeight: FontWeight.w600,
-                                fontSize: width * .013),
+                                fontSize: width * .011,
+                                height: 1.2),
                           ),
-                          const SizedBox(
-                            height: 10,
+                          SizedBox(
+                            height: height * .018,
                           ),
                           Row(
                             children: [
@@ -235,96 +329,15 @@ class Newsflashes extends StatelessWidget {
                                   'Admin - ${article.date?.formatDate()}',
                                   style: GoogleFonts.poppins(
                                       fontSize: width * .008,
-                                      color: Colors.white),
+                                      color: CusColors.title),
                                 ),
                               ),
                             ],
                           ),
                         ]),
                   ),
-                )
-              ],
-            ),
-          )
-        : Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: const Color(0xFFCCCCCC),
-                width: 1,
+                ],
               ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 130,
-                  decoration: article.image != ''
-                      ? BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          image: DecorationImage(
-                              image: NetworkImage(article.image!),
-                              fit: BoxFit.cover,
-                              alignment: Alignment.topCenter),
-                        )
-                      : BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: CusColors.inactive),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          article.title!,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                              color: CusColors.title,
-                              fontWeight: FontWeight.w600,
-                              fontSize: width * .011,
-                              height: 1.2),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                color: Colors.grey,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/suichan.jpg'),
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Admin - ${article.date?.formatDate()}',
-                                style: GoogleFonts.poppins(
-                                    fontSize: width * .008,
-                                    color: CusColors.title),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                ),
-              ],
             ),
           );
   }

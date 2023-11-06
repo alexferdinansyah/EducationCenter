@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/services/function.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class Footer extends StatelessWidget {
@@ -180,9 +181,14 @@ class Footer extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: SvgPicture.asset('assets/svg/Instagram.svg'),
+                        child: GestureDetector(
+                            onTap: launchInstagram,
+                            child:
+                                SvgPicture.asset('assets/svg/Instagram.svg')),
                       ),
-                      SvgPicture.asset('assets/svg/whatsapp.svg'),
+                      GestureDetector(
+                          onTap: launchWhatsapp,
+                          child: SvgPicture.asset('assets/svg/whatsapp.svg')),
                     ],
                   ),
                 ],
@@ -345,9 +351,14 @@ class FooterMobile extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: SvgPicture.asset('assets/svg/Instagram.svg'),
+                        child: GestureDetector(
+                            onTap: launchInstagram,
+                            child:
+                                SvgPicture.asset('assets/svg/Instagram.svg')),
                       ),
-                      SvgPicture.asset('assets/svg/whatsapp.svg'),
+                      GestureDetector(
+                          onTap: launchWhatsapp,
+                          child: SvgPicture.asset('assets/svg/whatsapp.svg')),
                     ],
                   ),
                 ],

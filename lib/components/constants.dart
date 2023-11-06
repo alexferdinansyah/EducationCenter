@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class CusColors {
   static Color mainColor = const Color(0xFF19A7CE);
@@ -61,7 +62,12 @@ class CusSearchBar extends StatelessWidget {
         style: GoogleFonts.mPlus1(
           fontWeight: FontWeight.w500,
           color: CusColors.subHeader,
-          fontSize: width * .009,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .022,
+            tablet: width * .012,
+            desktop: width * .009,
+          ),
         ),
         cursorColor: const Color(0xFFCCCCCC),
         textAlign: TextAlign.justify,
@@ -81,14 +87,31 @@ class CusSearchBar extends StatelessWidget {
               states.contains(MaterialState.focused)
                   ? CusColors.subHeader.withOpacity(0.5)
                   : const Color(0xFFCCCCCC)),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 10,
+              tablet: 10,
+              desktop: 30,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 5,
+              tablet: 5,
+              desktop: 15,
+            ),
+          ),
           isDense: true,
           hintText: 'Search article...',
           hintStyle: GoogleFonts.mPlus1(
             fontWeight: FontWeight.w500,
             color: CusColors.subHeader.withOpacity(0.5),
-            fontSize: width * .009,
+            fontSize: getValueForScreenType<double>(
+              context: context,
+              mobile: width * .022,
+              tablet: width * .012,
+              desktop: width * .009,
+            ),
           ),
         ),
       ),
@@ -96,10 +119,21 @@ class CusSearchBar extends StatelessWidget {
   }
 }
 
-Widget cusPaymentWidgetOn(
-    width, height, courseId, userId, isBundle, courseType, haveCourse) {
+Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle, courseType,
+    haveCourse, context) {
   return Container(
-    width: width * .2,
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
     decoration: BoxDecoration(
       color: const Color(0xFF86B1F2),
       borderRadius: BorderRadius.circular(64),
@@ -137,11 +171,6 @@ Widget cusPaymentWidgetOn(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          EdgeInsets.symmetric(
-            vertical: height * 0.025,
-          ),
-        ),
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
       ),
@@ -151,7 +180,12 @@ Widget cusPaymentWidgetOn(
               style: GoogleFonts.mulish(
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-                fontSize: width * 0.01,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .018,
+                  tablet: width * .015,
+                  desktop: width * .01,
+                ),
               ),
             )
           : Text(
@@ -159,16 +193,32 @@ Widget cusPaymentWidgetOn(
               style: GoogleFonts.mulish(
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-                fontSize: width * 0.01,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .018,
+                  tablet: width * .015,
+                  desktop: width * .01,
+                ),
               ),
             ),
     ),
   );
 }
 
-Widget cusPaymentWidgetOff(width, height, isBundle) {
+Widget cusPaymentWidgetOff(width, height, isBundle, context) {
   return Container(
-    width: width * .2,
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
     decoration: BoxDecoration(
       color: const Color(0xFF86B1F2),
       borderRadius: BorderRadius.circular(64),
@@ -183,11 +233,6 @@ Widget cusPaymentWidgetOff(width, height, isBundle) {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          EdgeInsets.symmetric(
-            vertical: height * 0.025,
-          ),
-        ),
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
       ),
@@ -196,7 +241,12 @@ Widget cusPaymentWidgetOff(width, height, isBundle) {
         style: GoogleFonts.mulish(
           fontWeight: FontWeight.w700,
           color: Colors.white,
-          fontSize: width * 0.01,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .018,
+            tablet: width * .015,
+            desktop: width * .01,
+          ),
         ),
       ),
     ),

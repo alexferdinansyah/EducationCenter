@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/static/help_data.dart';
+import 'package:project_tc/services/function.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({super.key});
@@ -79,24 +80,27 @@ class _HelpPageState extends State<HelpPage> {
                               color: Colors.black.withOpacity(.2), width: .5),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svg/whatsapp.svg',
-                            height: 30,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Chat us',
-                            style: GoogleFonts.poppins(
-                              color: CusColors.subHeader,
-                              fontSize: width * .01,
-                              fontWeight: FontWeight.w400,
+                      child: GestureDetector(
+                        onTap: launchWhatsapp,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svg/whatsapp.svg',
+                              height: 30,
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              'Chat us',
+                              style: GoogleFonts.poppins(
+                                color: CusColors.subHeader,
+                                fontSize: width * .01,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -138,25 +142,28 @@ class _HelpPageState extends State<HelpPage> {
                               color: Colors.black.withOpacity(.2), width: .5),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            IconlyLight.message,
-                            size: 30,
-                            color: Color(0xFF0081FE),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Email us',
-                            style: GoogleFonts.poppins(
-                              color: CusColors.subHeader,
-                              fontSize: width * .01,
-                              fontWeight: FontWeight.w400,
+                      child: GestureDetector(
+                        onTap: launchEmail,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              IconlyLight.message,
+                              size: 30,
+                              color: Color(0xFF0081FE),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              'Email us',
+                              style: GoogleFonts.poppins(
+                                color: CusColors.subHeader,
+                                fontSize: width * .01,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

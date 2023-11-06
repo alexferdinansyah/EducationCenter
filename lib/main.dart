@@ -14,6 +14,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await GetStorage.init();
+
   runApp(const MyApp());
 }
 
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         navigatorKey: navKey,
         defaultTransition: Transition.fadeIn,
         getPages: getPages,
+        theme: ThemeData().copyWith(
+          visualDensity: VisualDensity.standard,
+        ),
         // home: Wrapper(),
       ),
     );

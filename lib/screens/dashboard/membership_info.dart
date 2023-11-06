@@ -141,7 +141,7 @@ class _MembershipInfoState extends State<MembershipInfo> {
                             padding:
                                 MaterialStateProperty.all<EdgeInsetsGeometry>(
                               EdgeInsets.symmetric(
-                                  vertical: height * 0.025,
+                                  vertical: height * 0.015,
                                   horizontal: width * .02),
                             ),
                             backgroundColor:
