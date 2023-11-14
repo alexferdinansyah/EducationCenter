@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/course_form_modal.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Courses extends StatelessWidget {
   final Course course;
@@ -51,7 +53,11 @@ class Courses extends StatelessWidget {
           course.image != ''
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(course.image!, width: double.infinity))
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: course.image!,
+                  ),
+                )
               : const Text('No Image'),
           Padding(
             padding: EdgeInsets.only(
@@ -374,22 +380,32 @@ class ListCourses extends StatelessWidget {
 class MyCourse extends StatelessWidget {
   final String id;
   final Course course;
-  final bool isPaid;
+  final bool? isPaid;
+  final bool isAdmin;
+  final Function()? onPressed;
 
   const MyCourse(
       {super.key,
       required this.course,
       required this.id,
-      required this.isPaid});
+      this.isPaid,
+      required this.isAdmin,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * .15,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(
+          getValueForScreenType<double>(
+            context: context,
+            mobile: 18,
+            tablet: 22,
+            desktop: 25,
+          ),
+        ),
         color: Colors.white,
         border: Border.all(
           color: const Color(0xFFCCCCCC),
@@ -397,24 +413,36 @@ class MyCourse extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        padding: const EdgeInsets.all(10),
         child: Column(children: [
-          Container(
-            width: double.infinity,
-            height: height * .16,
-            decoration: course.image != ''
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    image: DecorationImage(
-                      image: NetworkImage(course.image!),
-                      fit: BoxFit.contain, // Adjust the fit as needed
-                    ),
-                  )
-                : BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
+          course.image != ''
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: course.image!,
                   ),
-          ),
+                )
+              : SizedBox(
+                  height: 95,
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('No Image',
+                          style: GoogleFonts.mulish(
+                              color: CusColors.title,
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .02,
+                                tablet: width * .017,
+                                desktop: width * .012,
+                              ),
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
           Padding(
             padding: EdgeInsets.only(top: height * .01),
             child: Column(
@@ -424,7 +452,12 @@ class MyCourse extends StatelessWidget {
                   course.courseCategory!,
                   style: GoogleFonts.mulish(
                       color: CusColors.inactive,
-                      fontSize: width * .009,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .017,
+                        tablet: width * .014,
+                        desktop: width * .009,
+                      ),
                       fontWeight: FontWeight.w300,
                       height: 1.5),
                 ),
@@ -436,7 +469,12 @@ class MyCourse extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.mulish(
                         color: CusColors.title,
-                        fontSize: width * .012,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .02,
+                          tablet: width * .017,
+                          desktop: width * .012,
+                        ),
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -449,53 +487,76 @@ class MyCourse extends StatelessWidget {
                     )),
                 Row(
                   children: [
-                    Container(
-                      width: width * .1,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF86B1F2),
-                        borderRadius: BorderRadius.circular(64),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (isPaid == true) {
-                            Get.toNamed(
-                              routeLearnCourse,
-                              parameters: {'id': id},
-                            );
-                          } else {
-                            Get.toNamed(
-                              routeOfferLearnCourse,
-                              parameters: {'id': id},
-                            );
-                          }
-                        },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF86B1F2),
+                          borderRadius: BorderRadius.circular(64),
                         ),
-                        child: Text(
-                          'Learn Course',
-                          style: GoogleFonts.mulish(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                            fontSize: width * 0.01,
+                        height: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 26,
+                          tablet: 33,
+                          desktop: 38,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (isAdmin == true) {
+                              onPressed!();
+                            } else {
+                              if (isPaid == true) {
+                                Get.toNamed(
+                                  routeLearnCourse,
+                                  parameters: {'id': id},
+                                );
+                              } else {
+                                Get.toNamed(
+                                  routeOfferLearnCourse,
+                                  parameters: {'id': id},
+                                );
+                              }
+                            }
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                          ),
+                          child: Text(
+                            isAdmin ? 'Edit Course' : 'Learn Course',
+                            style: GoogleFonts.mulish(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .018,
+                                tablet: width * .015,
+                                desktop: width * .01,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(
+                      width: 4,
+                    ),
                     Icon(
-                      IconlyLight.chat,
+                      isAdmin ? IconlyLight.delete : IconlyLight.chat,
                       color: const Color(0xFF86B1F2),
-                      size: width * .02,
+                      size: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 22,
+                        tablet: 24,
+                        desktop: 28,
+                      ),
                     )
                   ],
                 ),

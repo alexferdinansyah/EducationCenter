@@ -34,7 +34,7 @@ List<AdvantageModel> advantage = [
   ),
   AdvantageModel(
     svg: 'assets/svg/instructor.svg',
-    title: 'EXPERIENCE \n INSTRUCTOR',
+    title: 'EXPERIENCED \n INSTRUCTOR',
   ),
 ];
 

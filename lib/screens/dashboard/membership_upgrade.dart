@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class MembershipUpgrade extends StatefulWidget {
   final MembershipModel membershipData;
@@ -20,13 +21,36 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * .83,
-      height: height - 60,
+      width: getValueForScreenType<double>(
+        context: context,
+        mobile: width * .86,
+        tablet: width * .79,
+        desktop: width * .83,
+      ),
+      height: getValueForScreenType<double>(
+        context: context,
+        mobile: height - 40,
+        tablet: height - 50,
+        desktop: height - 60,
+      ),
       color: CusColors.bg,
       child: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 35),
+            padding: EdgeInsets.symmetric(
+              horizontal: getValueForScreenType<double>(
+                context: context,
+                mobile: 20,
+                tablet: 30,
+                desktop: 40,
+              ),
+              vertical: getValueForScreenType<double>(
+                context: context,
+                mobile: 20,
+                tablet: 30,
+                desktop: 35,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

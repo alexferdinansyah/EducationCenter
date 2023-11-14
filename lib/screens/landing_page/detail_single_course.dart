@@ -115,7 +115,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                         Column(
                           children: [
                             Text(
-                              'Courses',
+                              'What you will learn on this course',
                               style: GoogleFonts.mulish(
                                   color: CusColors.header,
                                   fontSize: getValueForScreenType<double>(
@@ -473,7 +473,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                     courseType, snapshot.data, context);
               }
             })
-        : cusPaymentWidgetOff(width, height, isBundle, context);
+        : cusPaymentWidgetOff(width, height, isBundle, id, courseType, context);
   }
 
   Widget _defaultPaymentCard(
@@ -487,7 +487,9 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
           margin: EdgeInsets.only(right: width * .012),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: const Color(0xFFD9D9D9),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/certificate.png'),
+            ),
           ),
         ),
         Column(
@@ -602,7 +604,9 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
           height: height * .2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: const Color(0xFFD9D9D9),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/certificate.png'),
+            ),
           ),
         ),
         Padding(

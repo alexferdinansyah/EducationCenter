@@ -106,11 +106,13 @@ class _PaymentPageState extends State<PaymentPage> {
         );
       });
     }
-    return Container(
-        width: width * .83,
-        height: height - 60,
-        color: CusColors.bg,
-        child: _default(width, height, isCourse: false));
+    return Scaffold(
+      body: Container(
+          width: width * .83,
+          height: height - 60,
+          color: CusColors.bg,
+          child: _default(width, height, isCourse: false)),
+    );
   }
 
   Widget _default(
@@ -297,28 +299,29 @@ class _PaymentPageState extends State<PaymentPage> {
                                   dynamic data;
                                   if (isCourse == true) {
                                     data = TransactionModel(
-                                      uid: uid,
-                                      item: TransactionItem(
-                                          id: courseId,
-                                          title: title,
-                                          subTitle: type),
-                                      invoiceDate: DateTime.now(),
-                                      date: DateTime.now(),
-                                      price: price,
-                                      status: 'Pending',
-                                      invoice: downloadURL,
-                                    );
+                                        uid: uid,
+                                        item: TransactionItem(
+                                            id: courseId,
+                                            title: title,
+                                            subTitle: type),
+                                        invoiceDate: DateTime.now(),
+                                        date: DateTime.now(),
+                                        price: price,
+                                        status: 'Pending',
+                                        invoice: downloadURL,
+                                        reason: null);
                                   } else {
                                     data = TransactionModel(
-                                      uid: widget.user!.uid,
-                                      item: TransactionItem(
-                                          title: 'Membership', subTitle: 'Pro'),
-                                      invoiceDate: DateTime.now(),
-                                      date: DateTime.now(),
-                                      price: widget.price,
-                                      status: 'Pending',
-                                      invoice: downloadURL,
-                                    );
+                                        uid: widget.user!.uid,
+                                        item: TransactionItem(
+                                            title: 'Membership',
+                                            subTitle: 'Pro'),
+                                        invoiceDate: DateTime.now(),
+                                        date: DateTime.now(),
+                                        price: widget.price,
+                                        status: 'Pending',
+                                        invoice: downloadURL,
+                                        reason: null);
                                   }
                                   final exist = await firestoreService
                                       .checkTransaction(widget.title ?? title);

@@ -1,5 +1,4 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +8,7 @@ import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/firestore_service.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class EditProfile extends StatefulWidget {
   final UserData userData;
@@ -82,12 +82,35 @@ class _EditProfileState extends State<EditProfile> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * .83,
-      height: height - 60,
+      width: getValueForScreenType<double>(
+        context: context,
+        mobile: width * .86,
+        tablet: width * .79,
+        desktop: width * .83,
+      ),
+      height: getValueForScreenType<double>(
+        context: context,
+        mobile: height - 40,
+        tablet: height - 50,
+        desktop: height - 60,
+      ),
       color: CusColors.bg,
       child: ListView(children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 35),
+          padding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 30,
+              desktop: 40,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 30,
+              desktop: 35,
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -178,30 +201,37 @@ class _EditProfileState extends State<EditProfile> {
                         const SizedBox(
                           width: 20,
                         ),
-                        ElevatedButton(
-                          onPressed: selectImageFromGallery,
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                const EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 18),
-                              ),
-                              foregroundColor: MaterialStateProperty.all(
-                                const Color(0xFF4351FF),
-                              ),
-                              backgroundColor: MaterialStateProperty.all(
-                                const Color(0xFF4351FF),
-                              ),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
+                        SizedBox(
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 28,
+                            tablet: 35,
+                            desktop: 40,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: selectImageFromGallery,
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(horizontal: 25),
                                 ),
-                              )),
-                          child: Text(
-                            'Upload New',
-                            style: GoogleFonts.poppins(
-                              fontSize: width * .009,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                                foregroundColor: MaterialStateProperty.all(
+                                  const Color(0xFF4351FF),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFF4351FF),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                )),
+                            child: Text(
+                              'Upload New',
+                              style: GoogleFonts.poppins(
+                                fontSize: width * .009,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -462,70 +492,77 @@ class _EditProfileState extends State<EditProfile> {
                           const SizedBox(
                             height: 40,
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (image != null) {
-                                await uploadToFirebase(image);
-                                await deleteExistingPhoto();
-                              }
-                              if (_formKey.currentState!.validate()) {
-                                String updatedName =
-                                    name ?? widget.userData.name;
-                                String updatedPhotoUrl =
-                                    downloadURL ?? widget.userData.photoUrl;
+                          SizedBox(
+                            height: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 28,
+                              tablet: 35,
+                              desktop: 40,
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (image != null) {
+                                  await uploadToFirebase(image);
+                                  await deleteExistingPhoto();
+                                }
+                                if (_formKey.currentState!.validate()) {
+                                  String updatedName =
+                                      name ?? widget.userData.name;
+                                  String updatedPhotoUrl =
+                                      downloadURL ?? widget.userData.photoUrl;
 
-                                // // Check if the name changed and no image URL is provided
-                                // if (name != null &&
-                                //     name != widget.userData.name &&
-                                //     downloadURL == null &&
-                                //     !widget.userData.photoUrl.contains(
-                                //         'https://lh3.googleusercontent.com')) {
-                                //   // Set a default image URL here
-                                //   updatedPhotoUrl =
-                                //       'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
-                                // }
-                                await FirestoreService(uid: widget.user.uid)
-                                    .updateUserData(
-                                        updatedName,
-                                        updatedPhotoUrl,
-                                        'member',
-                                        noWhatsapp ??
-                                            widget.userData.noWhatsapp,
-                                        address ?? widget.userData.address,
-                                        lastEducation ??
-                                            widget.userData.education,
-                                        workingStatus ??
-                                            widget.userData.working,
-                                        reason ?? widget.userData.reason,
-                                        widget.userData.membership
-                                            .toFirestore());
-                                setState(() {
-                                  image = null;
-                                });
-                              }
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                  const EdgeInsets.symmetric(
-                                      horizontal: 60, vertical: 22),
-                                ),
-                                foregroundColor: MaterialStateProperty.all(
-                                  const Color(0xFF4351FF),
-                                ),
-                                backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xFF4351FF),
-                                ),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
+                                  // // Check if the name changed and no image URL is provided
+                                  // if (name != null &&
+                                  //     name != widget.userData.name &&
+                                  //     downloadURL == null &&
+                                  //     !widget.userData.photoUrl.contains(
+                                  //         'https://lh3.googleusercontent.com')) {
+                                  //   // Set a default image URL here
+                                  //   updatedPhotoUrl =
+                                  //       'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
+                                  // }
+                                  await FirestoreService(uid: widget.user.uid)
+                                      .updateUserData(
+                                          updatedName,
+                                          updatedPhotoUrl,
+                                          'member',
+                                          noWhatsapp ??
+                                              widget.userData.noWhatsapp,
+                                          address ?? widget.userData.address,
+                                          lastEducation ??
+                                              widget.userData.education,
+                                          workingStatus ??
+                                              widget.userData.working,
+                                          reason ?? widget.userData.reason,
+                                          widget.userData.membership
+                                              .toFirestore());
+                                  setState(() {
+                                    image = null;
+                                  });
+                                }
+                              },
+                              style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(horizontal: 60),
                                   ),
-                                )),
-                            child: Text(
-                              'Save',
-                              style: GoogleFonts.poppins(
-                                fontSize: width * .01,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                                  foregroundColor: MaterialStateProperty.all(
+                                    const Color(0xFF4351FF),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xFF4351FF),
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  )),
+                              child: Text(
+                                'Save',
+                                style: GoogleFonts.poppins(
+                                  fontSize: width * .01,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),

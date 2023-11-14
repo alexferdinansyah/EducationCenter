@@ -149,6 +149,44 @@ class FirestoreService {
     }
   }
 
+  Future updateCourseFewField({
+    String? courseId,
+    String? title,
+    String? learnLimit,
+    String? price,
+    String? courseCategory,
+    String? courseType,
+    bool? isBundle,
+    bool? isBestSales,
+  }) async {
+    try {
+      await courseCollection.doc(courseId).set({
+        'title': title,
+        'learn_limit': learnLimit,
+        'price': price,
+        'course_category': courseCategory,
+        'course_type': courseType,
+        'is_bundle': isBundle,
+        'best_sales': isBestSales
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print('Error adding course: $e');
+      // Handle the error as needed
+    }
+  }
+
+  Future updateCourseEachField(
+      {String? courseId, String? fieldName, dynamic data}) async {
+    try {
+      await courseCollection
+          .doc(courseId)
+          .set({fieldName: data}, SetOptions(merge: true));
+    } catch (e) {
+      print('Error adding course: $e');
+      // Handle the error as needed
+    }
+  }
+
   // Add my courses sub collection
   Future<void> addMyCourse(String courseId, String userId, bool isPaid) async {
     final myCoursesCollection =
@@ -329,7 +367,8 @@ class FirestoreService {
       final data = transactionDocument.data() as Map<String, dynamic>;
       final transactionData = await data['transaction'].get();
 
-      if (transactionData['item']['title'] == title) {
+      if (transactionData['item']['title'] == title &&
+          transactionData['status'] != 'Failed') {
         return true; // Title exists within 'transactions' collection
       }
     }
@@ -394,6 +433,17 @@ class FirestoreService {
           print('Error updating user my course data $e');
         }
       }
+    } catch (e) {
+      print('Error getting transaction data $e');
+    }
+  }
+
+  Future cancelTransactionUser(transactionId, UserData user,
+      TransactionModel transaction, String reason) async {
+    try {
+      await transactionCollection
+          .doc(transactionId)
+          .update({'status': 'Failed', 'reason': reason});
     } catch (e) {
       print('Error getting transaction data $e');
     }

@@ -95,6 +95,7 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
               ),
             ),
             elevation: 0,
+            centerTitle: false,
             backgroundColor: CusColors.bg,
             automaticallyImplyLeading: false,
             actions: [
@@ -118,7 +119,7 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
             iconTheme: const IconThemeData(color: Color(0xFF458FF6))),
         endDrawer: Drawer(
           width: double.infinity,
-          backgroundColor: const Color(0xFFC2D8F2),
+          backgroundColor: CusColors.bgSideBar,
           child: ListView(
             children: const [CusNavigationBarMobile()],
           ),

@@ -48,7 +48,7 @@ InputDecoration editProfileDecoration = InputDecoration(
           BorderSide(color: CusColors.subHeader.withOpacity(.2), width: 1.0),
     ),
     isCollapsed: true,
-    contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15));
+    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15));
 
 class CusSearchBar extends StatelessWidget {
   const CusSearchBar({super.key});
@@ -147,7 +147,6 @@ Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle, courseType,
               parameters: {'id': courseId},
             );
           } else {
-            // ganti jadi route payment
             Get.toNamed(
               routeBuyCourse,
               parameters: {'id': courseId},
@@ -205,7 +204,8 @@ Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle, courseType,
   );
 }
 
-Widget cusPaymentWidgetOff(width, height, isBundle, context) {
+Widget cusPaymentWidgetOff(
+    width, height, isBundle, courseId, courseType, context) {
   return Container(
     width: getValueForScreenType<double>(
       context: context,
@@ -225,7 +225,17 @@ Widget cusPaymentWidgetOff(width, height, isBundle, context) {
     ),
     child: ElevatedButton(
       onPressed: () {
-        Get.toNamed(routeLogin);
+        if (courseType == 'Free') {
+          Get.toNamed(
+            routeOfferLearnCourse,
+            parameters: {'id': courseId},
+          );
+        } else {
+          Get.toNamed(
+            routeBuyCourse,
+            parameters: {'id': courseId},
+          );
+        }
       },
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

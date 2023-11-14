@@ -1,9 +1,8 @@
-import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:project_tc/components/animation/animation_function.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/components/loading.dart';
@@ -11,6 +10,7 @@ import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/firestore_service.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class MyCourses extends StatefulWidget {
   final UserModel user;
@@ -81,108 +81,174 @@ class _MyCoursesState extends State<MyCourses> {
             courses = List.from(dataCourses);
 
             return Container(
-              width: width * .83,
-              height: height - 60,
+              width: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .86,
+                tablet: width * .79,
+                desktop: width * .83,
+              ),
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: height - 40,
+                tablet: height - 50,
+                desktop: height - 60,
+              ),
               color: CusColors.bg,
               child: ListView(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 35),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 20,
+                        tablet: 30,
+                        desktop: 40,
+                      ),
+                      vertical: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 20,
+                        tablet: 30,
+                        desktop: 35,
+                      ),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'My Courses',
                           style: GoogleFonts.poppins(
-                            fontSize: width * .014,
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .022,
+                              tablet: width * .019,
+                              desktop: width * .014,
+                            ),
                             fontWeight: FontWeight.w500,
                             color: const Color(0xFF1F384C),
                           ),
                         ),
-                        const SizedBox(
-                          height: 40,
+                        SizedBox(
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 20,
+                            tablet: 25,
+                            desktop: 40,
+                          ),
                         ),
-                        Row(
-                          children:
-                              List.generate(filterCriteria.length, (index) {
-                            return MouseRegion(
-                              onEnter: (_) {
-                                // Set the hover state
-                                setState(() {
-                                  isHovered[index] = true;
-                                });
-                              },
-                              onExit: (_) {
-                                // Reset the hover state
-                                setState(() {
-                                  isHovered[index] = false;
-                                });
-                              },
-                              child: AnimatedContainer(
-                                margin: const EdgeInsets.only(right: 10),
-                                duration: const Duration(milliseconds: 300),
-                                width: width * .1,
-                                decoration: BoxDecoration(
-                                  color: isSelected[index]
-                                      ? CusColors.accentBlue
-                                      : isHovered[index]
-                                          ? CusColors.accentBlue
-                                          : Colors.white,
-                                  borderRadius: BorderRadius.circular(64),
-                                  border: Border.all(
-                                    color: CusColors.accentBlue,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      for (int i = 0;
-                                          i < isSelected.length;
-                                          i++) {
-                                        isSelected[i] = (i == index);
-                                      }
-                                    });
-                                    filterCourses(filterCriteria[index]);
-                                  },
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                        SizedBox(
+                          width: double.infinity,
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 38,
+                            tablet: 45,
+                            desktop: 50,
+                          ),
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              Row(
+                                children: List.generate(filterCriteria.length,
+                                    (index) {
+                                  return MouseRegion(
+                                    onEnter: (_) {
+                                      // Set the hover state
+                                      setState(() {
+                                        isHovered[index] = true;
+                                      });
+                                    },
+                                    onExit: (_) {
+                                      // Reset the hover state
+                                      setState(() {
+                                        isHovered[index] = false;
+                                      });
+                                    },
+                                    child: AnimatedContainer(
+                                      margin: const EdgeInsets.only(right: 10),
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 28,
+                                        tablet: 35,
+                                        desktop: 40,
+                                      ),
+                                      width: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: width * .2,
+                                        tablet: width * .15,
+                                        desktop: width * .1,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isSelected[index]
+                                            ? CusColors.accentBlue
+                                            : isHovered[index]
+                                                ? CusColors.accentBlue
+                                                : Colors.white,
+                                        borderRadius: BorderRadius.circular(64),
+                                        border: Border.all(
+                                          color: CusColors.accentBlue,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            for (int i = 0;
+                                                i < isSelected.length;
+                                                i++) {
+                                              isSelected[i] = (i == index);
+                                            }
+                                          });
+                                          filterCourses(filterCriteria[index]);
+                                        },
+                                        style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.transparent),
+                                          shadowColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.transparent),
+                                        ),
+                                        child: Text(
+                                          filterCriteria[index],
+                                          style: GoogleFonts.mulish(
+                                            fontWeight: FontWeight.w700,
+                                            color: isSelected[index]
+                                                ? Colors.white
+                                                : isHovered[index]
+                                                    ? Colors.white
+                                                    : CusColors.accentBlue,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .018,
+                                              tablet: width * .015,
+                                              desktop: width * .01,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                      EdgeInsets.symmetric(
-                                        vertical: height * 0.01,
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    shadowColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                  ),
-                                  child: Text(
-                                    filterCriteria[index],
-                                    style: GoogleFonts.mulish(
-                                      fontWeight: FontWeight.w700,
-                                      color: isSelected[index]
-                                          ? Colors.white
-                                          : isHovered[index]
-                                              ? Colors.white
-                                              : CusColors.accentBlue,
-                                      fontSize: width * 0.01,
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                }),
                               ),
-                            );
-                          }),
+                            ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 80,
+                        SizedBox(
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 20,
+                            tablet: 40,
+                            desktop: 50,
+                          ),
                         ),
                         SizedBox(
                           height: filteredCourses.length / 5 > 1 &&
@@ -198,7 +264,12 @@ class _MyCoursesState extends State<MyCourses> {
                                   children: [
                                     SvgPicture.asset(
                                       'assets/svg/course_none.svg',
-                                      height: height / 2.3,
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: height / 3,
+                                        tablet: height / 2.7,
+                                        desktop: height / 2.3,
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -207,7 +278,13 @@ class _MyCoursesState extends State<MyCourses> {
                                         "You don't take any courses, \n you can search for courses according to your needs",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
-                                          fontSize: width * .013,
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .021,
+                                            tablet: width * .018,
+                                            desktop: width * .013,
+                                          ),
                                           color: const Color(0xFF1F384C),
                                         ),
                                       ),
@@ -230,7 +307,18 @@ class _MyCoursesState extends State<MyCourses> {
                                             const EdgeInsets.only(right: 10),
                                         duration:
                                             const Duration(milliseconds: 300),
-                                        width: width * .17,
+                                        height: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: 28,
+                                          tablet: 35,
+                                          desktop: 40,
+                                        ),
+                                        width: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width * .23,
+                                          tablet: width * .2,
+                                          desktop: width * .17,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: isHover
                                               ? CusColors.accentBlue
@@ -252,12 +340,6 @@ class _MyCoursesState extends State<MyCourses> {
                                               RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
-                                              ),
-                                            ),
-                                            padding: MaterialStateProperty.all<
-                                                EdgeInsetsGeometry>(
-                                              EdgeInsets.symmetric(
-                                                vertical: height * 0.01,
                                               ),
                                             ),
                                             backgroundColor:
@@ -283,7 +365,14 @@ class _MyCoursesState extends State<MyCourses> {
                                                     color: isHover
                                                         ? Colors.white
                                                         : CusColors.accentBlue,
-                                                    fontSize: width * 0.01,
+                                                    fontSize:
+                                                        getValueForScreenType<
+                                                            double>(
+                                                      context: context,
+                                                      mobile: width * .018,
+                                                      tablet: width * .015,
+                                                      desktop: width * .01,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -292,6 +381,13 @@ class _MyCoursesState extends State<MyCourses> {
                                                 color: isHover
                                                     ? Colors.white
                                                     : CusColors.accentBlue,
+                                                size: getValueForScreenType<
+                                                    double>(
+                                                  context: context,
+                                                  mobile: 20,
+                                                  tablet: 22,
+                                                  desktop: 24,
+                                                ),
                                               )
                                             ],
                                           ),
@@ -300,26 +396,34 @@ class _MyCoursesState extends State<MyCourses> {
                                     )
                                   ],
                                 ))
-                              : LiveGrid(
-                                  itemCount: filteredCourses.length,
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent: height * .34,
-                                    crossAxisCount:
-                                        5, // Number of items per row
+                              : ScrollConfiguration(
+                                  behavior: ScrollConfiguration.of(context)
+                                      .copyWith(scrollbars: false),
+                                  child: MasonryGridView.count(
+                                    physics: const ScrollPhysics(
+                                        parent: BouncingScrollPhysics()),
                                     crossAxisSpacing: width *
                                         .02, // Adjust spacing between items horizontally
                                     mainAxisSpacing:
                                         16.0, // Adjust spacing between rows vertically
-                                  ),
-                                  itemBuilder: animationBuilder(
-                                    (index) => MyCourse(
+                                    crossAxisCount: getValueForScreenType<int>(
+                                      context: context,
+                                      mobile: 2,
+                                      tablet: 3,
+                                      desktop: 5,
+                                    ),
+                                    itemCount: filteredCourses.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return MyCourse(
                                         course: filteredCourses[index]
                                             ['course'],
                                         id: filteredCourses[index]['id'],
                                         isPaid: filteredCourses[index]
-                                            ['isPaid']),
+                                            ['isPaid'],
+                                        isAdmin: false,
+                                      );
+                                    },
                                   ),
                                 ),
                         ),

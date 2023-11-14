@@ -255,7 +255,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
               ]),
           child: ElevatedButton(
             onPressed: () {
-              Get.to(() => const Wrapper());
+              Get.to(() => const Wrapper(), routeName: '/login');
             },
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

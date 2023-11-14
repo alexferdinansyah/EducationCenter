@@ -5,6 +5,7 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/static/help_data.dart';
 import 'package:project_tc/services/function.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({super.key});
@@ -19,13 +20,36 @@ class _HelpPageState extends State<HelpPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * .83,
-      height: height - 60,
+      width: getValueForScreenType<double>(
+        context: context,
+        mobile: width * .86,
+        tablet: width * .79,
+        desktop: width * .83,
+      ),
+      height: getValueForScreenType<double>(
+        context: context,
+        mobile: height - 40,
+        tablet: height - 50,
+        desktop: height - 60,
+      ),
       color: CusColors.bg,
       child: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 35),
+            padding: EdgeInsets.symmetric(
+              horizontal: getValueForScreenType<double>(
+                context: context,
+                mobile: 20,
+                tablet: 30,
+                desktop: 40,
+              ),
+              vertical: getValueForScreenType<double>(
+                context: context,
+                mobile: 20,
+                tablet: 30,
+                desktop: 35,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

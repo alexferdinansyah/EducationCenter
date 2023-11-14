@@ -592,147 +592,166 @@ class _LearningCourseState extends State<LearningCourse> {
                       width: width * .17,
                       height: height - 50,
                       margin: const EdgeInsets.only(left: 20, top: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.grey,
                         ),
                       ),
-                      child: Column(
-                        children: List.generate(learnCourse.length, (index) {
-                          if (data['isPaid'] == true) {
-                            return GestureDetector(
-                              onTap: () {
-                                // Handle the item selection and update the selected index
-                                setState(() {
-                                  selectedContainerIndex = index;
-                                  _controller.loadVideoById(
-                                      videoId:
-                                          learnCourse[selectedContainerIndex]
-                                              .videoUrl!);
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 50),
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: selectedContainerIndex != index
-                                    ? BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(.2),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(scrollbars: false),
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          children: List.generate(learnCourse.length, (index) {
+                            if (data['isPaid'] == true) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Handle the item selection and update the selected index
+                                  setState(() {
+                                    selectedContainerIndex = index;
+                                    _controller.loadVideoById(
+                                        videoId:
+                                            learnCourse[selectedContainerIndex]
+                                                .videoUrl!);
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: selectedContainerIndex != index
+                                      ? BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(.2),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        )
+                                      : BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(.2),
+                                          ),
+                                          color: Colors.blue.shade300,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      )
-                                    : BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(.2),
-                                        ),
-                                        color: Colors.blue.shade300,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                child: Text(
-                                  learnCourseTitle[index],
-                                  style:
-                                      GoogleFonts.poppins(color: Colors.black),
-                                ),
-                              ),
-                            );
-                          } else if (data['isPaid'] == false &&
-                              data['user_membership']['type'] == 'Pro' &&
-                              index < (num.parse(data['limit_course']) + 2)) {
-                            return GestureDetector(
-                              onTap: () {
-                                // Handle the item selection and update the selected index
-                                setState(() {
-                                  selectedContainerIndex = index;
-                                  _controller.loadVideoById(
-                                      videoId:
-                                          learnCourse[selectedContainerIndex]
-                                              .videoUrl!);
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 50),
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: selectedContainerIndex != index
-                                    ? BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(.2),
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      )
-                                    : BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(.2),
-                                        ),
-                                        color: Colors.blue.shade300,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                child: Text(
-                                  learnCourseTitle[index],
-                                  style:
-                                      GoogleFonts.poppins(color: Colors.black),
-                                ),
-                              ),
-                            );
-                          } else if (index < num.parse(data['limit_course'])) {
-                            return GestureDetector(
-                              onTap: () {
-                                // Handle the item selection and update the selected index
-                                setState(() {
-                                  selectedContainerIndex = index;
-                                  _controller.loadVideoById(
-                                      videoId:
-                                          learnCourse[selectedContainerIndex]
-                                              .videoUrl!);
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 50),
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: selectedContainerIndex != index
-                                    ? BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(.2),
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      )
-                                    : BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(.2),
-                                        ),
-                                        color: Colors.blue.shade300,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                child: Text(
-                                  learnCourseTitle[index],
-                                  style:
-                                      GoogleFonts.poppins(color: Colors.black),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 50),
-                              margin: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black.withOpacity(.2),
+                                  child: Text(
+                                    learnCourseTitle[index],
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.black),
                                   ),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey),
-                              child: Text(
-                                learnCourseTitle[index],
-                                style: GoogleFonts.poppins(color: Colors.white),
-                              ),
-                            );
-                          }
-                        }),
+                                ),
+                              );
+                            } else if (data['isPaid'] == false &&
+                                data['user_membership']['type'] == 'Pro' &&
+                                index < (num.parse(data['limit_course']) + 2)) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Handle the item selection and update the selected index
+                                  setState(() {
+                                    selectedContainerIndex = index;
+                                    _controller.loadVideoById(
+                                        videoId:
+                                            learnCourse[selectedContainerIndex]
+                                                .videoUrl!);
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: selectedContainerIndex != index
+                                      ? BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(.2),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        )
+                                      : BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(.2),
+                                          ),
+                                          color: Colors.blue.shade300,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                  child: Text(
+                                    learnCourseTitle[index],
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              );
+                            } else if (index <
+                                num.parse(data['limit_course'])) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Handle the item selection and update the selected index
+                                  setState(() {
+                                    selectedContainerIndex = index;
+                                    _controller.loadVideoById(
+                                        videoId:
+                                            learnCourse[selectedContainerIndex]
+                                                .videoUrl!);
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: selectedContainerIndex != index
+                                      ? BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(.2),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        )
+                                      : BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(.2),
+                                          ),
+                                          color: Colors.blue.shade300,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                  child: Text(
+                                    learnCourseTitle[index],
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Container(
+                                alignment: Alignment.center,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black.withOpacity(.2),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey),
+                                child: Text(
+                                  learnCourseTitle[index],
+                                  style:
+                                      GoogleFonts.poppins(color: Colors.white),
+                                ),
+                              );
+                            }
+                          }),
+                        ),
                       ),
                     ),
                     const Spacer(),

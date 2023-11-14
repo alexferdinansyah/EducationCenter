@@ -8,6 +8,7 @@ import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/services/extension.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class DetailArticle extends StatefulWidget {
   const DetailArticle({super.key});
@@ -89,8 +90,9 @@ class _DetailArticleState extends State<DetailArticle> {
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                article.image!,
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: article.image!,
                 height: getValueForScreenType<double>(
                   context: context,
                   mobile: height / 3.7,
@@ -179,8 +181,9 @@ class ArticleContentWidget extends StatelessWidget {
         if (articleContent.image != null)
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              articleContent.image!,
+            child: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: articleContent.image!,
               height: getValueForScreenType<double>(
                 context: context,
                 mobile: height / 4.6,

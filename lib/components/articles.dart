@@ -6,6 +6,7 @@ import 'package:project_tc/models/article.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/extension.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Articles extends StatelessWidget {
   final Article article;
@@ -97,7 +98,11 @@ class Articles extends StatelessWidget {
           article.image != ''
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(article.image!, width: double.infinity))
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: article.image!,
+                  ),
+                )
               : const Text('No Image'),
           Padding(
             padding: const EdgeInsets.only(top: 10),
@@ -264,18 +269,22 @@ class _ArticleListsState extends State<ArticleLists> {
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              width: double.infinity,
-              height: height * .32,
-              margin: EdgeInsets.only(bottom: height * .03),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                image: DecorationImage(
-                    image: NetworkImage(widget.article.image!),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center),
-              ),
-            ),
+            widget.article.image != ''
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: height * .03),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: widget.article.image!,
+                        height: height * .32,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      ),
+                    ),
+                  )
+                : const Text('No Image'),
             Text(
               widget.article.title!,
               style: GoogleFonts.mulish(

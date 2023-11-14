@@ -61,6 +61,8 @@ dependencies:
   youtube_player_iframe: ^4.0.4
   url_launcher: ^6.1.14
   omni_datetime_picker: ^1.0.9
+  carousel_slider: ^4.2.1
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:

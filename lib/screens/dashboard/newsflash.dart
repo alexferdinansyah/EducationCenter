@@ -8,6 +8,7 @@ import "package:project_tc/models/article.dart";
 import "package:project_tc/routes/routes.dart";
 import "package:project_tc/services/firestore_service.dart";
 import 'package:project_tc/services/extension.dart';
+import "package:responsive_builder/responsive_builder.dart";
 
 class Newsflash extends StatefulWidget {
   const Newsflash({super.key});
@@ -37,20 +38,55 @@ class _NewsflashState extends State<Newsflash> {
             articles = List.from(dataArticle);
 
             return Container(
-              width: width * .83,
-              height: height - 60,
+              width: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .86,
+                tablet: width * .79,
+                desktop: width * .83,
+              ),
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: height - 40,
+                tablet: height - 50,
+                desktop: height - 60,
+              ),
               color: CusColors.bg,
               child: ListView(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 35),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 20,
+                        tablet: 30,
+                        desktop: 40,
+                      ),
+                      vertical: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 20,
+                        tablet: 30,
+                        desktop: 35,
+                      ),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           width: double.infinity,
-                          height: 56,
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 35,
+                            tablet: 40,
+                            desktop: 56,
+                          ),
+                          margin: EdgeInsets.only(
+                            bottom: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 10,
+                              tablet: 15,
+                              desktop: 20,
+                            ),
+                          ),
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(9),
@@ -60,78 +96,107 @@ class _NewsflashState extends State<Newsflash> {
                               width: 1,
                             ),
                           ),
-                          child: Row(children: [
-                            Text(
-                              'UI/UX',
-                              style: GoogleFonts.poppins(
-                                  fontSize: width * .01,
-                                  fontWeight: FontWeight.w400,
-                                  color: CusColors.secondaryText),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              'Front-end developer',
-                              style: GoogleFonts.poppins(
-                                  fontSize: width * .01,
-                                  fontWeight: FontWeight.w400,
-                                  color: CusColors.secondaryText),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              'Back-end developer',
-                              style: GoogleFonts.poppins(
-                                  fontSize: width * .01,
-                                  fontWeight: FontWeight.w400,
-                                  color: CusColors.secondaryText),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              'Database',
-                              style: GoogleFonts.poppins(
-                                  fontSize: width * .01,
-                                  fontWeight: FontWeight.w400,
-                                  color: CusColors.secondaryText),
-                            ),
-                          ]),
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'UI/UX',
+                                      style: GoogleFonts.poppins(
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .018,
+                                            tablet: width * .015,
+                                            desktop: width * .01,
+                                          ),
+                                          fontWeight: FontWeight.w400,
+                                          color: CusColors.secondaryText),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'Front-end developer',
+                                      style: GoogleFonts.poppins(
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .018,
+                                            tablet: width * .015,
+                                            desktop: width * .01,
+                                          ),
+                                          fontWeight: FontWeight.w400,
+                                          color: CusColors.secondaryText),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'Back-end developer',
+                                      style: GoogleFonts.poppins(
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .018,
+                                            tablet: width * .015,
+                                            desktop: width * .01,
+                                          ),
+                                          fontWeight: FontWeight.w400,
+                                          color: CusColors.secondaryText),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'Database',
+                                      style: GoogleFonts.poppins(
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .018,
+                                            tablet: width * .015,
+                                            desktop: width * .01,
+                                          ),
+                                          fontWeight: FontWeight.w400,
+                                          color: CusColors.secondaryText),
+                                    ),
+                                  ],
+                                )
+                              ]),
                         ),
                         SizedBox(
-                          width: double.infinity,
                           height: height - 100,
-                          child: GridView.custom(
-                            gridDelegate: SliverQuiltedGridDelegate(
-                              crossAxisCount: 4,
-                              // mainAxisSpacing: 4,
-                              // crossAxisSpacing: 4,
-                              repeatPattern: QuiltedGridRepeatPattern.inverted,
-                              pattern: [
-                                const QuiltedGridTile(1, 2),
-                                const QuiltedGridTile(1, 1),
-                                const QuiltedGridTile(1, 1),
-                                const QuiltedGridTile(1, 1),
-                                const QuiltedGridTile(1, 1),
-                              ],
-                            ),
-                            childrenDelegate: SliverChildBuilderDelegate(
-                              childCount: articles.length,
-                              (context, index) {
-                                // Calculate the color based on the repeating pattern
+                          width: double.infinity,
+                          child: ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(context)
+                                .copyWith(scrollbars: false),
+                            child: StaggeredGrid.count(
+                              crossAxisCount: getValueForScreenType<int>(
+                                context: context,
+                                mobile: 2,
+                                tablet: 3,
+                                desktop: 4,
+                              ),
+                              children: articles.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final article = entry.value;
+
                                 bool isFullscreen =
                                     index % 10 == 0 || (index - 9) % 10 == 0
                                         ? true
                                         : false;
 
-                                return Newsflashes(
-                                  article: articles[index]['article'],
-                                  id: articles[index]['id'],
-                                  isFullscreen: isFullscreen,
+                                return StaggeredGridTile.fit(
+                                  crossAxisCellCount: isFullscreen ? 2 : 1,
+                                  child: Newsflashes(
+                                    isFullscreen: isFullscreen,
+                                    article: article['article'],
+                                    id: article['id'],
+                                  ),
                                 );
-                              },
+                              }).toList(),
                             ),
                           ),
                         ),
@@ -145,7 +210,7 @@ class _NewsflashState extends State<Newsflash> {
             return const Loading();
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
-              child: Text('No courses available.'),
+              child: Text('No articles available.'),
             );
           } else {
             return const Center(
@@ -177,7 +242,26 @@ class Newsflashes extends StatelessWidget {
               Get.toNamed(routeDetailArticle, parameters: {'id': id});
             },
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              margin: EdgeInsets.symmetric(
+                horizontal: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 5,
+                  tablet: 10,
+                  desktop: 10,
+                ),
+                vertical: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 10,
+                  tablet: 15,
+                  desktop: 2,
+                ),
+              ),
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: height / 4.3,
+                tablet: height / 3.3,
+                desktop: height / 3,
+              ),
               decoration: article.image != ""
                   ? BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -193,8 +277,8 @@ class Newsflashes extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    height: 90,
                     width: double.infinity - 10,
+                    padding: const EdgeInsets.only(bottom: 5),
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -215,9 +299,15 @@ class Newsflashes extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: width * .013),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: width * .021,
+                                  tablet: width * .018,
+                                  desktop: width * .013,
+                                ),
+                              ),
                             ),
                             const SizedBox(
                               height: 10,
@@ -225,8 +315,18 @@ class Newsflashes extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                  width: 30,
-                                  height: 30,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 22,
+                                    tablet: 25,
+                                    desktop: 30,
+                                  ),
+                                  height: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 22,
+                                    tablet: 25,
+                                    desktop: 30,
+                                  ),
                                   decoration: const BoxDecoration(
                                     color: Colors.grey,
                                     shape: BoxShape.circle,
@@ -241,7 +341,12 @@ class Newsflashes extends StatelessWidget {
                                   child: Text(
                                     'Admin - ${article.date?.formatDate()}',
                                     style: GoogleFonts.poppins(
-                                        fontSize: width * .008,
+                                        fontSize: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width * .016,
+                                          tablet: width * .013,
+                                          desktop: width * .008,
+                                        ),
                                         color: Colors.white),
                                   ),
                                 ),
@@ -259,7 +364,20 @@ class Newsflashes extends StatelessWidget {
               Get.toNamed(routeDetailArticle, parameters: {'id': id});
             },
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              margin: EdgeInsets.symmetric(
+                horizontal: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 5,
+                  tablet: 10,
+                  desktop: 10,
+                ),
+                vertical: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 10,
+                  tablet: 15,
+                  desktop: 2,
+                ),
+              ),
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -274,7 +392,12 @@ class Newsflashes extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 130,
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 80,
+                      tablet: 100,
+                      desktop: 130,
+                    ),
                     decoration: article.image != ''
                         ? BoxDecoration(
                             borderRadius: const BorderRadius.all(
@@ -290,8 +413,8 @@ class Newsflashes extends StatelessWidget {
                             color: CusColors.inactive),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 13),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 1, vertical: 13),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +426,12 @@ class Newsflashes extends StatelessWidget {
                             style: GoogleFonts.poppins(
                                 color: CusColors.title,
                                 fontWeight: FontWeight.w600,
-                                fontSize: width * .011,
+                                fontSize: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: width * .019,
+                                  tablet: width * .016,
+                                  desktop: width * .01,
+                                ),
                                 height: 1.2),
                           ),
                           SizedBox(
@@ -312,8 +440,18 @@ class Newsflashes extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                width: 30,
-                                height: 30,
+                                width: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 22,
+                                  tablet: 25,
+                                  desktop: 30,
+                                ),
+                                height: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 22,
+                                  tablet: 25,
+                                  desktop: 30,
+                                ),
                                 decoration: const BoxDecoration(
                                   color: Colors.grey,
                                   shape: BoxShape.circle,
@@ -323,12 +461,21 @@ class Newsflashes extends StatelessWidget {
                                       fit: BoxFit.cover),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
                                 child: Text(
                                   'Admin - ${article.date?.formatDate()}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style: GoogleFonts.poppins(
-                                      fontSize: width * .008,
+                                      fontSize: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: width * .016,
+                                        tablet: width * .013,
+                                        desktop: width * .008,
+                                      ),
                                       color: CusColors.title),
                                 ),
                               ),

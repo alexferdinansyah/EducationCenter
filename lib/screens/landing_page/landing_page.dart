@@ -14,6 +14,7 @@ import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -166,7 +167,9 @@ class _LandingPageState extends State<LandingPage> {
               final List<Map> singleCourses = dataMaps
                   .where((courseMap) {
                     final dynamic data = courseMap['course'];
-                    return data is Course && data.isBundle == false;
+                    return data is Course &&
+                        data.isBundle == false &&
+                        data.isDraf == false;
                   })
                   .map((courseMap) {
                     final Course course = courseMap['course'];
@@ -220,7 +223,7 @@ class _LandingPageState extends State<LandingPage> {
                                   .copyWith(scrollbars: false),
                               child: MasonryGridView.count(
                                 physics: const ScrollPhysics(
-                                    parent: NeverScrollableScrollPhysics()),
+                                    parent: BouncingScrollPhysics()),
                                 crossAxisSpacing: width *
                                     .02, // Adjust spacing between items horizontally
                                 mainAxisSpacing:
@@ -453,7 +456,7 @@ class _LandingPageState extends State<LandingPage> {
                           SizedBox(
                             height: getValueForScreenType<double>(
                               context: context,
-                              mobile: (height / 2) * (articles.length / 1),
+                              mobile: (height / 3) * (articles.length / 1),
                               tablet: (height / 1.9) * (articles.length / 2),
                               desktop: height / 1.6,
                             ),
@@ -628,10 +631,10 @@ class HeaderLandingPage extends StatelessWidget {
       builder: (context, sizingInformation) {
         // Check the sizing information here and return your UI
         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
-          return _defaultHeader();
+          return _defaultHeader(context);
         }
         if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
-          return _defaultHeader();
+          return _defaultHeader(context);
         }
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
           return Padding(
@@ -743,115 +746,151 @@ class HeaderLandingPage extends StatelessWidget {
     );
   }
 
-  Widget _defaultHeader() {
+  Widget _defaultHeader(context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 100, bottom: 200),
-      child: Row(
-        children: [
-          AnimateIfVisible(
-            key: const Key('item.1'),
-            builder: (
-              BuildContext context,
-              Animation<double> animation,
-            ) =>
-                FadeTransition(
-              opacity: Tween<double>(
-                begin: 0,
-                end: 1,
-              ).animate(animation),
-              child: SizedBox(
-                width: width / 2.5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'DAC Education Center',
-                      style: GoogleFonts.mulish(
-                          color: CusColors.header,
-                          fontSize: mainHeader,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
-                        'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
-                        style: GoogleFonts.mulish(
-                            color: CusColors.inactive,
-                            fontSize: subHeader,
-                            fontWeight: FontWeight.w300,
-                            height: 1.5),
-                      ),
-                    ),
-                    Container(
-                      width: width * .09,
-                      decoration: BoxDecoration(
-                          color: const Color(0xFF00C8FF),
-                          borderRadius: BorderRadius.circular(80),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(.25),
-                                spreadRadius: 0,
-                                blurRadius: 20,
-                                offset: const Offset(0, 4))
-                          ]),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed(routeLogin);
-                        },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(
-                              vertical: height * 0.015,
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                        ),
-                        child: Text(
-                          'Start now',
-                          style: GoogleFonts.mulish(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            fontSize: width * 0.01,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        padding: EdgeInsets.only(
+          top: 100,
+          bottom: getValueForScreenType<double>(
+            context: context,
+            mobile: 50,
+            tablet: 100,
+            desktop: 150,
+          ),
+        ),
+        child: CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            viewportFraction: 1,
+            pageSnapping: true,
+            aspectRatio: getValueForScreenType<double>(
+              context: context,
+              mobile: 16 / 7,
+              tablet: 16 / 5.7,
+              desktop: 16 / 5.6,
             ),
           ),
-          const Spacer(),
-          AnimateIfVisible(
-            key: const Key('item.2'),
-            builder: (
-              BuildContext context,
-              Animation<double> animation,
-            ) =>
-                FadeTransition(
-              opacity: Tween<double>(
-                begin: 0,
-                end: 1,
-              ).animate(animation),
-              child: SvgPicture.asset(
-                'assets/svg/landing_page.svg',
-                width: width / 2.5,
-              ),
+          items: [
+            Column(
+              children: [
+                Row(
+                  children: [
+                    AnimateIfVisible(
+                      key: const Key('item.1'),
+                      builder: (
+                        BuildContext context,
+                        Animation<double> animation,
+                      ) =>
+                          FadeTransition(
+                        opacity: Tween<double>(
+                          begin: 0,
+                          end: 1,
+                        ).animate(animation),
+                        child: SizedBox(
+                          width: width / 2.5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'DAC Education Center',
+                                style: GoogleFonts.mulish(
+                                    color: CusColors.header,
+                                    fontSize: mainHeader,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 30),
+                                child: Text(
+                                  'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
+                                  style: GoogleFonts.mulish(
+                                      color: CusColors.inactive,
+                                      fontSize: subHeader,
+                                      fontWeight: FontWeight.w300,
+                                      height: 1.5),
+                                ),
+                              ),
+                              Container(
+                                width: width * .09,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xFF00C8FF),
+                                    borderRadius: BorderRadius.circular(80),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(.25),
+                                          spreadRadius: 0,
+                                          blurRadius: 20,
+                                          offset: const Offset(0, 4))
+                                    ]),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.toNamed(routeLogin);
+                                  },
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                      EdgeInsets.symmetric(
+                                        vertical: height * 0.015,
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                    shadowColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                  ),
+                                  child: Text(
+                                    'Start now',
+                                    style: GoogleFonts.mulish(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      fontSize: width * 0.01,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    AnimateIfVisible(
+                      key: const Key('item.2'),
+                      builder: (
+                        BuildContext context,
+                        Animation<double> animation,
+                      ) =>
+                          FadeTransition(
+                        opacity: Tween<double>(
+                          begin: 0,
+                          end: 1,
+                        ).animate(animation),
+                        child: SvgPicture.asset(
+                          'assets/svg/landing_page.svg',
+                          width: width / 2.5,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
-          )
-        ],
-      ),
-    );
+            Image.asset(
+              'assets/images/Alur Webiste DEC Register.png',
+            ),
+            Image.asset(
+              'assets/images/Alur Webiste DEC Upgrade Member.png',
+            ),
+            Image.asset(
+              'assets/images/Alur Webiste DEC Buy Course.png',
+            ),
+          ],
+        ));
   }
 }
 

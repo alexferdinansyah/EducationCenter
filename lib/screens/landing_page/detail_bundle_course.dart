@@ -37,7 +37,7 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context, listen: false);
+    final user = Provider.of<UserModel?>(context);
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -415,8 +415,8 @@ class _DetailBundleCourseState extends State<DetailBundleCourse> {
                               course.courseType,
                               false,
                               context)
-                          : cusPaymentWidgetOff(
-                              width, height, course.isBundle, context)
+                          : cusPaymentWidgetOff(width, height, course.isBundle,
+                              id, course.courseType, context)
                     ],
                   ),
                 ],

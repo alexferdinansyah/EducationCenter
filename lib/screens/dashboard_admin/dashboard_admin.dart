@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
@@ -8,50 +7,44 @@ import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
-import 'package:project_tc/screens/dashboard/edit_profile.dart';
-import 'package:project_tc/screens/dashboard/help_page.dart';
-import 'package:project_tc/screens/dashboard/membership_info.dart';
-import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
-import 'package:project_tc/screens/dashboard/my_course.dart';
-import 'package:project_tc/screens/dashboard/newsflash.dart';
-import 'package:project_tc/screens/learning/payment_page.dart';
-import 'package:project_tc/screens/dashboard/setting.dart';
-import 'package:project_tc/screens/dashboard/transaction_table.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_course.dart';
+import 'package:project_tc/screens/dashboard_admin/user_transaction.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 // ignore: must_be_immutable
-class DashboardApp extends StatefulWidget {
+class DashboardAdmin extends StatefulWidget {
   late String selected;
   String? optionalSelected;
-  DashboardApp({super.key, required this.selected, this.optionalSelected});
+  DashboardAdmin({super.key, required this.selected, this.optionalSelected});
 
   @override
-  State<DashboardApp> createState() => _DashboardAppState();
+  State<DashboardAdmin> createState() => _DashboardAdminState();
 }
 
-class _DashboardAppState extends State<DashboardApp> {
+class _DashboardAdminState extends State<DashboardAdmin> {
   String selectedSidebarItem = '';
+  int counter = 1;
 
   @override
   void initState() {
     super.initState();
-    String currentRoute = Get.currentRoute;
+    // String currentRoute = Get.currentRoute;
     setState(() {
-      if (currentRoute == "/edit-profile") {
-        widget.optionalSelected = 'Settings';
-        widget.selected = 'Edit-Profile';
-      } else if (currentRoute == "/membership-info") {
-        widget.optionalSelected = 'Settings';
-        widget.selected = 'Membership';
-      } else if (currentRoute == "/membership-upgrade") {
-        widget.optionalSelected = 'Settings';
-        widget.selected = 'Membership-Upgrade';
-      } else if (currentRoute == "/membership-upgrade-payment") {
-        widget.optionalSelected = 'Settings';
-        widget.selected = 'Membership-Payment';
-      }
+      // if (currentRoute == "/edit-profile") {
+      //   widget.optionalSelected = 'Settings';
+      //   widget.selected = 'Edit-Profile';
+      // } else if (currentRoute == "/membership-info") {
+      //   widget.optionalSelected = 'Settings';
+      //   widget.selected = 'Membership';
+      // } else if (currentRoute == "/membership-upgrade") {
+      //   widget.optionalSelected = 'Settings';
+      //   widget.selected = 'Membership-Upgrade';
+      // } else if (currentRoute == "/membership-upgrade-payment") {
+      //   widget.optionalSelected = 'Settings';
+      //   widget.selected = 'Membership-Payment';
+      // }
       if (widget.optionalSelected == null) {
         selectedSidebarItem = widget.selected;
       } else {
@@ -63,7 +56,6 @@ class _DashboardAppState extends State<DashboardApp> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
-    double width = MediaQuery.of(context).size.width;
 
     void selectSidebarItem(String itemTitle) {
       setState(() {
@@ -74,53 +66,17 @@ class _DashboardAppState extends State<DashboardApp> {
     // Function to build content based on the selected sidebar item
     Widget buildContent(dataUser, user, membershipData) {
       switch (selectedSidebarItem) {
-        case 'Newsflash':
-          return const Newsflash();
-        case 'My Courses':
-          return MyCourses(
-            user: user,
-          );
-        case 'Transaction':
-          return TransactionTable(
-            user: user,
-          );
-        case 'Free Tutorial':
-          return Container(
-            height: 50,
-            width: 50,
-            color: Colors.black,
-          );
-        case 'Review':
-          return Container(
-            height: 50,
-            width: 50,
-            color: Colors.blue,
-          );
-        case 'Settings':
-          if (widget.selected == 'Edit-Profile') {
-            return EditProfile(userData: dataUser, user: user);
-          } else if (widget.selected == 'Membership') {
-            return MembershipInfo(membershipData: membershipData);
-          } else if (widget.selected == 'Membership-Upgrade') {
-            return MembershipUpgrade(membershipData: membershipData);
-          } else if (widget.selected == 'Membership-Payment') {
-            return PaymentPage(
-              user: user,
-              price: 'Rp 35.000',
-              title: 'Membership',
-              type: 'Pro',
-            );
-          } else {
-            return Settings(
-              user: user,
-            );
-          }
-        case 'Help':
-          return const HelpPage();
+        case 'User Transaction':
+          return const UserTransaction();
+        case 'Courses':
+          return const AdminCourse();
         default:
           return Container(); // Handle the default case here
       }
     }
+
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
         body: SizedBox(
@@ -370,16 +326,16 @@ class DashboardSideBar extends StatefulWidget {
 
 class _DashboardSideBarState extends State<DashboardSideBar> {
   final List<SideItem> sidebarItems = [
-    const SideItem(icon: IconlyBold.category, title: 'Newsflash'),
-    const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
-    const SideItem(icon: IconlyBold.buy, title: 'Transaction'),
+    const SideItem(icon: IconlyBold.buy, title: 'User Transaction'),
+    const SideItem(icon: IconlyBold.category, title: 'Courses'),
+    // const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
     // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];
 
   final List<SideItem> otherItems = [
-    const SideItem(icon: IconlyBold.setting, title: 'Settings'),
-    const SideItem(icon: IconlyBold.info_square, title: 'Help'),
+    // const SideItem(icon: IconlyBold.setting, title: 'Settings'),
+    // const SideItem(icon: IconlyBold.info_square, title: 'Help'),
     // Add other "OTHERS" items as needed
   ];
   @override

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
-import 'package:project_tc/screens/dashboard/dashboard_admin.dart';
+import 'package:project_tc/screens/dashboard_admin/dashboard_admin.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -46,7 +46,9 @@ class Wrapper extends StatelessWidget {
             } else {
               // User data exists
               return isAdmin
-                  ? const DashboardAdmin() // Admin
+                  ? DashboardAdmin(
+                      selected: 'User Transaction',
+                    ) // Admin
                   : DashboardApp(selected: 'Newsflash'); // Non-admin
             }
           }
