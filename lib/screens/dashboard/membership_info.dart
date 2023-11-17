@@ -68,7 +68,7 @@ class _MembershipInfoState extends State<MembershipInfo> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: height / 2,
+                  padding: const EdgeInsets.only(bottom: 50),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     color: Colors.white,

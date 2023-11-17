@@ -140,11 +140,14 @@ class FirestoreService {
   }
 
   // Add a new Course document to Firestore
-  Future addCourse(Course course) async {
+  Future<String> addCourse(Course course) async {
     try {
-      await courseCollection.add(course.toFirestore());
+      final result = await courseCollection.add(course.toFirestore());
+      return result.id;
     } catch (e) {
       print('Error adding course: $e');
+      return 'Error adding course';
+
       // Handle the error as needed
     }
   }
@@ -160,7 +163,7 @@ class FirestoreService {
     bool? isBestSales,
   }) async {
     try {
-      await courseCollection.doc(courseId).set({
+      await courseCollection.doc(courseId).update({
         'title': title,
         'learn_limit': learnLimit,
         'price': price,
@@ -168,19 +171,26 @@ class FirestoreService {
         'course_type': courseType,
         'is_bundle': isBundle,
         'best_sales': isBestSales
-      }, SetOptions(merge: true));
+      });
     } catch (e) {
       print('Error adding course: $e');
       // Handle the error as needed
     }
   }
 
-  Future updateCourseEachField(
-      {String? courseId, String? fieldName, dynamic data}) async {
+  Future updateCourseEachField({
+    required String courseId,
+    required String fieldName,
+    required dynamic data,
+  }) async {
     try {
-      await courseCollection
-          .doc(courseId)
-          .set({fieldName: data}, SetOptions(merge: true));
+      if (data is List<ChapterList>) {
+        final List<Map<String, dynamic>> chapterData =
+            data.map((chapterList) => chapterList.toFirestore()).toList();
+        await courseCollection.doc(courseId).update({fieldName: chapterData});
+      } else {
+        await courseCollection.doc(courseId).update({fieldName: data});
+      }
     } catch (e) {
       print('Error adding course: $e');
       // Handle the error as needed

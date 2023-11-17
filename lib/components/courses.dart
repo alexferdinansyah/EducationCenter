@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
-import 'package:project_tc/components/course_form_modal.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -424,7 +423,7 @@ class MyCourse extends StatelessWidget {
                   ),
                 )
               : SizedBox(
-                  height: 95,
+                  height: 90,
                   width: double.infinity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -8,6 +8,7 @@ import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/dashboard/edit_profile.dart';
 import 'package:project_tc/screens/dashboard/help_page.dart';
 import 'package:project_tc/screens/dashboard/membership_info.dart';
@@ -106,7 +107,7 @@ class _DashboardAppState extends State<DashboardApp> {
           } else if (widget.selected == 'Membership-Payment') {
             return PaymentPage(
               user: user,
-              price: 'Rp 35.000',
+              price: '35,000',
               title: 'Membership',
               type: 'Pro',
             );
@@ -414,13 +415,18 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
                 desktop: 50,
               ),
             ),
-            child: Image.asset(
-              'assets/images/dec_logo2.png',
-              width: getValueForScreenType<double>(
-                context: context,
-                mobile: width * .1,
-                tablet: width * .08,
-                desktop: width * .06,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(routeHome);
+              },
+              child: Image.asset(
+                'assets/images/dec_logo2.png',
+                width: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .1,
+                  tablet: width * .08,
+                  desktop: width * .06,
+                ),
               ),
             ),
           ),

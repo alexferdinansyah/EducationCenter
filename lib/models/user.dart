@@ -46,10 +46,7 @@ class UserData {
         education: data['education'],
         working: data['working'],
         reason: data['reason'],
-        membership: MembershipModel(
-          memberType: membershipData!['type'],
-          joinSince: membershipData['join_since'].toDate(),
-        ));
+        membership: MembershipModel.fromFirestore(membershipData!));
   }
 }
 
@@ -58,6 +55,14 @@ class MembershipModel {
   final DateTime joinSince;
 
   MembershipModel({required this.memberType, required this.joinSince});
+
+  // Convert Firestore data to ListCourse object
+  factory MembershipModel.fromFirestore(Map<String, dynamic> data) {
+    return MembershipModel(
+      memberType: data['type'],
+      joinSince: data['join_since'].toDate(),
+    );
+  }
 
   Map<String, dynamic> toFirestore() {
     return {

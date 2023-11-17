@@ -639,102 +639,121 @@ class HeaderLandingPage extends StatelessWidget {
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
           return Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 50),
-            child: Column(
-              children: [
-                AnimateIfVisible(
-                  key: const Key('item.2'),
-                  builder: (
-                    BuildContext context,
-                    Animation<double> animation,
-                  ) =>
-                      FadeTransition(
-                    opacity: Tween<double>(
-                      begin: 0,
-                      end: 1,
-                    ).animate(animation),
-                    child: SvgPicture.asset(
-                      'assets/svg/landing_page.svg',
-                      width: width / 1.8,
-                    ),
-                  ),
-                ),
-                AnimateIfVisible(
-                  key: const Key('item.1'),
-                  builder: (
-                    BuildContext context,
-                    Animation<double> animation,
-                  ) =>
-                      FadeTransition(
-                    opacity: Tween<double>(
-                      begin: 0,
-                      end: 1,
-                    ).animate(animation),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'DAC Education Center',
-                            style: GoogleFonts.mulish(
-                                color: CusColors.header,
-                                fontSize: mainHeader,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 15),
-                            child: Text(
-                              'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.mulish(
-                                  color: CusColors.inactive,
-                                  fontSize: subHeader,
-                                  fontWeight: FontWeight.w300,
-                                  height: 1.5),
-                            ),
-                          ),
-                          Container(
-                            height: 28,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFF00C8FF),
-                                borderRadius: BorderRadius.circular(80),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(.25),
-                                      spreadRadius: 0,
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 4))
-                                ]),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Get.toNamed(routeLogin);
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                shadowColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                              ),
-                              child: Text(
-                                'Start now',
-                                style: GoogleFonts.mulish(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                  fontSize: subHeader,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+            child: CarouselSlider(
+              options: CarouselOptions(
+                  autoPlay: true,
+                  viewportFraction: 1,
+                  pageSnapping: true,
+                  aspectRatio: 16 / 13),
+              items: [
+                Column(
+                  children: [
+                    AnimateIfVisible(
+                      key: const Key('item.2'),
+                      builder: (
+                        BuildContext context,
+                        Animation<double> animation,
+                      ) =>
+                          FadeTransition(
+                        opacity: Tween<double>(
+                          begin: 0,
+                          end: 1,
+                        ).animate(animation),
+                        child: SvgPicture.asset(
+                          'assets/svg/landing_page.svg',
+                          width: width / 1.8,
+                        ),
                       ),
                     ),
-                  ),
+                    AnimateIfVisible(
+                      key: const Key('item.1'),
+                      builder: (
+                        BuildContext context,
+                        Animation<double> animation,
+                      ) =>
+                          FadeTransition(
+                        opacity: Tween<double>(
+                          begin: 0,
+                          end: 1,
+                        ).animate(animation),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'DAC Education Center',
+                                style: GoogleFonts.mulish(
+                                    color: CusColors.header,
+                                    fontSize: mainHeader,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 15),
+                                child: Text(
+                                  'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.mulish(
+                                      color: CusColors.inactive,
+                                      fontSize: subHeader,
+                                      fontWeight: FontWeight.w300,
+                                      height: 1.5),
+                                ),
+                              ),
+                              Container(
+                                height: 28,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xFF00C8FF),
+                                    borderRadius: BorderRadius.circular(80),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(.25),
+                                          spreadRadius: 0,
+                                          blurRadius: 20,
+                                          offset: const Offset(0, 4))
+                                    ]),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.toNamed(routeLogin);
+                                  },
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                    shadowColor: MaterialStateProperty.all(
+                                        Colors.transparent),
+                                  ),
+                                  child: Text(
+                                    'Start now',
+                                    style: GoogleFonts.mulish(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      fontSize: subHeader,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Image.asset(
+                  'assets/images/Alur Webiste DEC Register.png',
+                ),
+                Image.asset(
+                  'assets/images/Alur Webiste DEC Upgrade Member.png',
+                ),
+                Image.asset(
+                  'assets/images/Alur Webiste DEC Buy Course.png',
                 ),
               ],
             ),
@@ -759,7 +778,7 @@ class HeaderLandingPage extends StatelessWidget {
         ),
         child: CarouselSlider(
           options: CarouselOptions(
-            autoPlay: true,
+            autoPlay: false,
             viewportFraction: 1,
             pageSnapping: true,
             aspectRatio: getValueForScreenType<double>(

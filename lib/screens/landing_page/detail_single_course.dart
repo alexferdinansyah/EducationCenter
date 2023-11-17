@@ -538,7 +538,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Rp. $price',
+                    'Rp $price',
                     style: GoogleFonts.mulish(
                         color: CusColors.title,
                         fontSize: getValueForScreenType<double>(

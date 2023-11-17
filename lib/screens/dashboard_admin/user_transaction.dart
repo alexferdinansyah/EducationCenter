@@ -398,11 +398,23 @@ class _UserTransactionState extends State<UserTransaction> {
             ],
           ),
           content: SingleChildScrollView(
-              child: Container(
-            width: 200,
-            height: 350,
-            decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(imageUrl))),
+              child: Column(
+            children: [
+              Text(
+                'Unique code : ${transaction.uniqueCode}',
+                style: GoogleFonts.poppins(
+                  fontSize: width * .014,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFF1F384C),
+                ),
+              ),
+              Container(
+                width: 200,
+                height: 350,
+                decoration: BoxDecoration(
+                    image: DecorationImage(image: NetworkImage(imageUrl))),
+              ),
+            ],
           )),
           actions: [
             ElevatedButton(

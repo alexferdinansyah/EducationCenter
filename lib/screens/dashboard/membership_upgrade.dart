@@ -154,7 +154,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 15),
                                       child: Text(
-                                        'Lorem ipsum dolor sit amet doloroli sitiol conse ctetur adipiscing elit.',
+                                        'Welcome to our website, please enjoy your free content',
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.poppins(
@@ -195,7 +195,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                           color: Color(0xFF4351FF),
                                         ),
                                         Text(
-                                          "Free tutorial",
+                                          "First 3 videos free",
                                           style: GoogleFonts.poppins(
                                             fontSize: width * .009,
                                             fontWeight: FontWeight.w500,
@@ -341,7 +341,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 15),
                                       child: Text(
-                                        'Lorem ipsum dolor sit amet doloroli sitiol conse ctetur adipiscing elit.',
+                                        'Join our pro member for more advantage',
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.poppins(
@@ -355,7 +355,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       padding: const EdgeInsets.only(
                                           top: 15, bottom: 20),
                                       child: Text(
-                                        'Rp 35.000',
+                                        'Rp 35,000',
                                         style: GoogleFonts.poppins(
                                           fontSize: width * .02,
                                           fontWeight: FontWeight.w700,
@@ -421,6 +421,22 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                         ),
                                         Text(
                                           "Pro support",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: width * .009,
+                                            fontWeight: FontWeight.w500,
+                                            color: const Color(0xFF170F49),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.check_circle,
+                                          color: Color(0xFF4351FF),
+                                        ),
+                                        Text(
+                                          "Discount up to 10-20%",
                                           style: GoogleFonts.poppins(
                                             fontSize: width * .009,
                                             fontWeight: FontWeight.w500,

@@ -6,6 +6,8 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/services/extension.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -66,7 +68,8 @@ class _CourseFormModalState extends State<CourseFormModal> {
             ),
             const Spacer(),
             GestureDetector(
-                onTap: () => Get.back(), child: const Icon(Icons.close))
+                onTap: () => Get.back(result: false),
+                child: const Icon(Icons.close))
           ],
         ),
         const SizedBox(
@@ -429,8 +432,7 @@ class _CourseFormModalState extends State<CourseFormModal> {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^[0-9\-\+\s()]*$')),
+                    ThousandsFormatter(),
                   ],
                   decoration: editProfileDecoration.copyWith(
                     contentPadding: EdgeInsets.symmetric(
@@ -496,12 +498,13 @@ class _CourseFormModalState extends State<CourseFormModal> {
                 } else {
                   final Course data = Course(
                     image: '',
-                    courseCategory: courseCategory,
-                    courseType: courseType,
+                    courseCategory: courseCategory ?? 'Online course',
+                    courseType: courseType ?? 'Free',
                     title: title,
-                    isBundle: isBundle,
+                    isBundle: isBundle ?? false,
                     completionBenefits: [],
-                    learnLimit: learnLimit,
+                    chapterList: [ChapterList(chapter: '', subChapter: [])],
+                    learnLimit: learnLimit ?? '3',
                     price: price,
                     isDraf: true,
                   );
@@ -561,7 +564,42 @@ class _CourseFormModalState extends State<CourseFormModal> {
           child: ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                // Call your registration function here
+                final FirestoreService firestore =
+                    FirestoreService(uid: user!.uid);
+                if (widget.course != null) {
+                  await firestore.updateCourseFewField(
+                    courseId: widget.courseId,
+                    title: title ?? widget.course!.title,
+                    learnLimit: learnLimit ?? widget.course!.learnLimit,
+                    price: price ?? widget.course!.price,
+                    courseCategory:
+                        courseCategory ?? widget.course!.courseCategory,
+                    courseType: courseType ?? widget.course!.courseType,
+                    isBundle: isBundle ?? widget.course!.isBundle,
+                    isBestSales: isBestSales ?? widget.course!.isBestSales,
+                  );
+                } else {
+                  final Course data = Course(
+                    image: '',
+                    courseCategory: courseCategory ?? 'Online course',
+                    courseType: courseType ?? 'Free',
+                    title: title,
+                    isBundle: isBundle ?? false,
+                    completionBenefits: [],
+                    chapterList: [ChapterList(chapter: '', subChapter: [])],
+                    learnLimit: learnLimit ?? '3',
+                    price: price,
+                    isDraf: true,
+                  );
+
+                  final result = await firestore.addCourse(data);
+                  Get.toNamed(routeAdminDetailCourse,
+                      parameters: {'id': result});
+                }
+                if (widget.courseId != null) {
+                  Get.toNamed(routeAdminDetailCourse,
+                      parameters: {'id': widget.courseId!});
+                }
               }
             },
             style: ButtonStyle(

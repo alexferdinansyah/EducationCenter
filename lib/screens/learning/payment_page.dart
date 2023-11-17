@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/loading.dart';
@@ -38,6 +41,15 @@ class _PaymentPageState extends State<PaymentPage> {
   String? downloadURL;
   String error = '';
   bool loading = false;
+  int? uniqueCode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var ran = Random.secure();
+    uniqueCode = ran.nextInt(999);
+  }
 
   selectImageFromGallery() async {
     final picker = ImagePicker();
@@ -72,6 +84,7 @@ class _PaymentPageState extends State<PaymentPage> {
   String id = '';
 
   final DetailCourseController controller = Get.put(DetailCourseController());
+  final DetailMembershipUser membershipUser = Get.put(DetailMembershipUser());
 
   @override
   Widget build(BuildContext context) {
@@ -83,48 +96,74 @@ class _PaymentPageState extends State<PaymentPage> {
     if (user == null) {
       return const ResponsiveSignIn();
     }
-    if (route.contains('/checkout/course')) {
-      var argument = Get.parameters;
-      id = argument['id']!;
-      controller.fetchDocument(id);
-      return Obx(() {
-        final course = controller.documentSnapshot.value;
+    membershipUser.fetchMembership(user.uid);
 
-        if (course == null) {
-          return const Loading();
-        }
+    return Obx(() {
+      final membershipData = membershipUser.membershipData.value;
 
-        return Scaffold(
-          backgroundColor: CusColors.bg,
-          body: _default(width, height,
+      if (membershipData == null) {
+        return const Loading();
+      }
+
+      if (route.contains('/checkout/course')) {
+        var argument = Get.parameters;
+        id = argument['id']!;
+        controller.fetchDocument(id);
+        return Obx(() {
+          final course = controller.documentSnapshot.value;
+
+          if (course == null) {
+            return const Loading();
+          }
+
+          return Scaffold(
+            backgroundColor: CusColors.bg,
+            body: _default(
+              width,
+              height,
               uid: user.uid,
               courseId: id,
               isCourse: true,
               title: course.title,
               price: course.price,
-              type: course.courseCategory),
-        );
-      });
-    }
-    return Scaffold(
-      body: Container(
-          width: width * .83,
-          height: height - 60,
-          color: CusColors.bg,
-          child: _default(width, height, isCourse: false)),
-    );
+              type: course.courseCategory,
+              memberType: membershipData.memberType,
+            ),
+          );
+        });
+      }
+      return Container(
+        width: width * .83,
+        height: height - 60,
+        color: CusColors.bg,
+        child: _default(width, height,
+            isCourse: false, memberType: membershipData.memberType),
+      );
+    });
   }
 
-  Widget _default(
-    double width,
-    double height, {
-    String? courseId,
-    String? uid,
-    bool? isCourse,
-    String? title,
-    String? type,
-    String? price,
-  }) {
+  Widget _default(double width, double height,
+      {String? courseId,
+      String? uid,
+      bool? isCourse,
+      String? title,
+      String? type,
+      String? price,
+      String? memberType,
+      int discount = 10}) {
+    String? normalPrice = widget.price ?? price;
+    int parsedPrice = int.tryParse(normalPrice!.replaceAll(',', '')) ?? 0;
+    int total = 0;
+
+    if (isCourse! && memberType == 'Pro') {
+      int discountPrice = parsedPrice * discount ~/ 100;
+      total = (parsedPrice - discountPrice) + uniqueCode!;
+    } else {
+      total = parsedPrice + uniqueCode!;
+    }
+
+    String totalPrice = NumberFormat("#,###").format(total);
+
     return ListView(
       children: [
         Padding(
@@ -185,7 +224,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           ),
                         ),
                         Text(
-                          'Price : ${widget.price ?? "Rp $price"}',
+                          'Price : ${"Rp ${widget.price ?? price}"}',
                           style: GoogleFonts.poppins(
                             fontSize: width * .01,
                             fontWeight: FontWeight.w400,
@@ -222,7 +261,24 @@ class _PaymentPageState extends State<PaymentPage> {
                             ),
                           ),
                           Text(
-                            'Account Number : 7243485198\nBank Name : Bank BSI\nAmount : ${widget.price ?? "Rp $price"}',
+                            'Account Number : 7243485198\nBank Name : Bank BSI',
+                            style: GoogleFonts.poppins(
+                              fontSize: width * .01,
+                              fontWeight: FontWeight.w400,
+                              color: CusColors.subHeader,
+                            ),
+                          ),
+                          if (memberType == 'Pro')
+                            Text(
+                              'Discount for Being a Pro Member : $discount%',
+                              style: GoogleFonts.poppins(
+                                fontSize: width * .01,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                          Text(
+                            'Total : Rp $totalPrice',
                             style: GoogleFonts.poppins(
                               fontSize: width * .01,
                               fontWeight: FontWeight.w400,
@@ -233,9 +289,12 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                     if (image != null)
-                      Image.memory(
-                        image!,
-                        height: 200,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Image.memory(
+                          image!,
+                          height: 200,
+                        ),
                       ),
                     ElevatedButton(
                       onPressed: selectImageFromGallery,
@@ -287,68 +346,167 @@ class _PaymentPageState extends State<PaymentPage> {
                       child: ElevatedButton(
                         onPressed: loading
                             ? null // Disable the button when loading is true
-                            : () async {
-                                setState(() {
-                                  loading = true;
-                                });
-                                final firestoreService = FirestoreService(
-                                    uid: widget.user?.uid ?? uid!);
+                            : () {
+                                Get.defaultDialog(
+                                    titleStyle: GoogleFonts.poppins(
+                                      fontSize: width * .011,
+                                      fontWeight: FontWeight.w600,
+                                      color: CusColors.accentBlue,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    content: Column(
+                                      children: [
+                                        Text(
+                                          'Pembelian akan dikonfirmasi dalam 1x24 jam, harap menunggu',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: width * .011,
+                                            fontWeight: FontWeight.w600,
+                                            color: CusColors.title,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        )
+                                      ],
+                                    ),
+                                    actions: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(.25),
+                                                  spreadRadius: 0,
+                                                  blurRadius: 20,
+                                                  offset: const Offset(0, 4))
+                                            ]),
+                                        child: ElevatedButton(
+                                          style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.redAccent)),
+                                          onPressed: () => Get.back(),
+                                          child: Text(
+                                            'Cancel',
+                                            style: GoogleFonts.mulish(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                              fontSize: width * .012,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 10),
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                                begin:
+                                                    const Alignment(-1.2, 0.0),
+                                                colors: [
+                                                  const Color.fromARGB(
+                                                      255, 24, 95, 202),
+                                                  CusColors.mainColor,
+                                                ]),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(.25),
+                                                  spreadRadius: 0,
+                                                  blurRadius: 20,
+                                                  offset: const Offset(0, 4))
+                                            ]),
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            Get.back();
+                                            final firestoreService =
+                                                FirestoreService(
+                                                    uid: widget.user?.uid ??
+                                                        uid!);
 
-                                if (image != null) {
-                                  await uploadToFirebase(image);
-                                  dynamic data;
-                                  if (isCourse == true) {
-                                    data = TransactionModel(
-                                        uid: uid,
-                                        item: TransactionItem(
-                                            id: courseId,
-                                            title: title,
-                                            subTitle: type),
-                                        invoiceDate: DateTime.now(),
-                                        date: DateTime.now(),
-                                        price: price,
-                                        status: 'Pending',
-                                        invoice: downloadURL,
-                                        reason: null);
-                                  } else {
-                                    data = TransactionModel(
-                                        uid: widget.user!.uid,
-                                        item: TransactionItem(
-                                            title: 'Membership',
-                                            subTitle: 'Pro'),
-                                        invoiceDate: DateTime.now(),
-                                        date: DateTime.now(),
-                                        price: widget.price,
-                                        status: 'Pending',
-                                        invoice: downloadURL,
-                                        reason: null);
-                                  }
-                                  final exist = await firestoreService
-                                      .checkTransaction(widget.title ?? title);
-                                  if (exist == true) {
-                                    Get.snackbar('Error processing payment',
-                                        'Duplicate payment process');
-                                  } else {
-                                    await firestoreService
-                                        .createTransaction(data)
-                                        .then((value) async {
-                                      await firestoreService
-                                          .updateUserTransaction(value);
-                                    });
-                                  }
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  Get.to(
-                                      () =>
-                                          DashboardApp(selected: 'Transaction'),
-                                      routeName: routeLogin);
-                                } else {
-                                  setState(() {
-                                    loading = false;
-                                    error = 'Please put invoice';
-                                  });
-                                }
+                                            if (image != null) {
+                                              await uploadToFirebase(image);
+                                              dynamic data;
+                                              if (isCourse == true) {
+                                                data = TransactionModel(
+                                                    uid: uid,
+                                                    item: TransactionItem(
+                                                        id: courseId,
+                                                        title: title,
+                                                        subTitle: type),
+                                                    invoiceDate: DateTime.now(),
+                                                    date: DateTime.now(),
+                                                    price: price,
+                                                    status: 'Pending',
+                                                    invoice: downloadURL,
+                                                    uniqueCode:
+                                                        uniqueCode.toString(),
+                                                    reason: null);
+                                              } else {
+                                                data = TransactionModel(
+                                                    uid: widget.user!.uid,
+                                                    item: TransactionItem(
+                                                        title: 'Membership',
+                                                        subTitle: 'Pro'),
+                                                    invoiceDate: DateTime.now(),
+                                                    date: DateTime.now(),
+                                                    price: widget.price,
+                                                    status: 'Pending',
+                                                    invoice: downloadURL,
+                                                    uniqueCode:
+                                                        uniqueCode.toString(),
+                                                    reason: null);
+                                              }
+                                              final exist =
+                                                  await firestoreService
+                                                      .checkTransaction(
+                                                          widget.title ??
+                                                              title);
+                                              if (exist == true) {
+                                                Get.snackbar(
+                                                    'Error processing payment',
+                                                    'Duplicate payment process');
+                                              } else {
+                                                await firestoreService
+                                                    .createTransaction(data)
+                                                    .then((value) async {
+                                                  await firestoreService
+                                                      .updateUserTransaction(
+                                                          value);
+                                                });
+                                              }
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                              Get.to(
+                                                  () => DashboardApp(
+                                                      selected: 'Transaction'),
+                                                  routeName: routeLogin);
+                                            } else {
+                                              setState(() {
+                                                loading = false;
+                                                error = 'Please put invoice';
+                                              });
+                                            }
+                                          },
+                                          child: Text(
+                                            'Confirm',
+                                            style: GoogleFonts.mulish(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                              fontSize: width * .012,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ]);
                               },
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<

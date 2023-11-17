@@ -8,6 +8,7 @@ class TransactionModel {
   String? price;
   String? status;
   String? invoice;
+  String? uniqueCode;
   String? reason;
 
   TransactionModel(
@@ -18,6 +19,7 @@ class TransactionModel {
       required this.price,
       required this.status,
       required this.invoice,
+      required this.uniqueCode,
       this.reason});
 
   factory TransactionModel.fromFirestore(Map<String, dynamic> data) {
@@ -30,6 +32,7 @@ class TransactionModel {
       status: data['status'],
       invoice: data['invoice'],
       reason: data['reason'],
+      uniqueCode: data['unique_code'],
     );
   }
 
@@ -43,6 +46,7 @@ class TransactionModel {
       'status': status,
       'invoice': invoice,
       'reason': reason,
+      'unique_code': uniqueCode
     };
   }
 }

@@ -44,9 +44,14 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          'assets/images/dec_logo2.png',
-          width: width * .06,
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(routeHome);
+          },
+          child: Image.asset(
+            'assets/images/dec_logo2.png',
+            width: width * .06,
+          ),
         ),
         const Spacer(),
         NavigationItem(
@@ -63,7 +68,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         ),
         NavigationItem(
           selected: index == 2,
-          title: 'Article',
+          title: 'Articles',
           routeName: routeArticle,
           onHighlight: onHighlight,
         ),
@@ -184,13 +189,18 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
               horizontal: width * .03, vertical: height * .015),
           child: Row(
             children: [
-              Image.asset(
-                'assets/images/dec_logo2.png',
-                width: getValueForScreenType<double>(
-                  context: context,
-                  mobile: width * .13,
-                  tablet: width * .1,
-                  desktop: width * .019,
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(routeHome);
+                },
+                child: Image.asset(
+                  'assets/images/dec_logo2.png',
+                  width: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .13,
+                    tablet: width * .1,
+                    desktop: width * .019,
+                  ),
                 ),
               ),
               const Spacer(),
@@ -219,7 +229,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
         ),
         NavigationItem(
           selected: index == 2,
-          title: 'Article',
+          title: 'Articles',
           routeName: routeArticle,
           onHighlight: onHighlight,
         ),

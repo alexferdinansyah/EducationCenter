@@ -397,7 +397,7 @@ class _TransactionTableState extends State<TransactionTable> {
                                 context: context,
                                 mobile: 900,
                                 tablet: 1000,
-                                desktop: 1000,
+                                desktop: 1060,
                               ),
                               isHorizontalScrollBarVisible: false,
                               empty: Column(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
@@ -33,6 +34,7 @@ const String routeMembershipUpgradePayment = '/membership-upgrade-payment';
 const String routeLearnCourse = '/learn-course';
 const String routeOfferLearnCourse = '/learn-course/offers';
 const String routeBuyCourse = '/checkout/course';
+const String routeAdminDetailCourse = '/admin-detail-course';
 
 final navKey = GlobalKey<NavigatorState>();
 
@@ -63,10 +65,10 @@ final getPages = [
     name: routeCourses,
     page: () => wrapWithAppView(const SingleCourseList()),
   ),
-  GetPage(
-    name: routeBundleCourses,
-    page: () => wrapWithAppView(const BundleCourseList()),
-  ),
+  // GetPage(
+  //   name: routeBundleCourses,
+  //   page: () => wrapWithAppView(const BundleCourseList()),
+  // ),
   GetPage(
     name: routeArticle,
     page: () => wrapWithAppView(const ArticleList()),
@@ -79,10 +81,10 @@ final getPages = [
     name: routeDetailSingleCourse,
     page: () => wrapWithAppView(const DetailSingleCourse()),
   ),
-  GetPage(
-    name: routeDetailBundleCourse,
-    page: () => wrapWithAppView(const DetailBundleCourse()),
-  ),
+  // GetPage(
+  //   name: routeDetailBundleCourse,
+  //   page: () => wrapWithAppView(const DetailBundleCourse()),
+  // ),
   GetPage(
     name: routeDetailArticle,
     page: () => wrapWithAppView(const DetailArticle()),
@@ -114,5 +116,9 @@ final getPages = [
   GetPage(
     name: routeBuyCourse,
     page: () => const PaymentPage(),
+  ),
+  GetPage(
+    name: routeAdminDetailCourse,
+    page: () => const AdminDetailCourse(),
   ),
 ];

@@ -253,7 +253,7 @@ class _MyCoursesState extends State<MyCourses> {
                         SizedBox(
                           height: filteredCourses.length / 5 > 1 &&
                                   filteredCourses.length / 5 < 2
-                              ? height / 2.5 * 2
+                              ? height / 3
                               : filteredCourses.length / 5 >= 2
                                   ? height / 2.5 * (filteredCourses.length / 5)
                                   : height / 1.6,
