@@ -3,8 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
   final String uid;
   final String email;
+  final bool verifiedEmail;
 
-  UserModel({required this.uid, required this.email});
+  UserModel({
+    required this.uid,
+    required this.email,
+    required this.verifiedEmail,
+  });
 }
 
 class UserData {

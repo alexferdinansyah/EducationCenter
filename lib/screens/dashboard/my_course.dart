@@ -275,7 +275,7 @@ class _MyCoursesState extends State<MyCourses> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15),
                                       child: Text(
-                                        "You don't take any courses, \n you can search for courses according to your needs",
+                                        "You don't have any courses, \n you can search for courses according to your needs",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
                                           fontSize:

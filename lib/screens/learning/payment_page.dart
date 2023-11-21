@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/firestore_service.dart';
@@ -42,6 +45,8 @@ class _PaymentPageState extends State<PaymentPage> {
   String error = '';
   bool loading = false;
   int? uniqueCode;
+  bool? isVerify;
+  Timer? timer;
 
   @override
   void initState() {
@@ -93,9 +98,27 @@ class _PaymentPageState extends State<PaymentPage> {
     final user = Provider.of<UserModel?>(context);
     var route = Get.currentRoute;
 
+    checkEmailVerified() async {
+      await FirebaseAuth.instance.currentUser?.reload();
+
+      setState(() {
+        isVerify = FirebaseAuth.instance.currentUser!.emailVerified;
+      });
+
+      if (isVerify!) {
+        timer?.cancel();
+      }
+    }
+
     if (user == null) {
       return const ResponsiveSignIn();
     }
+
+    if (isVerify == false) {
+      timer = Timer(const Duration(seconds: 3), () => checkEmailVerified());
+      return const ConfirmEmail();
+    }
+
     membershipUser.fetchMembership(user.uid);
 
     return Obx(() {
@@ -261,7 +284,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             ),
                           ),
                           Text(
-                            'Account Number : 7243485198\nBank Name : Bank BSI',
+                            'Account Number : 4212518585\nBank Name : Bank BCA\nAccount Name : DAC SOLUTION INFORMATIKA',
                             style: GoogleFonts.poppins(
                               fontSize: width * .01,
                               fontWeight: FontWeight.w400,

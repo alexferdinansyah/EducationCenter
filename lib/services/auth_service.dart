@@ -10,7 +10,12 @@ class AuthService {
 
   // create user object based on user
   UserModel? _userFromFirebaseUser(User? user) {
-    return user != null ? UserModel(uid: user.uid, email: user.email!) : null;
+    return user != null
+        ? UserModel(
+            uid: user.uid,
+            email: user.email!,
+            verifiedEmail: user.emailVerified)
+        : null;
   }
 
   // auth changes user stream
@@ -34,9 +39,21 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
       return _userFromFirebaseUser(user);
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided for that user.';
+      } else if (e.code == 'too-many-requests') {
+        errorMessage =
+            'This account has been temporarily disabled due to multiple failed login attempts. You can restore access immediately by resetting your password or try again later.';
+      }
+      print('Firebase Auth Error: ${e.code} - ${e.message}');
+      return errorMessage;
     } catch (e) {
-      print(e.toString());
-      return null;
+      print('Non-Firebase Auth Error: ${e.toString()}');
+      return 'An error occurred';
     }
   }
 
@@ -58,20 +75,33 @@ class AuthService {
 
       // create a new document for the user with uid
       await FirestoreService(uid: user!.uid).updateUserData(
-          name,
-          'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF',
-          'member',
-          noWhatsapp,
-          address,
-          education,
-          working,
-          reason,
-          {'type': 'Basic', 'join_since': Timestamp.now()});
+        name,
+        'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF',
+        'member',
+        noWhatsapp,
+        address,
+        education,
+        working,
+        reason,
+        {
+          'type': 'Basic',
+          'join_since': Timestamp.now(),
+        },
+      );
 
       return _userFromFirebaseUser(user);
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred';
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'The account already exists for that email.';
+      }
+      print('Firebase Auth Error: ${e.code} - ${e.message}');
+      return errorMessage;
     } catch (e) {
-      print(e.toString());
-      return null;
+      print('Non-Firebase Auth Error: ${e.toString()}');
+      return 'An error occurred';
     }
   }
 

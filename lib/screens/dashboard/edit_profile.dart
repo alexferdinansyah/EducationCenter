@@ -309,6 +309,16 @@ class _EditProfileState extends State<EditProfile> {
                             onChanged: (value) {
                               noWhatsapp = value;
                             },
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'Enter a No. Whatsapp';
+                              } else if (val.length < 11 || val.length > 15) {
+                                return 'Number should be between 11 and 15 characters';
+                              } else if (!val.startsWith('08')) {
+                                return 'Number is invalid, example 08xxxxxxxx';
+                              }
+                              return null;
+                            },
                             decoration: editProfileDecoration.copyWith(
                               hintText: 'Input your Whatsapp number',
                               hintStyle: GoogleFonts.poppins(

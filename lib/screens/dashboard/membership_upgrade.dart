@@ -429,6 +429,28 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.check_circle,
+                                          color: Color(0xFF4351FF),
+                                        ),
+                                        Text(
+                                          "Plus two free videos",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: width * .009,
+                                            fontWeight: FontWeight.w500,
+                                            color: const Color(0xFF170F49),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
                                     Row(
                                       children: [
                                         const Icon(

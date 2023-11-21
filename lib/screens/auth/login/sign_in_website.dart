@@ -26,7 +26,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
   String password = '';
   String error = '';
   bool showPassword = false;
-    bool onHover =false;
+  bool onHover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -198,10 +198,10 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                       email, value);
 
                                               setState(() {
-                                                if (result == null) {
-                                                  error =
-                                                      'Could not sign in with those credentials';
+                                                if (result is String) {
+                                                  error = result;
                                                 }
+
                                                 loading =
                                                     false; // Set loading back to false
                                               });
@@ -263,10 +263,12 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                       email, password);
 
                                               setState(() {
-                                                if (result == null) {
-                                                  error =
-                                                      'Could not sign in with those credentials';
+                                                if (result is String) {
+                                                  error = result;
+                                                } else {
+                                                  error = '';
                                                 }
+
                                                 loading =
                                                     false; // Set loading back to false
                                               });
@@ -348,7 +350,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       onPressed: () async {
                                         await AuthService().signInWithGoogle();
                                       },
-                                                                            onHover: (value) {
+                                      onHover: (value) {
                                         setState(() {
                                           onHover = value;
                                         });
@@ -368,9 +370,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                     width: 1.3)),
                                           ),
                                           backgroundColor:
-                                               MaterialStatePropertyAll(
-                                                  onHover? Colors.grey.shade100
-                                                : Colors.white),
+                                              MaterialStatePropertyAll(onHover
+                                                  ? Colors.grey.shade100
+                                                  : Colors.white),
                                           shadowColor:
                                               const MaterialStatePropertyAll(
                                                   Colors.transparent)),

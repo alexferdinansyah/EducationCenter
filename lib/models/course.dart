@@ -17,6 +17,7 @@ class Course {
   String? price;
   String? discount;
   String? courseType;
+  DateTime? createdAt;
 
   Course({
     required this.image,
@@ -35,6 +36,7 @@ class Course {
     required this.price,
     this.discount = "",
     this.courseType,
+    required this.createdAt,
   });
 
   // Convert Firestore data to Course object
@@ -68,6 +70,7 @@ class Course {
       price: data['price'],
       discount: data['discount'],
       courseType: data['course_type'],
+      createdAt: data['created_at'].toDate(),
     );
   }
 
@@ -91,6 +94,7 @@ class Course {
       'price': price,
       'discount': discount,
       'course_type': courseType,
+      'created_at': Timestamp.fromDate(createdAt!),
     };
   }
 }

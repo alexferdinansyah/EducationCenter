@@ -28,6 +28,7 @@ class LearnCourseController extends GetxController {
 
       bool? isPaid;
       Map? memberType;
+      String? noWhatsapp;
 
       if (querySnapshot.docs.isNotEmpty) {
         isPaid = querySnapshot.docs.first.get('isPaid');
@@ -37,6 +38,7 @@ class LearnCourseController extends GetxController {
 
       if (getUser.exists) {
         memberType = getUser.get('membership');
+        noWhatsapp = getUser.get('noWhatsapp');
       } else {
         memberType = null;
       }
@@ -49,7 +51,8 @@ class LearnCourseController extends GetxController {
         'course_name': courseData.title,
         'price': courseData.price,
         'isPaid': isPaid,
-        'user_membership': memberType
+        'user_membership': memberType,
+        'no_whatsapp': noWhatsapp
       };
       documentSnapshot.value = learnData;
     } catch (e) {

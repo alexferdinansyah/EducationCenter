@@ -207,20 +207,18 @@ class _ContactUsState extends State<ContactUs> {
             ),
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Icon(
-                  Icons.phone,
-                  color: const Color(0xFF0081FE),
-                  size: getValueForScreenType<double>(
-                    context: context,
-                    mobile: 15,
-                    tablet: 20,
-                    desktop: 25,
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.only(right: 10),
+                  child: SvgPicture.asset(
+                    'assets/svg/whatsapp.svg',
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 15,
+                      tablet: 20,
+                      desktop: 20,
+                    ),
+                  )),
               Text(
-                '+62-21-7721-0358',
+                '0877-4281-2548',
                 style: GoogleFonts.assistant(
                   fontWeight: FontWeight.w500,
                   color: const Color(0xFF0A142F),

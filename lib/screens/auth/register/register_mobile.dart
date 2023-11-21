@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/auth_service.dart';
 
 class RegisterMobile extends StatefulWidget {
@@ -140,8 +142,16 @@ class _RegisterMobileState extends State<RegisterMobile> {
                               fontSize: width * .032,
                             ),
                           ),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter an No. Whatsapp' : null,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Enter a No. Whatsapp';
+                            } else if (val.length < 11 || val.length > 15) {
+                              return 'Number should be between 11 and 15 characters';
+                            } else if (!val.startsWith('08')) {
+                              return 'Number is invalid, example 08xxxxxxxx';
+                            }
+                            return null;
+                          },
                           onChanged: (val) {
                             setState(() => noWhatsapp = val);
                           },
@@ -470,13 +480,15 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                     );
 
                                     setState(() {
-                                      if (result == null) {
-                                        error = 'Please supply a valid email';
+                                      if (result is String) {
+                                        error = result;
                                       }
                                       loading =
                                           false; // Set loading back to false
                                     });
-                                    Get.back();
+                                    if (result is UserModel) {
+                                      Get.offAndToNamed(routeConfirmEmail);
+                                    }
                                   }
                                 },
                           style: ButtonStyle(

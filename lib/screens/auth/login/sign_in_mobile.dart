@@ -215,9 +215,10 @@ class _SignInMobileState extends State<SignInMobile> {
                                             email, password);
 
                                     setState(() {
-                                      if (result == null) {
-                                        error =
-                                            'Could not sign in with those credentials';
+                                      if (result is String) {
+                                        error = result;
+                                      } else {
+                                        error = '';
                                       }
                                       loading =
                                           false; // Set loading back to false

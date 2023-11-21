@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/reset_password.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -86,7 +87,7 @@ class _SettingsState extends State<Settings> {
                         tablet: 3,
                         desktop: 4,
                       ),
-                      itemCount: settingLists.length,
+                      itemCount: widget.user.verifiedEmail ? 3 : 4,
                       itemBuilder: (BuildContext context, int index) {
                         return SettingList(
                           setting: settingLists[index],
@@ -164,6 +165,15 @@ List<Setting> settingLists = [
           return const ResetPasswordDialog();
         },
       );
+    },
+  ),
+  Setting(
+    title: 'Verify Account',
+    image: 'assets/svg/Message.svg',
+    desc: 'Verify your account for benefits',
+    buttonText: 'Verify Now',
+    onTap: () {
+      Get.toNamed(routeConfirmEmail);
     },
   ),
 ];

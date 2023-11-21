@@ -250,7 +250,7 @@ class _LandingPageState extends State<LandingPage> {
                         Column(
                           children: [
                             Text(
-                              'Courses',
+                              'Latest Courses',
                               style: GoogleFonts.mulish(
                                   color: CusColors.header,
                                   fontSize: title,
@@ -427,7 +427,7 @@ class _LandingPageState extends State<LandingPage> {
                       Column(
                         children: [
                           Text(
-                            'Articles',
+                            'Latest Articles',
                             style: GoogleFonts.mulish(
                                 color: CusColors.header,
                                 fontSize: title,
@@ -778,7 +778,7 @@ class HeaderLandingPage extends StatelessWidget {
         ),
         child: CarouselSlider(
           options: CarouselOptions(
-            autoPlay: false,
+            autoPlay: true,
             viewportFraction: 1,
             pageSnapping: true,
             aspectRatio: getValueForScreenType<double>(
@@ -831,15 +831,9 @@ class HeaderLandingPage extends StatelessWidget {
                               Container(
                                 width: width * .09,
                                 decoration: BoxDecoration(
-                                    color: const Color(0xFF00C8FF),
-                                    borderRadius: BorderRadius.circular(80),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black.withOpacity(.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 20,
-                                          offset: const Offset(0, 4))
-                                    ]),
+                                  color: const Color(0xFF00C8FF),
+                                  borderRadius: BorderRadius.circular(80),
+                                ),
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Get.toNamed(routeLogin);

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
-import 'package:project_tc/screens/landing_page/bundle_course_list.dart';
 import 'package:project_tc/screens/landing_page/contact_us.dart';
 import 'package:project_tc/screens/landing_page/detail_article.dart';
-import 'package:project_tc/screens/landing_page/detail_bundle_course.dart';
 import 'package:project_tc/screens/landing_page/detail_single_course.dart';
 import 'package:project_tc/screens/landing_page/landing_page.dart';
 import 'package:project_tc/screens/landing_page/single_course_list.dart';
@@ -26,6 +25,7 @@ const String routeDetailArticle = '/detail-article';
 const String routeContacts = '/contact';
 const String routeLogin = '/login';
 const String routeRegister = '/register';
+const String routeConfirmEmail = '/verify-account';
 const String routeForgotPassword = '/forgot-password';
 const String routeEditProfile = '/edit-profile';
 const String routeMembershipInfo = '/membership-info';
@@ -56,6 +56,10 @@ final getPages = [
   GetPage(
     name: routeRegister,
     page: () => const ResponsiveRegister(),
+  ),
+  GetPage(
+    name: routeConfirmEmail,
+    page: () => const ConfirmEmail(),
   ),
   GetPage(
     name: routeForgotPassword,

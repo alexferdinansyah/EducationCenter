@@ -497,17 +497,17 @@ class _CourseFormModalState extends State<CourseFormModal> {
                   );
                 } else {
                   final Course data = Course(
-                    image: '',
-                    courseCategory: courseCategory ?? 'Online course',
-                    courseType: courseType ?? 'Free',
-                    title: title,
-                    isBundle: isBundle ?? false,
-                    completionBenefits: [],
-                    chapterList: [ChapterList(chapter: '', subChapter: [])],
-                    learnLimit: learnLimit ?? '3',
-                    price: price,
-                    isDraf: true,
-                  );
+                      image: '',
+                      courseCategory: courseCategory ?? 'Online course',
+                      courseType: courseType ?? 'Free',
+                      title: title,
+                      isBundle: isBundle ?? false,
+                      completionBenefits: [],
+                      chapterList: [ChapterList(chapter: '', subChapter: [])],
+                      learnLimit: learnLimit ?? '3',
+                      price: price,
+                      isDraf: true,
+                      createdAt: DateTime.now());
 
                   await firestore.addCourse(data);
                 }
@@ -580,17 +580,17 @@ class _CourseFormModalState extends State<CourseFormModal> {
                   );
                 } else {
                   final Course data = Course(
-                    image: '',
-                    courseCategory: courseCategory ?? 'Online course',
-                    courseType: courseType ?? 'Free',
-                    title: title,
-                    isBundle: isBundle ?? false,
-                    completionBenefits: [],
-                    chapterList: [ChapterList(chapter: '', subChapter: [])],
-                    learnLimit: learnLimit ?? '3',
-                    price: price,
-                    isDraf: true,
-                  );
+                      image: '',
+                      courseCategory: courseCategory ?? 'Online course',
+                      courseType: courseType ?? 'Free',
+                      title: title,
+                      isBundle: isBundle ?? false,
+                      completionBenefits: [],
+                      chapterList: [ChapterList(chapter: '', subChapter: [])],
+                      learnLimit: learnLimit ?? '3',
+                      price: price,
+                      isDraf: true,
+                      createdAt: DateTime.now());
 
                   final result = await firestore.addCourse(data);
                   Get.toNamed(routeAdminDetailCourse,
