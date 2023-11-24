@@ -5,6 +5,7 @@ class TransactionModel {
   TransactionItem? item;
   DateTime? invoiceDate;
   DateTime? date;
+  String? bankName;
   String? price;
   String? status;
   String? invoice;
@@ -16,6 +17,7 @@ class TransactionModel {
       required this.item,
       this.invoiceDate,
       required this.date,
+      required this.bankName,
       required this.price,
       required this.status,
       required this.invoice,
@@ -28,6 +30,7 @@ class TransactionModel {
       item: TransactionItem.fromFirestore(data['item']),
       invoiceDate: data['invoice_date'].toDate(),
       date: data['date'].toDate(),
+      bankName: data['bank_name'],
       price: data['price'],
       status: data['status'],
       invoice: data['invoice'],
@@ -42,6 +45,7 @@ class TransactionModel {
       'item': item!.toFirestore(),
       'invoice_date': Timestamp.fromDate(invoiceDate!),
       'date': Timestamp.fromDate(date!),
+      'bank_name': bankName,
       'price': price,
       'status': status,
       'invoice': invoice,

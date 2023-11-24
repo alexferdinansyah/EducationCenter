@@ -408,6 +408,14 @@ class _UserTransactionState extends State<UserTransaction> {
                   color: const Color(0xFF1F384C),
                 ),
               ),
+              Text(
+                'User bank name : ${transaction.bankName}',
+                style: GoogleFonts.poppins(
+                  fontSize: width * .014,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFF1F384C),
+                ),
+              ),
               Container(
                 width: 200,
                 height: 350,

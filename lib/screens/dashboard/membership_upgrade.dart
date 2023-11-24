@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -54,13 +55,25 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Membership Upgrade',
-                  style: GoogleFonts.poppins(
-                    fontSize: width * .014,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF1F384C),
-                  ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: GestureDetector(
+                          onTap: () => Get.off(
+                              DashboardApp(selected: 'Membership'),
+                              routeName: routeMembershipInfo),
+                          child: const Icon(Icons.arrow_back_rounded)),
+                    ),
+                    Text(
+                      'Membership Upgrade',
+                      style: GoogleFonts.poppins(
+                        fontSize: width * .014,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF1F384C),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 50,
@@ -90,6 +103,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                           ),
                         ),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               width: width / 5,

@@ -13,6 +13,7 @@ class BulletList extends StatelessWidget {
   final Color textColor;
   final FontWeight fontWeight;
   final double fontSize;
+  final double? cusWidth;
 
   const BulletList(this.strings,
       {super.key,
@@ -20,6 +21,7 @@ class BulletList extends StatelessWidget {
       this.padding = 5,
       this.textColor = const Color(0xFF676767),
       this.fontWeight = FontWeight.w500,
+      this.cusWidth,
       required this.fontSize});
 
   @override
@@ -27,14 +29,15 @@ class BulletList extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.centerLeft,
-      width: border
-          ? width / 1.7
-          : getValueForScreenType<double>(
-              context: context,
-              mobile: width * .3,
-              tablet: width * .18,
-              desktop: width * .13,
-            ),
+      width: cusWidth ??
+          (border
+              ? width / 1.7
+              : getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .3,
+                  tablet: width * .18,
+                  desktop: width * .13,
+                )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: strings.map((str) {

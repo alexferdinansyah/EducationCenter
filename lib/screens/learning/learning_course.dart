@@ -95,7 +95,7 @@ class _LearningCourseState extends State<LearningCourse> {
       return const ResponsiveSignIn();
     }
     if (isVerify == false) {
-      timer = Timer(const Duration(seconds: 3), () => checkEmailVerified());
+      timer = Timer(const Duration(seconds: 2), () => checkEmailVerified());
       return const ConfirmEmail();
     }
     controller.fetchDocument(id, user.uid);

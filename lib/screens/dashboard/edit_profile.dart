@@ -1,12 +1,16 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -22,6 +26,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool isDone = false;
 
   // text field state
   String? name;
@@ -114,13 +119,24 @@ class _EditProfileState extends State<EditProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'My Profile',
-                style: GoogleFonts.poppins(
-                  fontSize: width * .014,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF1F384C),
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: GestureDetector(
+                        onTap: () => Get.off(DashboardApp(selected: 'Settings'),
+                            routeName: routeLogin),
+                        child: const Icon(Icons.arrow_back_rounded)),
+                  ),
+                  Text(
+                    'My Profile',
+                    style: GoogleFonts.poppins(
+                      fontSize: width * .014,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF1F384C),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 70,
@@ -510,47 +526,57 @@ class _EditProfileState extends State<EditProfile> {
                               desktop: 40,
                             ),
                             child: ElevatedButton(
-                              onPressed: () async {
-                                if (image != null) {
-                                  await uploadToFirebase(image);
-                                  await deleteExistingPhoto();
-                                }
-                                if (_formKey.currentState!.validate()) {
-                                  String updatedName =
-                                      name ?? widget.userData.name;
-                                  String updatedPhotoUrl =
-                                      downloadURL ?? widget.userData.photoUrl;
+                              onPressed: loading
+                                  ? null
+                                  : () async {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      if (image != null) {
+                                        await uploadToFirebase(image);
+                                        await deleteExistingPhoto();
+                                      }
+                                      if (_formKey.currentState!.validate()) {
+                                        String updatedName =
+                                            name ?? widget.userData.name;
+                                        String updatedPhotoUrl = downloadURL ??
+                                            widget.userData.photoUrl;
 
-                                  // // Check if the name changed and no image URL is provided
-                                  // if (name != null &&
-                                  //     name != widget.userData.name &&
-                                  //     downloadURL == null &&
-                                  //     !widget.userData.photoUrl.contains(
-                                  //         'https://lh3.googleusercontent.com')) {
-                                  //   // Set a default image URL here
-                                  //   updatedPhotoUrl =
-                                  //       'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
-                                  // }
-                                  await FirestoreService(uid: widget.user.uid)
-                                      .updateUserData(
-                                          updatedName,
-                                          updatedPhotoUrl,
-                                          'member',
-                                          noWhatsapp ??
-                                              widget.userData.noWhatsapp,
-                                          address ?? widget.userData.address,
-                                          lastEducation ??
-                                              widget.userData.education,
-                                          workingStatus ??
-                                              widget.userData.working,
-                                          reason ?? widget.userData.reason,
-                                          widget.userData.membership
-                                              .toFirestore());
-                                  setState(() {
-                                    image = null;
-                                  });
-                                }
-                              },
+                                        // // Check if the name changed and no image URL is provided
+                                        // if (name != null &&
+                                        //     name != widget.userData.name &&
+                                        //     downloadURL == null &&
+                                        //     !widget.userData.photoUrl.contains(
+                                        //         'https://lh3.googleusercontent.com')) {
+                                        //   // Set a default image URL here
+                                        //   updatedPhotoUrl =
+                                        //       'https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF';
+                                        // }
+                                        await FirestoreService(
+                                                uid: widget.user.uid)
+                                            .updateUserData(
+                                                updatedName,
+                                                updatedPhotoUrl,
+                                                'member',
+                                                noWhatsapp ??
+                                                    widget.userData.noWhatsapp,
+                                                address ??
+                                                    widget.userData.address,
+                                                lastEducation ??
+                                                    widget.userData.education,
+                                                workingStatus ??
+                                                    widget.userData.working,
+                                                reason ??
+                                                    widget.userData.reason,
+                                                widget.userData.membership
+                                                    .toFirestore());
+                                        setState(() {
+                                          image = null;
+                                          loading = false;
+                                        });
+                                        showDialogSuccess(width);
+                                      }
+                                    },
                               style: ButtonStyle(
                                   padding: MaterialStateProperty.all(
                                     const EdgeInsets.symmetric(horizontal: 60),
@@ -566,14 +592,16 @@ class _EditProfileState extends State<EditProfile> {
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                   )),
-                              child: Text(
-                                'Save',
-                                style: GoogleFonts.poppins(
-                                  fontSize: width * .01,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              child: loading
+                                  ? const CircularProgressIndicator()
+                                  : Text(
+                                      'Save',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: width * .01,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],
@@ -586,6 +614,96 @@ class _EditProfileState extends State<EditProfile> {
           ),
         )
       ]),
+    );
+  }
+
+  showDialogSuccess(width) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Color(0xFFCCCCCC),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: SizedBox(
+            height: 250,
+            child: Column(
+              children: [
+                Text(
+                  'Success',
+                  style: GoogleFonts.poppins(
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .022,
+                      tablet: width * .019,
+                      desktop: width * .014,
+                    ),
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF1F384C),
+                  ),
+                ),
+                Text(
+                  'Your profile has been successfully updated',
+                  style: GoogleFonts.poppins(
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .016,
+                      tablet: width * .013,
+                      desktop: width * .008,
+                    ),
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF7d848c),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Lottie.asset('assets/animations/check.json', height: 130),
+                const SizedBox(
+                  height: 15,
+                ),
+                SizedBox(
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 28,
+                    tablet: 35,
+                    desktop: 40,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () => Get.off(DashboardApp(selected: 'Settings'),
+                        routeName: routeLogin),
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(horizontal: 60),
+                        ),
+                        foregroundColor: MaterialStateProperty.all(
+                          const Color(0xFF4351FF),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                          const Color(0xFF4351FF),
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        )),
+                    child: Text(
+                      'Ok',
+                      style: GoogleFonts.poppins(
+                        fontSize: width * .01,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
