@@ -239,7 +239,8 @@ class Newsflashes extends StatelessWidget {
     return isFullscreen
         ? GestureDetector(
             onTap: () {
-              Get.toNamed(routeDetailArticle, parameters: {'id': id});
+              Get.rootDelegate
+                  .toNamed(routeDetailArticle, parameters: {'id': id});
             },
             child: Container(
               margin: EdgeInsets.symmetric(
@@ -361,7 +362,8 @@ class Newsflashes extends StatelessWidget {
           )
         : GestureDetector(
             onTap: () {
-              Get.toNamed(routeDetailArticle, parameters: {'id': id});
+              Get.rootDelegate
+                  .toNamed(routeDetailArticle, parameters: {'id': id});
             },
             child: Container(
               margin: EdgeInsets.symmetric(

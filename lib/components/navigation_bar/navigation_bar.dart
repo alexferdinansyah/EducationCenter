@@ -5,7 +5,6 @@ import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -24,19 +23,21 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final user = Provider.of<UserModel?>(context);
-    if (Get.currentRoute.contains(routeDetailSingleCourse) ||
-        Get.currentRoute.contains(routeDetailBundleCourse) ||
-        Get.currentRoute == routeBundleCourses ||
-        Get.currentRoute == routeCourses) {
+    final currentRoute = Get.rootDelegate.currentConfiguration!.location!;
+
+    if (currentRoute.contains(routeDetailSingleCourse) ||
+        currentRoute.contains(routeDetailBundleCourse) ||
+        currentRoute == routeBundleCourses ||
+        currentRoute == routeCourses) {
       setState(() {
         index = 1;
       });
-    } else if (Get.currentRoute == routeArticle ||
-        Get.currentRoute.contains(routeDetailArticle)) {
+    } else if (currentRoute == routeArticle ||
+        currentRoute.contains(routeDetailArticle)) {
       setState(() {
         index = 2;
       });
-    } else if (Get.currentRoute == routeContacts) {
+    } else if (currentRoute == routeContacts) {
       setState(() {
         index = 3;
       });
@@ -46,7 +47,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
       children: [
         GestureDetector(
           onTap: () {
-            Get.toNamed(routeHome);
+            Get.rootDelegate.toNamed(routeHome);
           },
           child: Image.asset(
             'assets/images/dec_logo2.png',
@@ -97,7 +98,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
               ]),
           child: ElevatedButton(
             onPressed: () {
-              Get.toNamed(routeLogin);
+              Get.rootDelegate.toNamed(routeLogin);
             },
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -163,19 +164,20 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
 
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    if (Get.currentRoute.contains(routeDetailSingleCourse) ||
-        Get.currentRoute.contains(routeDetailBundleCourse) ||
-        Get.currentRoute == routeBundleCourses ||
-        Get.currentRoute == routeCourses) {
+    final currentRoute = Get.rootDelegate.currentConfiguration!.location!;
+    if (currentRoute.contains(routeDetailSingleCourse) ||
+        currentRoute.contains(routeDetailBundleCourse) ||
+        currentRoute == routeBundleCourses ||
+        currentRoute == routeCourses) {
       setState(() {
         index = 1;
       });
-    } else if (Get.currentRoute == routeArticle ||
-        Get.currentRoute.contains(routeDetailArticle)) {
+    } else if (currentRoute == routeArticle ||
+        currentRoute.contains(routeDetailArticle)) {
       setState(() {
         index = 2;
       });
-    } else if (Get.currentRoute == routeContacts) {
+    } else if (currentRoute == routeContacts) {
       setState(() {
         index = 3;
       });
@@ -191,7 +193,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(routeHome);
+                  Get.rootDelegate.toNamed(routeHome);
                 },
                 child: Image.asset(
                   'assets/images/dec_logo2.png',
@@ -265,7 +267,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
               ]),
           child: ElevatedButton(
             onPressed: () {
-              Get.to(() => const Wrapper(), routeName: '/login');
+              Get.rootDelegate.toNamed(routeLogin);
             },
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

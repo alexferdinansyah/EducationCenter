@@ -146,23 +146,23 @@ Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle, courseType,
       onPressed: () async {
         if (haveCourse == null) {
           if (courseType == 'Free') {
-            Get.toNamed(
+            Get.rootDelegate.toNamed(
               routeOfferLearnCourse,
               parameters: {'id': courseId},
             );
           } else {
-            Get.toNamed(
+            Get.rootDelegate.toNamed(
               routeBuyCourse,
               parameters: {'id': courseId},
             );
           }
         } else if (haveCourse == false) {
-          Get.toNamed(
+          Get.rootDelegate.toNamed(
             routeOfferLearnCourse,
             parameters: {'id': courseId},
           );
         } else {
-          Get.toNamed(
+          Get.rootDelegate.toNamed(
             routeLearnCourse,
             parameters: {'id': courseId},
           );
@@ -230,12 +230,12 @@ Widget cusPaymentWidgetOff(
     child: ElevatedButton(
       onPressed: () {
         if (courseType == 'Free') {
-          Get.toNamed(
+          Get.rootDelegate.toNamed(
             routeOfferLearnCourse,
             parameters: {'id': courseId},
           );
         } else {
-          Get.toNamed(
+          Get.rootDelegate.toNamed(
             routeBuyCourse,
             parameters: {'id': courseId},
           );

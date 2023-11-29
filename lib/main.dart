@@ -25,15 +25,17 @@ class MyApp extends StatelessWidget {
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,
-      child: GetMaterialApp(
+      child: GetMaterialApp.router(
+        routerDelegate: GetDelegate(
+            preventDuplicateHandlingMode:
+                PreventDuplicateHandlingMode.PopUntilOriginalRoute),
         debugShowCheckedModeBanner: false,
-        initialRoute: routeHome,
-        navigatorKey: navKey,
         defaultTransition: Transition.fadeIn,
         getPages: getPages,
         theme: ThemeData().copyWith(
           visualDensity: VisualDensity.standard,
         ),
+
         // home: Wrapper(),
       ),
     );

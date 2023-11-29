@@ -47,7 +47,7 @@ class Wrapper extends StatelessWidget {
               // User data exists
               return isAdmin
                   ? DashboardAdmin(
-                      selected: 'User Transaction',
+                      selected: 'Coupons',
                     ) // Admin
                   : DashboardApp(selected: 'Newsflash'); // Non-admin
             }

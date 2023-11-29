@@ -64,7 +64,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(routeHome);
+                      Get.rootDelegate.toNamed(routeHome);
                     },
                     child: Image.asset(
                       'assets/images/dec_logo2.png',
@@ -108,7 +108,12 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                     height: 14,
                   ),
                   SizedBox(
-                    width: width / 3,
+                    width: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width / 2,
+                      tablet: width / 2.6,
+                      desktop: width / 3,
+                    ),
                     child: Text(
                       isVerify == true
                           ? 'Thank you for verify your account, now you can get first three videos for free, please go to dashboard to check your courses'
@@ -146,7 +151,14 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                       tablet: 33,
                       desktop: 38,
                     ),
-                    margin: const EdgeInsets.symmetric(vertical: 30),
+                    margin: EdgeInsets.symmetric(
+                      vertical: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 15,
+                        tablet: 20,
+                        desktop: 30,
+                      ),
+                    ),
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                         color: const Color(0xFF00C8FF),
@@ -164,12 +176,12 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                           Get.offAndToNamed(routeLogin);
                         } else {
                           showModalConfirmEmail(width);
-                          FirebaseAuth.instance.currentUser
-                              ?.sendEmailVerification();
-                          timer = Timer.periodic(
-                            const Duration(seconds: 2),
-                            (_) => checkEmailVerified(),
-                          );
+                          // FirebaseAuth.instance.currentUser
+                          //     ?.sendEmailVerification();
+                          // timer = Timer.periodic(
+                          //   const Duration(seconds: 2),
+                          //   (_) => checkEmailVerified(),
+                          // );
                         }
                       },
                       style: ButtonStyle(
@@ -246,8 +258,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
             ),
             borderRadius: BorderRadius.circular(20),
           ),
-          content: SizedBox(
-            height: 250,
+          content: SingleChildScrollView(
             child: Column(
               children: [
                 Text(

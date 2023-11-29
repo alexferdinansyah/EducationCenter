@@ -487,7 +487,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                           false; // Set loading back to false
                                     });
                                     if (result is UserModel) {
-                                      Get.offAndToNamed(routeConfirmEmail);
+                                      Get.rootDelegate.offAndToNamed(routeConfirmEmail);
                                     }
                                   }
                                 },

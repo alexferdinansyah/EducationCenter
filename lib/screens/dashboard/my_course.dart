@@ -332,7 +332,8 @@ class _MyCoursesState extends State<MyCourses> {
                                         ),
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            Get.toNamed(routeCourses);
+                                            Get.rootDelegate
+                                                .toNamed(routeCourses);
                                           },
                                           style: ButtonStyle(
                                             shape: MaterialStateProperty.all<

@@ -56,7 +56,12 @@ class _HelpPageState extends State<HelpPage> {
                 Text(
                   'Help',
                   style: GoogleFonts.poppins(
-                    fontSize: width * .014,
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .021,
+                      tablet: width * .019,
+                      desktop: width * .014,
+                    ),
                     fontWeight: FontWeight.w500,
                     color: const Color(0xFF1F384C),
                   ),
@@ -71,17 +76,32 @@ class _HelpPageState extends State<HelpPage> {
                       'Frequently Asked Questions',
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
-                          fontSize: width * .011,
+                          fontSize: getValueForScreenType<double>(
+                            context: context,
+                            mobile: width * .019,
+                            tablet: width * .016,
+                            desktop: width * .011,
+                          ),
                           color: CusColors.text),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 30,
+                    tablet: 35,
+                    desktop: 50,
+                  ),
                 ),
                 const HelpList(),
-                const SizedBox(
-                  height: 100,
+                SizedBox(
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 40,
+                    tablet: 70,
+                    desktop: 100,
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +109,12 @@ class _HelpPageState extends State<HelpPage> {
                     Text(
                       'Contact Us',
                       style: GoogleFonts.poppins(
-                        fontSize: width * .015,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .023,
+                          tablet: width * .02,
+                          desktop: width * .015,
+                        ),
                         fontWeight: FontWeight.w400,
                         color: CusColors.text,
                       ),
@@ -110,7 +135,12 @@ class _HelpPageState extends State<HelpPage> {
                           children: [
                             SvgPicture.asset(
                               'assets/svg/whatsapp.svg',
-                              height: 30,
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 25,
+                                desktop: 30,
+                              ),
                             ),
                             const SizedBox(
                               width: 20,
@@ -119,7 +149,12 @@ class _HelpPageState extends State<HelpPage> {
                               'Chat us',
                               style: GoogleFonts.poppins(
                                 color: CusColors.subHeader,
-                                fontSize: width * .01,
+                                fontSize: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: width * .018,
+                                  tablet: width * .015,
+                                  desktop: width * .01,
+                                ),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -138,10 +173,15 @@ class _HelpPageState extends State<HelpPage> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(
+                          Icon(
                             IconlyLight.call,
-                            size: 30,
-                            color: Color(0xFF0081FE),
+                            size: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 20,
+                              tablet: 25,
+                              desktop: 30,
+                            ),
+                            color: const Color(0xFF0081FE),
                           ),
                           const SizedBox(
                             width: 20,
@@ -150,7 +190,12 @@ class _HelpPageState extends State<HelpPage> {
                             '+62-21-7721-0358',
                             style: GoogleFonts.poppins(
                               color: CusColors.subHeader,
-                              fontSize: width * .01,
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .018,
+                                tablet: width * .015,
+                                desktop: width * .01,
+                              ),
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -170,10 +215,15 @@ class _HelpPageState extends State<HelpPage> {
                         onTap: launchEmail,
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               IconlyLight.message,
-                              size: 30,
-                              color: Color(0xFF0081FE),
+                              size: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 25,
+                                desktop: 30,
+                              ),
+                              color: const Color(0xFF0081FE),
                             ),
                             const SizedBox(
                               width: 20,
@@ -182,7 +232,12 @@ class _HelpPageState extends State<HelpPage> {
                               'Email us',
                               style: GoogleFonts.poppins(
                                 color: CusColors.subHeader,
-                                fontSize: width * .01,
+                                fontSize: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: width * .018,
+                                  tablet: width * .015,
+                                  desktop: width * .01,
+                                ),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -241,7 +296,14 @@ class _HelpListState extends State<HelpList> {
                 duration: const Duration(microseconds: 1),
                 curve: Curves.ease,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding: EdgeInsets.symmetric(
+                    vertical: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 8,
+                      tablet: 10,
+                      desktop: 25,
+                    ),
+                  ),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     border: Border.symmetric(
@@ -262,24 +324,57 @@ class _HelpListState extends State<HelpList> {
                               softWrap: true,
                               style: GoogleFonts.poppins(
                                 color: CusColors.title,
-                                fontSize: width * .011,
+                                fontSize: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: width * .019,
+                                  tablet: width * .016,
+                                  desktop: width * .011,
+                                ),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                           expandStates[index]!
-                              ? const Icon(Icons.keyboard_arrow_up)
-                              : const Icon(Icons.keyboard_arrow_down)
+                              ? Icon(
+                                  Icons.keyboard_arrow_up,
+                                  size: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 18,
+                                    tablet: 22,
+                                    desktop: 24,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 18,
+                                    tablet: 22,
+                                    desktop: 24,
+                                  ),
+                                ),
                         ],
                       ),
                       if (expandStates[index]!)
                         Padding(
-                          padding: const EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.only(
+                            top: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 10,
+                              tablet: 15,
+                              desktop: 20,
+                            ),
+                          ),
                           child: Text(
                             helps[index].answer!,
                             style: GoogleFonts.poppins(
                               color: CusColors.subHeader,
-                              fontSize: width * .01,
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .018,
+                                tablet: width * .015,
+                                desktop: width * .01,
+                              ),
                               fontWeight: FontWeight.w300,
                             ),
                           ),

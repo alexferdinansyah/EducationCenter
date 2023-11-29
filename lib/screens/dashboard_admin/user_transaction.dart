@@ -33,6 +33,33 @@ class _UserTransactionState extends State<UserTransaction> {
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    var deviceType = getDeviceType(MediaQuery.of(context).size);
+    double title = 0;
+    double subHeader = 0;
+    double fixedWidthStatus = 0;
+
+    switch (deviceType) {
+      case DeviceScreenType.desktop:
+        subHeader = width * .01;
+        title = width * .014;
+        fixedWidthStatus = 180;
+        break;
+      case DeviceScreenType.tablet:
+        subHeader = width * .015;
+        title = width * .019;
+        fixedWidthStatus = 170;
+
+        break;
+      case DeviceScreenType.mobile:
+        subHeader = width * .018;
+        title = width * .022;
+        fixedWidthStatus = 150;
+        break;
+      default:
+        subHeader = 0;
+        title = 0;
+    }
     return StreamBuilder(
       stream: firestoreService.userRequestTransaction,
       builder: (BuildContext context, snapshot) {
@@ -53,7 +80,7 @@ class _UserTransactionState extends State<UserTransaction> {
               DataCell(Text(
                 counter.toString(),
                 style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w500,
                     color: const Color(0xFF121212)),
               )),
@@ -64,14 +91,14 @@ class _UserTransactionState extends State<UserTransaction> {
                   Text(
                     transaction.item!.title!,
                     style: GoogleFonts.poppins(
-                        fontSize: width * .01,
+                        fontSize: subHeader,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF121212)),
                   ),
                   Text(
                     transaction.item!.subTitle!,
                     style: GoogleFonts.poppins(
-                        fontSize: width * .01,
+                        fontSize: subHeader,
                         fontWeight: FontWeight.w400,
                         color: const Color(0xFF7D8398)),
                   ),
@@ -80,28 +107,28 @@ class _UserTransactionState extends State<UserTransaction> {
               DataCell(Text(
                 transaction.invoiceDate!.formatDate(),
                 style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
               DataCell(Text(
-                transaction.date!.formatDate(),
+                transaction.date!.formatDateAndTime(),
                 style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
               DataCell(Text(
                 transaction.price!,
                 style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
               DataCell(Text(
                 userData.name,
                 style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
@@ -117,40 +144,61 @@ class _UserTransactionState extends State<UserTransaction> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
-                    // mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       transaction.status == 'Success'
-                          ? const Icon(
+                          ? Icon(
                               Icons.done,
-                              color: Color(0xFF91C561),
+                              color: const Color(0xFF91C561),
+                              size: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 22,
+                                desktop: 24,
+                              ),
                             )
                           : transaction.status == 'Pending'
-                              ? const Icon(
+                              ? Icon(
                                   CupertinoIcons.rays,
-                                  color: Color(0xFFD6A243),
+                                  color: const Color(0xFFD6A243),
+                                  size: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 20,
+                                    tablet: 22,
+                                    desktop: 24,
+                                  ),
                                 )
-                              : const Icon(Icons.close, color: Colors.white),
+                              : Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 20,
+                                    tablet: 22,
+                                    desktop: 24,
+                                  ),
+                                ),
                       const SizedBox(
                         width: 5,
                       ),
-                      Text(transaction.status!,
-                          style: GoogleFonts.poppins(
-                              fontSize: width * .01,
-                              fontWeight: FontWeight.w400,
-                              color: transaction.status == 'Success'
-                                  ? const Color(0xFF91C561)
-                                  : transaction.status == 'Pending'
-                                      ? const Color(0xFFD6A243)
-                                      : Colors.white))
+                      Expanded(
+                        child: Text(transaction.status!,
+                            style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w400,
+                                color: transaction.status == 'Success'
+                                    ? const Color(0xFF91C561)
+                                    : transaction.status == 'Pending'
+                                        ? const Color(0xFFD6A243)
+                                        : Colors.white)),
+                      )
                     ],
                   ),
                 ),
               )),
               DataCell(GestureDetector(
                 onTap: () {
-                  showModalInvoice(width, transaction.invoice, userData,
-                      transactionId, transaction);
+                  showModalInvoice(width, transaction.invoice, subHeader, title,
+                      userData, transactionId, transaction);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -179,12 +227,14 @@ class _UserTransactionState extends State<UserTransaction> {
                         const SizedBox(
                           width: 5,
                         ),
-                        Text(
-                          'View Invoice',
-                          style: GoogleFonts.poppins(
-                              fontSize: width * .01,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF121212)),
+                        Expanded(
+                          child: Text(
+                            'View Invoice',
+                            style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF121212)),
+                          ),
                         )
                       ],
                     ),
@@ -230,7 +280,7 @@ class _UserTransactionState extends State<UserTransaction> {
                       Text(
                         'User Transactions',
                         style: GoogleFonts.poppins(
-                          fontSize: width * .014,
+                          fontSize: title,
                           fontWeight: FontWeight.w500,
                           color: const Color(0xFF1F384C),
                         ),
@@ -250,7 +300,13 @@ class _UserTransactionState extends State<UserTransaction> {
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(
+                              value,
+                              style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w400,
+                                  color: const Color(0xFF7D8398)),
+                            ),
                           );
                         }).toList(),
                       ),
@@ -268,6 +324,7 @@ class _UserTransactionState extends State<UserTransaction> {
                               tablet: 1000,
                               desktop: 1300,
                             ),
+                            isHorizontalScrollBarVisible: false,
                             empty: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -285,16 +342,26 @@ class _UserTransactionState extends State<UserTransaction> {
                                   child: Text(
                                     'No transation data',
                                     style: GoogleFonts.poppins(
-                                        fontSize: width * .01,
+                                        fontSize: subHeader,
                                         fontWeight: FontWeight.w400,
                                         color: const Color(0xFF7D8398)),
                                   ),
                                 ),
                               ],
                             ),
-                            dataRowHeight: 90,
+                            dataRowHeight: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 60,
+                              tablet: 70,
+                              desktop: 90,
+                            ),
                             dividerThickness: .5,
-                            headingRowHeight: 70,
+                            headingRowHeight: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 40,
+                              tablet: 50,
+                              desktop: 70,
+                            ),
                             dataRowColor: const MaterialStatePropertyAll(
                                 Color(0xFFfcfcfc)),
                             border: TableBorder.symmetric(
@@ -303,45 +370,47 @@ class _UserTransactionState extends State<UserTransaction> {
                             )),
                             showBottomBorder: false,
                             headingTextStyle: GoogleFonts.poppins(
-                                fontSize: width * .01,
+                                fontSize: subHeader,
                                 fontWeight: FontWeight.w500,
                                 color: const Color(0xFF121212)),
-                            columns: const [
-                              DataColumn2(
+                            columns: [
+                              const DataColumn2(
                                   fixedWidth: 50,
                                   label: Text(
                                     'No',
                                   )),
-                              DataColumn2(
+                              const DataColumn2(
                                   size: ColumnSize.L,
                                   label: Text(
                                     'Name',
                                   )),
-                              DataColumn2(
+                              const DataColumn2(
                                   label: Text(
                                 'Invoice Date',
                               )),
-                              DataColumn2(
+                              const DataColumn2(
                                   label: Text(
                                 'Date',
                               )),
-                              DataColumn2(
+                              const DataColumn2(
                                   size: ColumnSize.S,
                                   label: Text(
                                     'Price',
                                   )),
-                              DataColumn2(
+                              const DataColumn2(
                                   label: Text(
                                 'User',
                               )),
                               DataColumn2(
-                                  label: Text(
-                                'Status',
-                              )),
+                                  fixedWidth: fixedWidthStatus,
+                                  label: const Text(
+                                    'Status',
+                                  )),
                               DataColumn2(
-                                  label: Text(
-                                'Actions',
-                              )),
+                                  fixedWidth: fixedWidthStatus,
+                                  label: const Text(
+                                    'Actions',
+                                  )),
                             ],
                             rows: dataRows),
                       ),
@@ -366,8 +435,8 @@ class _UserTransactionState extends State<UserTransaction> {
     );
   }
 
-  void showModalInvoice(width, imageUrl, UserData user, transactionId,
-      TransactionModel transaction) {
+  void showModalInvoice(width, imageUrl, subHeader, title, UserData user,
+      transactionId, TransactionModel transaction) {
     showDialog(
       context: context,
       builder: (_) {
@@ -385,7 +454,7 @@ class _UserTransactionState extends State<UserTransaction> {
               Text(
                 'Invoice',
                 style: GoogleFonts.poppins(
-                  fontSize: width * .014,
+                  fontSize: title,
                   fontWeight: FontWeight.w500,
                   color: const Color(0xFF1F384C),
                 ),
@@ -393,7 +462,15 @@ class _UserTransactionState extends State<UserTransaction> {
               const Spacer(),
               GestureDetector(
                 onTap: () => Get.back(),
-                child: const Icon(Icons.close),
+                child: Icon(
+                  Icons.close,
+                  size: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 20,
+                    tablet: 22,
+                    desktop: 24,
+                  ),
+                ),
               )
             ],
           ),
@@ -403,7 +480,7 @@ class _UserTransactionState extends State<UserTransaction> {
               Text(
                 'Unique code : ${transaction.uniqueCode}',
                 style: GoogleFonts.poppins(
-                  fontSize: width * .014,
+                  fontSize: subHeader,
                   fontWeight: FontWeight.w500,
                   color: const Color(0xFF1F384C),
                 ),
@@ -411,7 +488,7 @@ class _UserTransactionState extends State<UserTransaction> {
               Text(
                 'User bank name : ${transaction.bankName}',
                 style: GoogleFonts.poppins(
-                  fontSize: width * .014,
+                  fontSize: subHeader,
                   fontWeight: FontWeight.w500,
                   color: const Color(0xFF1F384C),
                 ),
@@ -425,72 +502,85 @@ class _UserTransactionState extends State<UserTransaction> {
             ],
           )),
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                Get.back();
-                showCancelTransaction(width, user, transactionId, transaction);
-              },
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                  ),
-                  foregroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 234, 47, 47),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 234, 47, 47),
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+            if (transaction.status == 'Pending' ||
+                transaction.status == 'Failed')
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                      showCancelTransaction(width, user, subHeader, title,
+                          transactionId, transaction);
+                    },
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 18),
+                        ),
+                        foregroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 234, 47, 47),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 234, 47, 47),
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        )),
+                    child: Text(
+                      'Cancel',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
                     ),
-                  )),
-              child: Text(
-                'Cancel',
-                style: GoogleFonts.poppins(
-                  fontSize: width * .01,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Get.back();
-                showConfirmTransaction(width, user, transactionId, transaction);
-              },
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
                   ),
-                  foregroundColor: MaterialStateProperty.all(
-                    const Color(0xFF4351FF),
+                  const SizedBox(
+                    width: 15,
                   ),
-                  backgroundColor: MaterialStateProperty.all(
-                    const Color(0xFF4351FF),
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                      showConfirmTransaction(width, user, subHeader, title,
+                          transactionId, transaction);
+                    },
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 18),
+                        ),
+                        foregroundColor: MaterialStateProperty.all(
+                          const Color(0xFF4351FF),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                          const Color(0xFF4351FF),
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        )),
+                    child: Text(
+                      'Confirm',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
                     ),
-                  )),
-              child: Text(
-                'Confirm',
-                style: GoogleFonts.poppins(
-                  fontSize: width * .01,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+                  ),
+                ],
               ),
-            ),
           ],
         );
       },
     );
   }
 
-  void showConfirmTransaction(
-      width, UserData user, transactionId, TransactionModel transaction) {
+  void showConfirmTransaction(width, UserData user, subHeader, title,
+      transactionId, TransactionModel transaction) {
     showDialog(
         context: context,
         builder: (_) {
@@ -508,7 +598,7 @@ class _UserTransactionState extends State<UserTransaction> {
                   Text(
                     'Detail',
                     style: GoogleFonts.poppins(
-                      fontSize: width * .014,
+                      fontSize: title,
                       fontWeight: FontWeight.w500,
                       color: const Color(0xFF1F384C),
                     ),
@@ -538,7 +628,7 @@ class _UserTransactionState extends State<UserTransaction> {
                 child: Text(
                   'Cancel',
                   style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w500,
                     color: CusColors.secondaryText,
                   ),
@@ -572,7 +662,7 @@ class _UserTransactionState extends State<UserTransaction> {
                 child: Text(
                   'Confirm',
                   style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
@@ -583,8 +673,8 @@ class _UserTransactionState extends State<UserTransaction> {
         });
   }
 
-  void showCancelTransaction(
-      width, UserData user, transactionId, TransactionModel transaction) {
+  void showCancelTransaction(width, UserData user, subHeader, title,
+      transactionId, TransactionModel transaction) {
     showDialog(
         context: context,
         builder: (_) {
@@ -602,7 +692,7 @@ class _UserTransactionState extends State<UserTransaction> {
                   Text(
                     'Detail',
                     style: GoogleFonts.poppins(
-                      fontSize: width * .014,
+                      fontSize: title,
                       fontWeight: FontWeight.w500,
                       color: const Color(0xFF1F384C),
                     ),
@@ -635,7 +725,7 @@ class _UserTransactionState extends State<UserTransaction> {
                             context: context,
                             mobile: width * .018,
                             tablet: width * .015,
-                            desktop: width * .01,
+                            desktop: subHeader,
                           ),
                           fontWeight: FontWeight.w500,
                           color: CusColors.text,
@@ -656,7 +746,7 @@ class _UserTransactionState extends State<UserTransaction> {
                               context: context,
                               mobile: width * .018,
                               tablet: width * .015,
-                              desktop: width * .01,
+                              desktop: subHeader,
                             ),
                             fontWeight: FontWeight.w500,
                             color: CusColors.secondaryText,
@@ -685,7 +775,7 @@ class _UserTransactionState extends State<UserTransaction> {
                 child: Text(
                   'Cancel',
                   style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w500,
                     color: CusColors.secondaryText,
                   ),
@@ -719,7 +809,7 @@ class _UserTransactionState extends State<UserTransaction> {
                 child: Text(
                   'Confirm',
                   style: GoogleFonts.poppins(
-                    fontSize: width * .01,
+                    fontSize: subHeader,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),

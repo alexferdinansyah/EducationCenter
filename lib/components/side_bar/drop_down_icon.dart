@@ -69,14 +69,14 @@ abstract class MenuItems {
 
     switch (item) {
       case MenuItems.home:
-        Get.toNamed(routeHome);
+        Get.rootDelegate.toNamed(routeHome);
         break;
       case MenuItems.settings:
-        Get.to(DashboardApp(selected: 'Settings'));
+        Get.rootDelegate.toNamed(routeSettings);
         break;
       case MenuItems.logout:
         logout();
-        Get.offAndToNamed(routeLogin);
+        Get.rootDelegate.offAndToNamed(routeLogin);
         break;
     }
   }

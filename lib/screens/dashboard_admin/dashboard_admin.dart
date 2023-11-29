@@ -8,6 +8,7 @@ import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_course.dart';
+import 'package:project_tc/screens/dashboard_admin/coupon_pages.dart';
 import 'package:project_tc/screens/dashboard_admin/user_transaction.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +71,8 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           return const UserTransaction();
         case 'Courses':
           return const AdminCourse();
+        case 'Coupons':
+          return const AdminCoupons();
         default:
           return Container(); // Handle the default case here
       }
@@ -328,7 +331,7 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
   final List<SideItem> sidebarItems = [
     const SideItem(icon: IconlyBold.buy, title: 'User Transaction'),
     const SideItem(icon: IconlyBold.category, title: 'Courses'),
-    // const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
+    const SideItem(icon: IconlyBold.discount, title: 'Coupons'),
     // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];

@@ -7,7 +7,7 @@ class Course {
   String? description;
   bool? isBundle;
   bool? isBestSales;
-  bool? isDraf;
+  bool? isDraft;
   String? totalCourse;
   List<ListCourse>? listCourse;
   List<ChapterList>? chapterList;
@@ -25,7 +25,7 @@ class Course {
     required this.title,
     required this.isBundle,
     this.isBestSales,
-    this.isDraf,
+    this.isDraft,
     this.totalCourse = "",
     this.description,
     this.listCourse,
@@ -59,7 +59,7 @@ class Course {
       description: data['description'],
       isBundle: data['is_bundle'],
       isBestSales: data['best_sales'],
-      isDraf: data['is_draf'],
+      isDraft: data['is_draft'],
       totalCourse: data['total_course'],
       listCourse: courseLists,
       chapterList: chapterLists,
@@ -83,7 +83,7 @@ class Course {
       'description': description,
       'is_bundle': isBundle,
       'best_sales': isBestSales ?? false,
-      'is_draf': isDraf,
+      'is_draft': isDraft,
       'total_course': totalCourse,
       'list_course': listCourse?.map((course) => course.toFirestore()).toList(),
       'chapter_list':

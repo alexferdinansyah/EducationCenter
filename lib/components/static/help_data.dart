@@ -19,10 +19,6 @@ List<HelpModel> helps = [
     answer: 'Yes, you can choose online or offline classes and flexible times.',
   ),
   HelpModel(
-    question: 'If i work, can be i join DEC?',
-    answer: 'Yes, you can choose online or offline classes and flexible times.',
-  ),
-  HelpModel(
     question: 'Is it true that you will get an internship',
     answer:
         'So true. Because DEC collaborates with several companies and there will be an interview test regarding the internship program.',

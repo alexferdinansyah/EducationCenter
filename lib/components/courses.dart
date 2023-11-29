@@ -202,12 +202,12 @@ class Courses extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       if (course.isBundle == true) {
-                        Get.toNamed(
+                        Get.rootDelegate.toNamed(
                           routeDetailBundleCourse,
                           parameters: {'id': id},
                         );
                       } else {
-                        Get.toNamed(
+                        Get.rootDelegate.toNamed(
                           routeDetailSingleCourse,
                           parameters: {'id': id},
                         );
@@ -504,12 +504,12 @@ class MyCourse extends StatelessWidget {
                               onPressed!();
                             } else {
                               if (isPaid == true) {
-                                Get.toNamed(
+                                Get.rootDelegate.toNamed(
                                   routeLearnCourse,
                                   parameters: {'id': id},
                                 );
                               } else {
-                                Get.toNamed(
+                                Get.rootDelegate.toNamed(
                                   routeOfferLearnCourse,
                                   parameters: {'id': id},
                                 );

@@ -169,7 +169,7 @@ class _LandingPageState extends State<LandingPage> {
                     final dynamic data = courseMap['course'];
                     return data is Course &&
                         data.isBundle == false &&
-                        data.isDraf == false;
+                        data.isDraft == false;
                   })
                   .map((courseMap) {
                     final Course course = courseMap['course'];
@@ -349,7 +349,7 @@ class _LandingPageState extends State<LandingPage> {
                                 ),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.toNamed(routeCourses);
+                                    Get.rootDelegate.toNamed(routeCourses);
                                   },
                                   style: ButtonStyle(
                                     shape: MaterialStateProperty.all<
@@ -523,7 +523,7 @@ class _LandingPageState extends State<LandingPage> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Get.toNamed(routeArticle);
+                                  Get.rootDelegate.toNamed(routeArticle);
                                 },
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
@@ -715,7 +715,7 @@ class HeaderLandingPage extends StatelessWidget {
                                     ]),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.toNamed(routeLogin);
+                                    Get.rootDelegate.toNamed(routeLogin);
                                   },
                                   style: ButtonStyle(
                                     shape: MaterialStateProperty.all<
@@ -836,7 +836,7 @@ class HeaderLandingPage extends StatelessWidget {
                                 ),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.toNamed(routeLogin);
+                                    Get.rootDelegate.toNamed(routeLogin);
                                   },
                                   style: ButtonStyle(
                                     shape: MaterialStateProperty.all<

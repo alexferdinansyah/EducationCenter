@@ -506,7 +506,7 @@ class _CourseFormModalState extends State<CourseFormModal> {
                       chapterList: [ChapterList(chapter: '', subChapter: [])],
                       learnLimit: learnLimit ?? '3',
                       price: price,
-                      isDraf: true,
+                      isDraft: true,
                       createdAt: DateTime.now());
 
                   await firestore.addCourse(data);
@@ -589,15 +589,15 @@ class _CourseFormModalState extends State<CourseFormModal> {
                       chapterList: [ChapterList(chapter: '', subChapter: [])],
                       learnLimit: learnLimit ?? '3',
                       price: price,
-                      isDraf: true,
+                      isDraft: true,
                       createdAt: DateTime.now());
 
                   final result = await firestore.addCourse(data);
-                  Get.toNamed(routeAdminDetailCourse,
+                  Get.rootDelegate.toNamed(routeAdminDetailCourse,
                       parameters: {'id': result});
                 }
                 if (widget.courseId != null) {
-                  Get.toNamed(routeAdminDetailCourse,
+                  Get.rootDelegate.toNamed(routeAdminDetailCourse,
                       parameters: {'id': widget.courseId!});
                 }
               }

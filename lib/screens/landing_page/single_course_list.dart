@@ -43,7 +43,7 @@ class SingleCourseList extends StatelessWidget {
                     final dynamic data = courseMap['course'];
                     return data is Course &&
                         data.isBundle == false &&
-                        data.isDraf == false;
+                        data.isDraft == false;
                   }).map((courseMap) {
                     final Course course = courseMap['course'];
                     final String id = courseMap['id'];

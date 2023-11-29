@@ -170,7 +170,7 @@ class _SignInMobileState extends State<SignInMobile> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.toNamed(routeForgotPassword);
+                                Get.rootDelegate.toNamed(routeForgotPassword);
                               },
                               child: Text('Forgot password ?',
                                   style: GoogleFonts.mulish(
@@ -362,8 +362,8 @@ class _SignInMobileState extends State<SignInMobile> {
                                     mouseCursor:
                                         MaterialStateMouseCursor.clickable,
                                     recognizer: TapGestureRecognizer()
-                                      ..onTap =
-                                          () => Get.toNamed(routeRegister))
+                                      ..onTap = () => Get.rootDelegate
+                                          .toNamed(routeRegister))
                               ]),
                         ),
                       ),

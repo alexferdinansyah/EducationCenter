@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class MembershipUpgrade extends StatefulWidget {
@@ -60,23 +59,40 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                     Padding(
                       padding: const EdgeInsets.only(right: 5),
                       child: GestureDetector(
-                          onTap: () => Get.off(
-                              DashboardApp(selected: 'Membership'),
-                              routeName: routeMembershipInfo),
-                          child: const Icon(Icons.arrow_back_rounded)),
+                          onTap: () =>
+                              Get.rootDelegate.offNamed(routeMembershipInfo),
+                          child: Icon(
+                            Icons.arrow_back_rounded,
+                            size: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 18,
+                              tablet: 22,
+                              desktop: 24,
+                            ),
+                          )),
                     ),
                     Text(
                       'Membership Upgrade',
                       style: GoogleFonts.poppins(
-                        fontSize: width * .014,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .021,
+                          tablet: width * .019,
+                          desktop: width * .014,
+                        ),
                         fontWeight: FontWeight.w500,
                         color: const Color(0xFF1F384C),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 30,
+                    tablet: 35,
+                    desktop: 50,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +102,12 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                         Text(
                           'Choose Membership Type',
                           style: GoogleFonts.poppins(
-                            fontSize: width * .013,
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .021,
+                              tablet: width * .018,
+                              desktop: width * .013,
+                            ),
                             fontWeight: FontWeight.w500,
                             color: const Color(0xFF1F384C),
                           ),
@@ -96,7 +117,12 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                           child: Text(
                             'Upgrade your membership to gains more courses',
                             style: GoogleFonts.poppins(
-                              fontSize: width * .011,
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .019,
+                                tablet: width * .016,
+                                desktop: width * .011,
+                              ),
                               fontWeight: FontWeight.w400,
                               color: CusColors.sidebarInactive,
                             ),
@@ -106,9 +132,20 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: width / 5,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 30),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 15,
+                                  tablet: 20,
+                                  desktop: 25,
+                                ),
+                                vertical: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 20,
+                                  tablet: 25,
+                                  desktop: 30,
+                                ),
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(24),
                                 boxShadow: [
@@ -133,7 +170,12 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       children: [
                                         SvgPicture.asset(
                                           'assets/svg/basic_plan.svg',
-                                          height: 60,
+                                          height: getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: 35,
+                                            tablet: 40,
+                                            desktop: 60,
+                                          ),
                                         ),
                                         Padding(
                                           padding:
@@ -145,7 +187,14 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                               Text(
                                                 'For Starter',
                                                 style: GoogleFonts.poppins(
-                                                  fontSize: width * .01,
+                                                  fontSize:
+                                                      getValueForScreenType<
+                                                          double>(
+                                                    context: context,
+                                                    mobile: width * .018,
+                                                    tablet: width * .015,
+                                                    desktop: width * .01,
+                                                  ),
                                                   fontWeight: FontWeight.w500,
                                                   color:
                                                       const Color(0xFF6F6C90),
@@ -154,7 +203,14 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                               Text(
                                                 'Basic',
                                                 style: GoogleFonts.poppins(
-                                                  fontSize: width * .012,
+                                                  fontSize:
+                                                      getValueForScreenType<
+                                                          double>(
+                                                    context: context,
+                                                    mobile: width * .020,
+                                                    tablet: width * .017,
+                                                    desktop: width * .012,
+                                                  ),
                                                   fontWeight: FontWeight.w600,
                                                   color:
                                                       const Color(0xFF170F49),
@@ -167,24 +223,55 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 15),
-                                      child: Text(
-                                        'Welcome to our website, please enjoy your free content',
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: width * .01,
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xFF6F6C90),
+                                      child: SizedBox(
+                                        width: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width / 3.7,
+                                          tablet: width / 5,
+                                          desktop: width / 6,
+                                        ),
+                                        child: Text(
+                                          'Welcome to our website, please enjoy your free content',
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .018,
+                                              tablet: width * .015,
+                                              desktop: width * .01,
+                                            ),
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xFF6F6C90),
+                                          ),
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 15, bottom: 20),
+                                      padding: EdgeInsets.only(
+                                          top: getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: 10,
+                                            tablet: 13,
+                                            desktop: 15,
+                                          ),
+                                          bottom: getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: 12,
+                                            tablet: 15,
+                                            desktop: 20,
+                                          )),
                                       child: Text(
                                         'Rp 0',
                                         style: GoogleFonts.poppins(
-                                          fontSize: width * .02,
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .028,
+                                            tablet: width * .025,
+                                            desktop: width * .02,
+                                          ),
                                           fontWeight: FontWeight.w700,
                                           color: const Color(0xFF170F49),
                                         ),
@@ -196,7 +283,13 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       child: Text(
                                         "What's included",
                                         style: GoogleFonts.poppins(
-                                          fontSize: width * .009,
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .017,
+                                            tablet: width * .014,
+                                            desktop: width * .009,
+                                          ),
                                           fontWeight: FontWeight.w600,
                                           color: const Color(0xFF170F49),
                                         ),
@@ -204,98 +297,204 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "First 3 videos free",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Lifetime courses",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Normal support",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
-                                    const SizedBox(
-                                      height: 25,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 15,
+                                        tablet: 20,
+                                        desktop: 25,
+                                      ),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        widget.membershipData.memberType ==
-                                                'Basic'
-                                            ? Text(
-                                                'Current Membership',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: width * .01,
-                                                  fontWeight: FontWeight.w600,
-                                                  color:
-                                                      const Color(0xFF4351FF),
-                                                ),
-                                              )
-                                            : Text(
-                                                'Already join pro member',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: width * .01,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: CusColors.inactive,
-                                                ),
-                                              )
-                                      ],
+                                    SizedBox(
+                                      width: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: width / 3.7,
+                                        tablet: width / 5,
+                                        desktop: width / 6,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          widget.membershipData.memberType ==
+                                                  'Basic'
+                                              ? Text(
+                                                  'Current Membership',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize:
+                                                        getValueForScreenType<
+                                                            double>(
+                                                      context: context,
+                                                      mobile: width * .018,
+                                                      tablet: width * .015,
+                                                      desktop: width * .01,
+                                                    ),
+                                                    fontWeight: FontWeight.w600,
+                                                    color:
+                                                        const Color(0xFF4351FF),
+                                                  ),
+                                                )
+                                              : Text(
+                                                  'Already join pro member',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize:
+                                                        getValueForScreenType<
+                                                            double>(
+                                                      context: context,
+                                                      mobile: width * .018,
+                                                      tablet: width * .015,
+                                                      desktop: width * .01,
+                                                    ),
+                                                    fontWeight: FontWeight.w600,
+                                                    color: CusColors.inactive,
+                                                  ),
+                                                )
+                                        ],
+                                      ),
                                     ),
                                   ]),
                             ),
-                            const SizedBox(
-                              width: 40,
+                            SizedBox(
+                              width: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 30,
+                                desktop: 40,
+                              ),
                             ),
                             Container(
-                              width: width / 5,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 30),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 15,
+                                  tablet: 20,
+                                  desktop: 25,
+                                ),
+                                vertical: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 20,
+                                  tablet: 25,
+                                  desktop: 30,
+                                ),
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(24),
                                 boxShadow: [
@@ -320,7 +519,12 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       children: [
                                         SvgPicture.asset(
                                           'assets/svg/pro_plan.svg',
-                                          height: 60,
+                                          height: getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: 35,
+                                            tablet: 40,
+                                            desktop: 60,
+                                          ),
                                         ),
                                         Padding(
                                           padding:
@@ -332,7 +536,14 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                               Text(
                                                 'For Serious',
                                                 style: GoogleFonts.poppins(
-                                                  fontSize: width * .01,
+                                                  fontSize:
+                                                      getValueForScreenType<
+                                                          double>(
+                                                    context: context,
+                                                    mobile: width * .018,
+                                                    tablet: width * .015,
+                                                    desktop: width * .01,
+                                                  ),
                                                   fontWeight: FontWeight.w500,
                                                   color:
                                                       const Color(0xFF6F6C90),
@@ -341,7 +552,14 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                               Text(
                                                 'Pro',
                                                 style: GoogleFonts.poppins(
-                                                  fontSize: width * .012,
+                                                  fontSize:
+                                                      getValueForScreenType<
+                                                          double>(
+                                                    context: context,
+                                                    mobile: width * .020,
+                                                    tablet: width * .017,
+                                                    desktop: width * .012,
+                                                  ),
                                                   fontWeight: FontWeight.w600,
                                                   color:
                                                       const Color(0xFF170F49),
@@ -354,24 +572,55 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 15),
-                                      child: Text(
-                                        'Join our pro member for more advantage',
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: width * .01,
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xFF6F6C90),
+                                      child: SizedBox(
+                                        width: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width / 3.7,
+                                          tablet: width / 5,
+                                          desktop: width / 6,
+                                        ),
+                                        child: Text(
+                                          'Join our pro member for more advantage',
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .018,
+                                              tablet: width * .015,
+                                              desktop: width * .01,
+                                            ),
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xFF6F6C90),
+                                          ),
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 15, bottom: 20),
+                                      padding: EdgeInsets.only(
+                                          top: getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: 10,
+                                            tablet: 13,
+                                            desktop: 15,
+                                          ),
+                                          bottom: getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: 12,
+                                            tablet: 15,
+                                            desktop: 20,
+                                          )),
                                       child: Text(
                                         'Rp 35,000',
                                         style: GoogleFonts.poppins(
-                                          fontSize: width * .02,
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .028,
+                                            tablet: width * .025,
+                                            desktop: width * .02,
+                                          ),
                                           fontWeight: FontWeight.w700,
                                           color: const Color(0xFF170F49),
                                         ),
@@ -383,7 +632,13 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                       child: Text(
                                         "What's included",
                                         style: GoogleFonts.poppins(
-                                          fontSize: width * .009,
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .017,
+                                            tablet: width * .014,
+                                            desktop: width * .009,
+                                          ),
                                           fontWeight: FontWeight.w600,
                                           color: const Color(0xFF170F49),
                                         ),
@@ -391,98 +646,203 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Paid tutorial",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Lifetime courses",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Pro support",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Plus two free videos",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(
-                                          Icons.check_circle,
-                                          color: Color(0xFF4351FF),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 3),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: const Color(0xFF4351FF),
+                                            size: getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 18,
+                                              tablet: 20,
+                                              desktop: 24,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           "Discount up to 10-20%",
                                           style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width * .017,
+                                              tablet: width * .014,
+                                              desktop: width * .009,
+                                            ),
                                             fontWeight: FontWeight.w500,
                                             color: const Color(0xFF170F49),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 8,
+                                    SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 4,
+                                        tablet: 5,
+                                        desktop: 8,
+                                      ),
                                     ),
                                     SizedBox(
                                       height:
@@ -492,23 +852,52 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                               : 10,
                                     ),
                                     widget.membershipData.memberType != 'Basic'
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'Current Membership',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: width * .01,
-                                                  fontWeight: FontWeight.w600,
-                                                  color:
-                                                      const Color(0xFF4351FF),
+                                        ? SizedBox(
+                                            width:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width / 3.7,
+                                              tablet: width / 5,
+                                              desktop: width / 6,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  'Current Membership',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize:
+                                                        getValueForScreenType<
+                                                            double>(
+                                                      context: context,
+                                                      mobile: width * .018,
+                                                      tablet: width * .015,
+                                                      desktop: width * .01,
+                                                    ),
+                                                    fontWeight: FontWeight.w600,
+                                                    color:
+                                                        const Color(0xFF4351FF),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           )
                                         : Container(
-                                            width: double.infinity,
+                                            width:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: width / 3.7,
+                                              tablet: width / 5,
+                                              desktop: width / 6,
+                                            ),
+                                            height:
+                                                getValueForScreenType<double>(
+                                              context: context,
+                                              mobile: 26,
+                                              tablet: 33,
+                                              desktop: 40,
+                                            ),
                                             decoration: BoxDecoration(
                                               color: const Color(0xFF4351FF),
                                               borderRadius:
@@ -516,15 +905,8 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                             ),
                                             child: ElevatedButton(
                                               onPressed: () {
-                                                Get.to(
-                                                    () => DashboardApp(
-                                                          selected:
-                                                              'Membership-Payment',
-                                                          optionalSelected:
-                                                              'Settings',
-                                                        ),
-                                                    routeName:
-                                                        'membership-upgrade-payment');
+                                                Get.rootDelegate.toNamed(
+                                                    routeMembershipUpgrade);
                                               },
                                               style: ButtonStyle(
                                                 shape:
@@ -534,12 +916,6 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             8),
-                                                  ),
-                                                ),
-                                                padding: MaterialStateProperty
-                                                    .all<EdgeInsetsGeometry>(
-                                                  EdgeInsets.symmetric(
-                                                    vertical: height * 0.015,
                                                   ),
                                                 ),
                                                 backgroundColor:
@@ -554,7 +930,14 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                                 style: GoogleFonts.mulish(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.white,
-                                                  fontSize: width * 0.01,
+                                                  fontSize:
+                                                      getValueForScreenType<
+                                                          double>(
+                                                    context: context,
+                                                    mobile: width * .018,
+                                                    tablet: width * .015,
+                                                    desktop: width * .01,
+                                                  ),
                                                 ),
                                               ),
                                             ),

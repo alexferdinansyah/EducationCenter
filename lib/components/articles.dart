@@ -154,7 +154,8 @@ class Articles extends StatelessWidget {
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(routeDetailArticle, parameters: {'id': id});
+                        Get.rootDelegate.toNamed(routeDetailArticle,
+                            parameters: {'id': id});
                       },
                       child: Text(
                         'Read more...',
@@ -220,8 +221,11 @@ class _ArticleListsState extends State<ArticleLists> {
       onEnter: (_) => _hovered(),
       onExit: (_) => _hovered(),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragUpdate: (_) {},
         onTap: () {
-          Get.toNamed(routeDetailArticle, parameters: {'id': widget.id});
+          Get.rootDelegate
+              .toNamed(routeDetailArticle, parameters: {'id': widget.id});
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -270,17 +274,19 @@ class _ArticleListsState extends State<ArticleLists> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             widget.article.image != ''
-                ? Padding(
-                    padding: EdgeInsets.only(bottom: height * .03),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image: widget.article.image!,
-                        height: height * .32,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
+                ? IgnorePointer(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: height * .03),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: widget.article.image!,
+                          height: height * .32,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                        ),
                       ),
                     ),
                   )

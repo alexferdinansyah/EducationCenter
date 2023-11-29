@@ -100,7 +100,7 @@ class _AdminDetailCourseState extends State<AdminDetailCourse> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    var argument = Get.parameters;
+    var argument = Get.rootDelegate.parameters;
     id = argument['id']!;
     controller.fetchDocument(id);
 
@@ -690,7 +690,7 @@ class _AdminDetailCourseState extends State<AdminDetailCourse> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (course.isDraf != false)
+                    if (course.isDraft != false)
                       SizedBox(
                         height: getValueForScreenType<double>(
                           context: context,
@@ -758,7 +758,7 @@ class _AdminDetailCourseState extends State<AdminDetailCourse> {
                           if (_formKey.currentState!.validate()) {
                             final FirestoreService firestore =
                                 FirestoreService(uid: user.uid);
-                            if (course.isDraf!) {
+                            if (course.isDraft!) {
                               await firestore.updateCourseEachField(
                                   courseId: id,
                                   fieldName: 'is_draf',
@@ -795,7 +795,7 @@ class _AdminDetailCourseState extends State<AdminDetailCourse> {
                               ),
                             )),
                         child: Text(
-                          course.isDraf! ? 'Publish' : 'Save',
+                          course.isDraft! ? 'Publish' : 'Save',
                           style: GoogleFonts.poppins(
                             fontSize: getValueForScreenType<double>(
                               context: context,

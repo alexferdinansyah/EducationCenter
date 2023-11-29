@@ -7,7 +7,6 @@ import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/reset_password.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class Settings extends StatefulWidget {
@@ -128,14 +127,7 @@ List<Setting> settingLists = [
     desc: 'Edit your profile',
     buttonText: 'Edit Profile',
     onTap: () {
-      Get.to(
-        () => DashboardApp(
-          selected: 'Edit-Profile',
-          optionalSelected: 'Settings',
-        ),
-        routeName: 'edit-profile',
-        popGesture: true,
-      );
+      Get.rootDelegate.toNamed(routeEditProfile);
     },
   ),
   Setting(
@@ -144,13 +136,7 @@ List<Setting> settingLists = [
     desc: 'See your membership status',
     buttonText: 'See Now',
     onTap: () {
-      Get.to(
-        () => DashboardApp(
-          selected: 'Membership',
-          optionalSelected: 'Settings',
-        ),
-        routeName: 'membership-info',
-      );
+      Get.rootDelegate.toNamed(routeMembershipInfo);
     },
   ),
   Setting(
@@ -173,7 +159,7 @@ List<Setting> settingLists = [
     desc: 'Verify your account for benefits',
     buttonText: 'Verify Now',
     onTap: () {
-      Get.toNamed(routeConfirmEmail);
+      Get.rootDelegate.toNamed(routeConfirmEmail);
     },
   ),
 ];

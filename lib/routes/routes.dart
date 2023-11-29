@@ -4,6 +4,7 @@ import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
+import 'package:project_tc/screens/dashboard_admin/create_coupon.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
@@ -13,6 +14,7 @@ import 'package:project_tc/screens/landing_page/detail_single_course.dart';
 import 'package:project_tc/screens/landing_page/landing_page.dart';
 import 'package:project_tc/screens/landing_page/single_course_list.dart';
 import 'package:project_tc/screens/learning/payment_page.dart';
+import 'package:project_tc/screens/middleware/admin_middleware.dart';
 import 'package:project_tc/screens/wrapper.dart';
 
 const String routeHome = '/home';
@@ -27,6 +29,7 @@ const String routeLogin = '/login';
 const String routeRegister = '/register';
 const String routeConfirmEmail = '/verify-account';
 const String routeForgotPassword = '/forgot-password';
+const String routeSettings = '/settings';
 const String routeEditProfile = '/edit-profile';
 const String routeMembershipInfo = '/membership-info';
 const String routeMembershipUpgrade = '/membership-upgrade';
@@ -35,6 +38,9 @@ const String routeLearnCourse = '/learn-course';
 const String routeOfferLearnCourse = '/learn-course/offers';
 const String routeBuyCourse = '/checkout/course';
 const String routeAdminDetailCourse = '/admin-detail-course';
+const String routeCreateCoupon = '/create-coupon';
+
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 final navKey = GlobalKey<NavigatorState>();
 
@@ -94,6 +100,10 @@ final getPages = [
     page: () => wrapWithAppView(const DetailArticle()),
   ),
   GetPage(
+    name: routeSettings,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
     name: routeEditProfile,
     page: () => const Wrapper(),
   ),
@@ -122,7 +132,11 @@ final getPages = [
     page: () => const PaymentPage(),
   ),
   GetPage(
-    name: routeAdminDetailCourse,
-    page: () => const AdminDetailCourse(),
-  ),
+      name: routeAdminDetailCourse,
+      page: () => const AdminDetailCourse(),
+      middlewares: [AdminMiddleware()]),
+  GetPage(
+      name: routeCreateCoupon,
+      page: () => const CreateCoupon(),
+      middlewares: [AdminMiddleware()]),
 ];

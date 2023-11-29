@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_tc/models/article.dart';
+import 'package:project_tc/models/coupon.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
@@ -24,6 +25,8 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('transactions');
   final CollectionReference meetRequestCollection =
       FirebaseFirestore.instance.collection('meet_request');
+  final CollectionReference couponCollection =
+      FirebaseFirestore.instance.collection('coupons');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -390,6 +393,7 @@ class FirestoreService {
   Stream<List<Map>> get userRequestTransaction {
     try {
       return transactionCollection
+          .orderBy('date', descending: true)
           .snapshots()
           .asyncMap((QuerySnapshot querySnapshot) async {
         List<Map<String, dynamic>> userTransaction = [];
@@ -456,6 +460,34 @@ class FirestoreService {
           .update({'status': 'Failed', 'reason': reason});
     } catch (e) {
       print('Error getting transaction data $e');
+    }
+  }
+
+  Stream<List<Map>> get couponsData {
+    try {
+      return transactionCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> coupons = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+
+          try {
+            coupons.add({
+              'id': document.id,
+              'coupon': Coupon.fromFirestore(data),
+            });
+          } catch (error) {
+            print('Error getting coupon data: $error');
+          }
+        }
+
+        return coupons;
+      });
+    } catch (error) {
+      print('Error streaming coupon: $error');
+      return Stream.value([]); // Return an empty list in case of an error
     }
   }
 

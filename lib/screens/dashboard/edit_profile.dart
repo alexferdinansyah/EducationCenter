@@ -86,6 +86,37 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
+    var deviceType = getDeviceType(MediaQuery.of(context).size);
+    double title = 0;
+    double subHeader = 0;
+    double text = 0;
+    double subText = 0;
+
+    switch (deviceType) {
+      case DeviceScreenType.desktop:
+        subHeader = width * .01;
+        title = width * .014;
+        text = width * .011;
+        subText = width * .009;
+        break;
+      case DeviceScreenType.tablet:
+        subHeader = width * .015;
+        title = width * .019;
+        text = width * .016;
+        subText = width * .014;
+
+        break;
+      case DeviceScreenType.mobile:
+        subHeader = width * .018;
+        title = width * .022;
+        text = width * .019;
+        subText = width * .017;
+        break;
+      default:
+        subHeader = 0;
+        title = 0;
+    }
     return Container(
       width: getValueForScreenType<double>(
         context: context,
@@ -124,33 +155,60 @@ class _EditProfileState extends State<EditProfile> {
                   Padding(
                     padding: const EdgeInsets.only(right: 5),
                     child: GestureDetector(
-                        onTap: () => Get.off(DashboardApp(selected: 'Settings'),
-                            routeName: routeLogin),
-                        child: const Icon(Icons.arrow_back_rounded)),
+                        onTap: () => Get.rootDelegate.offNamed(routeSettings),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          size: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 18,
+                            tablet: 22,
+                            desktop: 24,
+                          ),
+                        )),
                   ),
                   Text(
                     'My Profile',
                     style: GoogleFonts.poppins(
-                      fontSize: width * .014,
+                      fontSize: title,
                       fontWeight: FontWeight.w500,
                       color: const Color(0xFF1F384C),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 70,
+              SizedBox(
+                height: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 40,
+                  tablet: 55,
+                  desktop: 70,
+                ),
               ),
               SizedBox(
-                width: width / 1.7,
+                width: getValueForScreenType<double>(
+                  context: context,
+                  mobile: double.infinity,
+                  tablet: width / 1.5,
+                  desktop: width / 1.7,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         Container(
-                          width: 50,
-                          height: 50,
+                          width: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 35,
+                            tablet: 40,
+                            desktop: 50,
+                          ),
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 35,
+                            tablet: 40,
+                            desktop: 50,
+                          ),
                           margin: const EdgeInsets.only(right: 10),
                           decoration: BoxDecoration(
                             color: Colors.grey,
@@ -176,7 +234,7 @@ class _EditProfileState extends State<EditProfile> {
                             Text(
                               widget.userData.name,
                               style: GoogleFonts.poppins(
-                                fontSize: width * .011,
+                                fontSize: text,
                                 fontWeight: FontWeight.w600,
                                 color: CusColors.text,
                               ),
@@ -187,7 +245,7 @@ class _EditProfileState extends State<EditProfile> {
                             Text(
                               widget.user.email,
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
@@ -208,27 +266,39 @@ class _EditProfileState extends State<EditProfile> {
                           child: Text(
                             'Delete Photo',
                             style: GoogleFonts.poppins(
-                              fontSize: width * .009,
+                              fontSize: subText,
                               fontWeight: FontWeight.w500,
                               color: const Color(0xFF37373E),
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 20,
+                        SizedBox(
+                          width: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 10,
+                            tablet: 15,
+                            desktop: 20,
+                          ),
                         ),
                         SizedBox(
                           height: getValueForScreenType<double>(
                             context: context,
-                            mobile: 28,
-                            tablet: 35,
+                            mobile: 26,
+                            tablet: 33,
                             desktop: 40,
                           ),
                           child: ElevatedButton(
                             onPressed: selectImageFromGallery,
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all(
-                                  const EdgeInsets.symmetric(horizontal: 25),
+                                  EdgeInsets.symmetric(
+                                    horizontal: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 15,
+                                      tablet: 20,
+                                      desktop: 25,
+                                    ),
+                                  ),
                                 ),
                                 foregroundColor: MaterialStateProperty.all(
                                   const Color(0xFF4351FF),
@@ -244,7 +314,7 @@ class _EditProfileState extends State<EditProfile> {
                             child: Text(
                               'Upload New',
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white,
                               ),
@@ -255,7 +325,14 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     Container(
                       width: double.infinity,
-                      margin: const EdgeInsets.symmetric(vertical: 30),
+                      margin: EdgeInsets.symmetric(
+                        vertical: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 15,
+                          tablet: 20,
+                          desktop: 30,
+                        ),
+                      ),
                       decoration: BoxDecoration(
                         color: CusColors.bg,
                         border: const Border(
@@ -274,7 +351,7 @@ class _EditProfileState extends State<EditProfile> {
                           Text(
                             'Fullname',
                             style: GoogleFonts.poppins(
-                              fontSize: width * .009,
+                              fontSize: subText,
                               fontWeight: FontWeight.w600,
                               color: CusColors.subHeader.withOpacity(0.5),
                             ),
@@ -284,7 +361,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           TextFormField(
                             style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader),
                             initialValue: widget.userData.name,
@@ -294,18 +371,26 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: editProfileDecoration.copyWith(
                               hintText: 'Fullname',
                               hintStyle: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8, top: 37),
+                            padding: EdgeInsets.only(
+                              bottom: 8,
+                              top: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 17,
+                                tablet: 27,
+                                desktop: 37,
+                              ),
+                            ),
                             child: Text(
                               'No. Whatsapp',
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w600,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
@@ -318,7 +403,7 @@ class _EditProfileState extends State<EditProfile> {
                                   RegExp(r'^[0-9\-\+\s()]*$')),
                             ],
                             style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader),
                             initialValue: widget.userData.noWhatsapp,
@@ -338,18 +423,26 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: editProfileDecoration.copyWith(
                               hintText: 'Input your Whatsapp number',
                               hintStyle: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8, top: 37),
+                            padding: EdgeInsets.only(
+                              bottom: 8,
+                              top: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 17,
+                                tablet: 27,
+                                desktop: 37,
+                              ),
+                            ),
                             child: Text(
                               'Address',
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w600,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
@@ -357,7 +450,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           TextFormField(
                             style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader),
                             initialValue: widget.userData.address,
@@ -367,18 +460,26 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: editProfileDecoration.copyWith(
                               hintText: 'Input your Address',
                               hintStyle: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8, top: 37),
+                            padding: EdgeInsets.only(
+                              bottom: 8,
+                              top: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 17,
+                                tablet: 27,
+                                desktop: 37,
+                              ),
+                            ),
                             child: Text(
                               'Last Education',
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w600,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
@@ -387,15 +488,30 @@ class _EditProfileState extends State<EditProfile> {
                           DropdownButtonFormField<String>(
                             value: widget.userData
                                 .education, // Make sure to define 'selectedValue' as a state variable.
-                            icon: const Icon(IconlyLight.arrow_down_2),
-                            decoration: editProfileDecoration.copyWith(
-                              hintText: 'Last Education',
-                              hintStyle: GoogleFonts.poppins(
-                                fontSize: width * .009,
-                                fontWeight: FontWeight.w500,
-                                color: CusColors.subHeader.withOpacity(0.5),
+                            icon: Icon(
+                              IconlyLight.arrow_down_2,
+                              size: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 18,
+                                tablet: 22,
+                                desktop: 24,
                               ),
                             ),
+                            decoration: editProfileDecoration.copyWith(
+                                hintText: 'Last Education',
+                                hintStyle: GoogleFonts.poppins(
+                                  fontSize: subText,
+                                  fontWeight: FontWeight.w500,
+                                  color: CusColors.subHeader.withOpacity(0.5),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 10,
+                                      tablet: 14,
+                                      desktop: 16,
+                                    ),
+                                    horizontal: 15)),
                             validator: (val) => val == null ||
                                     val.isEmpty ||
                                     val == 'Select last education'
@@ -414,7 +530,7 @@ class _EditProfileState extends State<EditProfile> {
                                     ? Text(
                                         education,
                                         style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize: subText,
                                             fontWeight: FontWeight.w500,
                                             color: CusColors.subHeader
                                                 .withOpacity(0.5)),
@@ -422,7 +538,7 @@ class _EditProfileState extends State<EditProfile> {
                                     : Text(
                                         education,
                                         style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize: subText,
                                             fontWeight: FontWeight.w500,
                                             color: CusColors.subHeader),
                                       ),
@@ -430,11 +546,19 @@ class _EditProfileState extends State<EditProfile> {
                             }).toList(),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8, top: 37),
+                            padding: EdgeInsets.only(
+                              bottom: 8,
+                              top: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 17,
+                                tablet: 27,
+                                desktop: 37,
+                              ),
+                            ),
                             child: Text(
                               'Have been working?',
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w600,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
@@ -443,16 +567,29 @@ class _EditProfileState extends State<EditProfile> {
                           DropdownButtonFormField<String>(
                             value: widget.userData
                                 .working, // Make sure to define 'selectedValue' as a state variable.
-                            decoration: editProfileDecoration.copyWith(
-                              hintText: 'Have been working?',
-                              hintStyle: GoogleFonts.poppins(
-                                fontSize: width * .009,
-                                fontWeight: FontWeight.w500,
-                                color: CusColors.subHeader.withOpacity(0.5),
+                            icon: Icon(
+                              IconlyLight.arrow_down_2,
+                              size: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 18,
+                                tablet: 22,
+                                desktop: 24,
                               ),
-                              // suffixIcon:
-                              //     const Icon(IconlyLight.arrow_down_2),
                             ),
+                            decoration: editProfileDecoration.copyWith(
+                                hintStyle: GoogleFonts.poppins(
+                                  fontSize: subText,
+                                  fontWeight: FontWeight.w500,
+                                  color: CusColors.subHeader.withOpacity(0.5),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 10,
+                                      tablet: 14,
+                                      desktop: 16,
+                                    ),
+                                    horizontal: 15)),
                             validator: (val) => val == null ||
                                     val.isEmpty ||
                                     val == 'Have been working?'
@@ -471,7 +608,7 @@ class _EditProfileState extends State<EditProfile> {
                                     ? Text(
                                         work,
                                         style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize: subText,
                                             fontWeight: FontWeight.w500,
                                             color: CusColors.subHeader
                                                 .withOpacity(0.5)),
@@ -479,7 +616,7 @@ class _EditProfileState extends State<EditProfile> {
                                     : Text(
                                         work,
                                         style: GoogleFonts.poppins(
-                                            fontSize: width * .009,
+                                            fontSize: subText,
                                             fontWeight: FontWeight.w500,
                                             color: CusColors.subHeader),
                                       ),
@@ -487,11 +624,19 @@ class _EditProfileState extends State<EditProfile> {
                             }).toList(),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8, top: 37),
+                            padding: EdgeInsets.only(
+                              bottom: 8,
+                              top: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 17,
+                                tablet: 27,
+                                desktop: 37,
+                              ),
+                            ),
                             child: Text(
                               'Reason why join our education center',
                               style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w600,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
@@ -499,7 +644,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           TextFormField(
                             style: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader),
                             initialValue: widget.userData.reason,
@@ -509,14 +654,19 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: editProfileDecoration.copyWith(
                               hintText: 'Feel free to input your reason',
                               hintStyle: GoogleFonts.poppins(
-                                fontSize: width * .009,
+                                fontSize: subText,
                                 fontWeight: FontWeight.w500,
                                 color: CusColors.subHeader.withOpacity(0.5),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 40,
+                          SizedBox(
+                            height: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 20,
+                              tablet: 30,
+                              desktop: 40,
+                            ),
                           ),
                           SizedBox(
                             height: getValueForScreenType<double>(
@@ -579,7 +729,14 @@ class _EditProfileState extends State<EditProfile> {
                                     },
                               style: ButtonStyle(
                                   padding: MaterialStateProperty.all(
-                                    const EdgeInsets.symmetric(horizontal: 60),
+                                    EdgeInsets.symmetric(
+                                      horizontal: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 28,
+                                        tablet: 40,
+                                        desktop: 60,
+                                      ),
+                                    ),
                                   ),
                                   foregroundColor: MaterialStateProperty.all(
                                     const Color(0xFF4351FF),
@@ -597,7 +754,7 @@ class _EditProfileState extends State<EditProfile> {
                                   : Text(
                                       'Save',
                                       style: GoogleFonts.poppins(
-                                        fontSize: width * .01,
+                                        fontSize: subHeader,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.white,
                                       ),
@@ -629,8 +786,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             borderRadius: BorderRadius.circular(20),
           ),
-          content: SizedBox(
-            height: 250,
+          content: SingleChildScrollView(
             child: Column(
               children: [
                 Text(
@@ -676,7 +832,14 @@ class _EditProfileState extends State<EditProfile> {
                         routeName: routeLogin),
                     style: ButtonStyle(
                         padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(horizontal: 60),
+                          EdgeInsets.symmetric(
+                            horizontal: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 28,
+                              tablet: 40,
+                              desktop: 60,
+                            ),
+                          ),
                         ),
                         foregroundColor: MaterialStateProperty.all(
                           const Color(0xFF4351FF),
@@ -692,7 +855,12 @@ class _EditProfileState extends State<EditProfile> {
                     child: Text(
                       'Ok',
                       style: GoogleFonts.poppins(
-                        fontSize: width * .01,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .018,
+                          tablet: width * .015,
+                          desktop: width * .01,
+                        ),
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),

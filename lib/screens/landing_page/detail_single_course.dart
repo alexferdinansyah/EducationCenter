@@ -31,7 +31,7 @@ class _DetailSingleCourseState extends State<DetailSingleCourse> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    var argument = Get.parameters;
+    var argument = Get.rootDelegate.parameters;
     id = argument['id']!;
     controller.fetchDocument(id);
 

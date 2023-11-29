@@ -38,9 +38,12 @@ class _DashboardAppState extends State<DashboardApp> {
   @override
   void initState() {
     super.initState();
-    String currentRoute = Get.currentRoute;
+    String currentRoute = Get.rootDelegate.currentConfiguration!.location!;
+
     setState(() {
-      if (currentRoute == "/edit-profile") {
+      if (currentRoute == "/settings") {
+        widget.selected = 'Settings';
+      } else if (currentRoute == "/edit-profile") {
         widget.optionalSelected = 'Settings';
         widget.selected = 'Edit-Profile';
       } else if (currentRoute == "/membership-info") {
@@ -417,7 +420,7 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
             ),
             child: GestureDetector(
               onTap: () {
-                Get.toNamed(routeHome);
+                Get.rootDelegate.toNamed(routeHome);
               },
               child: Image.asset(
                 'assets/images/dec_logo2.png',
