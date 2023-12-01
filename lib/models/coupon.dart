@@ -8,7 +8,7 @@ class Coupon {
   int? amount;
   DateTime? expires;
   int? timesUsed;
-  UsageRestriction? usageRestriction;
+  // UsageRestriction? usageRestriction;  nanti
   UsageLimit? usageLimit;
 
   Coupon({
@@ -16,23 +16,25 @@ class Coupon {
     this.description,
     required this.type,
     required this.amount,
-    required this.expires,
+    this.expires,
     this.timesUsed,
-    this.usageRestriction,
+    // this.usageRestriction,
     this.usageLimit,
   });
 
   factory Coupon.fromFirestore(Map<String, dynamic> data) {
+    final usageLimit = data['usage_limit'] as Map<String, dynamic>?;
+
     return Coupon(
       code: data['code'],
       description: data['description'],
-      type: Coupons.values[data['type']],
+      type: Coupons.values.firstWhere((e) => e.name == data['type']),
       amount: data['amount'],
-      expires: data['expires'].toDate(),
+      expires: data['expires']?.toDate(),
       timesUsed: data['times_used'],
-      usageRestriction:
-          UsageRestriction.fromFirestore(data['usage_restriction']),
-      usageLimit: UsageLimit.fromFirestore(data['usage_limit']),
+      // usageRestriction:
+      //     UsageRestriction.fromFirestore(data['usage_restriction']),
+      usageLimit: UsageLimit.fromFirestore(usageLimit!),
     );
   }
 
@@ -40,11 +42,11 @@ class Coupon {
     return {
       'code': code,
       'description': description,
-      'type': type, //type?.index,
+      'type': type?.name,
       'amount': amount,
-      'expires': Timestamp.fromDate(expires!),
+      'expires': expires != null ? Timestamp.fromDate(expires!) : null,
       'times_used': timesUsed,
-      'usage_restriction': usageRestriction?.toFirestore(),
+      // 'usage_restriction': usageRestriction?.toFirestore(),
       'usage_limit': usageLimit?.toFirestore(),
     };
   }
@@ -100,8 +102,8 @@ class UsageLimit {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'perCoupon': perCoupon,
-      'perUser': perUser,
+      'per_coupon': perCoupon,
+      'per_user': perUser,
     };
   }
 }

@@ -47,6 +47,12 @@ InputDecoration editProfileDecoration = InputDecoration(
       borderSide:
           BorderSide(color: CusColors.subHeader.withOpacity(.2), width: 1.0),
     ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red.withOpacity(.5), width: 1.0),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red.withOpacity(.5), width: 1.0),
+    ),
     enabledBorder: OutlineInputBorder(
       borderSide:
           BorderSide(color: CusColors.subHeader.withOpacity(.2), width: 1.0),

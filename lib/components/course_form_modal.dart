@@ -372,8 +372,7 @@ class _CourseFormModalState extends State<CourseFormModal> {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^[0-9\-\+\s()]*$')),
+                    FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*')),
                   ],
                   decoration: editProfileDecoration.copyWith(
                     contentPadding: EdgeInsets.symmetric(

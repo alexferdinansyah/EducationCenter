@@ -137,7 +137,7 @@ class _TransactionTableState extends State<TransactionTable> {
                                         : Colors.red,
                                 borderRadius: BorderRadius.circular(50)),
                             child: Row(
-                              // mainAxisSize: MainAxisSize.min,
+                              mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -534,7 +534,12 @@ class _TransactionTableState extends State<TransactionTable> {
               children: [
                 Container(
                   width: 200,
-                  height: 300,
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 150,
+                    tablet: 250,
+                    desktop: 300,
+                  ),
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(imageUrl),
@@ -599,7 +604,12 @@ class _TransactionTableState extends State<TransactionTable> {
           content: SingleChildScrollView(
               child: Container(
             width: 200,
-            height: 350,
+            height: getValueForScreenType<double>(
+              context: context,
+              mobile: 150,
+              tablet: 250,
+              desktop: 300,
+            ),
             decoration: BoxDecoration(
                 image: DecorationImage(image: NetworkImage(imageUrl))),
           )),

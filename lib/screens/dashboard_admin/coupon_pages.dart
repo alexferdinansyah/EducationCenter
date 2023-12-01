@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/models/coupon.dart';
+import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/extension.dart';
@@ -57,13 +58,14 @@ class _AdminCouponsState extends State<AdminCoupons> {
         break;
       default:
         subHeader = 0;
+        buttonText = 0;
         title = 0;
+        fixedWidthStatus = 0;
     }
     return StreamBuilder(
       stream: firestoreService.couponsData,
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          print(snapshot.data);
           List<DataRow2> dataRows = snapshot.data!.asMap().entries.map((entry) {
             final Coupon coupon = entry.value['coupon'];
             final String couponId = entry.value['id'];
@@ -88,7 +90,7 @@ class _AdminCouponsState extends State<AdminCoupons> {
                 ),
               ),
               DataCell(Text(
-                coupon.type.toString(),
+                getCouponDisplayName(coupon.type!),
                 style: GoogleFonts.poppins(
                     fontSize: subHeader,
                     fontWeight: FontWeight.w400,
@@ -109,14 +111,16 @@ class _AdminCouponsState extends State<AdminCoupons> {
                     color: const Color(0xFF7D8398)),
               )),
               DataCell(Text(
-                '${coupon.timesUsed} / ${coupon.usageLimit != null ? coupon.usageLimit!.perCoupon : "∞"}',
+                '${coupon.timesUsed} / ${coupon.usageLimit!.perCoupon ?? "Unlimited"}',
                 style: GoogleFonts.poppins(
                     fontSize: subHeader,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
               DataCell(Text(
-                coupon.expires!.formatDate(),
+                coupon.expires != null
+                    ? coupon.expires!.formatDate()
+                    : 'No Expired',
                 style: GoogleFonts.poppins(
                     fontSize: subHeader,
                     fontWeight: FontWeight.w400,
@@ -330,8 +334,8 @@ class _AdminCouponsState extends State<AdminCoupons> {
                                       width: 5,
                                     ),
                                     GestureDetector(
-                                      onTap: () =>
-                                          Get.rootDelegate.toNamed(routeCreateCoupon),
+                                      onTap: () => Get.rootDelegate
+                                          .toNamed(routeCreateCoupon),
                                       child: Icon(
                                         CupertinoIcons.add_circled,
                                         color: CusColors.accentBlue,

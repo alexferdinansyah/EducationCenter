@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
@@ -23,7 +24,6 @@ import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/login/sign_in_responsive.dart';
-import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -337,7 +337,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     Padding(
                       padding: const EdgeInsets.only(right: 5),
                       child: GestureDetector(
-                          onTap: () => Get.rootDelegate.offNamed(routeSettings),
+                          onTap: () =>
+                              Get.rootDelegate.offNamed(routeMembershipUpgrade),
                           child: Icon(
                             Icons.arrow_back_rounded,
                             size: getValueForScreenType<double>(
@@ -550,7 +551,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image.asset(
-                              'assets/banks/logo_BCA.png',
+                              'assets/banks/Logo_BCA.png',
                               height: getValueForScreenType<double>(
                                 context: context,
                                 mobile: 20,
@@ -1231,7 +1232,7 @@ class _PaymentPageState extends State<PaymentPage> {
               'Buka aplikasi bank / E-Wallet yang sudah kalian pilih (${bankController.bankName})',
               'Masuk ke menu transfer di aplikasi tersebut',
               'Masukkan nama bank kami, BCA',
-              'Masukkan nomor rekening kami, 7243485198',
+              'Masukkan nomor rekening kami, 4212518585',
               'Masukan nominal sebesar, Rp $totalPrice',
               'Screenshot bukti pembayaran yang telah dilakukan',
               'Klik upload invoice dan pilih bukti transfer tadi',
@@ -1607,28 +1608,36 @@ class _PaymentPageState extends State<PaymentPage> {
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 10),
-                          content: Column(
-                            children: [
-                              Text(
-                                'Pembelian akan dikonfirmasi dalam 1x24 jam, harap menunggu',
-                                style: GoogleFonts.poppins(
-                                  fontSize: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: width * .019,
-                                    tablet: width * .016,
-                                    desktop: width * .011,
+                          content: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Pembelian akan dikonfirmasi dalam 1x24 jam, harap menunggu',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: width * .019,
+                                      tablet: width * .016,
+                                      desktop: width * .011,
+                                    ),
+                                    fontWeight: FontWeight.w600,
+                                    color: CusColors.title,
                                   ),
-                                  fontWeight: FontWeight.w600,
-                                  color: CusColors.title,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 30,
+                                )
+                              ],
+                            ),
                           ),
                           actions: [
                             Container(
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 28,
+                                tablet: 35,
+                                desktop: 40,
+                              ),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
@@ -1654,6 +1663,12 @@ class _PaymentPageState extends State<PaymentPage> {
                               ),
                             ),
                             Container(
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 28,
+                                tablet: 35,
+                                desktop: 40,
+                              ),
                               margin: const EdgeInsets.only(left: 10),
                               decoration: BoxDecoration(
                                   gradient: LinearGradient(
@@ -1671,83 +1686,104 @@ class _PaymentPageState extends State<PaymentPage> {
                                         offset: const Offset(0, 4))
                                   ]),
                               child: ElevatedButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  Get.back();
-                                  final firestoreService = FirestoreService(
-                                      uid: widget.user?.uid ?? uid!);
+                                onPressed: loading
+                                    ? null
+                                    : () async {
+                                        setStateDialog(() {
+                                          loading = true;
+                                        });
+                                        Get.back();
+                                        final firestoreService =
+                                            FirestoreService(
+                                                uid: widget.user?.uid ?? uid!);
 
-                                  if (image != null) {
-                                    await uploadToFirebase(image);
-                                    dynamic data;
-                                    if (isCourse == true) {
-                                      data = TransactionModel(
-                                          uid: uid,
-                                          item: TransactionItem(
-                                              id: courseId,
-                                              title: title,
-                                              subTitle: type),
-                                          invoiceDate: DateTime.now(),
-                                          date: DateTime.now(),
-                                          bankName: bankController.bankName,
-                                          price: price,
-                                          status: 'Pending',
-                                          invoice: downloadURL,
-                                          uniqueCode: uniqueCode.toString(),
-                                          reason: null);
-                                    } else {
-                                      data = TransactionModel(
-                                          uid: widget.user!.uid,
-                                          item: TransactionItem(
-                                              title: 'Membership',
-                                              subTitle: 'Pro'),
-                                          invoiceDate: DateTime.now(),
-                                          date: DateTime.now(),
-                                          bankName: bankController.bankName,
-                                          price: widget.price,
-                                          status: 'Pending',
-                                          invoice: downloadURL,
-                                          uniqueCode: uniqueCode.toString(),
-                                          reason: null);
-                                    }
-                                    final exist =
-                                        await firestoreService.checkTransaction(
-                                            widget.title ?? title);
-                                    if (exist == true) {
-                                      Get.snackbar('Error processing payment',
-                                          'Duplicate payment process');
-                                    } else {
-                                      await firestoreService
-                                          .createTransaction(data)
-                                          .then((value) async {
-                                        await firestoreService
-                                            .updateUserTransaction(value);
-                                      });
-                                    }
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    Get.to(
-                                        () => DashboardApp(
-                                            selected: 'Transaction'),
-                                        routeName: routeLogin);
-                                  } else {
-                                    setStateDialog(() {
-                                      loading = false;
-                                      error = 'Please put invoice';
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  'Confirm',
-                                  style: GoogleFonts.mulish(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: subHeader,
-                                  ),
-                                ),
+                                        if (image != null) {
+                                          await uploadToFirebase(image);
+                                          dynamic data;
+                                          if (isCourse == true) {
+                                            data = TransactionModel(
+                                                uid: uid,
+                                                item: TransactionItem(
+                                                    id: courseId,
+                                                    title: title,
+                                                    subTitle: type),
+                                                invoiceDate: DateTime.now(),
+                                                date: DateTime.now(),
+                                                bankName:
+                                                    bankController.bankName,
+                                                price: price,
+                                                status: 'Pending',
+                                                invoice: downloadURL,
+                                                uniqueCode:
+                                                    uniqueCode.toString(),
+                                                reason: null);
+                                          } else {
+                                            data = TransactionModel(
+                                                uid: widget.user!.uid,
+                                                item: TransactionItem(
+                                                    title: 'Membership',
+                                                    subTitle: 'Pro'),
+                                                invoiceDate: DateTime.now(),
+                                                date: DateTime.now(),
+                                                bankName:
+                                                    bankController.bankName,
+                                                price: widget.price,
+                                                status: 'Pending',
+                                                invoice: downloadURL,
+                                                uniqueCode:
+                                                    uniqueCode.toString(),
+                                                reason: null);
+                                          }
+                                          final exist = await firestoreService
+                                              .checkTransaction(
+                                                  widget.title ?? title);
+                                          if (exist == true) {
+                                            if (context.mounted) {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) {
+                                                  return CustomAlert(
+                                                    onPressed: () => Get.back(),
+                                                    title:
+                                                        'Error processing payment',
+                                                    message:
+                                                        'Duplicate payment process',
+                                                    animatedIcon:
+                                                        'assets/animations/failed.json',
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          } else {
+                                            await firestoreService
+                                                .createTransaction(data)
+                                                .then((value) async {
+                                              await firestoreService
+                                                  .updateUserTransaction(value);
+                                            });
+                                            Get.rootDelegate
+                                                .offNamed(routeTransaction);
+                                          }
+                                          setStateDialog(() {
+                                            loading = false;
+                                          });
+                                        } else {
+                                          setStateDialog(() {
+                                            loading = false;
+                                            error = 'Please put invoice';
+                                          });
+                                        }
+                                      },
+                                child: loading
+                                    ? const CircularProgressIndicator()
+                                    : Text(
+                                        'Confirm',
+                                        style: GoogleFonts.mulish(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: subHeader,
+                                        ),
+                                      ),
                               ),
                             ),
                           ]);

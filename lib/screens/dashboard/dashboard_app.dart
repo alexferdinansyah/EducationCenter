@@ -46,6 +46,8 @@ class _DashboardAppState extends State<DashboardApp> {
       } else if (currentRoute == "/edit-profile") {
         widget.optionalSelected = 'Settings';
         widget.selected = 'Edit-Profile';
+      } else if (currentRoute == "/transactions") {
+        widget.selected = 'Transactions';
       } else if (currentRoute == "/membership-info") {
         widget.optionalSelected = 'Settings';
         widget.selected = 'Membership';

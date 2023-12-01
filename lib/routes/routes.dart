@@ -4,7 +4,6 @@ import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
-import 'package:project_tc/screens/dashboard_admin/create_coupon.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
@@ -31,6 +30,7 @@ const String routeConfirmEmail = '/verify-account';
 const String routeForgotPassword = '/forgot-password';
 const String routeSettings = '/settings';
 const String routeEditProfile = '/edit-profile';
+const String routeTransaction = '/transactions';
 const String routeMembershipInfo = '/membership-info';
 const String routeMembershipUpgrade = '/membership-upgrade';
 const String routeMembershipUpgradePayment = '/membership-upgrade-payment';
@@ -38,6 +38,7 @@ const String routeLearnCourse = '/learn-course';
 const String routeOfferLearnCourse = '/learn-course/offers';
 const String routeBuyCourse = '/checkout/course';
 const String routeAdminDetailCourse = '/admin-detail-course';
+const String routeAdminCoupon = '/admin-coupons';
 const String routeCreateCoupon = '/create-coupon';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -100,6 +101,10 @@ final getPages = [
     page: () => wrapWithAppView(const DetailArticle()),
   ),
   GetPage(
+    name: routeTransaction,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
     name: routeSettings,
     page: () => const Wrapper(),
   ),
@@ -136,7 +141,11 @@ final getPages = [
       page: () => const AdminDetailCourse(),
       middlewares: [AdminMiddleware()]),
   GetPage(
-      name: routeCreateCoupon,
-      page: () => const CreateCoupon(),
-      middlewares: [AdminMiddleware()]),
+    name: routeCreateCoupon,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeAdminCoupon,
+    page: () => const Wrapper(),
+  ),
 ];

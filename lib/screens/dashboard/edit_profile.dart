@@ -5,12 +5,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -724,7 +723,22 @@ class _EditProfileState extends State<EditProfile> {
                                           image = null;
                                           loading = false;
                                         });
-                                        showDialogSuccess(width);
+                                        if (context.mounted) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) {
+                                                return CustomAlert(
+                                                    onPressed: () => Get
+                                                        .rootDelegate
+                                                        .offNamed(
+                                                            routeSettings),
+                                                    title: 'Success',
+                                                    message:
+                                                        'Your profile has been successfully updated',
+                                                    animatedIcon:
+                                                        'assets/animations/check.json');
+                                              });
+                                        }
                                       }
                                     },
                               style: ButtonStyle(
@@ -771,107 +785,6 @@ class _EditProfileState extends State<EditProfile> {
           ),
         )
       ]),
-    );
-  }
-
-  showDialogSuccess(width) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(
-              color: Color(0xFFCCCCCC),
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                  'Success',
-                  style: GoogleFonts.poppins(
-                    fontSize: getValueForScreenType<double>(
-                      context: context,
-                      mobile: width * .022,
-                      tablet: width * .019,
-                      desktop: width * .014,
-                    ),
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF1F384C),
-                  ),
-                ),
-                Text(
-                  'Your profile has been successfully updated',
-                  style: GoogleFonts.poppins(
-                    fontSize: getValueForScreenType<double>(
-                      context: context,
-                      mobile: width * .016,
-                      tablet: width * .013,
-                      desktop: width * .008,
-                    ),
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF7d848c),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Lottie.asset('assets/animations/check.json', height: 130),
-                const SizedBox(
-                  height: 15,
-                ),
-                SizedBox(
-                  height: getValueForScreenType<double>(
-                    context: context,
-                    mobile: 28,
-                    tablet: 35,
-                    desktop: 40,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () => Get.off(DashboardApp(selected: 'Settings'),
-                        routeName: routeLogin),
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(
-                            horizontal: getValueForScreenType<double>(
-                              context: context,
-                              mobile: 28,
-                              tablet: 40,
-                              desktop: 60,
-                            ),
-                          ),
-                        ),
-                        foregroundColor: MaterialStateProperty.all(
-                          const Color(0xFF4351FF),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color(0xFF4351FF),
-                        ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        )),
-                    child: Text(
-                      'Ok',
-                      style: GoogleFonts.poppins(
-                        fontSize: getValueForScreenType<double>(
-                          context: context,
-                          mobile: width * .018,
-                          tablet: width * .015,
-                          desktop: width * .01,
-                        ),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 

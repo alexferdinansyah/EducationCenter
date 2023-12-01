@@ -4,12 +4,26 @@ enum Coupons {
   fixedProductCoupon,
 }
 
-enum Status {
-  draft,
-  publish,
+String getCouponDisplayName(Coupons coupon) {
+  switch (coupon) {
+    case Coupons.percentageCoupon:
+      return 'Percentage Coupon';
+    case Coupons.fixedCartCoupon:
+      return 'Fixed Cart Coupon';
+    case Coupons.fixedProductCoupon:
+      return 'Fixed Product Coupon';
+    // handle other enum values if needed
+    default:
+      return coupon.toString().split('.').last;
+  }
 }
 
-enum Visibility {
-  public,
-  private,
+enum Status {
+  Draft,
+  Publish,
+}
+
+enum VisibilityType {
+  Public,
+  Private,
 }

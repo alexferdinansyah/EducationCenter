@@ -906,7 +906,7 @@ class _MembershipUpgradeState extends State<MembershipUpgrade> {
                                             child: ElevatedButton(
                                               onPressed: () {
                                                 Get.rootDelegate.toNamed(
-                                                    routeMembershipUpgrade);
+                                                    routeMembershipUpgradePayment);
                                               },
                                               style: ButtonStyle(
                                                 shape:

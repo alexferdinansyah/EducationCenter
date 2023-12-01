@@ -302,8 +302,13 @@ class CourseOffer extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 25,
+                            SizedBox(
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 15,
+                                tablet: 20,
+                                desktop: 25,
+                              ),
                             ),
                             Container(
                               width: getValueForScreenType<double>(
@@ -362,8 +367,13 @@ class CourseOffer extends StatelessWidget {
                             ),
                           ]),
                     ),
-                    const SizedBox(
-                      width: 40,
+                    SizedBox(
+                      width: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 20,
+                        tablet: 30,
+                        desktop: 40,
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
@@ -641,8 +651,13 @@ class CourseOffer extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 25,
+                            SizedBox(
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 15,
+                                tablet: 20,
+                                desktop: 25,
+                              ),
                             ),
                             Container(
                               width: getValueForScreenType<double>(

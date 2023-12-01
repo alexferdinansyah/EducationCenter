@@ -281,7 +281,7 @@ class FirestoreService {
     }
   }
 
-  // Add a new Course document to Firestore
+  // Add a new Article document to Firestore
   Future addArticle(Article article) async {
     try {
       await articleCollection.add(article.toFirestore());
@@ -465,13 +465,15 @@ class FirestoreService {
 
   Stream<List<Map>> get couponsData {
     try {
-      return transactionCollection
+      return couponCollection
           .snapshots()
           .asyncMap((QuerySnapshot querySnapshot) async {
         List<Map<String, dynamic>> coupons = [];
 
         for (final DocumentSnapshot document in querySnapshot.docs) {
           final data = document.data() as Map<String, dynamic>;
+
+          // print(Coupon.fromFirestore(data));
 
           try {
             coupons.add({
@@ -488,6 +490,18 @@ class FirestoreService {
     } catch (error) {
       print('Error streaming coupon: $error');
       return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  // Add a new Article document to Firestore
+  Future<String> addCoupon(Coupon coupon) async {
+    try {
+      await couponCollection.add(coupon.toFirestore());
+      return 'Success adding coupon';
+    } catch (e) {
+      print('Error adding coupon: $e');
+      return 'Failed adding coupon';
+      // Handle the error as needed
     }
   }
 

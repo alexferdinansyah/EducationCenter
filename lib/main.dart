@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       initialData: null,
       child: GetMaterialApp.router(
+        defaultGlobalState: true,
         routerDelegate: GetDelegate(
             preventDuplicateHandlingMode:
                 PreventDuplicateHandlingMode.PopUntilOriginalRoute),

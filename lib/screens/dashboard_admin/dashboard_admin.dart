@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
@@ -7,8 +8,10 @@ import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_course.dart';
 import 'package:project_tc/screens/dashboard_admin/coupon_pages.dart';
+import 'package:project_tc/screens/dashboard_admin/create_coupon.dart';
 import 'package:project_tc/screens/dashboard_admin/user_transaction.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -31,21 +34,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
   @override
   void initState() {
     super.initState();
-    // String currentRoute = Get.currentRoute;
+    String currentRoute = Get.rootDelegate.currentConfiguration!.location!;
     setState(() {
-      // if (currentRoute == "/edit-profile") {
-      //   widget.optionalSelected = 'Settings';
-      //   widget.selected = 'Edit-Profile';
-      // } else if (currentRoute == "/membership-info") {
-      //   widget.optionalSelected = 'Settings';
-      //   widget.selected = 'Membership';
-      // } else if (currentRoute == "/membership-upgrade") {
-      //   widget.optionalSelected = 'Settings';
-      //   widget.selected = 'Membership-Upgrade';
-      // } else if (currentRoute == "/membership-upgrade-payment") {
-      //   widget.optionalSelected = 'Settings';
-      //   widget.selected = 'Membership-Payment';
-      // }
+      if (currentRoute == "/create-coupon") {
+        widget.optionalSelected = 'Coupons';
+        widget.selected = 'Create-Coupon';
+      } else if (currentRoute == '/admin-coupons') {
+        widget.selected = 'Coupons';
+      }
       if (widget.optionalSelected == null) {
         selectedSidebarItem = widget.selected;
       } else {
@@ -72,7 +68,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         case 'Courses':
           return const AdminCourse();
         case 'Coupons':
-          return const AdminCoupons();
+          if (widget.selected == 'Create-Coupon') {
+            return const CreateCoupon();
+          } else {
+            return const AdminCoupons();
+          }
         default:
           return Container(); // Handle the default case here
       }
@@ -373,13 +373,18 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
                 desktop: 50,
               ),
             ),
-            child: Image.asset(
-              'assets/images/dec_logo2.png',
-              width: getValueForScreenType<double>(
-                context: context,
-                mobile: width * .1,
-                tablet: width * .08,
-                desktop: width * .06,
+            child: GestureDetector(
+              onTap: () {
+                Get.rootDelegate.toNamed(routeHome);
+              },
+              child: Image.asset(
+                'assets/images/dec_logo2.png',
+                width: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .1,
+                  tablet: width * .08,
+                  desktop: width * .06,
+                ),
               ),
             ),
           ),
