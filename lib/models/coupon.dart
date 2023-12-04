@@ -50,6 +50,19 @@ class Coupon {
       'usage_limit': usageLimit?.toFirestore(),
     };
   }
+
+  StatusCoupon? getStatus() => getStatusAt(DateTime.now());
+
+  StatusCoupon? getStatusAt(DateTime? dateTime) {
+    if (dateTime == null) {
+      return null;
+    }
+    if (expires != null && dateTime.isAfter(expires!)) {
+      return StatusCoupon.Expired;
+    } else {
+      return null;
+    }
+  }
 }
 
 class UsageRestriction {

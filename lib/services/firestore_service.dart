@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/coupon.dart';
+import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
@@ -502,6 +503,91 @@ class FirestoreService {
       print('Error adding coupon: $e');
       return 'Failed adding coupon';
       // Handle the error as needed
+    }
+  }
+
+  Future getCoupon(DocumentReference coupon) async {
+    // Get Reference Coupon Data
+    final couponDoc = await coupon.get();
+
+    if (couponDoc.exists) {
+      final couponData =
+          Coupon.fromFirestore(couponDoc.data() as Map<String, dynamic>);
+      return couponData;
+    } else {
+      throw Exception('Coupon not found.');
+    }
+  }
+
+  Future getUserCoupon(DocumentReference coupon) async {
+    // Get Reference Coupon Data
+    final couponDoc = await coupon.get();
+
+    if (couponDoc.exists) {
+      final couponData =
+          UserCoupon.fromFirestore(couponDoc.data() as Map<String, dynamic>);
+      return couponData;
+    } else {
+      return null;
+    }
+  }
+
+  Future checkUserCouponStatus(String code) async {
+    try {
+      QuerySnapshot query = await userCollection
+          .doc(uid)
+          .collection('user_coupon')
+          .where('code', isEqualTo: code)
+          .get();
+
+      if (query.docs.first.exists) {
+        UserCoupon couponData = await getUserCoupon(query.docs.first.reference);
+
+        return couponData;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future checkValidationCoupon(String code) async {
+    try {
+      QuerySnapshot query =
+          await couponCollection.where('code', isEqualTo: code).get();
+
+      UserCoupon? userCouponData = await checkUserCouponStatus(code);
+      if (query.docs.first.exists) {
+        Coupon? couponData = await getCoupon(query.docs.first.reference);
+
+        final usageLimit = couponData!.usageLimit!;
+
+        final statusCoupon = couponData.getStatus();
+
+        if (statusCoupon == StatusCoupon.Expired) {
+          return 'Coupon is expired';
+        }
+
+        // belom di check
+        if (usageLimit.perCoupon != null) {
+          if (couponData.timesUsed! >= usageLimit.perCoupon!) {
+            return 'Coupon usage limit exceeded';
+          }
+        }
+
+        // belom di check
+        if (usageLimit.perUser != null && userCouponData != null) {
+          if (userCouponData.redeemTotal! >= usageLimit.perUser!) {
+            return 'You have been redeeming this code';
+          }
+        }
+
+        return couponData;
+      } else {
+        return 'Coupon not exist';
+      }
+    } catch (e) {
+      return 'Coupon invalid, please try another';
     }
   }
 

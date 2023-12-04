@@ -13,12 +13,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/coupon_redeem.dart';
 import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/components/custom_list.dart';
 import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/controllers/storage_controller.dart';
 import 'package:project_tc/models/bank_model.dart';
+import 'package:project_tc/models/coupon.dart';
+import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
@@ -54,6 +57,7 @@ class _PaymentPageState extends State<PaymentPage> {
   bool? isVerify;
   Timer? timer;
   bool isOpen = true;
+  Coupon? coupon;
 
   @override
   void initState() {
@@ -131,27 +135,33 @@ class _PaymentPageState extends State<PaymentPage> {
     double titleFontSize = 0;
     double header = 0;
     double subHeader = 0;
+    double buttonText = 0;
 
     switch (deviceType) {
       case DeviceScreenType.desktop:
         header = width * .012;
         subHeader = width * .01;
+        buttonText = width * .009;
         titleFontSize = width * .014;
         break;
       case DeviceScreenType.tablet:
         header = width * .017;
         subHeader = width * .015;
+        buttonText = width * .014;
         titleFontSize = width * .019;
 
         break;
       case DeviceScreenType.mobile:
         header = width * .02;
         subHeader = width * .018;
+        buttonText = width * .017;
         titleFontSize = width * .022;
         break;
       default:
         subHeader = 0;
         titleFontSize = 0;
+        header = 0;
+        buttonText = 0;
     }
 
     membershipUser.fetchMembership(user.uid);
@@ -182,6 +192,7 @@ class _PaymentPageState extends State<PaymentPage> {
               subHeader,
               titleFontSize,
               header,
+              buttonText,
               uid: user.uid,
               courseId: id,
               isCourse: true,
@@ -202,13 +213,15 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         height: height - 60,
         color: CusColors.bg,
-        child: _default(width, height, subHeader, titleFontSize, header,
+        child: _default(
+            width, height, subHeader, titleFontSize, header, buttonText,
             isCourse: false, memberType: membershipData.memberType),
       );
     });
   }
 
-  Widget _default(double width, double height, subHeader, titleFontSize, header,
+  Widget _default(
+      double width, double height, subHeader, titleFontSize, header, buttonText,
       {String? courseId,
       String? uid,
       bool? isCourse,
@@ -218,78 +231,91 @@ class _PaymentPageState extends State<PaymentPage> {
       String? memberType,
       int discount = 10}) {
     String? normalPrice = widget.price ?? price;
-    int parsedPrice = int.tryParse(normalPrice!.replaceAll(',', '')) ?? 0;
-    int total = 0;
-
-    if (isCourse! && memberType == 'Pro') {
-      int discountPrice = parsedPrice * discount ~/ 100;
-      total = (parsedPrice - discountPrice) + uniqueCode!;
-    } else {
-      total = parsedPrice + uniqueCode!;
-    }
-
-    String totalPrice = NumberFormat("#,###").format(total);
 
     return ResponsiveBuilder(builder: (context, sizingInformation) {
       // Check the sizing information here and return your UI
       if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
-        return desktopDefault(
-            width, height, subHeader, titleFontSize, header, true,
-            uid: uid,
-            courseId: id,
-            isCourse: isCourse,
-            title: title,
-            price: price,
-            type: type,
-            memberType: memberType,
-            discount: discount,
-            normalPrice: normalPrice,
-            totalPrice: totalPrice);
+        return defaultLayout(
+          width,
+          height,
+          subHeader,
+          titleFontSize,
+          header,
+          buttonText,
+          true,
+          uid: uid,
+          courseId: id,
+          isCourse: isCourse,
+          title: title,
+          price: price,
+          type: type,
+          memberType: memberType,
+          discount: discount,
+          normalPrice: normalPrice,
+        );
       }
       if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
-        return desktopDefault(
-            width, height, subHeader, titleFontSize, header, true,
-            uid: uid,
-            courseId: id,
-            isCourse: isCourse,
-            title: title,
-            price: price,
-            type: type,
-            memberType: memberType,
-            discount: discount,
-            normalPrice: normalPrice,
-            totalPrice: totalPrice);
+        return defaultLayout(
+          width,
+          height,
+          subHeader,
+          titleFontSize,
+          header,
+          buttonText,
+          true,
+          uid: uid,
+          courseId: id,
+          isCourse: isCourse,
+          title: title,
+          price: price,
+          type: type,
+          memberType: memberType,
+          discount: discount,
+          normalPrice: normalPrice,
+        );
       }
       if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
-        return desktopDefault(
-            width, height, subHeader, titleFontSize, header, false,
-            uid: uid,
-            courseId: id,
-            isCourse: isCourse,
-            title: title,
-            price: price,
-            type: type,
-            memberType: memberType,
-            discount: discount,
-            normalPrice: normalPrice,
-            totalPrice: totalPrice);
+        return defaultLayout(
+          width,
+          height,
+          subHeader,
+          titleFontSize,
+          header,
+          buttonText,
+          false,
+          uid: uid,
+          courseId: id,
+          isCourse: isCourse,
+          title: title,
+          price: price,
+          type: type,
+          memberType: memberType,
+          discount: discount,
+          normalPrice: normalPrice,
+        );
       }
       return Container();
     });
   }
 
-  Widget desktopDefault(
-      double width, double height, subHeader, titleFontSize, header, bool isRow,
-      {String? courseId,
-      String? uid,
-      bool? isCourse,
-      String? title,
-      String? type,
-      String? price,
-      String? memberType,
-      int? discount,
-      String? normalPrice,
-      String? totalPrice}) {
+  Widget defaultLayout(
+    double width,
+    double height,
+    subHeader,
+    titleFontSize,
+    header,
+    buttonText,
+    bool isRow, {
+    String? courseId,
+    String? uid,
+    bool? isCourse,
+    String? title,
+    String? type,
+    String? price,
+    String? memberType,
+    int? discount,
+    String? normalPrice,
+  }) {
     return ListView(
       scrollDirection: Axis.horizontal,
       children: [
@@ -367,33 +393,45 @@ class _PaymentPageState extends State<PaymentPage> {
               isRow
                   ? Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: defaultWidgetPayment(width, height, subHeader,
-                          titleFontSize, header, isRow,
-                          uid: uid,
-                          courseId: id,
-                          isCourse: isCourse,
-                          title: title,
-                          price: price,
-                          type: type,
-                          memberType: memberType,
-                          discount: discount,
-                          normalPrice: normalPrice,
-                          totalPrice: totalPrice),
+                      children: defaultWidgetPayment(
+                        width,
+                        height,
+                        subHeader,
+                        titleFontSize,
+                        header,
+                        buttonText,
+                        isRow,
+                        uid: uid,
+                        courseId: id,
+                        isCourse: isCourse,
+                        title: title,
+                        price: price,
+                        type: type,
+                        memberType: memberType,
+                        discount: discount,
+                        normalPrice: normalPrice,
+                      ),
                     )
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: defaultWidgetPayment(width, height, subHeader,
-                          titleFontSize, header, isRow,
-                          uid: uid,
-                          courseId: id,
-                          isCourse: isCourse,
-                          title: title,
-                          price: price,
-                          type: type,
-                          memberType: memberType,
-                          discount: discount,
-                          normalPrice: normalPrice,
-                          totalPrice: totalPrice),
+                      children: defaultWidgetPayment(
+                        width,
+                        height,
+                        subHeader,
+                        titleFontSize,
+                        header,
+                        buttonText,
+                        isRow,
+                        uid: uid,
+                        courseId: id,
+                        isCourse: isCourse,
+                        title: title,
+                        price: price,
+                        type: type,
+                        memberType: memberType,
+                        discount: discount,
+                        normalPrice: normalPrice,
+                      ),
                     ),
             ],
           ),
@@ -403,22 +441,46 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   List<Widget> defaultWidgetPayment(
-      double width, double height, subHeader, titleFontSize, header, isRow,
-      {String? courseId,
-      String? uid,
-      bool? isCourse,
-      String? title,
-      String? type,
-      String? price,
-      String? memberType,
-      int? discount,
-      String? normalPrice,
-      String? totalPrice}) {
+    double width,
+    double height,
+    subHeader,
+    titleFontSize,
+    header,
+    buttonText,
+    isRow, {
+    String? courseId,
+    String? uid,
+    bool? isCourse,
+    String? title,
+    String? type,
+    String? price,
+    String? memberType,
+    int? discount,
+    String? normalPrice,
+  }) {
+    int parsedPrice = int.tryParse(normalPrice!.replaceAll(',', '')) ?? 0;
+    int total = 0;
+
+    if (isCourse! && memberType == 'Pro') {
+      int discountPrice = parsedPrice * discount! ~/ 100;
+      total = (parsedPrice - discountPrice) + uniqueCode!;
+      if (coupon != null) {
+        int discountCoupon = parsedPrice * coupon!.amount! ~/ 100;
+        total = (parsedPrice - discountPrice - discountCoupon) + uniqueCode!;
+      }
+    } else if (coupon != null) {
+      int discountCoupon = parsedPrice * coupon!.amount! ~/ 100;
+      total = (parsedPrice - discountCoupon) + uniqueCode!;
+    } else {
+      total = parsedPrice + uniqueCode!;
+    }
+
+    String totalPrice = NumberFormat("#,###").format(total);
     return [
       SizedBox(
         width: getValueForScreenType<double>(
           context: context,
-          mobile: isCourse! ? width / 1.1 : width / 1.3,
+          mobile: isCourse ? width / 1.1 : width / 1.3,
           tablet: width / 1.8,
           desktop: width / 2,
         ),
@@ -643,6 +705,119 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
             borderRadius: BorderRadius.circular(10)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          GestureDetector(
+            onTap: () async {
+              final result = await showDialog(
+                  context: context,
+                  builder: (_) {
+                    return const CouponRedeem();
+                  });
+
+              if (result != false) {
+                setState(() {
+                  coupon = result;
+                });
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              height: 45,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    IconlyLight.discount,
+                    color: CusColors.accentBlue,
+                    size: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 20,
+                      tablet: 22,
+                      desktop: 24,
+                    ),
+                  ),
+                  if (coupon == null)
+                    Text(
+                      'Save more with promos',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w500,
+                        color: CusColors.text,
+                      ),
+                    ),
+                  if (coupon != null)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (coupon!.description != '')
+                          Text(
+                            coupon!.description!,
+                            style: GoogleFonts.poppins(
+                              fontSize: subHeader,
+                              fontWeight: FontWeight.w500,
+                              color: CusColors.text,
+                            ),
+                          ),
+                        Text(
+                          '1 Coupon used',
+                          style: GoogleFonts.poppins(
+                            fontSize: buttonText,
+                            fontWeight: FontWeight.w400,
+                            color: CusColors.text,
+                          ),
+                        ),
+                      ],
+                    ),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                    size: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 20,
+                      tablet: 22,
+                      desktop: 24,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          if (coupon != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Discount items',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    getCouponFormatName(coupon!.type!, coupon!.amount!),
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w400,
+                      color: CusColors.subHeader,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Container(
+            height: 2,
+            width: double.infinity,
+            margin: const EdgeInsets.only(top: 10, bottom: 20),
+            color: CusColors.bgSideBar,
+          ),
           Text(
             'Payment summary',
             style: GoogleFonts.poppins(
@@ -685,7 +860,16 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                     if (memberType == 'Pro')
                       Text(
-                        'Discount for Being a Pro Member',
+                        'Discount Pro Member',
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w400,
+                          color: CusColors.subHeader,
+                        ),
+                      ),
+                    if (coupon != null)
+                      Text(
+                        'Coupon discount',
                         style: GoogleFonts.poppins(
                           fontSize: subHeader,
                           fontWeight: FontWeight.w400,
@@ -734,6 +918,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 tablet: width * .013,
                                 desktop: width * .008,
                               ),
+                              decoration: TextDecoration.underline,
                               fontWeight: FontWeight.w400,
                               color: CusColors.accentBlue,
                             ),
@@ -755,6 +940,15 @@ class _PaymentPageState extends State<PaymentPage> {
                   if (memberType == 'Pro')
                     Text(
                       '$discount%',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                  if (coupon != null)
+                    Text(
+                      getCouponFormatName(coupon!.type!, coupon!.amount!),
                       style: GoogleFonts.poppins(
                         fontSize: subHeader,
                         fontWeight: FontWeight.w400,
@@ -1340,7 +1534,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                         if (memberType == 'Pro')
                           Text(
-                            'Discount for Being a Pro Member',
+                            'Discount Pro Member',
                             style: GoogleFonts.poppins(
                               fontSize: subHeader,
                               fontWeight: FontWeight.w400,

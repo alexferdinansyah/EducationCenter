@@ -61,7 +61,7 @@ class MembershipModel {
 
   MembershipModel({required this.memberType, required this.joinSince});
 
-  // Convert Firestore data to ListCourse object
+  // Convert Firestore data to Membership object
   factory MembershipModel.fromFirestore(Map<String, dynamic> data) {
     return MembershipModel(
       memberType: data['type'],
@@ -74,6 +74,30 @@ class MembershipModel {
       'type': memberType,
       'join_since': Timestamp.fromDate(
           joinSince), // Assuming Firestore uses Timestamp for DateTime
+    };
+  }
+}
+
+class UserCoupon {
+  String? code;
+  int? redeemTotal;
+
+  UserCoupon({
+    required this.code,
+    required this.redeemTotal,
+  });
+
+  factory UserCoupon.fromFirestore(Map<String, dynamic> data) {
+    return UserCoupon(
+      code: data['code'],
+      redeemTotal: data['redeem_total'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'code': code,
+      'redeem_total': redeemTotal,
     };
   }
 }

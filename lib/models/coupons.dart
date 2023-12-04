@@ -1,7 +1,7 @@
 enum Coupons {
   percentageCoupon,
   fixedCartCoupon,
-  fixedProductCoupon,
+  productCoupon,
 }
 
 String getCouponDisplayName(Coupons coupon) {
@@ -10,8 +10,23 @@ String getCouponDisplayName(Coupons coupon) {
       return 'Percentage Coupon';
     case Coupons.fixedCartCoupon:
       return 'Fixed Cart Coupon';
-    case Coupons.fixedProductCoupon:
-      return 'Fixed Product Coupon';
+    case Coupons.productCoupon:
+      return 'Product Coupon';
+    // handle other enum values if needed
+    default:
+      return coupon.toString().split('.').last;
+  }
+}
+
+// nanti tambahin buat redeem membership parameter
+String getCouponFormatName(Coupons coupon, int amount) {
+  switch (coupon) {
+    case Coupons.percentageCoupon:
+      return '$amount%';
+    case Coupons.fixedCartCoupon:
+      return 'Rp $amount';
+    case Coupons.productCoupon:
+      return 'Product Coupon';
     // handle other enum values if needed
     default:
       return coupon.toString().split('.').last;
@@ -21,6 +36,12 @@ String getCouponDisplayName(Coupons coupon) {
 enum Status {
   Draft,
   Publish,
+}
+
+enum StatusCoupon {
+  Expired,
+  Activated,
+  Redeemed,
 }
 
 enum VisibilityType {
