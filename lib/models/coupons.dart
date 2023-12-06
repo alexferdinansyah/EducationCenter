@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 enum Coupons {
   percentageCoupon,
   fixedCartCoupon,
@@ -24,7 +26,7 @@ String getCouponFormatName(Coupons coupon, int amount) {
     case Coupons.percentageCoupon:
       return '$amount%';
     case Coupons.fixedCartCoupon:
-      return 'Rp $amount';
+      return 'Rp ${NumberFormat("#,###").format(amount)}';
     case Coupons.productCoupon:
       return 'Product Coupon';
     // handle other enum values if needed

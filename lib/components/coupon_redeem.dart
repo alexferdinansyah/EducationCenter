@@ -3,13 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class CouponRedeem extends StatefulWidget {
-  const CouponRedeem({super.key});
+  final bool isProductCoupon;
+  final String? title;
+  const CouponRedeem({super.key, required this.isProductCoupon, this.title});
 
   @override
   State<CouponRedeem> createState() => _CouponRedeemState();
@@ -20,6 +23,7 @@ class _CouponRedeemState extends State<CouponRedeem> {
 
   final _formKey = GlobalKey<FormState>();
   String? error;
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -36,7 +40,7 @@ class _CouponRedeemState extends State<CouponRedeem> {
       title: Row(
         children: [
           Text(
-            'Use coupons',
+            widget.isProductCoupon ? 'Redeem code' : 'Use coupons',
             style: GoogleFonts.poppins(
               fontSize: getValueForScreenType<double>(
                 context: context,
@@ -103,6 +107,15 @@ class _CouponRedeemState extends State<CouponRedeem> {
                       keyboardType: TextInputType.text,
                       decoration: editProfileDecoration.copyWith(
                         errorText: error,
+                        errorMaxLines: 2,
+                        errorStyle: GoogleFonts.poppins(
+                          fontSize: getValueForScreenType<double>(
+                            context: context,
+                            mobile: width * .017,
+                            tablet: width * .014,
+                            desktop: width * .008,
+                          ),
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                           vertical: getValueForScreenType<double>(
                             context: context,
@@ -150,18 +163,55 @@ class _CouponRedeemState extends State<CouponRedeem> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
                           final FirestoreService firestore =
                               FirestoreService(uid: user!.uid);
 
-                          final result = await firestore
-                              .checkValidationCoupon(_codeController.text);
+                          if (widget.isProductCoupon) {
+                            final result =
+                                await firestore.checkValidationCoupon(
+                                    _codeController.text,
+                                    widget.isProductCoupon,
+                                    widget.title);
 
-                          if (result is String) {
-                            setState(() {
-                              error = result;
-                            });
+                            if (result is String &&
+                                result != 'Success Redeem') {
+                              setState(() {
+                                error = result;
+                                loading = false;
+                              });
+                            } else {
+                              Get.back();
+                              if (context.mounted) {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return CustomAlert(
+                                          onPressed: () => Get.back(),
+                                          title: 'Success',
+                                          message: result,
+                                          animatedIcon:
+                                              'assets/animations/check.json');
+                                    });
+                              }
+                            }
                           } else {
-                            Get.back(result: result);
+                            final result =
+                                await firestore.checkValidationCoupon(
+                                    _codeController.text,
+                                    widget.isProductCoupon,
+                                    widget.title);
+
+                            if (result is String) {
+                              setState(() {
+                                error = result;
+                                loading = false;
+                              });
+                            } else {
+                              Get.back(result: result);
+                            }
                           }
                         }
                       },

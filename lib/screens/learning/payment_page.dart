@@ -20,7 +20,6 @@ import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/controllers/detail_controller.dart';
 import 'package:project_tc/controllers/storage_controller.dart';
 import 'package:project_tc/models/bank_model.dart';
-import 'package:project_tc/models/coupon.dart';
 import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
@@ -57,7 +56,7 @@ class _PaymentPageState extends State<PaymentPage> {
   bool? isVerify;
   Timer? timer;
   bool isOpen = true;
-  Coupon? coupon;
+  Map? couponData;
 
   @override
   void initState() {
@@ -141,20 +140,20 @@ class _PaymentPageState extends State<PaymentPage> {
       case DeviceScreenType.desktop:
         header = width * .012;
         subHeader = width * .01;
-        buttonText = width * .009;
+        buttonText = width * .008;
         titleFontSize = width * .014;
         break;
       case DeviceScreenType.tablet:
         header = width * .017;
         subHeader = width * .015;
-        buttonText = width * .014;
+        buttonText = width * .013;
         titleFontSize = width * .019;
 
         break;
       case DeviceScreenType.mobile:
         header = width * .02;
         subHeader = width * .018;
-        buttonText = width * .017;
+        buttonText = width * .016;
         titleFontSize = width * .022;
         break;
       default:
@@ -463,14 +462,26 @@ class _PaymentPageState extends State<PaymentPage> {
 
     if (isCourse! && memberType == 'Pro') {
       int discountPrice = parsedPrice * discount! ~/ 100;
-      total = (parsedPrice - discountPrice) + uniqueCode!;
-      if (coupon != null) {
-        int discountCoupon = parsedPrice * coupon!.amount! ~/ 100;
-        total = (parsedPrice - discountPrice - discountCoupon) + uniqueCode!;
+      int memberProPrice = parsedPrice - discountPrice;
+      total = memberProPrice + uniqueCode!;
+      if (couponData != null) {
+        if (couponData!['coupon'].type == Coupons.percentageCoupon) {
+          int discountCoupon =
+              memberProPrice * couponData!['coupon'].amount ~/ 100;
+          total = (memberProPrice - discountCoupon) + uniqueCode!;
+        } else {
+          total = (memberProPrice - couponData!['coupon'].amount as int) +
+              uniqueCode!;
+        }
       }
-    } else if (coupon != null) {
-      int discountCoupon = parsedPrice * coupon!.amount! ~/ 100;
-      total = (parsedPrice - discountCoupon) + uniqueCode!;
+    } else if (couponData != null) {
+      if (couponData!['coupon'].type == Coupons.percentageCoupon) {
+        int discountCoupon = parsedPrice * couponData!['coupon'].amount! ~/ 100;
+        total = (parsedPrice - discountCoupon) + uniqueCode!;
+      } else {
+        total =
+            (parsedPrice - couponData!['coupon'].amount as int) + uniqueCode!;
+      }
     } else {
       total = parsedPrice + uniqueCode!;
     }
@@ -710,12 +721,15 @@ class _PaymentPageState extends State<PaymentPage> {
               final result = await showDialog(
                   context: context,
                   builder: (_) {
-                    return const CouponRedeem();
+                    return CouponRedeem(
+                      isProductCoupon: false,
+                      title: widget.title ?? title!,
+                    );
                   });
 
               if (result != false) {
                 setState(() {
-                  coupon = result;
+                  couponData = result;
                 });
               }
             },
@@ -741,7 +755,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       desktop: 24,
                     ),
                   ),
-                  if (coupon == null)
+                  if (couponData == null)
                     Text(
                       'Save more with promos',
                       style: GoogleFonts.poppins(
@@ -750,13 +764,15 @@ class _PaymentPageState extends State<PaymentPage> {
                         color: CusColors.text,
                       ),
                     ),
-                  if (coupon != null)
+                  if (couponData != null)
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (coupon!.description != '')
+                        if (couponData!['coupon'].description != '')
                           Text(
-                            coupon!.description!,
+                            couponData!['coupon'].description!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: subHeader,
                               fontWeight: FontWeight.w500,
@@ -786,7 +802,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
             ),
           ),
-          if (coupon != null)
+          if (couponData != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Row(
@@ -802,7 +818,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ),
                   Text(
-                    getCouponFormatName(coupon!.type!, coupon!.amount!),
+                    getCouponFormatName(couponData!['coupon'].type!,
+                        couponData!['coupon'].amount!),
                     style: GoogleFonts.poppins(
                       fontSize: subHeader,
                       fontWeight: FontWeight.w400,
@@ -867,13 +884,16 @@ class _PaymentPageState extends State<PaymentPage> {
                           color: CusColors.subHeader,
                         ),
                       ),
-                    if (coupon != null)
-                      Text(
-                        'Coupon discount',
-                        style: GoogleFonts.poppins(
-                          fontSize: subHeader,
-                          fontWeight: FontWeight.w400,
-                          color: CusColors.subHeader,
+                    if (couponData != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        child: Text(
+                          'Coupon discount',
+                          style: GoogleFonts.poppins(
+                            fontSize: subHeader,
+                            fontWeight: FontWeight.w400,
+                            color: CusColors.subHeader,
+                          ),
                         ),
                       ),
                   ],
@@ -946,13 +966,17 @@ class _PaymentPageState extends State<PaymentPage> {
                         color: CusColors.subHeader,
                       ),
                     ),
-                  if (coupon != null)
-                    Text(
-                      getCouponFormatName(coupon!.type!, coupon!.amount!),
-                      style: GoogleFonts.poppins(
-                        fontSize: subHeader,
-                        fontWeight: FontWeight.w400,
-                        color: CusColors.subHeader,
+                  if (couponData != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      child: Text(
+                        getCouponFormatName(couponData!['coupon'].type!,
+                            couponData!['coupon'].amount!),
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w400,
+                          color: CusColors.subHeader,
+                        ),
                       ),
                     ),
                 ],
@@ -1541,6 +1565,18 @@ class _PaymentPageState extends State<PaymentPage> {
                               color: CusColors.subHeader,
                             ),
                           ),
+                        if (couponData != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 3),
+                            child: Text(
+                              'Coupon discount',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                          ),
                         SizedBox(
                           height: getValueForScreenType<double>(
                             context: context,
@@ -1636,6 +1672,19 @@ class _PaymentPageState extends State<PaymentPage> {
                             fontSize: subHeader,
                             fontWeight: FontWeight.w400,
                             color: CusColors.subHeader,
+                          ),
+                        ),
+                      if (couponData != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 3),
+                          child: Text(
+                            getCouponFormatName(couponData!['coupon'].type!,
+                                couponData!['coupon'].amount!),
+                            style: GoogleFonts.poppins(
+                              fontSize: subHeader,
+                              fontWeight: FontWeight.w400,
+                              color: CusColors.subHeader,
+                            ),
                           ),
                         ),
                       image != null
@@ -1898,9 +1947,10 @@ class _PaymentPageState extends State<PaymentPage> {
                                             data = TransactionModel(
                                                 uid: uid,
                                                 item: TransactionItem(
-                                                    id: courseId,
-                                                    title: title,
-                                                    subTitle: type),
+                                                  id: courseId,
+                                                  title: title,
+                                                  subTitle: type,
+                                                ),
                                                 invoiceDate: DateTime.now(),
                                                 date: DateTime.now(),
                                                 bankName:
@@ -1908,8 +1958,9 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 price: price,
                                                 status: 'Pending',
                                                 invoice: downloadURL,
-                                                uniqueCode:
-                                                    uniqueCode.toString(),
+                                                uniqueCode: totalPrice!
+                                                    .substring(
+                                                        totalPrice.length - 3),
                                                 reason: null);
                                           } else {
                                             data = TransactionModel(
@@ -1949,6 +2000,15 @@ class _PaymentPageState extends State<PaymentPage> {
                                               );
                                             }
                                           } else {
+                                            if (couponData != null) {
+                                              await firestoreService
+                                                  .addCouponUsage(
+                                                      couponData!['coupon']
+                                                          .code,
+                                                      couponData!['id'],
+                                                      couponData!['coupon']
+                                                          .timesUsed);
+                                            }
                                             await firestoreService
                                                 .createTransaction(data)
                                                 .then((value) async {

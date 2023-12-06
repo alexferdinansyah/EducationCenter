@@ -97,7 +97,9 @@ class _AdminCouponsState extends State<AdminCoupons> {
                     color: const Color(0xFF7D8398)),
               )),
               DataCell(Text(
-                coupon.amount.toString(),
+                coupon.type == Coupons.productCoupon
+                    ? coupon.product!
+                    : getCouponFormatName(coupon.type!, coupon.amount!),
                 style: GoogleFonts.poppins(
                     fontSize: subHeader,
                     fontWeight: FontWeight.w400,

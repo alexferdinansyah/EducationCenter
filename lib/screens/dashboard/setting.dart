@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/coupon_redeem.dart';
 import 'package:project_tc/components/reset_password.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
@@ -86,7 +87,7 @@ class _SettingsState extends State<Settings> {
                         tablet: 3,
                         desktop: 4,
                       ),
-                      itemCount: widget.user.verifiedEmail ? 3 : 4,
+                      itemCount: widget.user.verifiedEmail ? 4 : 5,
                       itemBuilder: (BuildContext context, int index) {
                         return SettingList(
                           setting: settingLists[index],
@@ -149,6 +150,22 @@ List<Setting> settingLists = [
         context: Get.context!,
         builder: (_) {
           return const ResetPasswordDialog();
+        },
+      );
+    },
+  ),
+  Setting(
+    title: 'Redeem Code',
+    image: 'assets/svg/Ticket.svg',
+    desc: 'Redeem code to get reward',
+    buttonText: 'Redeem Now',
+    onTap: () {
+      showDialog(
+        context: Get.context!,
+        builder: (_) {
+          return const CouponRedeem(
+            isProductCoupon: true,
+          );
         },
       );
     },

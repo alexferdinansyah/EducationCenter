@@ -129,6 +129,31 @@ class FirestoreService {
     }
   }
 
+  Future<List<String>> getAllCourseTitles() async {
+    List<String> courseTitles = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('courses')
+              .where('is_draft', isNotEqualTo: true)
+              .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var doc in querySnapshot.docs) {
+          var title = doc.data()['title'] as String?;
+          if (title != null) {
+            courseTitles.add(title);
+          }
+        }
+      }
+    } catch (e) {
+      print('Error getting course data: $e');
+    }
+
+    return courseTitles;
+  }
+
   //get course data by reference
   Future getCourseData(DocumentReference course) async {
     // Get Reference Courses Data
@@ -543,7 +568,7 @@ class FirestoreService {
       if (query.docs.first.exists) {
         UserCoupon couponData = await getUserCoupon(query.docs.first.reference);
 
-        return couponData;
+        return {'coupon': couponData, 'id': query.docs.first.id};
       }
       return null;
     } catch (e) {
@@ -551,16 +576,19 @@ class FirestoreService {
     }
   }
 
-  Future checkValidationCoupon(String code) async {
+  Future checkValidationCoupon(
+      String code, bool isProductCoupon, String? title) async {
     try {
       QuerySnapshot query =
           await couponCollection.where('code', isEqualTo: code).get();
 
-      UserCoupon? userCouponData = await checkUserCouponStatus(code);
+      Map? userCouponData = await checkUserCouponStatus(code);
       if (query.docs.first.exists) {
         Coupon? couponData = await getCoupon(query.docs.first.reference);
+        String? couponId = query.docs.first.id;
 
         final usageLimit = couponData!.usageLimit!;
+        final usageRestriction = couponData.usageRestriction!;
 
         final statusCoupon = couponData.getStatus();
 
@@ -568,26 +596,119 @@ class FirestoreService {
           return 'Coupon is expired';
         }
 
-        // belom di check
-        if (usageLimit.perCoupon != null) {
-          if (couponData.timesUsed! >= usageLimit.perCoupon!) {
-            return 'Coupon usage limit exceeded';
+        if (couponData.status == Status.Draft ||
+            couponData.visibility == VisibilityType.Private) {
+          return 'Invalid code, please enter the right code';
+        }
+
+        if (usageLimit.perCoupon != null &&
+            couponData.timesUsed! >= usageLimit.perCoupon!) {
+          return 'Coupon usage limit exceeded';
+        }
+
+        if (usageLimit.perUser != null &&
+            userCouponData != null &&
+            userCouponData['coupon'].redeemTotal! >= usageLimit.perUser!) {
+          return 'You have been redeeming this code';
+        }
+
+        if (!isProductCoupon && couponData.type == Coupons.productCoupon) {
+          return 'You cannot use this coupon on payment, please use redeem code';
+        }
+
+        if (isProductCoupon && couponData.type != Coupons.productCoupon) {
+          return 'You cannot redeem this code, please enter the right code';
+        }
+
+        if (isProductCoupon && couponData.type == Coupons.productCoupon) {
+          await addCouponUsage(
+            code,
+            couponId,
+            couponData.timesUsed!,
+          );
+          await redeemCode(couponData.product!);
+          return 'Success Redeem';
+        }
+
+        if (usageRestriction.products!.isNotEmpty &&
+            usageRestriction.excludeProducts!.isNotEmpty) {
+          if (!usageRestriction.products!.contains(title) &&
+              usageRestriction.excludeProducts!.contains(title)) {
+            return 'You cannot use this code on this payment';
+          }
+        } else if (usageRestriction.products!.isNotEmpty &&
+            usageRestriction.excludeProducts!.isEmpty) {
+          if (!usageRestriction.products!.contains(title)) {
+            return 'You cannot use this code in $title payment';
+          }
+        } else if (usageRestriction.products!.isEmpty &&
+            usageRestriction.excludeProducts!.isNotEmpty) {
+          if (usageRestriction.excludeProducts!.contains(title)) {
+            return 'You cannot use this code in $title payment';
           }
         }
 
-        // belom di check
-        if (usageLimit.perUser != null && userCouponData != null) {
-          if (userCouponData.redeemTotal! >= usageLimit.perUser!) {
-            return 'You have been redeeming this code';
-          }
-        }
-
-        return couponData;
+        return {'coupon': couponData, 'id': couponId};
       } else {
         return 'Coupon not exist';
       }
     } catch (e) {
       return 'Coupon invalid, please try another';
+    }
+  }
+
+  Future addCouponUsage(
+    String code,
+    String couponId,
+    int timesUsed,
+  ) async {
+    try {
+      Map? userCouponData = await checkUserCouponStatus(code);
+      if (userCouponData != null) {
+        await userCollection
+            .doc(uid)
+            .collection('user_coupon')
+            .doc(userCouponData['id'])
+            .update(
+                {'redeem_total': userCouponData['coupon'].redeemTotal! + 1});
+      } else {
+        final data = UserCoupon(code: code, redeemTotal: 1);
+        await userCollection
+            .doc(uid)
+            .collection('user_coupon')
+            .add(data.toFirestore());
+      }
+      await couponCollection
+          .doc(couponId)
+          .update({'times_used': timesUsed + 1});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future redeemCode(String product) async {
+    try {
+      if (product == 'Membership') {
+        final upgradeMembership =
+            MembershipModel(memberType: 'Pro', joinSince: DateTime.now());
+        try {
+          await userCollection
+              .doc(uid)
+              .update({'membership': upgradeMembership.toFirestore()});
+        } catch (e) {
+          print('Error updating user membership data $e');
+        }
+      } else {
+        try {
+          final courseProduct =
+              await courseCollection.where('title', isEqualTo: product).get();
+          await addMyCourse(courseProduct.docs.first.id, uid, true);
+        } catch (e) {
+          print('Error updating user my course data $e');
+        }
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

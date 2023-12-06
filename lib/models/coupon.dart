@@ -6,19 +6,25 @@ class Coupon {
   String? description;
   Coupons? type;
   int? amount;
+  String? product;
   DateTime? expires;
   int? timesUsed;
-  // UsageRestriction? usageRestriction;  nanti
+  Status? status;
+  VisibilityType? visibility;
+  UsageRestriction? usageRestriction;
   UsageLimit? usageLimit;
 
   Coupon({
     required this.code,
     this.description,
     required this.type,
-    required this.amount,
+    this.amount,
+    this.product,
     this.expires,
     this.timesUsed,
-    // this.usageRestriction,
+    required this.status,
+    required this.visibility,
+    this.usageRestriction,
     this.usageLimit,
   });
 
@@ -30,10 +36,14 @@ class Coupon {
       description: data['description'],
       type: Coupons.values.firstWhere((e) => e.name == data['type']),
       amount: data['amount'],
+      product: data['product'],
       expires: data['expires']?.toDate(),
       timesUsed: data['times_used'],
-      // usageRestriction:
-      //     UsageRestriction.fromFirestore(data['usage_restriction']),
+      status: Status.values.firstWhere((e) => e.name == data['status']),
+      visibility:
+          VisibilityType.values.firstWhere((e) => e.name == data['visibility']),
+      usageRestriction:
+          UsageRestriction.fromFirestore(data['usage_restriction']),
       usageLimit: UsageLimit.fromFirestore(usageLimit!),
     );
   }
@@ -44,9 +54,12 @@ class Coupon {
       'description': description,
       'type': type?.name,
       'amount': amount,
+      'product': product,
       'expires': expires != null ? Timestamp.fromDate(expires!) : null,
       'times_used': timesUsed,
-      // 'usage_restriction': usageRestriction?.toFirestore(),
+      'status': status?.name,
+      'visibility': visibility?.name,
+      'usage_restriction': usageRestriction?.toFirestore(),
       'usage_limit': usageLimit?.toFirestore(),
     };
   }
@@ -68,31 +81,23 @@ class Coupon {
 class UsageRestriction {
   List<String>? products;
   List<String>? excludeProducts;
-  List<String>? productCategories;
-  List<String>? excludeCategories;
 
   UsageRestriction({
     this.products,
     this.excludeProducts,
-    this.productCategories,
-    this.excludeCategories,
   });
 
   factory UsageRestriction.fromFirestore(Map<String, dynamic> data) {
     return UsageRestriction(
-      products: List<String>.from(data['products']),
-      excludeProducts: List<String>.from(data['exclude_products']),
-      productCategories: List<String>.from(data['product_Categories']),
-      excludeCategories: List<String>.from(data['exclude_categories']),
+      products: List<String>.from(data['products'] ?? []),
+      excludeProducts: List<String>.from(data['exclude_products'] ?? []),
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
       'products': products,
-      'exclude_croducts': excludeProducts,
-      'product_categories': productCategories,
-      'exclude_categories': excludeCategories,
+      'exclude_products': excludeProducts,
     };
   }
 }

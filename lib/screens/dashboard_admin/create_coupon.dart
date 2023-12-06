@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
+import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
@@ -36,7 +37,7 @@ class _CreateCouponState extends State<CreateCoupon> {
   final TextEditingController _limitPerUserController = TextEditingController();
   final List<SideItem> sidebarItems = [
     const SideItem(icon: IconlyBold.category, title: 'General'),
-    // const SideItem(icon: IconlyBold.danger, title: 'Usage Restriction'),
+    const SideItem(icon: IconlyBold.danger, title: 'Usage Restriction'),
     const SideItem(icon: IconlyBold.graph, title: 'Usage Limits'),
   ];
 
@@ -48,6 +49,10 @@ class _CreateCouponState extends State<CreateCoupon> {
   Status status = Status.Draft;
   VisibilityType visibility = VisibilityType.Private;
   bool? loading;
+  List<String> items = ['Membership'];
+  List<String>? products;
+  List<String>? excludeProducts;
+  List<String>? productReward;
 
   DateTime selectedDate = DateTime.now();
 
@@ -63,6 +68,20 @@ class _CreateCouponState extends State<CreateCoupon> {
         _dateController.text = expiryDate?.formatDate() ?? '';
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCourseTitles();
+  }
+
+  Future<void> fetchCourseTitles() async {
+    List<String> titles =
+        await FirestoreService.withoutUID().getAllCourseTitles();
+    setState(() {
+      items.addAll(titles);
+    });
   }
 
   String generateCouponCode() {
@@ -140,8 +159,8 @@ class _CreateCouponState extends State<CreateCoupon> {
       switch (selectedSidebarItem) {
         case 'General':
           return _generalMenu(subHeader, buttonText);
-        // case 'Usage Restriction':
-        //   return _usageRestrictionMenu(subHeader, buttonText);
+        case 'Usage Restriction':
+          return _usageRestriction(subHeader, buttonText);
         case 'Usage Limits':
           return _usageLimits(subHeader, buttonText);
         default:
@@ -630,10 +649,18 @@ class _CreateCouponState extends State<CreateCoupon> {
                                                   type: type,
                                                   amount: int.tryParse(
                                                       _amountController.text),
+                                                  product: productReward?[0],
                                                   description:
                                                       description ?? '',
                                                   expires: expiryDate,
                                                   timesUsed: 0,
+                                                  status: status,
+                                                  visibility: visibility,
+                                                  usageRestriction:
+                                                      UsageRestriction(
+                                                          products: products,
+                                                          excludeProducts:
+                                                              excludeProducts),
                                                   usageLimit: UsageLimit(
                                                     perCoupon: int.tryParse(
                                                         _limitPerCouponController
@@ -903,58 +930,143 @@ class _CreateCouponState extends State<CreateCoupon> {
             const SizedBox(
               height: 12,
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    'Coupon amount',
-                    style: GoogleFonts.poppins(
-                      fontSize: subHeader,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF1F384C),
+            if (type == Coupons.productCoupon)
+              Row(
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      'Product',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF1F384C),
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    key: const Key('coupon amount'),
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*')),
-                    ],
-                    style: GoogleFonts.poppins(
-                        fontSize: buttonText,
-                        fontWeight: FontWeight.w500,
-                        color: CusColors.subHeader),
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Enter an amount coupon';
-                      }
-                      return null;
-                    },
-                    decoration: editProfileDecoration.copyWith(
-                      hintText: 'Coupon amount',
-                      hintStyle: GoogleFonts.poppins(
-                        fontSize: buttonText,
-                        fontWeight: FontWeight.w500,
-                        color: CusColors.subHeader.withOpacity(0.5),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: getValueForScreenType<double>(
-                          context: context,
-                          mobile: 2,
-                          tablet: 3,
-                          desktop: 5,
+                  Expanded(
+                    child: MultipleSearchSelection(
+                      key: const Key('product reward'),
+                      items: items,
+                      initialPickedItems: productReward,
+                      fieldToCheck: (product) {
+                        return product; // String
+                      },
+                      itemBuilder: (item, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 12,
+                              ),
+                              child: Text(item),
+                            ),
+                          ),
+                        );
+                      },
+                      pickedItemBuilder: (item) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey[400]!),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(item),
+                          ),
+                        );
+                      },
+                      fuzzySearch: FuzzySearch.levenshtein,
+                      showSelectAllButton: false,
+                      itemsVisibility: ShowedItemsVisibility.onType,
+                      onPickedChange: (items) {
+                        setState(() {
+                          productReward = items;
+                        });
+                      },
+                      showClearAllButton: false,
+                      maxSelectedItems: 1,
+                      searchFieldInputDecoration:
+                          editProfileDecoration.copyWith(
+                        hintText: 'Products',
+                        hintStyle: GoogleFonts.poppins(
+                          fontSize: buttonText,
+                          fontWeight: FontWeight.w500,
+                          color: CusColors.subHeader.withOpacity(0.5),
                         ),
-                        horizontal: 10,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 2,
+                            tablet: 3,
+                            desktop: 5,
+                          ),
+                          horizontal: 10,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            if (type != Coupons.productCoupon)
+              Row(
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      'Coupon amount',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF1F384C),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      key: const Key('coupon amount'),
+                      controller: _amountController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*')),
+                      ],
+                      style: GoogleFonts.poppins(
+                          fontSize: buttonText,
+                          fontWeight: FontWeight.w500,
+                          color: CusColors.subHeader),
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'Enter an amount coupon';
+                        }
+                        return null;
+                      },
+                      decoration: editProfileDecoration.copyWith(
+                        hintText: 'Coupon amount',
+                        hintStyle: GoogleFonts.poppins(
+                          fontSize: buttonText,
+                          fontWeight: FontWeight.w500,
+                          color: CusColors.subHeader.withOpacity(0.5),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 2,
+                            tablet: 3,
+                            desktop: 5,
+                          ),
+                          horizontal: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             const SizedBox(
               height: 12,
             ),
@@ -998,6 +1110,181 @@ class _CreateCouponState extends State<CreateCoupon> {
                           ),
                           horizontal: 10,
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _usageRestriction(subHeader, buttonText) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Products',
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF1F384C),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: MultipleSearchSelection(
+                    key: const Key('ur products'),
+                    items: items,
+                    initialPickedItems: products,
+                    fieldToCheck: (product) {
+                      return product; // String
+                    },
+                    itemBuilder: (item, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20.0,
+                              horizontal: 12,
+                            ),
+                            child: Text(item),
+                          ),
+                        ),
+                      );
+                    },
+                    pickedItemBuilder: (item) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey[400]!),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(item),
+                        ),
+                      );
+                    },
+                    fuzzySearch: FuzzySearch.levenshtein,
+                    showSelectAllButton: false,
+                    itemsVisibility: ShowedItemsVisibility.onType,
+                    onPickedChange: (items) {
+                      setState(() {
+                        products = items;
+                      });
+                    },
+                    searchFieldInputDecoration: editProfileDecoration.copyWith(
+                      hintText: 'Products',
+                      hintStyle: GoogleFonts.poppins(
+                        fontSize: buttonText,
+                        fontWeight: FontWeight.w500,
+                        color: CusColors.subHeader.withOpacity(0.5),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 2,
+                          tablet: 3,
+                          desktop: 5,
+                        ),
+                        horizontal: 10,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Exclude Products',
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF1F384C),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: MultipleSearchSelection(
+                    key: const Key('ur exclude products'),
+                    items: items,
+                    initialPickedItems: excludeProducts,
+                    fieldToCheck: (product) {
+                      return product; // String
+                    },
+                    itemBuilder: (item, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20.0,
+                              horizontal: 12,
+                            ),
+                            child: Text(item),
+                          ),
+                        ),
+                      );
+                    },
+                    pickedItemBuilder: (item) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey[400]!),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(item),
+                        ),
+                      );
+                    },
+                    fuzzySearch: FuzzySearch.levenshtein,
+                    showSelectAllButton: false,
+                    itemsVisibility: ShowedItemsVisibility.onType,
+                    onPickedChange: (items) {
+                      setState(() {
+                        excludeProducts = items;
+                      });
+                    },
+                    searchFieldInputDecoration: editProfileDecoration.copyWith(
+                      hintText: 'Exclude Products',
+                      hintStyle: GoogleFonts.poppins(
+                        fontSize: buttonText,
+                        fontWeight: FontWeight.w500,
+                        color: CusColors.subHeader.withOpacity(0.5),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 2,
+                          tablet: 3,
+                          desktop: 5,
+                        ),
+                        horizontal: 10,
                       ),
                     ),
                   ),
