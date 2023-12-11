@@ -9,8 +9,20 @@ import 'package:project_tc/models/article.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class ArticleList extends StatelessWidget {
+class ArticleList extends StatefulWidget {
   const ArticleList({super.key});
+
+  @override
+  State<ArticleList> createState() => _ArticleListState();
+}
+
+class _ArticleListState extends State<ArticleList> {
+  final TextEditingController _searchController = TextEditingController();
+  _onChange(value) {
+    setState(() {
+      _searchController.text = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +85,10 @@ class ArticleList extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CusSearchBar(),
+                            CusSearchBar(
+                              controller: _searchController,
+                              onChange: _onChange,
+                            ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -155,14 +170,21 @@ class ArticleList extends StatelessWidget {
         if (snapshot.hasData) {
           final List<Map> dataMaps = snapshot.data!;
 
-          final List<Map> articles = dataMaps.where((articleData) {
-            final dynamic data = articleData['article'];
-            return data is Article;
-          }).map((articleData) {
-            final Article article = articleData['article'];
-            final String id = articleData['id'];
-            return {'article': article, 'id': id};
-          }).toList();
+          final List<Map> articles = dataMaps
+              .where((articleData) {
+                final dynamic data = articleData['article'];
+                return data is Article;
+              })
+              .where((articleData) => articleData['article']
+                  .title
+                  .toLowerCase()
+                  .contains(_searchController.text.toLowerCase()))
+              .map((articleData) {
+                final Article article = articleData['article'];
+                final String id = articleData['id'];
+                return {'article': article, 'id': id};
+              })
+              .toList();
           return SizedBox(
             width: getValueForScreenType<double>(
               context: context,
@@ -176,17 +198,33 @@ class ArticleList extends StatelessWidget {
               tablet: height * .64 * articles.length + 150,
               desktop: height * .64 * articles.length + 150,
             ),
-            child: LiveList(
-              showItemInterval: const Duration(milliseconds: 150),
-              showItemDuration: const Duration(milliseconds: 350),
-              scrollDirection: Axis.vertical,
-              itemCount: articles.length,
-              itemBuilder: animationBuilder(
-                (index) => ArticleLists(
-                    article: articles[index]['article'],
-                    id: articles[index]['id']),
-              ),
-            ),
+            child: articles.isNotEmpty
+                ? LiveList(
+                    showItemInterval: const Duration(milliseconds: 150),
+                    showItemDuration: const Duration(milliseconds: 350),
+                    scrollDirection: Axis.vertical,
+                    itemCount: articles.length,
+                    itemBuilder: animationBuilder(
+                      (index) => ArticleLists(
+                          article: articles[index]['article'],
+                          id: articles[index]['id']),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      'Not Found',
+                      style: GoogleFonts.mulish(
+                        color: CusColors.secondaryText,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .024,
+                          tablet: width * .014,
+                          desktop: width * .011,
+                        ),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -220,7 +258,10 @@ class ArticleList extends StatelessWidget {
         ),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const CusSearchBar(),
+        CusSearchBar(
+          controller: _searchController,
+          onChange: _onChange,
+        ),
         Padding(
           padding: EdgeInsets.symmetric(
             vertical: getValueForScreenType<double>(

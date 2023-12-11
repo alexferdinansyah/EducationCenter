@@ -14,7 +14,10 @@ class LearnCourseController extends GetxController {
       final getCourse = await course.get();
       final Course courseData =
           Course.fromFirestore(getCourse.data()! as Map<String, dynamic>);
-      final learnCourse = await course.collection('learn_course').get();
+      final learnCourse = await course
+          .collection('learn_course')
+          .orderBy('created_at', descending: false)
+          .get();
       // Reference to the user's document
 
       DocumentReference userDoc = usersCollection.doc(userId);

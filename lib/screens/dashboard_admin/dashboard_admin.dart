@@ -39,6 +39,9 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       if (currentRoute == "/create-coupon") {
         widget.optionalSelected = 'Coupons';
         widget.selected = 'Create-Coupon';
+      } else if (currentRoute.contains('/edit-coupon')) {
+        widget.optionalSelected = 'Coupons';
+        widget.selected = 'Edit-Coupon';
       } else if (currentRoute == '/admin-coupons') {
         widget.selected = 'Coupons';
       }
@@ -61,7 +64,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
     }
 
     // Function to build content based on the selected sidebar item
-    Widget buildContent(dataUser, user, membershipData) {
+    Widget buildContent() {
       switch (selectedSidebarItem) {
         case 'User Transaction':
           return const UserTransaction();
@@ -69,7 +72,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           return const AdminCourse();
         case 'Coupons':
           if (widget.selected == 'Create-Coupon') {
-            return const CreateCoupon();
+            return const CreateCoupon(
+              isEditing: false,
+            );
+          }
+          if (widget.selected == 'Edit-Coupon') {
+            return const CreateCoupon(
+              isEditing: true,
+            );
           } else {
             return const AdminCoupons();
           }
@@ -96,7 +106,6 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserData? userData = snapshot.data;
-                  MembershipModel membershipData = userData!.membership;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -179,7 +188,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                     color: Colors.grey,
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                        image: NetworkImage(userData.photoUrl),
+                                        image: NetworkImage(userData!.photoUrl),
                                         fit: BoxFit.cover),
                                   ),
                                 ),
@@ -302,7 +311,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                           ],
                         ),
                       ),
-                      buildContent(userData, user, membershipData),
+                      buildContent(),
                     ],
                   );
                 } else {

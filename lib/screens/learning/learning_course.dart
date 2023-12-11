@@ -49,9 +49,11 @@ class _LearningCourseState extends State<LearningCourse> {
           captionLanguage: 'id'),
     );
 
-    setState(() {
-      isVerify = FirebaseAuth.instance.currentUser!.emailVerified;
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      setState(() {
+        isVerify = FirebaseAuth.instance.currentUser!.emailVerified;
+      });
+    }
   }
 
   final LearnCourseController controller = Get.put(LearnCourseController());

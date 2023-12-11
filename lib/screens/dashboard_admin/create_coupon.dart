@@ -20,7 +20,8 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:project_tc/services/extension.dart';
 
 class CreateCoupon extends StatefulWidget {
-  const CreateCoupon({super.key});
+  final bool isEditing;
+  const CreateCoupon({super.key, required this.isEditing});
 
   @override
   State<CreateCoupon> createState() => _CreateCouponState();
@@ -40,10 +41,12 @@ class _CreateCouponState extends State<CreateCoupon> {
     const SideItem(icon: IconlyBold.danger, title: 'Usage Restriction'),
     const SideItem(icon: IconlyBold.graph, title: 'Usage Limits'),
   ];
+  String id = '';
 
   List<bool> isOpen = [true, true];
   String selectedSidebarItem = 'General';
   String? description;
+  int timesUsed = 0;
   Coupons type = Coupons.percentageCoupon;
   DateTime? expiryDate;
   Status status = Status.Draft;
@@ -53,6 +56,7 @@ class _CreateCouponState extends State<CreateCoupon> {
   List<String>? products;
   List<String>? excludeProducts;
   List<String>? productReward;
+  bool initData = false;
 
   DateTime selectedDate = DateTime.now();
 
@@ -121,6 +125,11 @@ class _CreateCouponState extends State<CreateCoupon> {
     double height = MediaQuery.of(context).size.height;
     final user = Provider.of<UserModel?>(context);
 
+    if (widget.isEditing) {
+      var argument = Get.rootDelegate.parameters;
+      id = argument['id']!;
+    }
+
     var deviceType = getDeviceType(MediaQuery.of(context).size);
     double title = 0;
     double subTitle = 0;
@@ -182,572 +191,268 @@ class _CreateCouponState extends State<CreateCoupon> {
         desktop: height - 60,
       ),
       color: CusColors.bg,
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: getValueForScreenType<double>(
-                  context: context,
-                  mobile: 20,
-                  tablet: 30,
-                  desktop: 40,
-                ),
-                vertical: getValueForScreenType<double>(
-                  context: context,
-                  mobile: 20,
-                  tablet: 30,
-                  desktop: 35,
-                ),
+      child: widget.isEditing
+          ? FutureBuilder(
+              future: FirestoreService(uid: user!.uid).getCouponById(id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  if (snapshot.hasData) {
+                    if (initData == false) {
+                      final Coupon couponData = snapshot.data;
+                      _codeController.text = couponData.code!;
+                      description = couponData.description;
+                      _amountController.text = couponData.amount != null
+                          ? couponData.amount.toString()
+                          : '';
+                      _limitPerCouponController.text =
+                          couponData.usageLimit?.perCoupon != null
+                              ? couponData.usageLimit!.perCoupon.toString()
+                              : '';
+                      _limitPerUserController.text =
+                          couponData.usageLimit?.perUser != null
+                              ? couponData.usageLimit!.perUser.toString()
+                              : '';
+                      _dateController.text =
+                          couponData.expires?.formatDate() ?? '';
+                      expiryDate = couponData.expires;
+                      timesUsed = couponData.timesUsed!;
+                      type = couponData.type!;
+                      status = couponData.status!;
+                      visibility = couponData.visibility!;
+                      productReward = [couponData.product ?? ''];
+                      products = couponData.usageRestriction?.products;
+                      excludeProducts =
+                          couponData.usageRestriction?.excludeProducts;
+                    }
+
+                    initData = true;
+
+                    return Form(
+                      key: _formKey,
+                      child: _defaultForm(
+                        width,
+                        title,
+                        subTitle,
+                        buttonText,
+                        subHeader,
+                        user,
+                        buildContent(subHeader, buttonText),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: Text('Coupon not found'),
+                    );
+                  }
+                }
+              })
+          : Form(
+              key: _formKey,
+              child: _defaultForm(
+                width,
+                title,
+                subTitle,
+                buttonText,
+                subHeader,
+                user,
+                buildContent(subHeader, buttonText),
               ),
-              child: Column(
+            ),
+    );
+  }
+
+  Widget _defaultForm(
+      width, title, subTitle, buttonText, subHeader, user, Widget content) {
+    return ListView(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 30,
+              desktop: 40,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 30,
+              desktop: 35,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: GestureDetector(
+                        onTap: () =>
+                            Get.rootDelegate.offNamed(routeAdminCoupon),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          size: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 18,
+                            tablet: 22,
+                            desktop: 24,
+                          ),
+                        )),
+                  ),
+                  Text(
+                    widget.isEditing ? 'Edit coupon' : 'Add new coupon',
+                    style: GoogleFonts.poppins(
+                      fontSize: title,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF1F384C),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: GestureDetector(
-                            onTap: () =>
-                                Get.rootDelegate.offNamed(routeAdminCoupon),
-                            child: Icon(
-                              Icons.arrow_back_rounded,
-                              size: getValueForScreenType<double>(
-                                context: context,
-                                mobile: 18,
-                                tablet: 22,
-                                desktop: 24,
-                              ),
-                            )),
-                      ),
-                      Text(
-                        'Add new coupon',
-                        style: GoogleFonts.poppins(
-                          fontSize: title,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF1F384C),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFormField(
-                              key: const Key('coupon code'),
-                              controller: _codeController,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(
-                                    r'[a-zA-Z0-9]')), // Allow only letters and numbers
-                              ],
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Enter an coupon code';
-                                }
-                                return null;
-                              },
-                              style: GoogleFonts.poppins(
-                                  fontSize: buttonText,
-                                  fontWeight: FontWeight.w500,
-                                  color: CusColors.subHeader),
-                              onChanged: (value) {
-                                _codeController.value = TextEditingValue(
-                                  text: value.toUpperCase(),
-                                  selection: _codeController.selection,
-                                );
-                              },
-                              decoration: editProfileDecoration.copyWith(
-                                hintText: 'Coupon code',
-                                hintStyle: GoogleFonts.poppins(
-                                  fontSize: buttonText,
-                                  fontWeight: FontWeight.w500,
-                                  color: CusColors.subHeader.withOpacity(0.5),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 8, bottom: 12),
-                              height: getValueForScreenType<double>(
-                                context: context,
-                                mobile: 24,
-                                tablet: 26,
-                                desktop: 30,
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _codeController.text = generateCouponCode();
-                                },
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                      EdgeInsets.symmetric(
-                                        horizontal:
-                                            getValueForScreenType<double>(
-                                          context: context,
-                                          mobile: 8,
-                                          tablet: 10,
-                                          desktop: 15,
-                                        ),
-                                      ),
-                                    ),
-                                    foregroundColor: MaterialStateProperty.all(
-                                      const Color(0xFF4351FF),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                      Colors.white,
-                                    ),
-                                    elevation:
-                                        const MaterialStatePropertyAll(0),
-                                    side: const MaterialStatePropertyAll(
-                                        BorderSide(
-                                      color: Color(0xFF4351FF),
-                                    )),
-                                    overlayColor:
-                                        MaterialStateProperty.resolveWith<
-                                            Color>((Set<MaterialState> states) {
-                                      if (states
-                                          .contains(MaterialState.focused)) {
-                                        return CusColors.accentBlue
-                                            .withOpacity(.5);
-                                      }
-                                      if (states
-                                          .contains(MaterialState.hovered)) {
-                                        return CusColors.accentBlue
-                                            .withOpacity(.3);
-                                      }
-                                      if (states
-                                          .contains(MaterialState.pressed)) {
-                                        return CusColors.accentBlue;
-                                      }
-                                      return Colors.transparent;
-                                    }),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                    )),
-                                child: Text(
-                                  'Generate coupon code',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: buttonText,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF4351FF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TextFormField(
-                              key: const Key('description'),
-                              minLines: 4,
-                              maxLines: 5,
-                              style: GoogleFonts.poppins(
-                                  fontSize: buttonText,
-                                  fontWeight: FontWeight.w500,
-                                  color: CusColors.subHeader),
-                              onChanged: (value) {
-                                description = value;
-                              },
-                              decoration: editProfileDecoration.copyWith(
-                                hintText: 'Description (optional)',
-                                hintStyle: GoogleFonts.poppins(
-                                  fontSize: buttonText,
-                                  fontWeight: FontWeight.w500,
-                                  color: CusColors.subHeader.withOpacity(0.5),
-                                ),
-                              ),
-                            ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          key: const Key('coupon code'),
+                          controller: _codeController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(
+                                r'[a-zA-Z0-9]')), // Allow only letters and numbers
                           ],
-                        ),
-                      ),
-                      Container(
-                        width: width / 4.5,
-                        margin: const EdgeInsets.only(left: 25),
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          border: Border.all(
-                            color: const Color(0xFFCCCCCC),
-                            width: 1,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Enter an coupon code';
+                            }
+                            return null;
+                          },
+                          style: GoogleFonts.poppins(
+                              fontSize: buttonText,
+                              fontWeight: FontWeight.w500,
+                              color: CusColors.subHeader),
+                          onChanged: (value) {
+                            _codeController.value = TextEditingValue(
+                              text: value.toUpperCase(),
+                              selection: _codeController.selection,
+                            );
+                          },
+                          decoration: editProfileDecoration.copyWith(
+                            hintText: 'Coupon code',
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: buttonText,
+                              fontWeight: FontWeight.w500,
+                              color: CusColors.subHeader.withOpacity(0.5),
+                            ),
                           ),
                         ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Publish',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: subTitle,
-                                      fontWeight: FontWeight.w500,
-                                      color: const Color(0xFF1F384C),
+                        Container(
+                          margin: const EdgeInsets.only(top: 8, bottom: 12),
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 24,
+                            tablet: 26,
+                            desktop: 30,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _codeController.text = generateCouponCode();
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                  EdgeInsets.symmetric(
+                                    horizontal: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 8,
+                                      tablet: 10,
+                                      desktop: 15,
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isOpen[0] = !isOpen[0];
-                                      });
-                                    },
-                                    child: Icon(
-                                      isOpen[0]
-                                          ? Icons.keyboard_arrow_up
-                                          : Icons.keyboard_arrow_down,
-                                      size: getValueForScreenType<double>(
-                                        context: context,
-                                        mobile: 20,
-                                        tablet: 22,
-                                        desktop: 24,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                height: 1,
-                                color: const Color(0xFFCCCCCC),
-                              ),
-                              AnimatedSize(
-                                curve: Curves.fastOutSlowIn,
-                                duration: const Duration(milliseconds: 400),
-                                child: Visibility(
-                                  visible: isOpen[0],
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              text: 'Status : ',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: subHeader,
-                                                fontWeight: FontWeight.w400,
-                                                color: const Color(0xFF1F384C),
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: status.name,
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: subHeader,
-                                                    fontWeight: FontWeight.w500,
-                                                    color:
-                                                        const Color(0xFF1F384C),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          DropdownButtonHideUnderline(
-                                            child: DropdownButton2(
-                                              isDense: true,
-                                              customButton: Text(
-                                                'Edit',
-                                                style: GoogleFonts.poppins(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  fontSize: buttonText,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: CusColors.accentBlue,
-                                                ),
-                                              ),
-                                              items: Status.values
-                                                  .map(
-                                                    (item) => DropdownMenuItem<
-                                                        Status>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item.name,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: subHeader,
-                                                          fontWeight: item ==
-                                                                  status
-                                                              ? FontWeight.w500
-                                                              : FontWeight.w400,
-                                                          color: const Color(
-                                                              0xFF1F384C),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  status = value!;
-                                                });
-                                              },
-                                              dropdownStyleData:
-                                                  DropdownStyleData(
-                                                width: getValueForScreenType<
-                                                        double>(
-                                                    context: context,
-                                                    mobile: 100,
-                                                    tablet: 130,
-                                                    desktop: 160),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 6),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                      color: const Color(
-                                                          0xFFCCCCCC),
-                                                      width: 1),
-                                                  color: Colors.white,
-                                                ),
-                                                offset: const Offset(0, 3),
-                                              ),
-                                              menuItemStyleData:
-                                                  const MenuItemStyleData(
-                                                padding: EdgeInsets.only(
-                                                    left: 16, right: 16),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              text: 'Visibility : ',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: subHeader,
-                                                fontWeight: FontWeight.w400,
-                                                color: const Color(0xFF1F384C),
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: visibility.name,
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: subHeader,
-                                                    fontWeight: FontWeight.w500,
-                                                    color:
-                                                        const Color(0xFF1F384C),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          DropdownButtonHideUnderline(
-                                            child: DropdownButton2(
-                                              isDense: true,
-                                              customButton: Text(
-                                                'Edit',
-                                                style: GoogleFonts.poppins(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  fontSize: buttonText,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: CusColors.accentBlue,
-                                                ),
-                                              ),
-                                              items: VisibilityType.values
-                                                  .map(
-                                                    (item) => DropdownMenuItem<
-                                                        VisibilityType>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item.name,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: subHeader,
-                                                          fontWeight: item ==
-                                                                  visibility
-                                                              ? FontWeight.w500
-                                                              : FontWeight.w400,
-                                                          color: const Color(
-                                                              0xFF1F384C),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  visibility = value!;
-                                                });
-                                              },
-                                              dropdownStyleData:
-                                                  DropdownStyleData(
-                                                width: getValueForScreenType<
-                                                        double>(
-                                                    context: context,
-                                                    mobile: 100,
-                                                    tablet: 130,
-                                                    desktop: 160),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 6),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                      color: const Color(
-                                                          0xFFCCCCCC),
-                                                      width: 1),
-                                                  color: Colors.white,
-                                                ),
-                                                offset: const Offset(0, 3),
-                                              ),
-                                              menuItemStyleData:
-                                                  const MenuItemStyleData(
-                                                padding: EdgeInsets.only(
-                                                    left: 16, right: 16),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 4),
-                                        height: 1,
-                                        color: const Color(0xFFCCCCCC),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: SizedBox(
-                                          height: getValueForScreenType<double>(
-                                            context: context,
-                                            mobile: 25,
-                                            tablet: 30,
-                                            desktop: 35,
-                                          ),
-                                          child: ElevatedButton(
-                                            onPressed: () async {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                final FirestoreService
-                                                    firestore =
-                                                    FirestoreService(
-                                                        uid: user!.uid);
-                                                final couponData = Coupon(
-                                                  code: _codeController.text,
-                                                  type: type,
-                                                  amount: int.tryParse(
-                                                      _amountController.text),
-                                                  product: productReward?[0],
-                                                  description:
-                                                      description ?? '',
-                                                  expires: expiryDate,
-                                                  timesUsed: 0,
-                                                  status: status,
-                                                  visibility: visibility,
-                                                  usageRestriction:
-                                                      UsageRestriction(
-                                                          products: products,
-                                                          excludeProducts:
-                                                              excludeProducts),
-                                                  usageLimit: UsageLimit(
-                                                    perCoupon: int.tryParse(
-                                                        _limitPerCouponController
-                                                            .text),
-                                                    perUser: int.tryParse(
-                                                        _limitPerUserController
-                                                            .text),
-                                                  ),
-                                                );
-                                                final result = await firestore
-                                                    .addCoupon(couponData);
-
-                                                if (result ==
-                                                    'Success adding coupon') {
-                                                  if (context.mounted) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (_) {
-                                                          return CustomAlert(
-                                                              onPressed: () => Get
-                                                                  .rootDelegate
-                                                                  .offNamed(
-                                                                      routeAdminCoupon),
-                                                              title: 'Success',
-                                                              message: result,
-                                                              animatedIcon:
-                                                                  'assets/animations/check.json');
-                                                        });
-                                                  }
-                                                } else {
-                                                  if (context.mounted) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (_) {
-                                                          return CustomAlert(
-                                                              onPressed: () =>
-                                                                  Get.back(),
-                                                              title: 'Failed',
-                                                              message: result,
-                                                              animatedIcon:
-                                                                  'assets/animations/failed.json');
-                                                        });
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            style: ButtonStyle(
-                                                foregroundColor:
-                                                    MaterialStateProperty.all(
-                                                  const Color(0xFF4351FF),
-                                                ),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                  const Color(0xFF4351FF),
-                                                ),
-                                                shape:
-                                                    MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                  ),
-                                                )),
-                                            child: Text(
-                                              'Save',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: subHeader,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
                                   ),
                                 ),
-                              )
-                            ]),
-                      ),
-                    ],
+                                foregroundColor: MaterialStateProperty.all(
+                                  const Color(0xFF4351FF),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                  Colors.white,
+                                ),
+                                elevation: const MaterialStatePropertyAll(0),
+                                side: const MaterialStatePropertyAll(BorderSide(
+                                  color: Color(0xFF4351FF),
+                                )),
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.focused)) {
+                                    return CusColors.accentBlue.withOpacity(.5);
+                                  }
+                                  if (states.contains(MaterialState.hovered)) {
+                                    return CusColors.accentBlue.withOpacity(.3);
+                                  }
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return CusColors.accentBlue;
+                                  }
+                                  return Colors.transparent;
+                                }),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                )),
+                            child: Text(
+                              'Generate coupon code',
+                              style: GoogleFonts.poppins(
+                                fontSize: buttonText,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFF4351FF),
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextFormField(
+                          key: const Key('description'),
+                          initialValue: description,
+                          minLines: 4,
+                          maxLines: 5,
+                          style: GoogleFonts.poppins(
+                              fontSize: buttonText,
+                              fontWeight: FontWeight.w500,
+                              color: CusColors.subHeader),
+                          onChanged: (value) {
+                            description = value;
+                          },
+                          decoration: editProfileDecoration.copyWith(
+                            hintText: 'Description (optional)',
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: buttonText,
+                              fontWeight: FontWeight.w500,
+                              color: CusColors.subHeader.withOpacity(0.5),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(top: 20),
+                    width: width / 4.5,
+                    margin: const EdgeInsets.only(left: 25),
+                    padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
                       border: Border.all(
                         color: const Color(0xFFCCCCCC),
@@ -755,13 +460,12 @@ class _CreateCouponState extends State<CreateCoupon> {
                       ),
                     ),
                     child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
                               Text(
-                                'Coupon data',
+                                'Publish',
                                 style: GoogleFonts.poppins(
                                   fontSize: subTitle,
                                   fontWeight: FontWeight.w500,
@@ -772,11 +476,11 @@ class _CreateCouponState extends State<CreateCoupon> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    isOpen[1] = !isOpen[1];
+                                    isOpen[0] = !isOpen[0];
                                   });
                                 },
                                 child: Icon(
-                                  isOpen[1]
+                                  isOpen[0]
                                       ? Icons.keyboard_arrow_up
                                       : Icons.keyboard_arrow_down,
                                   size: getValueForScreenType<double>(
@@ -789,73 +493,439 @@ class _CreateCouponState extends State<CreateCoupon> {
                               ),
                             ],
                           ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          height: 1,
-                          color: const Color(0xFFCCCCCC),
-                        ),
-                        AnimatedSize(
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.fastOutSlowIn,
-                          child: Visibility(
-                            visible: isOpen[1],
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: width / 5,
-                                  padding: const EdgeInsets.only(bottom: 70),
-                                  decoration: BoxDecoration(
-                                      color:
-                                          CusColors.bgSideBar.withOpacity(.5),
-                                      border: const Border(
-                                        right: BorderSide(
-                                          color: Color(0xFFCCCCCC),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            height: 1,
+                            color: const Color(0xFFCCCCCC),
+                          ),
+                          AnimatedSize(
+                            curve: Curves.fastOutSlowIn,
+                            duration: const Duration(milliseconds: 400),
+                            child: Visibility(
+                              visible: isOpen[0],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Status : ',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: subHeader,
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xFF1F384C),
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: status.name,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: subHeader,
+                                                fontWeight: FontWeight.w500,
+                                                color: const Color(0xFF1F384C),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      )),
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: sidebarItems.length,
-                                    itemBuilder: (context, index) {
-                                      final item = sidebarItems[index];
-                                      return Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical:
-                                              getValueForScreenType<double>(
-                                            context: context,
-                                            mobile: 5,
-                                            tablet: 7,
-                                            desktop: 10,
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton2(
+                                          isDense: true,
+                                          customButton: Text(
+                                            'Edit',
+                                            style: GoogleFonts.poppins(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontSize: buttonText,
+                                              fontWeight: FontWeight.w400,
+                                              color: CusColors.accentBlue,
+                                            ),
+                                          ),
+                                          items: Status.values
+                                              .map(
+                                                (item) =>
+                                                    DropdownMenuItem<Status>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.name,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: subHeader,
+                                                      fontWeight: item == status
+                                                          ? FontWeight.w500
+                                                          : FontWeight.w400,
+                                                      color: const Color(
+                                                          0xFF1F384C),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              status = value!;
+                                            });
+                                          },
+                                          dropdownStyleData: DropdownStyleData(
+                                            width:
+                                                getValueForScreenType<double>(
+                                                    context: context,
+                                                    mobile: 100,
+                                                    tablet: 130,
+                                                    desktop: 160),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 6),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              border: Border.all(
+                                                  color:
+                                                      const Color(0xFFCCCCCC),
+                                                  width: 1),
+                                              color: Colors.white,
+                                            ),
+                                            offset: const Offset(0, 3),
+                                          ),
+                                          menuItemStyleData:
+                                              const MenuItemStyleData(
+                                            padding: EdgeInsets.only(
+                                                left: 16, right: 16),
                                           ),
                                         ),
-                                        child: SideItem(
-                                          icon: item.icon,
-                                          title: item.title,
-                                          isSelected:
-                                              item.title == selectedSidebarItem,
-                                          onTap: () {
-                                            selectSidebarItem(item.title);
-                                          },
-                                        ),
-                                      );
-                                    },
+                                      )
+                                    ],
                                   ),
-                                ),
-                                buildContent(subHeader, buttonText),
-                              ],
+                                  Row(
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Visibility : ',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: subHeader,
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xFF1F384C),
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: visibility.name,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: subHeader,
+                                                fontWeight: FontWeight.w500,
+                                                color: const Color(0xFF1F384C),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton2(
+                                          isDense: true,
+                                          customButton: Text(
+                                            'Edit',
+                                            style: GoogleFonts.poppins(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontSize: buttonText,
+                                              fontWeight: FontWeight.w400,
+                                              color: CusColors.accentBlue,
+                                            ),
+                                          ),
+                                          items: VisibilityType.values
+                                              .map(
+                                                (item) => DropdownMenuItem<
+                                                    VisibilityType>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.name,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: subHeader,
+                                                      fontWeight:
+                                                          item == visibility
+                                                              ? FontWeight.w500
+                                                              : FontWeight.w400,
+                                                      color: const Color(
+                                                          0xFF1F384C),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              visibility = value!;
+                                            });
+                                          },
+                                          dropdownStyleData: DropdownStyleData(
+                                            width:
+                                                getValueForScreenType<double>(
+                                                    context: context,
+                                                    mobile: 100,
+                                                    tablet: 130,
+                                                    desktop: 160),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 6),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              border: Border.all(
+                                                  color:
+                                                      const Color(0xFFCCCCCC),
+                                                  width: 1),
+                                              color: Colors.white,
+                                            ),
+                                            offset: const Offset(0, 3),
+                                          ),
+                                          menuItemStyleData:
+                                              const MenuItemStyleData(
+                                            padding: EdgeInsets.only(
+                                                left: 16, right: 16),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    height: 1,
+                                    color: const Color(0xFFCCCCCC),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: SizedBox(
+                                      height: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 25,
+                                        tablet: 30,
+                                        desktop: 35,
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            final FirestoreService firestore =
+                                                FirestoreService(
+                                                    uid: user!.uid);
+                                            final couponData = Coupon(
+                                              code: _codeController.text,
+                                              type: type,
+                                              amount: int.tryParse(
+                                                  _amountController.text),
+                                              product: productReward?[0],
+                                              description: description ?? '',
+                                              expires: expiryDate,
+                                              timesUsed: timesUsed,
+                                              status: status,
+                                              visibility: visibility,
+                                              usageRestriction:
+                                                  UsageRestriction(
+                                                      products: products,
+                                                      excludeProducts:
+                                                          excludeProducts),
+                                              usageLimit: UsageLimit(
+                                                perCoupon: int.tryParse(
+                                                    _limitPerCouponController
+                                                        .text),
+                                                perUser: int.tryParse(
+                                                    _limitPerUserController
+                                                        .text),
+                                              ),
+                                            );
+                                            String result = '';
+                                            if (widget.isEditing) {
+                                              result = await firestore
+                                                  .updateCoupon(id, couponData);
+                                            } else {
+                                              result = await firestore
+                                                  .addCoupon(couponData);
+                                            }
+
+                                            if (result ==
+                                                    'Success adding coupon' ||
+                                                result ==
+                                                    'Success editing coupon') {
+                                              if (context.mounted) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) {
+                                                      return CustomAlert(
+                                                          onPressed: () => Get
+                                                              .rootDelegate
+                                                              .offNamed(
+                                                                  routeAdminCoupon),
+                                                          title: 'Success',
+                                                          message: result,
+                                                          animatedIcon:
+                                                              'assets/animations/check.json');
+                                                    });
+                                              }
+                                            } else {
+                                              if (context.mounted) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) {
+                                                      return CustomAlert(
+                                                          onPressed: () =>
+                                                              Get.back(),
+                                                          title: 'Failed',
+                                                          message: result,
+                                                          animatedIcon:
+                                                              'assets/animations/failed.json');
+                                                    });
+                                              }
+                                            }
+                                          }
+                                        },
+                                        style: ButtonStyle(
+                                            foregroundColor:
+                                                MaterialStateProperty.all(
+                                              const Color(0xFF4351FF),
+                                            ),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                              const Color(0xFF4351FF),
+                                            ),
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                            )),
+                                        child: Text(
+                                          'Save',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: subHeader,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
+                          )
+                        ]),
                   ),
                 ],
               ),
-            ),
-          ],
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                  border: Border.all(
+                    color: const Color(0xFFCCCCCC),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Coupon data',
+                            style: GoogleFonts.poppins(
+                              fontSize: subTitle,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF1F384C),
+                            ),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isOpen[1] = !isOpen[1];
+                              });
+                            },
+                            child: Icon(
+                              isOpen[1]
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_down,
+                              size: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 22,
+                                desktop: 24,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: const Color(0xFFCCCCCC),
+                    ),
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.fastOutSlowIn,
+                      child: Visibility(
+                        visible: isOpen[1],
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: width / 5,
+                              padding: const EdgeInsets.only(bottom: 70),
+                              decoration: BoxDecoration(
+                                  color: CusColors.bgSideBar.withOpacity(.5),
+                                  border: const Border(
+                                    right: BorderSide(
+                                      color: Color(0xFFCCCCCC),
+                                    ),
+                                  )),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: sidebarItems.length,
+                                itemBuilder: (context, index) {
+                                  final item = sidebarItems[index];
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: 5,
+                                        tablet: 7,
+                                        desktop: 10,
+                                      ),
+                                    ),
+                                    child: SideItem(
+                                      icon: item.icon,
+                                      title: item.title,
+                                      isSelected:
+                                          item.title == selectedSidebarItem,
+                                      onTap: () {
+                                        selectSidebarItem(item.title);
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            content
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

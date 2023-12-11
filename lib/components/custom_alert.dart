@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class CustomAlert extends StatelessWidget {
+  final bool? cancelButton;
   final VoidCallback? onPressed;
   final String title;
   final String message;
   final String animatedIcon;
   const CustomAlert({
     super.key,
+    this.cancelButton = false,
     required this.onPressed,
     required this.title,
     required this.message,
@@ -61,51 +64,106 @@ class CustomAlert extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            SizedBox(
-              height: getValueForScreenType<double>(
-                context: context,
-                mobile: 28,
-                tablet: 35,
-                desktop: 40,
-              ),
-              child: ElevatedButton(
-                onPressed: onPressed,
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(
-                        horizontal: getValueForScreenType<double>(
-                          context: context,
-                          mobile: 28,
-                          tablet: 40,
-                          desktop: 60,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (cancelButton!)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: SizedBox(
+                      height: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 28,
+                        tablet: 35,
+                        desktop: 40,
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () => Get.back(),
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.symmetric(
+                                horizontal: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 10,
+                                  tablet: 20,
+                                  desktop: 40,
+                                ),
+                              ),
+                            ),
+                            foregroundColor: MaterialStateProperty.all(
+                              Colors.redAccent,
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              Colors.redAccent,
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            )),
+                        child: Text(
+                          'Cancel',
+                          style: GoogleFonts.poppins(
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .018,
+                              tablet: width * .015,
+                              desktop: width * .01,
+                            ),
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                    foregroundColor: MaterialStateProperty.all(
-                      const Color(0xFF4351FF),
-                    ),
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color(0xFF4351FF),
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                  ),
+                SizedBox(
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 28,
+                    tablet: 35,
+                    desktop: 40,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: onPressed,
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(
+                            horizontal: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 28,
+                              tablet: 40,
+                              desktop: 60,
+                            ),
+                          ),
+                        ),
+                        foregroundColor: MaterialStateProperty.all(
+                          const Color(0xFF4351FF),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                          const Color(0xFF4351FF),
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        )),
+                    child: Text(
+                      'Ok',
+                      style: GoogleFonts.poppins(
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .018,
+                          tablet: width * .015,
+                          desktop: width * .01,
+                        ),
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
-                    )),
-                child: Text(
-                  'Ok',
-                  style: GoogleFonts.poppins(
-                    fontSize: getValueForScreenType<double>(
-                      context: context,
-                      mobile: width * .018,
-                      tablet: width * .015,
-                      desktop: width * .01,
                     ),
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

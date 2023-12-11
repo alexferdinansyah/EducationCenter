@@ -1,4 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -54,7 +55,7 @@ class _UserTransactionState extends State<UserTransaction> {
       case DeviceScreenType.mobile:
         subHeader = width * .018;
         title = width * .022;
-        fixedWidthStatus = 150;
+        fixedWidthStatus = 140;
         break;
       default:
         subHeader = 0;
@@ -132,28 +133,46 @@ class _UserTransactionState extends State<UserTransaction> {
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
-              DataCell(Container(
-                decoration: BoxDecoration(
-                    color: transaction.status == 'Success'
-                        ? const Color(0xFF91C561).withOpacity(.12)
-                        : transaction.status == 'Pending'
-                            ? const Color(0xFFD6A243).withOpacity(.12)
-                            : Colors.red,
-                    borderRadius: BorderRadius.circular(50)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              DataCell(
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 2,
+                      tablet: 5,
+                      desktop: 8,
+                    ),
+                    vertical: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 2,
+                      tablet: 4,
+                      desktop: 6,
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                      color: transaction.status == 'Success'
+                          ? const Color(0xFF91C561).withOpacity(.12)
+                          : transaction.status == 'Pending'
+                              ? const Color(0xFFD6A243).withOpacity(.12)
+                              : Colors.red,
+                      borderRadius: BorderRadius.circular(50)),
                   child: Row(
+                    // mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const SizedBox(
+                        width: 5,
+                      ),
                       transaction.status == 'Success'
                           ? Icon(
                               Icons.done,
                               color: const Color(0xFF91C561),
                               size: getValueForScreenType<double>(
                                 context: context,
-                                mobile: 20,
-                                tablet: 22,
-                                desktop: 24,
+                                mobile: 18,
+                                tablet: 20,
+                                desktop: 22,
                               ),
                             )
                           : transaction.status == 'Pending'
@@ -162,9 +181,9 @@ class _UserTransactionState extends State<UserTransaction> {
                                   color: const Color(0xFFD6A243),
                                   size: getValueForScreenType<double>(
                                     context: context,
-                                    mobile: 20,
-                                    tablet: 22,
-                                    desktop: 24,
+                                    mobile: 18,
+                                    tablet: 20,
+                                    desktop: 22,
                                   ),
                                 )
                               : Icon(
@@ -172,35 +191,46 @@ class _UserTransactionState extends State<UserTransaction> {
                                   color: Colors.white,
                                   size: getValueForScreenType<double>(
                                     context: context,
-                                    mobile: 20,
-                                    tablet: 22,
-                                    desktop: 24,
+                                    mobile: 18,
+                                    tablet: 20,
+                                    desktop: 22,
                                   ),
                                 ),
                       const SizedBox(
                         width: 5,
                       ),
                       Expanded(
-                        child: Text(transaction.status!,
-                            style: GoogleFonts.poppins(
-                                fontSize: subHeader,
-                                fontWeight: FontWeight.w400,
-                                color: transaction.status == 'Success'
-                                    ? const Color(0xFF91C561)
-                                    : transaction.status == 'Pending'
-                                        ? const Color(0xFFD6A243)
-                                        : Colors.white)),
+                        child: Text(
+                          transaction.status!,
+                          style: GoogleFonts.poppins(
+                            fontSize: subHeader,
+                            fontWeight: FontWeight.w400,
+                            color: transaction.status == 'Success'
+                                ? const Color(0xFF91C561)
+                                : transaction.status == 'Pending'
+                                    ? const Color(0xFFD6A243)
+                                    : Colors.white,
+                          ),
+                        ),
                       )
                     ],
                   ),
                 ),
-              )),
+              ),
               DataCell(GestureDetector(
                 onTap: () {
                   showModalInvoice(width, transaction.invoice, subHeader, title,
                       userData, transactionId, transaction);
                 },
                 child: Container(
+                  padding: EdgeInsets.all(
+                    getValueForScreenType<double>(
+                      context: context,
+                      mobile: 2,
+                      tablet: 5,
+                      desktop: 8,
+                    ),
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(6),
@@ -215,29 +245,33 @@ class _UserTransactionState extends State<UserTransaction> {
                       width: 1,
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Icon(
                           Icons.remove_red_eye_outlined,
-                          color: Color(0xFF121212),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'View Invoice',
-                            style: GoogleFonts.poppins(
-                                fontSize: subHeader,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF121212)),
+                          color: const Color(0xFF121212),
+                          size: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 20,
+                            tablet: 22,
+                            desktop: 24,
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'View Invoice',
+                          style: GoogleFonts.poppins(
+                              fontSize: subHeader,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF121212)),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               )),
@@ -285,8 +319,13 @@ class _UserTransactionState extends State<UserTransaction> {
                           color: const Color(0xFF1F384C),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        height: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 10,
+                          tablet: 15,
+                          desktop: 20,
+                        ),
                       ),
                       // Add a dropdown for status filtering
                       DropdownButton<String>(
@@ -310,8 +349,13 @@ class _UserTransactionState extends State<UserTransaction> {
                           );
                         }).toList(),
                       ),
-                      const SizedBox(
-                        height: 50,
+                      SizedBox(
+                        height: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 20,
+                          tablet: 30,
+                          desktop: 50,
+                        ),
                       ),
 
                       SizedBox(
@@ -320,8 +364,8 @@ class _UserTransactionState extends State<UserTransaction> {
                         child: DataTable2(
                             minWidth: getValueForScreenType<double>(
                               context: context,
-                              mobile: 900,
-                              tablet: 1000,
+                              mobile: 1000,
+                              tablet: 1200,
                               desktop: 1300,
                             ),
                             isHorizontalScrollBarVisible: false,
@@ -493,11 +537,20 @@ class _UserTransactionState extends State<UserTransaction> {
                   color: const Color(0xFF1F384C),
                 ),
               ),
-              Container(
-                width: 200,
-                height: 350,
-                decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(imageUrl))),
+              GestureDetector(
+                onTap: () {
+                  final imageProvider = Image.network(imageUrl!).image;
+                  showImageViewer(
+                    context,
+                    imageProvider,
+                  );
+                },
+                child: Container(
+                  width: 200,
+                  height: 350,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: NetworkImage(imageUrl))),
+                ),
               ),
             ],
           )),
@@ -505,69 +558,98 @@ class _UserTransactionState extends State<UserTransaction> {
             if (transaction.status == 'Pending' ||
                 transaction.status == 'Failed')
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                      showCancelTransaction(width, user, subHeader, title,
-                          transactionId, transaction);
-                    },
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 18),
-                        ),
-                        foregroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 234, 47, 47),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 234, 47, 47),
-                        ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                  SizedBox(
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 28,
+                      tablet: 35,
+                      desktop: 40,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        showCancelTransaction(width, user, subHeader, title,
+                            transactionId, transaction);
+                      },
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(
+                              horizontal: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 10,
+                                tablet: 20,
+                                desktop: 40,
+                              ),
+                            ),
                           ),
-                        )),
-                    child: Text(
-                      'Cancel',
-                      style: GoogleFonts.poppins(
-                        fontSize: subHeader,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                          foregroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 234, 47, 47),
+                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 234, 47, 47),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          )),
+                      child: Text(
+                        'Cancel',
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(
                     width: 15,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                      showConfirmTransaction(width, user, subHeader, title,
-                          transactionId, transaction);
-                    },
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 18),
-                        ),
-                        foregroundColor: MaterialStateProperty.all(
-                          const Color(0xFF4351FF),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color(0xFF4351FF),
-                        ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                  SizedBox(
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 28,
+                      tablet: 35,
+                      desktop: 40,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        showConfirmTransaction(width, user, subHeader, title,
+                            transactionId, transaction);
+                      },
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(
+                              horizontal: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 10,
+                                tablet: 20,
+                                desktop: 40,
+                              ),
+                            ),
                           ),
-                        )),
-                    child: Text(
-                      'Confirm',
-                      style: GoogleFonts.poppins(
-                        fontSize: subHeader,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                          foregroundColor: MaterialStateProperty.all(
+                            const Color(0xFF4351FF),
+                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color(0xFF4351FF),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          )),
+                      child: Text(
+                        'Confirm',
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -606,7 +688,6 @@ class _UserTransactionState extends State<UserTransaction> {
                 ]),
             content: SingleChildScrollView(
                 child: SizedBox(
-              height: 500,
               width: 500,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -634,37 +715,52 @@ class _UserTransactionState extends State<UserTransaction> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final FirestoreService firestoreService =
-                      FirestoreService(uid: user.uid);
+              SizedBox(
+                height: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 28,
+                  tablet: 35,
+                  desktop: 40,
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final FirestoreService firestoreService =
+                        FirestoreService(uid: user.uid);
 
-                  await firestoreService.confirmTransactionUser(
-                      transactionId, user, transaction);
+                    await firestoreService.confirmTransactionUser(
+                        transactionId, user, transaction);
 
-                  Get.back();
-                },
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                    ),
-                    foregroundColor: MaterialStateProperty.all(
-                      const Color(0xFF4351FF),
-                    ),
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color(0xFF4351FF),
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                    Get.back();
+                  },
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(
+                          horizontal: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 10,
+                            tablet: 20,
+                            desktop: 40,
+                          ),
+                        ),
                       ),
-                    )),
-                child: Text(
-                  'Confirm',
-                  style: GoogleFonts.poppins(
-                    fontSize: subHeader,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                      foregroundColor: MaterialStateProperty.all(
+                        const Color(0xFF4351FF),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(
+                        const Color(0xFF4351FF),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      )),
+                  child: Text(
+                    'Confirm',
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -700,7 +796,6 @@ class _UserTransactionState extends State<UserTransaction> {
                 ]),
             content: SingleChildScrollView(
                 child: SizedBox(
-              height: 500,
               width: 500,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -710,9 +805,19 @@ class _UserTransactionState extends State<UserTransaction> {
                   Text('Item Type: ${transaction.item!.subTitle}'),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Image.network(
-                      transaction.invoice!,
-                      height: 100,
+                    child: GestureDetector(
+                      onTap: () {
+                        final imageProvider =
+                            Image.network(transaction.invoice!).image;
+                        showImageViewer(
+                          context,
+                          imageProvider,
+                        );
+                      },
+                      child: Image.network(
+                        transaction.invoice!,
+                        height: 100,
+                      ),
                     ),
                   ),
                   Padding(
@@ -781,37 +886,52 @@ class _UserTransactionState extends State<UserTransaction> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final FirestoreService firestoreService =
-                      FirestoreService(uid: user.uid);
+              SizedBox(
+                height: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 28,
+                  tablet: 35,
+                  desktop: 40,
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final FirestoreService firestoreService =
+                        FirestoreService(uid: user.uid);
 
-                  await firestoreService.cancelTransactionUser(
-                      transactionId, user, transaction, reason!);
+                    await firestoreService.cancelTransactionUser(
+                        transactionId, user, transaction, reason!);
 
-                  Get.back();
-                },
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                    ),
-                    foregroundColor: MaterialStateProperty.all(
-                      const Color(0xFF4351FF),
-                    ),
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color(0xFF4351FF),
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                    Get.back();
+                  },
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(
+                          horizontal: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 10,
+                            tablet: 20,
+                            desktop: 40,
+                          ),
+                        ),
                       ),
-                    )),
-                child: Text(
-                  'Confirm',
-                  style: GoogleFonts.poppins(
-                    fontSize: subHeader,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                      foregroundColor: MaterialStateProperty.all(
+                        const Color(0xFF4351FF),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(
+                        const Color(0xFF4351FF),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      )),
+                  child: Text(
+                    'Confirm',
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

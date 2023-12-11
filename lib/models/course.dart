@@ -163,18 +163,28 @@ class ChapterList {
 class LearnCourse {
   String? title;
   String? videoUrl;
+  DateTime? createdAt;
 
   LearnCourse({
     required this.title,
-    required this.videoUrl,
+    this.videoUrl,
+    this.createdAt,
   });
 
   factory LearnCourse.fromFirebase(Map<String, dynamic> data) {
-    return LearnCourse(title: data['title'], videoUrl: data['video_url']);
+    return LearnCourse(
+      title: data['title'],
+      videoUrl: data['video_url'],
+      createdAt: data['created_at'].toDate(),
+    );
   }
 
   Map<String, dynamic> toFirestore() {
-    return {'title': title, 'video_url': videoUrl};
+    return {
+      'title': title,
+      'video_url': videoUrl,
+      'created_at': Timestamp.fromDate(createdAt!)
+    };
   }
 }
 

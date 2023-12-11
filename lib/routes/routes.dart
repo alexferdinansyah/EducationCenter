@@ -4,6 +4,7 @@ import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_learn_course.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
@@ -21,7 +22,7 @@ const String routeCourses = '/courses';
 const String routeBundleCourses = '/bundle-course';
 const String routeDetailSingleCourse = '/detail-single-courses';
 const String routeDetailBundleCourse = '/detail-bundle-courses';
-const String routeArticle = '/article';
+const String routeArticle = '/articles';
 const String routeDetailArticle = '/detail-article';
 const String routeContacts = '/contact';
 const String routeLogin = '/login';
@@ -38,8 +39,10 @@ const String routeLearnCourse = '/learn-course';
 const String routeOfferLearnCourse = '/learn-course/offers';
 const String routeBuyCourse = '/checkout/course';
 const String routeAdminDetailCourse = '/admin-detail-course';
+const String routeAdminLearnCourse = '/admin-learn-course';
 const String routeAdminCoupon = '/admin-coupons';
 const String routeCreateCoupon = '/create-coupon';
+const String routeEditCoupon = '/edit-coupon';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -141,7 +144,15 @@ final getPages = [
       page: () => const AdminDetailCourse(),
       middlewares: [AdminMiddleware()]),
   GetPage(
+      name: routeAdminLearnCourse,
+      page: () => const AdminLearnCourse(),
+      middlewares: [AdminMiddleware()]),
+  GetPage(
     name: routeCreateCoupon,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeEditCoupon,
     page: () => const Wrapper(),
   ),
   GetPage(

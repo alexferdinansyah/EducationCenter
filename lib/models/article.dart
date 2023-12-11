@@ -84,3 +84,21 @@ class ArticleContent {
     };
   }
 }
+
+class Categories {
+  String? name;
+  DateTime? createdAt;
+
+  Categories({required this.name, required this.createdAt});
+
+  // Convert Firestore data to ArticleContent object
+  factory Categories.fromFirestore(Map<String, dynamic> data) {
+    return Categories(
+        name: data['name'], createdAt: data['created_at'].toDate());
+  }
+
+  // Convert ArticleContent object to Firestore data
+  Map<String, dynamic> toFirestore() {
+    return {'name': name, 'created_at': Timestamp.fromDate(createdAt!)};
+  }
+}

@@ -61,7 +61,10 @@ InputDecoration editProfileDecoration = InputDecoration(
     contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15));
 
 class CusSearchBar extends StatelessWidget {
-  const CusSearchBar({super.key});
+  final TextEditingController controller;
+  final Function(String) onChange;
+  const CusSearchBar(
+      {super.key, required this.controller, required this.onChange});
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +127,9 @@ class CusSearchBar extends StatelessWidget {
             ),
           ),
         ),
+        onChanged: (value) {
+          onChange(value);
+        },
       ),
     );
   }

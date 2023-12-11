@@ -1,4 +1,5 @@
 import "package:data_table_2/data_table_2.dart";
+import "package:easy_image_viewer/easy_image_viewer.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -532,17 +533,26 @@ class _TransactionTableState extends State<TransactionTable> {
           content: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  width: 200,
-                  height: getValueForScreenType<double>(
-                    context: context,
-                    mobile: 150,
-                    tablet: 250,
-                    desktop: 300,
-                  ),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(imageUrl),
+                GestureDetector(
+                  onTap: () {
+                    final imageProvider = Image.network(imageUrl).image;
+                    showImageViewer(
+                      context,
+                      imageProvider,
+                    );
+                  },
+                  child: Container(
+                    width: 200,
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 150,
+                      tablet: 250,
+                      desktop: 300,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(imageUrl),
+                      ),
                     ),
                   ),
                 ),
@@ -602,16 +612,25 @@ class _TransactionTableState extends State<TransactionTable> {
             ),
           ]),
           content: SingleChildScrollView(
-              child: Container(
-            width: 200,
-            height: getValueForScreenType<double>(
-              context: context,
-              mobile: 150,
-              tablet: 250,
-              desktop: 300,
+              child: GestureDetector(
+            onTap: () {
+              final imageProvider = Image.network(imageUrl).image;
+              showImageViewer(
+                context,
+                imageProvider,
+              );
+            },
+            child: Container(
+              width: 200,
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: 150,
+                tablet: 250,
+                desktop: 300,
+              ),
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: NetworkImage(imageUrl))),
             ),
-            decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(imageUrl))),
           )),
           actions: [
             GestureDetector(

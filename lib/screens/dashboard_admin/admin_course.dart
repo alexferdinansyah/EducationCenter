@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/course_form_modal.dart';
 import 'package:project_tc/components/courses.dart';
+import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/user.dart';
@@ -65,9 +67,10 @@ class _AdminCourseState extends State<AdminCourse> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final user = Provider.of<UserModel?>(context);
+    final FirestoreService fireStore = FirestoreService(uid: user!.uid);
 
     return StreamBuilder(
-        stream: FirestoreService(uid: user!.uid).allCourses,
+        stream: fireStore.allCourses,
         builder: (BuildContext context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active &&
               !initCourse) {
@@ -352,6 +355,72 @@ class _AdminCourseState extends State<AdminCourse> {
                                                   initCourse = result;
                                                 });
                                               }
+                                            },
+                                            onDelete: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return CustomAlert(
+                                                      cancelButton: true,
+                                                      title: 'Warning',
+                                                      message:
+                                                          'Are you sure want to delete this?',
+                                                      animatedIcon:
+                                                          'assets/animations/alert.json',
+                                                      onPressed: () async {
+                                                        Get.back();
+                                                        final result = await fireStore
+                                                            .deleteCourse(
+                                                                filteredCourses[
+                                                                        index]
+                                                                    ['id']);
+                                                        if (result ==
+                                                            'Success delete course') {
+                                                          if (context.mounted) {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (_) {
+                                                                return CustomAlert(
+                                                                  onPressed:
+                                                                      () => Get
+                                                                          .back(),
+                                                                  title:
+                                                                      'Success',
+                                                                  message:
+                                                                      result,
+                                                                  animatedIcon:
+                                                                      'assets/animations/check.json',
+                                                                );
+                                                              },
+                                                            );
+                                                            setState(() {
+                                                              initCourse =
+                                                                  false;
+                                                            });
+                                                          }
+                                                        } else {
+                                                          if (context.mounted) {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (_) {
+                                                                return CustomAlert(
+                                                                  onPressed:
+                                                                      () => Get
+                                                                          .back(),
+                                                                  title:
+                                                                      'Failed',
+                                                                  message:
+                                                                      result,
+                                                                  animatedIcon:
+                                                                      'assets/animations/failed.json',
+                                                                );
+                                                              },
+                                                            );
+                                                          }
+                                                        }
+                                                      },
+                                                    );
+                                                  });
                                             },
                                           );
                                         },

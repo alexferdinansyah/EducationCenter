@@ -382,6 +382,7 @@ class MyCourse extends StatelessWidget {
   final bool? isPaid;
   final bool isAdmin;
   final Function()? onPressed;
+  final Function()? onDelete;
 
   const MyCourse(
       {super.key,
@@ -389,7 +390,8 @@ class MyCourse extends StatelessWidget {
       required this.id,
       this.isPaid,
       required this.isAdmin,
-      this.onPressed});
+      this.onPressed,
+      this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -547,16 +549,24 @@ class MyCourse extends StatelessWidget {
                     const SizedBox(
                       width: 4,
                     ),
-                    Icon(
-                      isAdmin ? IconlyLight.delete : IconlyLight.chat,
-                      color: const Color(0xFF86B1F2),
-                      size: getValueForScreenType<double>(
-                        context: context,
-                        mobile: 22,
-                        tablet: 24,
-                        desktop: 28,
-                      ),
-                    )
+                    if (isAdmin)
+                      GestureDetector(
+                        onTap: () {
+                          if (isAdmin == true) {
+                            onDelete!();
+                          }
+                        },
+                        child: Icon(
+                          isAdmin ? IconlyLight.delete : IconlyLight.chat,
+                          color: const Color(0xFF86B1F2),
+                          size: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 22,
+                            tablet: 24,
+                            desktop: 28,
+                          ),
+                        ),
+                      )
                   ],
                 ),
               ],

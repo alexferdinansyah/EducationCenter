@@ -102,7 +102,7 @@ class _LandingPageState extends State<LandingPage> {
                       Column(
                         children: [
                           Text(
-                            'Advantage join our education center',
+                            'Advantages join our education center',
                             style: GoogleFonts.mulish(
                                 color: CusColors.header,
                                 fontSize: title,

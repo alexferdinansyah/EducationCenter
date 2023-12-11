@@ -470,6 +470,57 @@ class _CourseFormModalState extends State<CourseFormModal> {
         ),
       ),
       actions: [
+        if (widget.course != null)
+          SizedBox(
+            height: getValueForScreenType<double>(
+              context: context,
+              mobile: 26,
+              tablet: 33,
+              desktop: 38,
+            ),
+            child: ElevatedButton(
+              onPressed: () => Get.rootDelegate.toNamed(routeAdminLearnCourse,
+                  parameters: {'id': widget.courseId!}),
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      horizontal: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 20,
+                        tablet: 25,
+                        desktop: 30,
+                      ),
+                    ),
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 255, 230, 0),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 255, 230, 0),
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  )),
+              child: Text(
+                'Edit learn course',
+                style: GoogleFonts.poppins(
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .018,
+                    tablet: width * .015,
+                    desktop: width * .01,
+                  ),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(
+          width: 5,
+        ),
         SizedBox(
           height: getValueForScreenType<double>(
             context: context,

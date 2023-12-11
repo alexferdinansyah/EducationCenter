@@ -11,8 +11,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class FirestoreService {
   final String uid;
-  FirestoreService({required this.uid});
-  FirestoreService.withoutUID() : uid = "";
+  final String? courseId;
+  FirestoreService({required this.uid, this.courseId});
+  FirestoreService.withoutUID()
+      : uid = "",
+        courseId = "";
 
   // collection reference
 
@@ -101,14 +104,13 @@ class FirestoreService {
   }
 
   Future getUserByUid(String uid) async {
-    // Get Reference Courses Data
     final userDoc = await userCollection.doc(uid).get();
 
     if (userDoc.exists) {
       final userData = UserData.fromFirestore(userDoc);
       return userData;
     } else {
-      throw Exception('Course not found.');
+      throw Exception('User not found.');
     }
   }
 
@@ -181,6 +183,19 @@ class FirestoreService {
     }
   }
 
+  // Add a new Course document to Firestore
+  Future<String> deleteCourse(String courseId) async {
+    try {
+      await courseCollection.doc(courseId).delete();
+      return 'Success delete course';
+    } catch (e) {
+      print('Error adding course: $e');
+      return 'Error adding course';
+
+      // Handle the error as needed
+    }
+  }
+
   Future updateCourseFewField({
     String? courseId,
     String? title,
@@ -226,6 +241,46 @@ class FirestoreService {
     }
   }
 
+  Future addLearnCourse({
+    required String courseId,
+    required LearnCourse data,
+  }) async {
+    try {
+      await courseCollection
+          .doc(courseId)
+          .collection('learn_course')
+          .add(data.toFirestore());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future updateLearnCourse({
+    required String courseId,
+    required String learnCourseId,
+    String? fieldName,
+    String? data,
+    required bool isUpdating,
+  }) async {
+    try {
+      if (isUpdating) {
+        await courseCollection
+            .doc(courseId)
+            .collection('learn_course')
+            .doc(learnCourseId)
+            .update({fieldName!: data});
+      } else {
+        await courseCollection
+            .doc(courseId)
+            .collection('learn_course')
+            .doc(learnCourseId)
+            .delete();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // Add my courses sub collection
   Future<void> addMyCourse(String courseId, String userId, bool isPaid) async {
     final myCoursesCollection =
@@ -251,6 +306,40 @@ class FirestoreService {
         'isPaid': isPaid,
         'status': 'Not Finished',
       });
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>?> get allLearnCourse {
+    try {
+      final learnCourseCollection =
+          courseCollection.doc(courseId).collection('learn_course');
+      return learnCourseCollection
+          .orderBy('created_at', descending: false)
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> learnCourses = [];
+        final course = await courseCollection.doc(courseId).get();
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+
+          try {
+            learnCourses.add({
+              'id': document.id,
+              'learn_course': LearnCourse.fromFirebase(data),
+            });
+          } catch (error) {
+            print('Error getting course data: $error');
+          }
+        }
+
+        learnCourses.insert(0, {'course_name': course.get('title')});
+
+        return learnCourses;
+      });
+    } catch (error) {
+      print('Error streaming learn course: $error');
+      return Stream.value([]); // Return an empty list in case of an error
     }
   }
 
@@ -519,7 +608,7 @@ class FirestoreService {
     }
   }
 
-  // Add a new Article document to Firestore
+  // Add a new Coupon document to Firestore
   Future<String> addCoupon(Coupon coupon) async {
     try {
       await couponCollection.add(coupon.toFirestore());
@@ -527,6 +616,30 @@ class FirestoreService {
     } catch (e) {
       print('Error adding coupon: $e');
       return 'Failed adding coupon';
+      // Handle the error as needed
+    }
+  }
+
+  // update coupon document to Firestore
+  Future<String> updateCoupon(String couponId, Coupon coupon) async {
+    try {
+      await couponCollection.doc(couponId).set(coupon.toFirestore());
+      return 'Success editing coupon';
+    } catch (e) {
+      print('Error editing coupon: $e');
+      return 'Failed editing coupon';
+      // Handle the error as needed
+    }
+  }
+
+  // delete coupon document to Firestore
+  Future<String> deleteCoupon(String couponId) async {
+    try {
+      await couponCollection.doc(couponId).delete();
+      return 'Success deleting coupon';
+    } catch (e) {
+      print('Error deleting coupon: $e');
+      return 'Failed deleting coupon';
       // Handle the error as needed
     }
   }
@@ -539,6 +652,18 @@ class FirestoreService {
       final couponData =
           Coupon.fromFirestore(couponDoc.data() as Map<String, dynamic>);
       return couponData;
+    } else {
+      throw Exception('Coupon not found.');
+    }
+  }
+
+  Future getCouponById(String couponId) async {
+    final couponDoc = await couponCollection.doc(couponId).get();
+
+    if (couponDoc.exists) {
+      final coupon =
+          Coupon.fromFirestore(couponDoc.data() as Map<String, dynamic>);
+      return coupon;
     } else {
       throw Exception('Coupon not found.');
     }

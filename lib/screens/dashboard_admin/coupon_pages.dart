@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/components/loading.dart';
 import 'package:project_tc/models/coupon.dart';
 import 'package:project_tc/models/coupons.dart';
@@ -128,48 +129,113 @@ class _AdminCouponsState extends State<AdminCoupons> {
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF7D8398)),
               )),
-              DataCell(GestureDetector(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                          color: const Color(0xFF121212).withOpacity(.03),
-                          offset: const Offset(0, 3),
-                          blurRadius: 6)
-                    ],
-                    border: Border.all(
-                      color: const Color(0xFF7D8398).withOpacity(.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
+              DataCell(Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.rootDelegate.toNamed(routeEditCoupon,
+                          parameters: {'id': couponId});
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                              color: const Color(0xFF121212).withOpacity(.03),
+                              offset: const Offset(0, 3),
+                              blurRadius: 6)
+                        ],
+                        border: Border.all(
+                          color: const Color(0xFF7D8398).withOpacity(.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
                           Icons.edit,
                           color: Color(0xFF121212),
                         ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Edit',
-                            style: GoogleFonts.poppins(
-                                fontSize: subHeader,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF121212)),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return CustomAlert(
+                              cancelButton: true,
+                              title: 'Warning',
+                              message: 'Are you sure want to delete this?',
+                              animatedIcon: 'assets/animations/alert.json',
+                              onPressed: () async {
+                                Get.back();
+                                final result =
+                                    await FirestoreService(uid: user.uid)
+                                        .deleteCoupon(couponId);
+                                if (result == 'Success deleting coupon') {
+                                  if (context.mounted) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return CustomAlert(
+                                          onPressed: () => Get.back(),
+                                          title: 'Success',
+                                          message: result,
+                                          animatedIcon:
+                                              'assets/animations/check.json',
+                                        );
+                                      },
+                                    );
+                                  }
+                                } else {
+                                  if (context.mounted) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return CustomAlert(
+                                          onPressed: () => Get.back(),
+                                          title: 'Failed',
+                                          message: result,
+                                          animatedIcon:
+                                              'assets/animations/failed.json',
+                                        );
+                                      },
+                                    );
+                                  }
+                                }
+                              },
+                            );
+                          });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                              color: const Color(0xFF121212).withOpacity(.03),
+                              offset: const Offset(0, 3),
+                              blurRadius: 6)
+                        ],
+                        border: Border.all(
+                          color: Colors.red,
+                          width: 1,
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               )),
             ]);
           }).toList();
