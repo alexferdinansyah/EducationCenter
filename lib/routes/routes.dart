@@ -9,6 +9,7 @@ import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
 import 'package:project_tc/screens/landing_page/contact_us.dart';
+import 'package:project_tc/screens/landing_page/bootcampPage.dart';
 import 'package:project_tc/screens/landing_page/detail_article.dart';
 import 'package:project_tc/screens/landing_page/detail_single_course.dart';
 import 'package:project_tc/screens/landing_page/landing_page.dart';
@@ -42,6 +43,11 @@ const String routeAdminDetailCourse = '/admin-detail-course';
 const String routeAdminLearnCourse = '/admin-learn-course';
 const String routeAdminCoupon = '/admin-coupons';
 const String routeCreateCoupon = '/create-coupon';
+const String routeCreateFAQ = '/create-faq';
+const String routeFAQ = '/faq';
+const String routeBootcamp = '/bootcamp';
+const String routeDetailBootcamp = '$routeBootcamp/:id';
+const String routeCreateBootcamp = '/create-bootcamp';
 const String routeEditCoupon = '/edit-coupon';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -78,6 +84,14 @@ final getPages = [
   GetPage(
     name: routeCourses,
     page: () => wrapWithAppView(const SingleCourseList()),
+  ),
+  GetPage(
+    name: routeBootcamp,
+    page: () => wrapWithAppView(const BootcampPage()),
+  ),
+  GetPage(
+    name: routeDetailBootcamp,
+    page: () => wrapWithAppView(const BootcampPage()),
   ),
   // GetPage(
   //   name: routeBundleCourses,
@@ -152,11 +166,23 @@ final getPages = [
     page: () => const Wrapper(),
   ),
   GetPage(
+    name: routeCreateFAQ,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeCreateBootcamp,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeFAQ,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
     name: routeEditCoupon,
     page: () => const Wrapper(),
   ),
   GetPage(
     name: routeAdminCoupon,
     page: () => const Wrapper(),
-  ),
+  )
 ];

@@ -10,8 +10,12 @@ import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_course.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_faq.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_bootcamp.dart';
 import 'package:project_tc/screens/dashboard_admin/coupon_pages.dart';
 import 'package:project_tc/screens/dashboard_admin/create_coupon.dart';
+import 'package:project_tc/screens/dashboard_admin/create_faq.dart';
+import 'package:project_tc/screens/dashboard_admin/create_bootcamp.dart';
 import 'package:project_tc/screens/dashboard_admin/user_transaction.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +48,17 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         widget.selected = 'Edit-Coupon';
       } else if (currentRoute == '/admin-coupons') {
         widget.selected = 'Coupons';
+      } else if (currentRoute == '/create-faq') {
+        widget.selected = 'create-faq';
+        widget.optionalSelected = 'FAQ';
+      } else if (currentRoute == '/faq') {
+        widget.selected = 'FAQ';
+      } else if (currentRoute == '/create-bootcamp'){
+        widget.selected = 'create-bootcamp';
+        widget.optionalSelected = 'Bootcamp';
+      }
+      else if(currentRoute == '/bootcamp'){
+        widget.selected = 'Bootcamp';
       }
       if (widget.optionalSelected == null) {
         selectedSidebarItem = widget.selected;
@@ -70,6 +85,12 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           return const UserTransaction();
         case 'Courses':
           return const AdminCourse();
+        case 'FAQ':
+          if (widget.selected == 'create-faq') {
+            return const CreateFAQ();
+          } else {
+            return const AdminFaq();
+          }
         case 'Coupons':
           if (widget.selected == 'Create-Coupon') {
             return const CreateCoupon(
@@ -83,6 +104,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           } else {
             return const AdminCoupons();
           }
+
+        case 'Bootcamp':
+          if (widget.selected == 'create-bootcamp') {
+            return const CreateBootcamp();
+          } else {
+            return const AdminBootcamp();
+          }
+
         default:
           return Container(); // Handle the default case here
       }
@@ -341,6 +370,8 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
     const SideItem(icon: IconlyBold.buy, title: 'User Transaction'),
     const SideItem(icon: IconlyBold.category, title: 'Courses'),
     const SideItem(icon: IconlyBold.discount, title: 'Coupons'),
+    const SideItem(icon: IconlyBold.chat, title: 'FAQ'),
+    const SideItem(icon: IconlyBold.category, title: 'Bootcamp'),
     // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];

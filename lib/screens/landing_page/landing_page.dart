@@ -8,6 +8,7 @@ import 'package:project_tc/components/advantage.dart';
 import 'package:project_tc/components/articles.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
+import 'package:project_tc/components/faq.dart';
 import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
@@ -421,177 +422,177 @@ class _LandingPageState extends State<LandingPage> {
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            'Latest Articles',
-                            style: GoogleFonts.mulish(
-                                color: CusColors.header,
-                                fontSize: title,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(
-                                  bottom: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: 40,
-                                    tablet: 50,
-                                    desktop: 70,
-                                  ),
-                                  top: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: 10,
-                                    tablet: 20,
-                                    desktop: 26,
-                                  )),
-                              width: width * .05,
-                              height: 2,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: const Color.fromRGBO(0, 0, 0, 1),
-                              )),
-                          SizedBox(
-                            height: getValueForScreenType<double>(
-                              context: context,
-                              mobile: (height / 3) * (articles.length / 1),
-                              tablet: (height / 1.9) * (articles.length / 2),
-                              desktop: height / 1.6,
-                            ),
-                            width: widthArticle,
-                            child: ScrollConfiguration(
-                              behavior: ScrollConfiguration.of(context)
-                                  .copyWith(scrollbars: false),
-                              child: MasonryGridView.count(
-                                physics: const ScrollPhysics(
-                                    parent: BouncingScrollPhysics()),
-                                crossAxisSpacing: width *
-                                    .02, // Adjust spacing between items horizontally
-                                mainAxisSpacing:
-                                    16.0, // Adjust spacing between rows vertically
-                                crossAxisCount: crossAxis,
-                                itemCount: articles.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Articles(
-                                    article: articles[index]['article'],
-                                    id: articles[index]['id'],
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: getValueForScreenType<double>(
-                              context: context,
-                              mobile: height * .05,
-                              tablet: height / 10,
-                              desktop: height / 10,
-                            ),
-                          ),
-                          MouseRegion(
-                            onEnter: (_) {
-                              // Set the hover state
-                              setState(() {
-                                isHovered[2] = true;
-                              });
-                            },
-                            onExit: (_) {
-                              // Reset the hover state
-                              setState(() {
-                                isHovered[2] = false;
-                              });
-                            },
-                            child: AnimatedContainer(
-                              height: getValueForScreenType<double>(
-                                context: context,
-                                mobile: 28,
-                                tablet: 35,
-                                desktop: 45,
-                              ),
-                              duration: const Duration(milliseconds: 300),
-                              decoration: BoxDecoration(
-                                color: isHovered[2]
-                                    ? CusColors.accentBlue
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(64),
-                                border: Border.all(
-                                  color: CusColors.accentBlue,
-                                  width: 1,
-                                ),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Get.rootDelegate.toNamed(routeArticle);
-                                },
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  padding: MaterialStateProperty.all<
-                                      EdgeInsetsGeometry>(
-                                    EdgeInsets.symmetric(
-                                      horizontal: getValueForScreenType<double>(
-                                        context: context,
-                                        mobile: width * .022,
-                                        tablet: width * .011,
-                                        desktop: width * .013,
-                                      ),
-                                    ),
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.transparent),
-                                  shadowColor: MaterialStateProperty.all(
-                                      Colors.transparent),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: getValueForScreenType<double>(
-                                          context: context,
-                                          mobile: 4,
-                                          tablet: 7,
-                                          desktop: 10,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'See More Articles',
-                                        style: GoogleFonts.mulish(
-                                            fontWeight: FontWeight.w700,
-                                            color: isHovered[2]
-                                                ? Colors.white
-                                                : CusColors.accentBlue,
-                                            fontSize: subHeader),
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_outward_rounded,
-                                      color: isHovered[2]
-                                          ? Colors.white
-                                          : CusColors.accentBlue,
-                                      size: getValueForScreenType<double>(
-                                        context: context,
-                                        mobile: height * .018,
-                                        tablet: height * .014,
-                                        desktop: height * .025,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Column(
+                  //       children: [
+                  //         Text(
+                  //           'Latest Articles',
+                  //           style: GoogleFonts.mulish(
+                  //               color: CusColors.header,
+                  //               fontSize: title,
+                  //               fontWeight: FontWeight.bold),
+                  //         ),
+                  //         Container(
+                  //             margin: EdgeInsets.only(
+                  //                 bottom: getValueForScreenType<double>(
+                  //                   context: context,
+                  //                   mobile: 40,
+                  //                   tablet: 50,
+                  //                   desktop: 70,
+                  //                 ),
+                  //                 top: getValueForScreenType<double>(
+                  //                   context: context,
+                  //                   mobile: 10,
+                  //                   tablet: 20,
+                  //                   desktop: 26,
+                  //                 )),
+                  //             width: width * .05,
+                  //             height: 2,
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(5),
+                  //               color: const Color.fromRGBO(0, 0, 0, 1),
+                  //             )),
+                  //         SizedBox(
+                  //           height: getValueForScreenType<double>(
+                  //             context: context,
+                  //             mobile: (height / 3) * (articles.length / 1),
+                  //             tablet: (height / 1.9) * (articles.length / 2),
+                  //             desktop: height / 1.6,
+                  //           ),
+                  //           width: widthArticle,
+                  //           child: ScrollConfiguration(
+                  //             behavior: ScrollConfiguration.of(context)
+                  //                 .copyWith(scrollbars: false),
+                  //             child: MasonryGridView.count(
+                  //               physics: const ScrollPhysics(
+                  //                   parent: BouncingScrollPhysics()),
+                  //               crossAxisSpacing: width *
+                  //                   .02, // Adjust spacing between items horizontally
+                  //               mainAxisSpacing:
+                  //                   16.0, // Adjust spacing between rows vertically
+                  //               crossAxisCount: crossAxis,
+                  //               itemCount: articles.length,
+                  //               itemBuilder: (BuildContext context, int index) {
+                  //                 return Articles(
+                  //                   article: articles[index]['article'],
+                  //                   id: articles[index]['id'],
+                  //                 );
+                  //               },
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         SizedBox(
+                  //           height: getValueForScreenType<double>(
+                  //             context: context,
+                  //             mobile: height * .05,
+                  //             tablet: height / 10,
+                  //             desktop: height / 10,
+                  //           ),
+                  //         ),
+                  //         MouseRegion(
+                  //           onEnter: (_) {
+                  //             // Set the hover state
+                  //             setState(() {
+                  //               isHovered[2] = true;
+                  //             });
+                  //           },
+                  //           onExit: (_) {
+                  //             // Reset the hover state
+                  //             setState(() {
+                  //               isHovered[2] = false;
+                  //             });
+                  //           },
+                  //           child: AnimatedContainer(
+                  //             height: getValueForScreenType<double>(
+                  //               context: context,
+                  //               mobile: 28,
+                  //               tablet: 35,
+                  //               desktop: 45,
+                  //             ),
+                  //             duration: const Duration(milliseconds: 300),
+                  //             decoration: BoxDecoration(
+                  //               color: isHovered[2]
+                  //                   ? CusColors.accentBlue
+                  //                   : Colors.white,
+                  //               borderRadius: BorderRadius.circular(64),
+                  //               border: Border.all(
+                  //                 color: CusColors.accentBlue,
+                  //                 width: 1,
+                  //               ),
+                  //             ),
+                  //             child: ElevatedButton(
+                  //               onPressed: () {
+                  //                 Get.rootDelegate.toNamed(routeArticle);
+                  //               },
+                  //               style: ButtonStyle(
+                  //                 shape: MaterialStateProperty.all<
+                  //                     RoundedRectangleBorder>(
+                  //                   RoundedRectangleBorder(
+                  //                     borderRadius: BorderRadius.circular(8),
+                  //                   ),
+                  //                 ),
+                  //                 padding: MaterialStateProperty.all<
+                  //                     EdgeInsetsGeometry>(
+                  //                   EdgeInsets.symmetric(
+                  //                     horizontal: getValueForScreenType<double>(
+                  //                       context: context,
+                  //                       mobile: width * .022,
+                  //                       tablet: width * .011,
+                  //                       desktop: width * .013,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 backgroundColor: MaterialStateProperty.all(
+                  //                     Colors.transparent),
+                  //                 shadowColor: MaterialStateProperty.all(
+                  //                     Colors.transparent),
+                  //               ),
+                  //               child: Row(
+                  //                 crossAxisAlignment: CrossAxisAlignment.center,
+                  //                 mainAxisAlignment: MainAxisAlignment.center,
+                  //                 children: [
+                  //                   Padding(
+                  //                     padding: EdgeInsets.only(
+                  //                       right: getValueForScreenType<double>(
+                  //                         context: context,
+                  //                         mobile: 4,
+                  //                         tablet: 7,
+                  //                         desktop: 10,
+                  //                       ),
+                  //                     ),
+                  //                     child: Text(
+                  //                       'See More Articles',
+                  //                       style: GoogleFonts.mulish(
+                  //                           fontWeight: FontWeight.w700,
+                  //                           color: isHovered[2]
+                  //                               ? Colors.white
+                  //                               : CusColors.accentBlue,
+                  //                           fontSize: subHeader),
+                  //                     ),
+                  //                   ),
+                  //                   Icon(
+                  //                     Icons.arrow_outward_rounded,
+                  //                     color: isHovered[2]
+                  //                         ? Colors.white
+                  //                         : CusColors.accentBlue,
+                  //                     size: getValueForScreenType<double>(
+                  //                       context: context,
+                  //                       mobile: height * .018,
+                  //                       tablet: height * .014,
+                  //                       desktop: height * .025,
+                  //                     ),
+                  //                   )
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               );
             } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -608,6 +609,9 @@ class _LandingPageState extends State<LandingPage> {
               );
             }
           }),
+
+          const FAQSection(),
+
       const Footer()
     ]);
   }
@@ -646,114 +650,114 @@ class HeaderLandingPage extends StatelessWidget {
                   pageSnapping: true,
                   aspectRatio: 16 / 13),
               items: [
-                Column(
-                  children: [
-                    AnimateIfVisible(
-                      key: const Key('item.2'),
-                      builder: (
-                        BuildContext context,
-                        Animation<double> animation,
-                      ) =>
-                          FadeTransition(
-                        opacity: Tween<double>(
-                          begin: 0,
-                          end: 1,
-                        ).animate(animation),
-                        child: SvgPicture.asset(
-                          'assets/svg/landing_page.svg',
-                          width: width / 1.8,
-                        ),
-                      ),
-                    ),
-                    AnimateIfVisible(
-                      key: const Key('item.1'),
-                      builder: (
-                        BuildContext context,
-                        Animation<double> animation,
-                      ) =>
-                          FadeTransition(
-                        opacity: Tween<double>(
-                          begin: 0,
-                          end: 1,
-                        ).animate(animation),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'DAC Education Center',
-                                style: GoogleFonts.mulish(
-                                    color: CusColors.header,
-                                    fontSize: mainHeader,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, bottom: 15),
-                                child: Text(
-                                  'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.mulish(
-                                      color: CusColors.inactive,
-                                      fontSize: subHeader,
-                                      fontWeight: FontWeight.w300,
-                                      height: 1.5),
-                                ),
-                              ),
-                              Container(
-                                height: 28,
-                                decoration: BoxDecoration(
-                                    color: const Color(0xFF00C8FF),
-                                    borderRadius: BorderRadius.circular(80),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black.withOpacity(.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 20,
-                                          offset: const Offset(0, 4))
-                                    ]),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Get.rootDelegate.toNamed(routeLogin);
-                                  },
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    shadowColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                  ),
-                                  child: Text(
-                                    'Start now',
-                                    style: GoogleFonts.mulish(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      fontSize: subHeader,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                // Column(
+                //   children: [
+                //     AnimateIfVisible(
+                //       key: const Key('item.2'),
+                //       builder: (
+                //         BuildContext context,
+                //         Animation<double> animation,
+                //       ) =>
+                //           FadeTransition(
+                //         opacity: Tween<double>(
+                //           begin: 0,
+                //           end: 1,
+                //         ).animate(animation),
+                //         child: SvgPicture.asset(
+                //           'assets/svg/landing_page.svg',
+                //           width: width / 1.8,
+                //         ),
+                //       ),
+                //     ),
+                //     AnimateIfVisible(
+                //       key: const Key('item.1'),
+                //       builder: (
+                //         BuildContext context,
+                //         Animation<double> animation,
+                //       ) =>
+                //           FadeTransition(
+                //         opacity: Tween<double>(
+                //           begin: 0,
+                //           end: 1,
+                //         ).animate(animation),
+                //         child: Padding(
+                //           padding: const EdgeInsets.symmetric(vertical: 20),
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.center,
+                //             children: [
+                //               Text(
+                //                 'DAC Education Center',
+                //                 style: GoogleFonts.mulish(
+                //                     color: CusColors.header,
+                //                     fontSize: mainHeader,
+                //                     fontWeight: FontWeight.bold),
+                //               ),
+                //               Padding(
+                //                 padding:
+                //                     const EdgeInsets.only(top: 10, bottom: 15),
+                //                 child: Text(
+                //                   'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
+                //                   textAlign: TextAlign.center,
+                //                   style: GoogleFonts.mulish(
+                //                       color: CusColors.inactive,
+                //                       fontSize: subHeader,
+                //                       fontWeight: FontWeight.w300,
+                //                       height: 1.5),
+                //                 ),
+                //               ),
+                //               Container(
+                //                 height: 28,
+                //                 decoration: BoxDecoration(
+                //                     color: const Color(0xFF00C8FF),
+                //                     borderRadius: BorderRadius.circular(80),
+                //                     boxShadow: [
+                //                       BoxShadow(
+                //                           color: Colors.black.withOpacity(.25),
+                //                           spreadRadius: 0,
+                //                           blurRadius: 20,
+                //                           offset: const Offset(0, 4))
+                //                     ]),
+                //                 child: ElevatedButton(
+                //                   onPressed: () {
+                //                     Get.rootDelegate.toNamed(routeLogin);
+                //                   },
+                //                   style: ButtonStyle(
+                //                     shape: MaterialStateProperty.all<
+                //                         RoundedRectangleBorder>(
+                //                       RoundedRectangleBorder(
+                //                         borderRadius: BorderRadius.circular(8),
+                //                       ),
+                //                     ),
+                //                     backgroundColor: MaterialStateProperty.all(
+                //                         Colors.transparent),
+                //                     shadowColor: MaterialStateProperty.all(
+                //                         Colors.transparent),
+                //                   ),
+                //                   child: Text(
+                //                     'Start now',
+                //                     style: GoogleFonts.mulish(
+                //                       fontWeight: FontWeight.w700,
+                //                       color: Colors.white,
+                //                       fontSize: subHeader,
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                Image.asset(
+                  'assets/images/SLIDE 1.png',
                 ),
                 Image.asset(
-                  'assets/images/Alur Webiste DEC Register.png',
+                  'assets/images/SLIDE 2.png',
                 ),
                 Image.asset(
-                  'assets/images/Alur Webiste DEC Upgrade Member.png',
-                ),
-                Image.asset(
-                  'assets/images/Alur Webiste DEC Buy Course.png',
+                  'assets/images/SLIDE 3.png',
                 ),
               ],
             ),
@@ -789,118 +793,118 @@ class HeaderLandingPage extends StatelessWidget {
             ),
           ),
           items: [
-            Column(
-              children: [
-                Row(
-                  children: [
-                    AnimateIfVisible(
-                      key: const Key('item.1'),
-                      builder: (
-                        BuildContext context,
-                        Animation<double> animation,
-                      ) =>
-                          FadeTransition(
-                        opacity: Tween<double>(
-                          begin: 0,
-                          end: 1,
-                        ).animate(animation),
-                        child: SizedBox(
-                          width: width / 2.5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'DAC Education Center',
-                                style: GoogleFonts.mulish(
-                                    color: CusColors.header,
-                                    fontSize: mainHeader,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 30),
-                                child: Text(
-                                  'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
-                                  style: GoogleFonts.mulish(
-                                      color: CusColors.inactive,
-                                      fontSize: subHeader,
-                                      fontWeight: FontWeight.w300,
-                                      height: 1.5),
-                                ),
-                              ),
-                              Container(
-                                width: width * .09,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF00C8FF),
-                                  borderRadius: BorderRadius.circular(80),
-                                ),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Get.rootDelegate.toNamed(routeLogin);
-                                  },
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                      EdgeInsets.symmetric(
-                                        vertical: height * 0.015,
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    shadowColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                  ),
-                                  child: Text(
-                                    'Start now',
-                                    style: GoogleFonts.mulish(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      fontSize: width * 0.01,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    AnimateIfVisible(
-                      key: const Key('item.2'),
-                      builder: (
-                        BuildContext context,
-                        Animation<double> animation,
-                      ) =>
-                          FadeTransition(
-                        opacity: Tween<double>(
-                          begin: 0,
-                          end: 1,
-                        ).animate(animation),
-                        child: SvgPicture.asset(
-                          'assets/svg/landing_page.svg',
-                          width: width / 2.5,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
+            // Column(
+            //   children: [
+            //     Row(
+            //       children: [
+            //         AnimateIfVisible(
+            //           key: const Key('item.1'),
+            //           builder: (
+            //             BuildContext context,
+            //             Animation<double> animation,
+            //           ) =>
+            //               FadeTransition(
+            //             opacity: Tween<double>(
+            //               begin: 0,
+            //               end: 1,
+            //             ).animate(animation),
+            //             child: SizedBox(
+            //               width: width / 2.5,
+            //               child: Column(
+            //                 crossAxisAlignment: CrossAxisAlignment.start,
+            //                 children: [
+            //                   Text(
+            //                     'DAC Education Center',
+            //                     style: GoogleFonts.mulish(
+            //                         color: CusColors.header,
+            //                         fontSize: mainHeader,
+            //                         fontWeight: FontWeight.bold),
+            //                   ),
+            //                   Padding(
+            //                     padding:
+            //                         const EdgeInsets.symmetric(vertical: 30),
+            //                     child: Text(
+            //                       'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
+            //                       style: GoogleFonts.mulish(
+            //                           color: CusColors.inactive,
+            //                           fontSize: subHeader,
+            //                           fontWeight: FontWeight.w300,
+            //                           height: 1.5),
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     width: width * .09,
+            //                     decoration: BoxDecoration(
+            //                       color: const Color(0xFF00C8FF),
+            //                       borderRadius: BorderRadius.circular(80),
+            //                     ),
+            //                     child: ElevatedButton(
+            //                       onPressed: () {
+            //                         Get.rootDelegate.toNamed(routeLogin);
+            //                       },
+            //                       style: ButtonStyle(
+            //                         shape: MaterialStateProperty.all<
+            //                             RoundedRectangleBorder>(
+            //                           RoundedRectangleBorder(
+            //                             borderRadius: BorderRadius.circular(8),
+            //                           ),
+            //                         ),
+            //                         padding: MaterialStateProperty.all<
+            //                             EdgeInsetsGeometry>(
+            //                           EdgeInsets.symmetric(
+            //                             vertical: height * 0.015,
+            //                           ),
+            //                         ),
+            //                         backgroundColor: MaterialStateProperty.all(
+            //                             Colors.transparent),
+            //                         shadowColor: MaterialStateProperty.all(
+            //                             Colors.transparent),
+            //                       ),
+            //                       child: Text(
+            //                         'Start now',
+            //                         style: GoogleFonts.mulish(
+            //                           fontWeight: FontWeight.w700,
+            //                           color: Colors.white,
+            //                           fontSize: width * 0.01,
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //         const Spacer(),
+            //         AnimateIfVisible(
+            //           key: const Key('item.2'),
+            //           builder: (
+            //             BuildContext context,
+            //             Animation<double> animation,
+            //           ) =>
+            //               FadeTransition(
+            //             opacity: Tween<double>(
+            //               begin: 0,
+            //               end: 1,
+            //             ).animate(animation),
+            //             child: SvgPicture.asset(
+            //               'assets/svg/landing_page.svg',
+            //               width: width / 2.5,
+            //             ),
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ],
+            // ),
+            Image.asset(
+              'assets/images/SLIDE 1.png',
             ),
             Image.asset(
-              'assets/images/Alur Webiste DEC Register.png',
+              'assets/images/SLIDE 2.png',
             ),
             Image.asset(
-              'assets/images/Alur Webiste DEC Upgrade Member.png',
-            ),
-            Image.asset(
-              'assets/images/Alur Webiste DEC Buy Course.png',
+              'assets/images/SLIDE 3.png',
             ),
           ],
         ));

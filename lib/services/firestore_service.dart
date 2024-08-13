@@ -3,6 +3,8 @@ import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/coupon.dart';
 import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/faq.dart';
+import 'package:project_tc/models/Bootcamp.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/extension.dart';
@@ -31,6 +33,10 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('meet_request');
   final CollectionReference couponCollection =
       FirebaseFirestore.instance.collection('coupons');
+  final CollectionReference faqCollection =
+      FirebaseFirestore.instance.collection('faq');
+  final CollectionReference BootcampCollection =
+      FirebaseFirestore.instance.collection('bootcamp');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -122,6 +128,23 @@ class FirestoreService {
             'id': document.id,
             'course':
                 Course.fromFirestore(document.data() as Map<String, dynamic>)
+          };
+        }).toList();
+      });
+    } catch (error) {
+      print('Error streaming courses: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Stream<List<Map>> get allFaq {
+    try {
+      return courseCollection.snapshots().map((QuerySnapshot querySnapshot) {
+        return querySnapshot.docs.map((DocumentSnapshot document) {
+          return {
+            'id': document.id,
+            'faq':
+                Faq.fromFirestore(document.data() as Map<String, dynamic>)
           };
         }).toList();
       });
@@ -416,11 +439,62 @@ class FirestoreService {
     );
   }
 
+   Stream<List<Map>> get allFaqs {
+    try {
+      return faqCollection.snapshots().asyncMap((QuerySnapshot querySnapshot) {
+        return querySnapshot.docs.map((DocumentSnapshot document) {
+          return {
+            'id': document.id,
+            'faq':
+                Faq.fromFirestore(document.data() as Map<String, dynamic>)
+          };
+        }).toList();
+      });
+    } catch (error) {
+      print('Error streaming faqs: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Stream<List<Map>> faqStream() {
+    final faqStream = allFaq;
+
+    return Rx.zip(
+      [faqStream],
+      (values) => values.first + values.last,
+    );
+  }
+
   //create transaction
   Future<String> createTransaction(TransactionModel transactionData) async {
     final DocumentReference docRef =
         await transactionCollection.add(transactionData.toFirestore());
     return docRef.id;
+  }
+
+  //create faq
+  Future<String> createFAQ(Faq faq) async {
+        try {
+          final DocumentReference docRef =
+          await faqCollection.add(faq.toFirestore());
+          return docRef.id;
+        } catch (e) {
+            print("Error: $e");
+            return "Failed to create FAQ: $e";
+
+        }
+  }
+
+  //create bootcamp
+  Future<String> createBootcamp(Bootcamp data) async {
+        try {
+          final DocumentReference docRef =
+          await BootcampCollection.add(data.toFirestore());
+          return docRef.id;
+        } catch (e) {
+            print("Error: $e");
+            return "Failed to create Boot: $e";
+        }
   }
 
   // create user transaction
@@ -640,6 +714,18 @@ class FirestoreService {
     } catch (e) {
       print('Error deleting coupon: $e');
       return 'Failed deleting coupon';
+      // Handle the error as needed
+    }
+  }
+
+  // delete coupon document to Firestore
+  Future<String> deleteFaq(String couponId) async {
+    try {
+      await faqCollection.doc(couponId).delete();
+      return 'Success deleting faq';
+    } catch (e) {
+      print('Error deleting faq: $e');
+      return 'Failed deleting faq';
       // Handle the error as needed
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_bar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:project_tc/services/function.dart';
 
 class AppView extends StatefulWidget {
   final Widget child;
@@ -128,6 +129,14 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
   }
 
   Widget _dekstopNav(child) {
-    return Scaffold(body: AppView(child: child));
+    return Scaffold(
+      floatingActionButton: const FloatingActionButton(
+        onPressed: launchWhatsapp,
+        child: Icon(Icons.chat),
+        tooltip: 'Chat with Us',
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: AppView(child: child)
+      );
   }
 }

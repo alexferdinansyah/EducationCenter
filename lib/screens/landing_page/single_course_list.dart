@@ -17,6 +17,12 @@ class SingleCourseList extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+            margin: EdgeInsets.only(top: 30),
+            width: width * 0.8,
+            child: Image.asset('assets/images/SLIDE 2.png'))
+      ]),
       Padding(
         padding: EdgeInsets.only(
           top: getValueForScreenType<double>(
@@ -38,9 +44,8 @@ class SingleCourseList extends StatelessWidget {
               builder: (BuildContext context, snapshot) {
                 if (snapshot.hasData) {
                   final List<Map> dataMaps = snapshot.data!;
-
                   final List<Map> singleCourses = dataMaps.where((courseMap) {
-                    final dynamic data = courseMap['course'];
+                    final dynamic data = ['course'];
                     return data is Course &&
                         data.isBundle == false &&
                         data.isDraft == false;
