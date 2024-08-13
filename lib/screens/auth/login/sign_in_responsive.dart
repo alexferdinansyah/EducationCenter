@@ -14,6 +14,9 @@ class ResponsiveSignIn extends StatelessWidget {
         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
           return const SignInWebsite();
         }
+        if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
+          return const SignInWebsite();
+        }
 
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
           return const SignInMobile();

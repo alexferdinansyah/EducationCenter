@@ -19,6 +19,9 @@ class _ResponsiveRegisterState extends State<ResponsiveRegister> {
         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
           return const RegisterWebsite();
         }
+        if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
+          return const RegisterWebsite();
+        }
 
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
           return const RegisterMobile();

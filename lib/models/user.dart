@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String uid;
   final String email;
+  final bool verifiedEmail;
 
-  UserModel({required this.uid, required this.email});
+  UserModel({
+    required this.uid,
+    required this.email,
+    required this.verifiedEmail,
+  });
 }
 
 class UserData {
@@ -15,7 +22,7 @@ class UserData {
   final String education;
   final String working;
   final String reason;
-  MembershipModel? membership;
+  final MembershipModel membership;
 
   UserData({
     required this.uid,
@@ -27,8 +34,25 @@ class UserData {
     required this.education,
     required this.working,
     required this.reason,
-    this.membership,
+    required this.membership,
   });
+
+  factory UserData.fromFirestore(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+    final membershipData = data['membership'] as Map<String, dynamic>?;
+
+    return UserData(
+        uid: snapshot.id,
+        name: data['name'],
+        photoUrl: data['photoUrl'],
+        role: data['role'],
+        noWhatsapp: data['noWhatsapp'],
+        address: data['address'],
+        education: data['education'],
+        working: data['working'],
+        reason: data['reason'],
+        membership: MembershipModel.fromFirestore(membershipData!));
+  }
 }
 
 class MembershipModel {
@@ -36,4 +60,44 @@ class MembershipModel {
   final DateTime joinSince;
 
   MembershipModel({required this.memberType, required this.joinSince});
+
+  // Convert Firestore data to Membership object
+  factory MembershipModel.fromFirestore(Map<String, dynamic> data) {
+    return MembershipModel(
+      memberType: data['type'],
+      joinSince: data['join_since'].toDate(),
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'type': memberType,
+      'join_since': Timestamp.fromDate(
+          joinSince), // Assuming Firestore uses Timestamp for DateTime
+    };
+  }
+}
+
+class UserCoupon {
+  String? code;
+  int? redeemTotal;
+
+  UserCoupon({
+    required this.code,
+    required this.redeemTotal,
+  });
+
+  factory UserCoupon.fromFirestore(Map<String, dynamic> data) {
+    return UserCoupon(
+      code: data['code'],
+      redeemTotal: data['redeem_total'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'code': code,
+      'redeem_total': redeemTotal,
+    };
+  }
 }

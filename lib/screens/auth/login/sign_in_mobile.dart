@@ -24,6 +24,9 @@ class _SignInMobileState extends State<SignInMobile> {
   String email = '';
   String password = '';
   String error = '';
+  bool showPassword = false;
+  bool onHover = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -131,9 +134,18 @@ class _SignInMobileState extends State<SignInMobile> {
                             ),
                             suffixIcon: Container(
                               margin: const EdgeInsets.only(right: 8),
-                              child: Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: CusColors.subHeader.withOpacity(0.5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },
+                                child: Icon(
+                                  showPassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.remove_red_eye_outlined,
+                                  color: CusColors.subHeader.withOpacity(0.5),
+                                ),
                               ),
                             ),
                             hintText: "password",
@@ -142,7 +154,7 @@ class _SignInMobileState extends State<SignInMobile> {
                               fontSize: width * .032,
                             ),
                           ),
-                          obscureText: true,
+                          obscureText: showPassword ? false : true,
                           validator: (val) => val!.length < 6
                               ? 'Enter an password 6 chars long'
                               : null,
@@ -158,7 +170,7 @@ class _SignInMobileState extends State<SignInMobile> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.toNamed(routeForgotPassword);
+                                Get.rootDelegate.toNamed(routeForgotPassword);
                               },
                               child: Text('Forgot password ?',
                                   style: GoogleFonts.mulish(
@@ -203,9 +215,10 @@ class _SignInMobileState extends State<SignInMobile> {
                                             email, password);
 
                                     setState(() {
-                                      if (result == null) {
-                                        error =
-                                            'Could not sign in with those credentials';
+                                      if (result is String) {
+                                        error = result;
+                                      } else {
+                                        error = '';
                                       }
                                       loading =
                                           false; // Set loading back to false
@@ -219,7 +232,7 @@ class _SignInMobileState extends State<SignInMobile> {
                                       borderRadius: BorderRadius.circular(8))),
                               padding:
                                   MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      const EdgeInsets.all(20)),
+                                      const EdgeInsets.all(10)),
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.transparent),
                               shadowColor: MaterialStateProperty.all(
@@ -282,10 +295,15 @@ class _SignInMobileState extends State<SignInMobile> {
                             onPressed: () async {
                               await AuthService().signInWithGoogle();
                             },
+                            onHover: (value) {
+                              setState(() {
+                                onHover = value;
+                              });
+                            },
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
-                                    const EdgeInsets.all(20)),
+                                    const EdgeInsets.all(10)),
                                 shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -294,8 +312,10 @@ class _SignInMobileState extends State<SignInMobile> {
                                               .withOpacity(.5),
                                           width: 1.3)),
                                 ),
-                                backgroundColor: const MaterialStatePropertyAll(
-                                    Colors.white),
+                                backgroundColor: MaterialStatePropertyAll(
+                                    onHover
+                                        ? Colors.grey.shade100
+                                        : Colors.white),
                                 shadowColor: const MaterialStatePropertyAll(
                                     Colors.transparent)),
                             child: Row(
@@ -342,8 +362,8 @@ class _SignInMobileState extends State<SignInMobile> {
                                     mouseCursor:
                                         MaterialStateMouseCursor.clickable,
                                     recognizer: TapGestureRecognizer()
-                                      ..onTap =
-                                          () => Get.toNamed(routeRegister))
+                                      ..onTap = () => Get.rootDelegate
+                                          .toNamed(routeRegister))
                               ]),
                         ),
                       ),

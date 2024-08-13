@@ -8,6 +8,7 @@ import 'package:project_tc/routes/routes.dart';
 
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/services/auth_service.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class SignInWebsite extends StatefulWidget {
   const SignInWebsite({super.key});
@@ -25,6 +26,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
   String email = '';
   String password = '';
   String error = '';
+  bool showPassword = false;
+  bool onHover = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -43,17 +47,37 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'assets/images/dec_logo2.png',
-                      width: width * .06,
+                    GestureDetector(
+                      onTap: () {
+                        Get.rootDelegate.toNamed(routeHome);
+                      },
+                      child: Image.asset(
+                        'assets/images/dec_logo2.png',
+                        width: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .1,
+                          tablet: width * .08,
+                          desktop: width * .06,
+                        ),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 30,
+                    SizedBox(
+                      height: getValueForScreenType<double>(
+                        context: context,
+                        mobile: 15,
+                        tablet: 20,
+                        desktop: 30,
+                      ),
                     ),
                     Text(
                       'Welcome Back !',
                       style: GoogleFonts.mPlus1(
-                          fontSize: width * .015,
+                          fontSize: getValueForScreenType<double>(
+                            context: context,
+                            mobile: width * .023,
+                            tablet: width * .02,
+                            desktop: width * .015,
+                          ),
                           fontWeight: FontWeight.bold,
                           color: CusColors.text),
                     ),
@@ -61,16 +85,28 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                       height: 14,
                     ),
                     Text(
-                      'Start your training center faster and better',
+                      'Start your education center faster and better',
                       style: GoogleFonts.mulish(
-                          fontSize: width * .01,
+                          fontSize: getValueForScreenType<double>(
+                            context: context,
+                            mobile: width * .018,
+                            tablet: width * .015,
+                            desktop: width * .01,
+                          ),
                           color: CusColors.subHeader.withOpacity(0.7)),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: height * .04),
+                          padding: EdgeInsets.only(
+                            top: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 20,
+                              tablet: 40,
+                              desktop: height * .04,
+                            ),
+                          ),
                           child: Form(
                             key: _formKey,
                             child: Column(
@@ -78,27 +114,62 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  width: width / 3.5,
-                                  margin: EdgeInsets.only(bottom: height * .02),
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    bottom: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 10,
+                                      tablet: 15,
+                                      desktop: height * .02,
+                                    ),
+                                  ),
                                   alignment: Alignment.center,
                                   child: Text(
                                     error,
                                     style: GoogleFonts.mulish(
-                                        fontSize: width * .01,
+                                        fontSize: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width * .018,
+                                          tablet: width * .015,
+                                          desktop: width * .01,
+                                        ),
                                         color: Colors.red.withOpacity(0.7)),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: width / 3.5,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
                                   child: TextFormField(
                                     autocorrect: true,
                                     keyboardType: TextInputType.emailAddress,
-                                    style:
-                                        TextStyle(color: CusColors.subHeader),
+                                    style: GoogleFonts.mulish(
+                                      color: CusColors.subHeader,
+                                      fontSize: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: width * .019,
+                                        tablet: width * .014,
+                                        desktop: width * .009,
+                                      ),
+                                    ),
                                     decoration: textInputDecoration.copyWith(
                                       contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 20.0,
-                                          vertical: width * .016),
+                                        horizontal: 20.0,
+                                        vertical: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: 5,
+                                          tablet: 15,
+                                          desktop: width * .016,
+                                        ),
+                                      ),
                                       prefixIcon: Container(
                                         margin: const EdgeInsets.only(
                                             left: 20, right: 15),
@@ -110,9 +181,15 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       ),
                                       hintText: "you@example.com",
                                       hintStyle: GoogleFonts.mulish(
-                                          color: CusColors.subHeader
-                                              .withOpacity(.5),
-                                          fontSize: width * .009),
+                                        color:
+                                            CusColors.subHeader.withOpacity(.5),
+                                        fontSize: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width * .019,
+                                          tablet: width * .014,
+                                          desktop: width * .009,
+                                        ),
+                                      ),
                                     ),
                                     validator: (val) {
                                       if (val!.isEmpty) {
@@ -131,12 +208,24 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                   height: 20,
                                 ),
                                 SizedBox(
-                                  width: width / 3.5,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
                                   child: TextFormField(
                                     autocorrect: true,
                                     keyboardType: TextInputType.visiblePassword,
-                                    style:
-                                        TextStyle(color: CusColors.subHeader),
+                                    style: GoogleFonts.mulish(
+                                      color: CusColors.subHeader,
+                                      fontSize: getValueForScreenType<double>(
+                                        context: context,
+                                        mobile: width * .019,
+                                        tablet: width * .014,
+                                        desktop: width * .009,
+                                      ),
+                                    ),
                                     decoration: textInputDecoration.copyWith(
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 20.0,
@@ -152,26 +241,64 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       ),
                                       suffixIcon: Container(
                                         margin: const EdgeInsets.only(right: 8),
-                                        child: Icon(
-                                          Icons.remove_red_eye_outlined,
-                                          color: CusColors.subHeader
-                                              .withOpacity(0.5),
-                                          size: width * .015,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                            });
+                                          },
+                                          child: Icon(
+                                            showPassword
+                                                ? Icons.visibility_off_outlined
+                                                : Icons.remove_red_eye_outlined,
+                                            color: CusColors.subHeader
+                                                .withOpacity(0.5),
+                                            size: width * .015,
+                                          ),
                                         ),
                                       ),
                                       hintText: "password",
                                       hintStyle: GoogleFonts.mulish(
-                                          color: CusColors.subHeader
-                                              .withOpacity(.5),
-                                          fontSize: width * .009),
+                                        color:
+                                            CusColors.subHeader.withOpacity(.5),
+                                        fontSize: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width * .019,
+                                          tablet: width * .014,
+                                          desktop: width * .009,
+                                        ),
+                                      ),
                                     ),
-                                    obscureText: true,
+                                    obscureText: showPassword ? false : true,
                                     validator: (val) => val!.length < 6
                                         ? 'Enter an password 6 chars long'
                                         : null,
                                     onChanged: (val) {
                                       setState(() => password = val);
                                     },
+                                    onFieldSubmitted: loading
+                                        ? null // Disable the button when loading is true
+                                        : (value) async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              setState(() => loading =
+                                                  true); // Set loading to true when pressed
+
+                                              // Call your registration function here
+                                              dynamic result = await _auth
+                                                  .signInWithEmailAndPassword(
+                                                      email, value);
+
+                                              setState(() {
+                                                if (result is String) {
+                                                  error = result;
+                                                }
+
+                                                loading =
+                                                    false; // Set loading back to false
+                                              });
+                                            }
+                                          },
                                   ),
                                 ),
                                 Padding(
@@ -181,22 +308,38 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          Get.toNamed(routeForgotPassword);
+                                          Get.rootDelegate.toNamed(routeForgotPassword);
                                         },
                                         child: Text('Forgot password ?',
                                             style: GoogleFonts.mulish(
                                               color: CusColors.mainColor,
-                                              fontSize: width * .0095,
+                                              fontSize:
+                                                  getValueForScreenType<double>(
+                                                context: context,
+                                                mobile: width * .018,
+                                                tablet: width * .015,
+                                                desktop: width * .0095,
+                                              ),
                                             )),
                                       )
                                     ],
                                   ),
                                 ),
                                 SizedBox(
-                                  height: height * 0.05,
+                                  height: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 15,
+                                    tablet: 25,
+                                    desktop: height * .05,
+                                  ),
                                 ),
                                 Container(
-                                  width: width / 3.5,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
                                   decoration: BoxDecoration(
                                       gradient: LinearGradient(
                                           begin: const Alignment(-1.2, 0.0),
@@ -228,10 +371,12 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                       email, password);
 
                                               setState(() {
-                                                if (result == null) {
-                                                  error =
-                                                      'Could not sign in with those credentials';
+                                                if (result is String) {
+                                                  error = result;
+                                                } else {
+                                                  error = '';
                                                 }
+
                                                 loading =
                                                     false; // Set loading back to false
                                               });
@@ -246,7 +391,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                         padding: MaterialStateProperty.all<
                                                 EdgeInsetsGeometry>(
                                             EdgeInsets.symmetric(
-                                          vertical: width * .014,
+                                          vertical: height * .018,
                                         )),
                                         backgroundColor:
                                             MaterialStateProperty.all(
@@ -260,16 +405,32 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                             style: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white,
-                                              fontSize: width * .015,
+                                              fontSize:
+                                                  getValueForScreenType<double>(
+                                                context: context,
+                                                mobile: width * .023,
+                                                tablet: width * .02,
+                                                desktop: width * .015,
+                                              ),
                                             ),
                                           ),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: height * .04,
+                                  height: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 15,
+                                    tablet: 22,
+                                    desktop: height * .04,
+                                  ),
                                 ),
                                 Container(
-                                  width: width / 3.5,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 8),
                                   child: Row(
@@ -305,19 +466,34 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: height * .035,
+                                  height: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 15,
+                                    tablet: 22,
+                                    desktop: height * .04,
+                                  ),
                                 ),
                                 SizedBox(
-                                  width: width / 3.5,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
                                   child: ElevatedButton(
                                       onPressed: () async {
                                         await AuthService().signInWithGoogle();
+                                      },
+                                      onHover: (value) {
+                                        setState(() {
+                                          onHover = value;
+                                        });
                                       },
                                       style: ButtonStyle(
                                           padding: MaterialStateProperty.all<
                                                   EdgeInsetsGeometry>(
                                               EdgeInsets.symmetric(
-                                                  vertical: width * .016)),
+                                                  vertical: height * .018)),
                                           shape: MaterialStatePropertyAll(
                                             RoundedRectangleBorder(
                                                 borderRadius:
@@ -328,8 +504,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                                     width: 1.3)),
                                           ),
                                           backgroundColor:
-                                              const MaterialStatePropertyAll(
-                                                  Colors.white),
+                                              MaterialStatePropertyAll(onHover
+                                                  ? Colors.grey.shade100
+                                                  : Colors.white),
                                           shadowColor:
                                               const MaterialStatePropertyAll(
                                                   Colors.transparent)),
@@ -347,18 +524,35 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                           Text(
                                             "Sign in with google",
                                             style: GoogleFonts.mulish(
-                                                color: CusColors.subHeader,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: width * .01),
+                                              color: CusColors.subHeader,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize:
+                                                  getValueForScreenType<double>(
+                                                context: context,
+                                                mobile: width * .018,
+                                                tablet: width * .015,
+                                                desktop: width * .01,
+                                              ),
+                                            ),
                                           )
                                         ],
                                       )),
                                 ),
                                 SizedBox(
-                                  height: height * .03,
+                                  height: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: 15,
+                                    tablet: 20,
+                                    desktop: height * .03,
+                                  ),
                                 ),
                                 Container(
-                                  width: width / 3.5,
+                                  width: getValueForScreenType<double>(
+                                    context: context,
+                                    mobile: width * .019,
+                                    tablet: width / 2.5,
+                                    desktop: width / 3.5,
+                                  ),
                                   alignment: Alignment.center,
                                   padding: const EdgeInsets.only(left: 5),
                                   child: RichText(
@@ -368,20 +562,34 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                         style: GoogleFonts.mulish(
                                           color: CusColors.subHeader
                                               .withOpacity(.5),
-                                          fontSize: width * .01,
+                                          fontSize:
+                                              getValueForScreenType<double>(
+                                            context: context,
+                                            mobile: width * .018,
+                                            tablet: width * .015,
+                                            desktop: width * .01,
+                                          ),
                                         ),
                                         children: <InlineSpan>[
                                           TextSpan(
                                               text: "Register",
                                               style: GoogleFonts.mulish(
-                                                  color: CusColors.mainColor,
-                                                  fontWeight: FontWeight.w700),
+                                                color: CusColors.mainColor,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: getValueForScreenType<
+                                                    double>(
+                                                  context: context,
+                                                  mobile: width * .018,
+                                                  tablet: width * .015,
+                                                  desktop: width * .01,
+                                                ),
+                                              ),
                                               mouseCursor:
                                                   MaterialStateMouseCursor
                                                       .clickable,
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () =>
-                                                    Get.toNamed(routeRegister))
+                                                    Get.rootDelegate.toNamed(routeRegister))
                                         ]),
                                   ),
                                 ),

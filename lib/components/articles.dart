@@ -4,10 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/services/extension.dart';
+import 'package:responsive_builder/responsive_builder.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Articles extends StatelessWidget {
   final Article article;
-  const Articles({super.key, required this.article});
+  final String id;
+  const Articles({super.key, required this.article, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +27,44 @@ class Articles extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: EdgeInsets.symmetric(
+          vertical: getValueForScreenType<double>(
+            context: context,
+            mobile: 15,
+            tablet: 15,
+            desktop: 20,
+          ),
+          horizontal: getValueForScreenType<double>(
+            context: context,
+            mobile: 15,
+            tablet: 15,
+            desktop: 20,
+          ),
+        ),
         child: Column(children: [
           Container(
             width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-            height: 28,
+            margin: EdgeInsets.fromLTRB(
+                getValueForScreenType<double>(
+                  context: context,
+                  mobile: 15,
+                  tablet: 15,
+                  desktop: 20,
+                ),
+                0,
+                getValueForScreenType<double>(
+                  context: context,
+                  mobile: 15,
+                  tablet: 15,
+                  desktop: 20,
+                ),
+                10),
+            height: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 24,
+              desktop: 28,
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               color: Colors.transparent,
@@ -37,33 +73,37 @@ class Articles extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Text(
-              article.category!,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.mulish(
-                  color: const Color(0xFF2501FF),
-                  fontSize: width * .011,
-                  fontWeight: FontWeight.bold,
-                  height: 1.5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  article.category!,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.mulish(
+                    color: const Color(0xFF2501FF),
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .024,
+                      tablet: width * .014,
+                      desktop: width * .011,
+                    ),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 172,
-            decoration: article.image != ''
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
-                    image: DecorationImage(
-                      image: AssetImage(article.image!),
-                      fit: BoxFit.cover, // Adjust the fit as needed
-                    ),
-                  )
-                : BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: const Color(0xFFD9D9D9),
+          article.image != ''
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: article.image!,
                   ),
-          ),
+                )
+              : const Text('No Image'),
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Column(
@@ -73,37 +113,60 @@ class Articles extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
                     article.title!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.mulish(
                         color: CusColors.title,
-                        fontSize: width * .013,
+                        fontSize: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .029,
+                          tablet: width * .015,
+                          desktop: width * .013,
+                        ),
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
                   article.description!,
+                  overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: GoogleFonts.mulish(
                       color: CusColors.inactive,
-                      fontSize: width * .01,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .023,
+                        tablet: width * .013,
+                        desktop: width * .01,
+                      ),
                       fontWeight: FontWeight.w300,
                       height: 1.5),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(
+                    top: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 10,
+                      tablet: 15,
+                      desktop: 20,
+                    ),
+                  ),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(
-                          routeDetailArticle,
-                          arguments: {'article': article},
-                        );
+                        Get.rootDelegate.toNamed(routeDetailArticle,
+                            parameters: {'id': id});
                       },
                       child: Text(
                         'Read more...',
                         style: GoogleFonts.mulish(
                             color: const Color(0xFF86B1F2),
-                            fontSize: width * .01,
+                            fontSize: getValueForScreenType<double>(
+                              context: context,
+                              mobile: width * .023,
+                              tablet: width * .013,
+                              desktop: width * .01,
+                            ),
                             fontWeight: FontWeight.w300,
                             height: 1.5),
                       ),
@@ -118,10 +181,15 @@ class Articles extends StatelessWidget {
                       color: Color(0xFFCCCCCC),
                     )),
                 Text(
-                  article.date!,
+                  article.date!.formatDate(),
                   style: GoogleFonts.mulish(
                       color: const Color(0xFF828282),
-                      fontSize: width * .01,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .023,
+                        tablet: width * .013,
+                        desktop: width * .01,
+                      ),
                       fontWeight: FontWeight.normal,
                       height: 1.5),
                 ),
@@ -136,7 +204,8 @@ class Articles extends StatelessWidget {
 
 class ArticleLists extends StatefulWidget {
   final Article article;
-  const ArticleLists({super.key, required this.article});
+  final String id;
+  const ArticleLists({super.key, required this.article, required this.id});
 
   @override
   State<ArticleLists> createState() => _ArticleListsState();
@@ -152,15 +221,37 @@ class _ArticleListsState extends State<ArticleLists> {
       onEnter: (_) => _hovered(),
       onExit: (_) => _hovered(),
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragUpdate: (_) {},
         onTap: () {
-          Get.toNamed(routeDetailArticle,
-              arguments: {'article': widget.article});
+          Get.rootDelegate
+              .toNamed(routeDetailArticle, parameters: {'id': widget.id});
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: width / 2,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          margin: const EdgeInsets.symmetric(vertical: 20),
+          padding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 20,
+              desktop: 20,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 20,
+              desktop: 20,
+            ),
+          ),
+          margin: EdgeInsets.symmetric(
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 15,
+              tablet: 15,
+              desktop: 20,
+            ),
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: Colors.white,
@@ -182,20 +273,34 @@ class _ArticleListsState extends State<ArticleLists> {
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              width: double.infinity,
-              height: height * .32,
-              margin: EdgeInsets.only(bottom: height * .03),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                color: const Color(0xFFD9D9D9),
-              ),
-            ),
+            widget.article.image != ''
+                ? IgnorePointer(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: height * .03),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: widget.article.image!,
+                          height: height * .32,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                    ),
+                  )
+                : const Text('No Image'),
             Text(
               widget.article.title!,
               style: GoogleFonts.mulish(
                   color: CusColors.title,
-                  fontSize: width * .016,
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .032,
+                    tablet: width * .018,
+                    desktop: width * .016,
+                  ),
                   fontWeight: FontWeight.bold),
             ),
             Padding(
@@ -205,15 +310,25 @@ class _ArticleListsState extends State<ArticleLists> {
                 maxLines: 2,
                 style: GoogleFonts.mulish(
                     color: CusColors.inactive,
-                    fontSize: width * .01,
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .023,
+                      tablet: width * .013,
+                      desktop: width * .01,
+                    ),
                     fontWeight: FontWeight.w300,
                     height: 1.5),
               ),
             ),
             Container(
-              width: width * .1,
               margin: const EdgeInsets.only(right: 20),
-              height: 25,
+              height: getValueForScreenType<double>(
+                context: context,
+                mobile: 20,
+                tablet: 25,
+                desktop: 30,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 color: Colors.transparent,
@@ -225,13 +340,18 @@ class _ArticleListsState extends State<ArticleLists> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     widget.article.category!,
-                    textAlign: TextAlign.center,
                     style: GoogleFonts.mulish(
                       color: const Color(0xFF2501FF),
-                      fontSize: width * .011,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .023,
+                        tablet: width * .013,
+                        desktop: width * .01,
+                      ),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -247,11 +367,16 @@ class _ArticleListsState extends State<ArticleLists> {
               ),
             ),
             Text(
-              widget.article.date!,
+              widget.article.date!.formatDate(),
               maxLines: 1,
               style: GoogleFonts.mulish(
                 color: CusColors.inactive,
-                fontSize: width * .01,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .023,
+                  tablet: width * .013,
+                  desktop: width * .01,
+                ),
                 fontWeight: FontWeight.w400,
               ),
             ),

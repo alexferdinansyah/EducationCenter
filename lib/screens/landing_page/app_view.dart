@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_bar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:project_tc/services/function.dart';
 
 class AppView extends StatefulWidget {
   final Widget child;
@@ -17,7 +18,7 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print('Current Widget in AppView: ${widget.child.runtimeType}');
+    // print('Current Widget in AppView: ${widget.child.runtimeType}');
 
     return SizedBox(
       height: double.infinity,
@@ -32,14 +33,14 @@ class _AppViewState extends State<AppView> {
             child: AnimateIfVisibleWrapper(
               showItemInterval: const Duration(milliseconds: 150),
               child: SingleChildScrollView(
+                physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ScreenTypeLayout.builder(
                         desktop: (BuildContext context) =>
                             const CusNavigationBar(),
-                        tablet: (BuildContext context) =>
-                            const CusNavigationBar(),
+                        tablet: (BuildContext context) => const SizedBox(),
                         mobile: (BuildContext context) => const SizedBox()),
                     widget.child,
                   ],
@@ -71,6 +72,9 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
         // Check the sizing information here and return your UI
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
           return _mobileNav(widget.child, width, height);
+        } else if (sizingInformation.deviceScreenType ==
+            DeviceScreenType.tablet) {
+          return _mobileNav(widget.child, width, height);
         } else {
           return _dekstopNav(widget.child);
         }
@@ -83,10 +87,16 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             title: Image.asset(
-              'assets/images/logo_dac.png',
-              width: width * .3,
+              'assets/images/dec_logo2.png',
+              width: getValueForScreenType<double>(
+                context: context,
+                mobile: width * .13,
+                tablet: width * .1,
+                desktop: width * .02,
+              ),
             ),
             elevation: 0,
+            centerTitle: false,
             backgroundColor: CusColors.bg,
             automaticallyImplyLeading: false,
             actions: [
@@ -110,7 +120,7 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
             iconTheme: const IconThemeData(color: Color(0xFF458FF6))),
         endDrawer: Drawer(
           width: double.infinity,
-          backgroundColor: const Color(0xFFC2D8F2),
+          backgroundColor: CusColors.bgSideBar,
           child: ListView(
             children: const [CusNavigationBarMobile()],
           ),
@@ -119,6 +129,14 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
   }
 
   Widget _dekstopNav(child) {
-    return Scaffold(body: AppView(child: child));
+    return Scaffold(
+      floatingActionButton: const FloatingActionButton(
+        onPressed: launchWhatsapp,
+        child: Icon(Icons.chat),
+        tooltip: 'Chat with Us',
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: AppView(child: child)
+      );
   }
 }

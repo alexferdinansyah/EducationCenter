@@ -7,8 +7,9 @@ import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/components/footer.dart';
 import 'package:project_tc/components/reviews.dart';
-import 'package:project_tc/components/static/course_data.dart';
 import 'package:project_tc/components/static/review_data.dart';
+import 'package:project_tc/models/course.dart';
+import 'package:project_tc/services/firestore_service.dart';
 
 class BundleCourseList extends StatefulWidget {
   const BundleCourseList({super.key});
@@ -18,10 +19,6 @@ class BundleCourseList extends StatefulWidget {
 }
 
 class _BundleCourseListState extends State<BundleCourseList> {
-  // Define a list of courses or data that you want to display in rows
-  final bundleCourses =
-      courses.where((course) => course.isBundle == true).toList();
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -100,39 +97,68 @@ class _BundleCourseListState extends State<BundleCourseList> {
         ),
       ),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Column(children: [
-          Text(
-            'Available bundle',
-            style: GoogleFonts.mulish(
-                color: CusColors.header,
-                fontSize: width * .018,
-                fontWeight: FontWeight.bold),
-          ),
-          Container(
-              margin: const EdgeInsets.only(top: 26, bottom: 50),
-              width: 56,
-              height: 2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: const Color.fromRGBO(0, 0, 0, 1),
-              )),
-          SizedBox(
-            height: (height / 1.9) * (bundleCourses.length / 3),
-            width: width / 1.7,
-            child: LiveGrid(
-                itemCount: bundleCourses.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisExtent: height * .51,
-                  crossAxisCount: 3, // Number of items per row
-                  crossAxisSpacing:
-                      width * .02, // Adjust spacing between items horizontally
-                  mainAxisSpacing:
-                      16.0, // Adjust spacing between rows vertically
-                ),
-                itemBuilder: animationBuilder(
-                    (index) => Courses(course: bundleCourses[index]))),
-          ),
-        ])
+        StreamBuilder(
+            stream: FirestoreService.withoutUID().allCourses,
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.hasData) {
+                final List<Map> dataMaps = snapshot.data!;
+
+                final List<Map> bundleCourses = dataMaps.where((courseMap) {
+                  final dynamic data = courseMap['course'];
+                  return data is Course && data.isBundle == true;
+                }).map((courseMap) {
+                  final Course course = courseMap['course'];
+                  final String id = courseMap['id'];
+                  return {'course': course, 'id': id};
+                }).toList();
+                return Column(children: [
+                  Text(
+                    'Available bundle',
+                    style: GoogleFonts.mulish(
+                        color: CusColors.header,
+                        fontSize: width * .018,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.only(top: 26, bottom: 50),
+                      width: 56,
+                      height: 2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: const Color.fromRGBO(0, 0, 0, 1),
+                      )),
+                  SizedBox(
+                    height: (height / 1.9) * (bundleCourses.length / 3),
+                    width: width / 1.7,
+                    child: LiveGrid(
+                        itemCount: bundleCourses.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: height * .51,
+                          crossAxisCount: 3, // Number of items per row
+                          crossAxisSpacing: width *
+                              .02, // Adjust spacing between items horizontally
+                          mainAxisSpacing:
+                              16.0, // Adjust spacing between rows vertically
+                        ),
+                        itemBuilder: animationBuilder((index) => Courses(
+                            course: bundleCourses[index]['course'],
+                            id: bundleCourses[index]['id']))),
+                  ),
+                ]);
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('No courses available.'),
+                );
+              } else {
+                return const Center(
+                  child: Text('kok iso.'),
+                );
+              }
+            }),
       ]),
       SizedBox(
         height: height / 8,

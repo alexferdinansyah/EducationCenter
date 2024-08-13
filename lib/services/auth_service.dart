@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_tc/models/user.dart';
@@ -9,7 +10,12 @@ class AuthService {
 
   // create user object based on user
   UserModel? _userFromFirebaseUser(User? user) {
-    return user != null ? UserModel(uid: user.uid, email: user.email!) : null;
+    return user != null
+        ? UserModel(
+            uid: user.uid,
+            email: user.email!,
+            verifiedEmail: user.emailVerified)
+        : null;
   }
 
   // auth changes user stream
@@ -33,9 +39,21 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
       return _userFromFirebaseUser(user);
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided for that user.';
+      } else if (e.code == 'too-many-requests') {
+        errorMessage =
+            'This account has been temporarily disabled due to multiple failed login attempts. You can restore access immediately by resetting your password or try again later.';
+      }
+      print('Firebase Auth Error: ${e.code} - ${e.message}');
+      return errorMessage;
     } catch (e) {
-      print(e.toString());
-      return null;
+      print('Non-Firebase Auth Error: ${e.toString()}');
+      return 'An error occurred';
     }
   }
 
@@ -65,12 +83,25 @@ class AuthService {
         education,
         working,
         reason,
+        {
+          'type': 'Basic',
+          'join_since': Timestamp.now(),
+        },
       );
 
       return _userFromFirebaseUser(user);
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred';
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'The account already exists for that email.';
+      }
+      print('Firebase Auth Error: ${e.code} - ${e.message}');
+      return errorMessage;
     } catch (e) {
-      print(e.toString());
-      return null;
+      print('Non-Firebase Auth Error: ${e.toString()}');
+      return 'An error occurred';
     }
   }
 
@@ -102,16 +133,16 @@ class AuthService {
       if (!userExists['exists']) {
         // If the user doesn't exist in Firestore, create a new document for them
         await FirestoreService(uid: user.uid).updateUserData(
-          user.displayName!,
-          user.photoURL ??
-              'https://ui-avatars.com/api/?name=${user.displayName}&color=7F9CF5&background=EBF4FF',
-          'member',
-          user.phoneNumber ?? '',
-          '',
-          'Select last education',
-          'Have been working?',
-          '',
-        );
+            user.displayName!,
+            user.photoURL ??
+                'https://ui-avatars.com/api/?name=${user.displayName}&color=7F9CF5&background=EBF4FF',
+            'member',
+            user.phoneNumber ?? '',
+            '',
+            'Select last education',
+            'Have been working?',
+            '',
+            {'type': 'Basic', 'join_since': Timestamp.now()});
       }
 
       return _userFromFirebaseUser(user);

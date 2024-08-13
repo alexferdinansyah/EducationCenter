@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/auth_service.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -40,9 +42,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'assets/images/dec_logo2.png',
-                      width: width * .06,
+                    GestureDetector(
+                      onTap: () {
+                        Get.rootDelegate.toNamed(routeHome);
+                      },
+                      child: Image.asset(
+                        'assets/images/dec_logo2.png',
+                        width: getValueForScreenType<double>(
+                          context: context,
+                          mobile: width * .1,
+                          tablet: width * .08,
+                          desktop: width * .06,
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 30,

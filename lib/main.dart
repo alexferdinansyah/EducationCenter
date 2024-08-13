@@ -13,7 +13,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await GetStorage.init();
+  await GetStorage.init('UserBank');
   runApp(const MyApp());
 }
 
@@ -25,12 +25,18 @@ class MyApp extends StatelessWidget {
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,
-      child: GetMaterialApp(
+      child: GetMaterialApp.router(
+        defaultGlobalState: true,
+        routerDelegate: GetDelegate(
+            preventDuplicateHandlingMode:
+                PreventDuplicateHandlingMode.PopUntilOriginalRoute),
         debugShowCheckedModeBanner: false,
-        initialRoute: routeHome,
-        navigatorKey: navKey,
         defaultTransition: Transition.fadeIn,
         getPages: getPages,
+        theme: ThemeData().copyWith(
+          visualDensity: VisualDensity.standard,
+        ),
+
         // home: Wrapper(),
       ),
     );

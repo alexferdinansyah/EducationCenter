@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
+import 'package:project_tc/routes/routes.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class CusColors {
   static Color mainColor = const Color(0xFF19A7CE);
@@ -40,15 +43,28 @@ InputDecoration editProfileDecoration = InputDecoration(
       borderSide:
           BorderSide(color: CusColors.subHeader.withOpacity(.5), width: 1.0),
     ),
+    disabledBorder: OutlineInputBorder(
+      borderSide:
+          BorderSide(color: CusColors.subHeader.withOpacity(.2), width: 1.0),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red.withOpacity(.5), width: 1.0),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red.withOpacity(.5), width: 1.0),
+    ),
     enabledBorder: OutlineInputBorder(
       borderSide:
           BorderSide(color: CusColors.subHeader.withOpacity(.2), width: 1.0),
     ),
     isCollapsed: true,
-    contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15));
+    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15));
 
 class CusSearchBar extends StatelessWidget {
-  const CusSearchBar({super.key});
+  final TextEditingController controller;
+  final Function(String) onChange;
+  const CusSearchBar(
+      {super.key, required this.controller, required this.onChange});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +75,12 @@ class CusSearchBar extends StatelessWidget {
         style: GoogleFonts.mPlus1(
           fontWeight: FontWeight.w500,
           color: CusColors.subHeader,
-          fontSize: width * .009,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .022,
+            tablet: width * .012,
+            desktop: width * .009,
+          ),
         ),
         cursorColor: const Color(0xFFCCCCCC),
         textAlign: TextAlign.justify,
@@ -79,17 +100,181 @@ class CusSearchBar extends StatelessWidget {
               states.contains(MaterialState.focused)
                   ? CusColors.subHeader.withOpacity(0.5)
                   : const Color(0xFFCCCCCC)),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 10,
+              tablet: 10,
+              desktop: 30,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 5,
+              tablet: 5,
+              desktop: 15,
+            ),
+          ),
           isDense: true,
           hintText: 'Search article...',
           hintStyle: GoogleFonts.mPlus1(
             fontWeight: FontWeight.w500,
             color: CusColors.subHeader.withOpacity(0.5),
-            fontSize: width * .009,
+            fontSize: getValueForScreenType<double>(
+              context: context,
+              mobile: width * .022,
+              tablet: width * .012,
+              desktop: width * .009,
+            ),
           ),
         ),
+        onChanged: (value) {
+          onChange(value);
+        },
       ),
     );
   }
+}
+
+Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle, courseType,
+    haveCourse, context) {
+  return Container(
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () async {
+        if (haveCourse == null) {
+          if (courseType == 'Free') {
+            Get.rootDelegate.toNamed(
+              routeOfferLearnCourse,
+              parameters: {'id': courseId},
+            );
+          } else {
+            Get.rootDelegate.toNamed(
+              routeBuyCourse,
+              parameters: {'id': courseId},
+            );
+          }
+        } else if (haveCourse == false) {
+          Get.rootDelegate.toNamed(
+            routeOfferLearnCourse,
+            parameters: {'id': courseId},
+          );
+        } else {
+          Get.rootDelegate.toNamed(
+            routeLearnCourse,
+            parameters: {'id': courseId},
+          );
+        }
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: haveCourse != null
+          ? Text(
+              'Learn Courses',
+              style: GoogleFonts.mulish(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .018,
+                  tablet: width * .015,
+                  desktop: width * .01,
+                ),
+              ),
+            )
+          : Text(
+              isBundle ? 'Buy Courses Bundle' : 'Buy Course',
+              style: GoogleFonts.mulish(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .018,
+                  tablet: width * .015,
+                  desktop: width * .01,
+                ),
+              ),
+            ),
+    ),
+  );
+}
+
+Widget cusPaymentWidgetOff(
+    width, height, isBundle, courseId, courseType, context) {
+  return Container(
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () {
+        if (courseType == 'Free') {
+          Get.rootDelegate.toNamed(
+            routeOfferLearnCourse,
+            parameters: {'id': courseId},
+          );
+        } else {
+          Get.rootDelegate.toNamed(
+            routeBuyCourse,
+            parameters: {'id': courseId},
+          );
+        }
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        isBundle ? 'Buy Courses Bundle' : 'Buy Course',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .018,
+            tablet: width * .015,
+            desktop: width * .01,
+          ),
+        ),
+      ),
+    ),
+  );
 }

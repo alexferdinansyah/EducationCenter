@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
+import 'package:project_tc/models/user.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/auth_service.dart';
 
 class RegisterMobile extends StatefulWidget {
@@ -40,6 +43,9 @@ class _RegisterMobileState extends State<RegisterMobile> {
   String reason = '';
   String password = '';
   String error = '';
+  bool showPassword = false;
+  bool onHover = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -113,6 +119,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         child: TextFormField(
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[0-9\-\+\s()]*$')),
+                          ],
                           style: TextStyle(color: CusColors.subHeader),
                           decoration: textInputDecoration.copyWith(
                             contentPadding: const EdgeInsets.symmetric(
@@ -132,8 +142,16 @@ class _RegisterMobileState extends State<RegisterMobile> {
                               fontSize: width * .032,
                             ),
                           ),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter an No. Whatsapp' : null,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Enter a No. Whatsapp';
+                            } else if (val.length < 11 || val.length > 15) {
+                              return 'Number should be between 11 and 15 characters';
+                            } else if (!val.startsWith('08')) {
+                              return 'Number is invalid, example 08xxxxxxxx';
+                            }
+                            return null;
+                          },
                           onChanged: (val) {
                             setState(() => noWhatsapp = val);
                           },
@@ -313,7 +331,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       ),
                       Container(
                         child: TextFormField(
-                          obscureText: true,
+                          obscureText: showPassword ? false : true,
                           keyboardType: TextInputType.visiblePassword,
                           style: TextStyle(color: CusColors.subHeader),
                           decoration: textInputDecoration.copyWith(
@@ -330,9 +348,18 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             ),
                             suffixIcon: Container(
                               margin: const EdgeInsets.only(right: 8),
-                              child: Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: CusColors.subHeader.withOpacity(0.5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },
+                                child: Icon(
+                                  showPassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.remove_red_eye_outlined,
+                                  color: CusColors.subHeader.withOpacity(0.5),
+                                ),
                               ),
                             ),
                             hintText: "password",
@@ -453,13 +480,15 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                     );
 
                                     setState(() {
-                                      if (result == null) {
-                                        error = 'Please supply a valid email';
+                                      if (result is String) {
+                                        error = result;
                                       }
                                       loading =
                                           false; // Set loading back to false
                                     });
-                                    Get.back();
+                                    if (result is UserModel) {
+                                      Get.rootDelegate.offAndToNamed(routeConfirmEmail);
+                                    }
                                   }
                                 },
                           style: ButtonStyle(
@@ -469,7 +498,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                       borderRadius: BorderRadius.circular(8))),
                               padding:
                                   MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      const EdgeInsets.all(20)),
+                                      const EdgeInsets.all(10)),
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.transparent),
                               shadowColor: MaterialStateProperty.all(
@@ -530,10 +559,15 @@ class _RegisterMobileState extends State<RegisterMobile> {
                               await AuthService().signInWithGoogle();
                               Get.back();
                             },
+                            onHover: (value) {
+                              setState(() {
+                                onHover = value;
+                              });
+                            },
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
-                                    const EdgeInsets.all(20)),
+                                    const EdgeInsets.all(10)),
                                 shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -542,8 +576,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                               .withOpacity(.5),
                                           width: 1.3)),
                                 ),
-                                backgroundColor: const MaterialStatePropertyAll(
-                                    Colors.white),
+                                backgroundColor: MaterialStatePropertyAll(
+                                    onHover
+                                        ? Colors.grey.shade100
+                                        : Colors.white),
                                 shadowColor: const MaterialStatePropertyAll(
                                     Colors.transparent)),
                             child: Row(
