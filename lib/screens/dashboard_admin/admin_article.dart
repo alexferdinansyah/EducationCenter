@@ -3,64 +3,55 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project_tc/components/article_form_modal.dart';
+import 'package:project_tc/components/articles.dart';
 import 'package:project_tc/components/constants.dart';
-import 'package:project_tc/components/course_form_modal.dart';
-import 'package:project_tc/components/courses.dart';
 import 'package:project_tc/components/custom_alert.dart';
 import 'package:project_tc/components/loading.dart';
-import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class AdminCourse extends StatefulWidget {
-  const AdminCourse({super.key});
+class AdminArticle extends StatefulWidget {
+  const AdminArticle({super.key});
 
   @override
-  State<AdminCourse> createState() => _AdminCourseState();
+  State<AdminArticle> createState() => _AdminArticleState();
 }
 
-class _AdminCourseState extends State<AdminCourse> {
-  List<Map> courses = [];
-  List<Map> filteredCourses = [];
-  bool initCourse = false;
+class _AdminArticleState extends State<AdminArticle> {
+  List<Map> articles = [];
+  List<Map> filteredArticles = [];
+  bool initArticle = false;
 
-  void filterCourses(String criteria) {
+  void filterArticles(String criteria) {
     setState(() {
-      filteredCourses = courses.where((course) {
-        if (criteria == 'All Courses') {
+      filteredArticles = articles.where((article) {
+        if (criteria == 'All Articles') {
           return true;
-        } else if (criteria == 'Free Courses') {
-          return course['course'].courseType == 'Free';
-        } else if (criteria == 'Premium') {
-          return course['course'].courseType == 'Premium';
         } else if (criteria == 'Draft') {
-          return course['course'].isDraft == true;
-        } else if (criteria == 'Best Seller') {
-          return course['course'].isBestSales == true;
+          return article['article'].isDraft == true;
         }
         return false;
       }).toList();
     });
   }
 
-  void updateInitCourse(bool newValue) {
+  void updateInitArticle(bool newValue) {
     setState(() {
-      initCourse = newValue;
+      initArticle = newValue;
     });
   }
 
-  List<bool> isHovered = [false, false, false, false, false];
-  List<bool> isSelected = [true, false, false, false, false];
+  List<bool> isHovered = [false, false];
+  List<bool> isSelected = [true, false];
 
   // Define the list of criteria and button labels
   List<String> filterCriteria = [
-    'All Courses',
-    'Free Courses',
-    'Premium',
+    'All Articles',
     'Draft',
-    'Best Seller'
   ];
   @override
   Widget build(BuildContext context) {
@@ -70,27 +61,24 @@ class _AdminCourseState extends State<AdminCourse> {
     final FirestoreService fireStore = FirestoreService(uid: user!.uid);
 
     return StreamBuilder(
-        stream: fireStore.allCourses,
+        stream: fireStore.allArticle,
         builder: (BuildContext context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active &&
-              !initCourse) {
-            initCourse = true;
+              !initArticle) {
+            initArticle = true;
             Future.delayed(const Duration(milliseconds: 300),
-                () => filterCourses('All Courses'));
+                () => filterArticles('All Articles'));
           }
           if (snapshot.hasData) {
             final List<Map> dataMaps = snapshot.data!;
-            final dataCourses = dataMaps.map((data) {
+            final dataArticles = dataMaps.map((data) {
               return {
                 'id': data['id'],
-                'course': data['course'] as Course,
+                'article': data['article'] as Article,
               };
             }).toList();
 
-            //! hapus where kalau ingin ada bundle courses
-            courses = List.from(dataCourses.where((element) {
-              return element['course'].isBundle == false;
-            }));
+            articles = List.from(dataArticles);
 
             return Container(
               width: getValueForScreenType<double>(
@@ -129,7 +117,7 @@ class _AdminCourseState extends State<AdminCourse> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Courses',
+                              'Articles',
                               style: GoogleFonts.poppins(
                                 fontSize: getValueForScreenType<double>(
                                   context: context,
@@ -215,7 +203,7 @@ class _AdminCourseState extends State<AdminCourse> {
                                                   isSelected[i] = (i == index);
                                                 }
                                               });
-                                              filterCourses(
+                                              filterArticles(
                                                   filterCriteria[index]);
                                             },
                                             style: ButtonStyle(
@@ -268,15 +256,15 @@ class _AdminCourseState extends State<AdminCourse> {
                               ),
                             ),
                             SizedBox(
-                              height: filteredCourses.length / 5 > 1 &&
-                                      filteredCourses.length / 5 < 2
+                              height: filteredArticles.length / 5 > 1 &&
+                                      filteredArticles.length / 5 < 2
                                   ? height / 3.3 * 2
-                                  : filteredCourses.length / 5 >= 2
+                                  : filteredArticles.length / 5 >= 2
                                       ? height /
                                           2.5 *
-                                          (filteredCourses.length / 5)
+                                          (filteredArticles.length / 5)
                                       : height / 1.6,
-                              child: filteredCourses.isEmpty
+                              child: filteredArticles.isEmpty
                                   ? Center(
                                       // Show a message when data is null
                                       child: Column(
@@ -294,7 +282,7 @@ class _AdminCourseState extends State<AdminCourse> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 15),
                                           child: Text(
-                                            "There's no course in here, click button below to create course",
+                                            "There's no article in here, click button below to create article",
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.poppins(
                                               fontSize:
@@ -325,26 +313,25 @@ class _AdminCourseState extends State<AdminCourse> {
                                           context: context,
                                           mobile: 2,
                                           tablet: 3,
-                                          desktop: 5,
+                                          desktop: 4,
                                         ),
-                                        itemCount: filteredCourses.length,
+                                        itemCount: filteredArticles.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          return MyCourse(
-                                            course: filteredCourses[index]
-                                                ['course'],
-                                            id: filteredCourses[index]['id'],
-                                            isAdmin: true,
+                                          return AdminArticles(
+                                            article: filteredArticles[index]
+                                                ['article'],
+                                            id: filteredArticles[index]['id'],
                                             onPressed: () async {
                                               final result = await showDialog(
                                                 context: context,
                                                 builder: (_) {
-                                                  return CourseFormModal(
-                                                    course:
-                                                        filteredCourses[index]
-                                                            ['course'],
-                                                    courseId:
-                                                        filteredCourses[index]
+                                                  return ArticleFormModal(
+                                                    article:
+                                                        filteredArticles[index]
+                                                            ['article'],
+                                                    articleId:
+                                                        filteredArticles[index]
                                                             ['id'],
                                                   );
                                                 },
@@ -352,7 +339,7 @@ class _AdminCourseState extends State<AdminCourse> {
 
                                               if (result != null) {
                                                 setState(() {
-                                                  initCourse = result;
+                                                  initArticle = result;
                                                 });
                                               }
                                             },
@@ -370,12 +357,12 @@ class _AdminCourseState extends State<AdminCourse> {
                                                       onPressed: () async {
                                                         Get.back();
                                                         final result = await fireStore
-                                                            .deleteCourse(
-                                                                filteredCourses[
+                                                            .deleteArticle(
+                                                                filteredArticles[
                                                                         index]
                                                                     ['id']);
                                                         if (result ==
-                                                            'Success delete course') {
+                                                            'Success delete article') {
                                                           if (context.mounted) {
                                                             showDialog(
                                                               context: context,
@@ -394,7 +381,7 @@ class _AdminCourseState extends State<AdminCourse> {
                                                               },
                                                             );
                                                             setState(() {
-                                                              initCourse =
+                                                              initArticle =
                                                                   false;
                                                             });
                                                           }
@@ -438,12 +425,12 @@ class _AdminCourseState extends State<AdminCourse> {
                             final result = await showDialog(
                               context: context,
                               builder: (_) {
-                                return const CourseFormModal();
+                                return const ArticleFormModal();
                               },
                             );
                             if (result != null) {
                               setState(() {
-                                initCourse = result;
+                                initArticle = result;
                               });
                             }
                           },
@@ -460,7 +447,7 @@ class _AdminCourseState extends State<AdminCourse> {
             return const Loading();
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
-              child: Text('No courses available.'),
+              child: Text('No articles available.'),
             );
           } else {
             return const Center(

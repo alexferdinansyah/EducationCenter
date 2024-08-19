@@ -285,13 +285,13 @@ class BulletFormList extends StatefulWidget {
 }
 
 class _BulletFormListState extends State<BulletFormList> {
-  List<String> editedBenefits = [];
+  List<String> editedList = [];
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      editedBenefits = List.from(widget.strings);
+      editedList = List.from(widget.strings);
     });
   }
 
@@ -309,8 +309,8 @@ class _BulletFormListState extends State<BulletFormList> {
       width: width / 1.7,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: editedBenefits.isNotEmpty
-            ? editedBenefits.asMap().entries.map((entry) {
+        children: editedList.isNotEmpty
+            ? editedList.asMap().entries.map((entry) {
                 int index = entry.key;
                 String str = entry.value;
                 return Container(
@@ -340,7 +340,7 @@ class _BulletFormListState extends State<BulletFormList> {
                       Expanded(
                         child: Container(
                           child: TextFormField(
-                            key: ValueKey(editedBenefits[index]),
+                            key: ValueKey(editedList[index]),
                             initialValue: str,
                             textAlign: TextAlign.left,
                             style: GoogleFonts.mulish(
@@ -367,16 +367,16 @@ class _BulletFormListState extends State<BulletFormList> {
                             onChanged: (value) {
                               FirestoreService firestore =
                                   FirestoreService(uid: widget.uid);
-                              editedBenefits[index] = value;
+                              editedList[index] = value;
                               firestore.updateCourseEachField(
                                 courseId: widget.courseId,
                                 fieldName: 'completion_benefits',
-                                data: editedBenefits,
+                                data: editedList,
                               );
                             },
                             onFieldSubmitted: (value) {
                               setState(() {
-                                editedBenefits.add('');
+                                editedList.add('');
                               });
                             },
                           ),
@@ -387,7 +387,7 @@ class _BulletFormListState extends State<BulletFormList> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              editedBenefits.add('');
+                              editedList.add('');
                             });
                           },
                           child: const Icon(IconlyLight.plus),
@@ -398,12 +398,12 @@ class _BulletFormListState extends State<BulletFormList> {
                           FirestoreService firestore =
                               FirestoreService(uid: widget.uid);
                           setState(() {
-                            editedBenefits.removeAt(index);
+                            editedList.removeAt(index);
                           });
                           firestore.updateCourseEachField(
                             courseId: widget.courseId,
                             fieldName: 'completion_benefits',
-                            data: editedBenefits,
+                            data: editedList,
                           );
                         },
                         child: const Icon(IconlyLight.delete),
@@ -467,17 +467,17 @@ class _BulletFormListState extends State<BulletFormList> {
                               FirestoreService firestore =
                                   FirestoreService(uid: widget.uid);
                               setState(() {
-                                editedBenefits = [value];
+                                editedList = [value];
                               });
                               firestore.updateCourseEachField(
                                 courseId: widget.courseId,
                                 fieldName: 'completion_benefits',
-                                data: editedBenefits,
+                                data: editedList,
                               );
                             },
                             onFieldSubmitted: (value) {
                               setState(() {
-                                editedBenefits.add('');
+                                editedList.add('');
                               });
                             },
                           ),

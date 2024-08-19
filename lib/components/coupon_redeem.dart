@@ -40,7 +40,7 @@ class _CouponRedeemState extends State<CouponRedeem> {
       title: Row(
         children: [
           Text(
-            widget.isProductCoupon ? 'Redeem code' : 'Use coupons',
+            widget.isProductCoupon ? 'Redeem code' : 'Use coupon',
             style: GoogleFonts.poppins(
               fontSize: getValueForScreenType<double>(
                 context: context,

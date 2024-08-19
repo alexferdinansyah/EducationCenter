@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:project_tc/screens/auth/confirm_email.dart';
 import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_detail_article.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_learn_course.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
@@ -40,6 +41,7 @@ const String routeOfferLearnCourse = '/learn-course/offers';
 const String routeBuyCourse = '/checkout/course';
 const String routeAdminDetailCourse = '/admin-detail-course';
 const String routeAdminLearnCourse = '/admin-learn-course';
+const String routeAdminDetailArticle = '/admin-detail-article';
 const String routeAdminCoupon = '/admin-coupons';
 const String routeCreateCoupon = '/create-coupon';
 const String routeEditCoupon = '/edit-coupon';
@@ -142,6 +144,10 @@ final getPages = [
   GetPage(
       name: routeAdminDetailCourse,
       page: () => const AdminDetailCourse(),
+      middlewares: [AdminMiddleware()]),
+  GetPage(
+      name: routeAdminDetailArticle,
+      page: () => const AdminDetailArticle(),
       middlewares: [AdminMiddleware()]),
   GetPage(
       name: routeAdminLearnCourse,

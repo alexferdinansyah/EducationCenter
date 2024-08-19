@@ -184,6 +184,8 @@ class _LandingPageState extends State<LandingPage> {
                     final dynamic data = articleData['article'];
                     return data is Article;
                   })
+                  .where(
+                      (articleData) => articleData['article'].isDraft == false)
                   .map((articleData) {
                     final Article article = articleData['article'];
                     final String id = articleData['id'];

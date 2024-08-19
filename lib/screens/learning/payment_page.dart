@@ -765,29 +765,34 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                   if (couponData != null)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (couponData!['coupon'].description != '')
-                          Text(
-                            couponData!['coupon'].description!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                              fontSize: subHeader,
-                              fontWeight: FontWeight.w500,
-                              color: CusColors.text,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (couponData!['coupon'].description != '')
+                              Text(
+                                couponData!['coupon'].description!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w500,
+                                  color: CusColors.text,
+                                ),
+                              ),
+                            Text(
+                              '1 Coupon used',
+                              style: GoogleFonts.poppins(
+                                fontSize: buttonText,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.text,
+                              ),
                             ),
-                          ),
-                        Text(
-                          '1 Coupon used',
-                          style: GoogleFonts.poppins(
-                            fontSize: buttonText,
-                            fontWeight: FontWeight.w400,
-                            color: CusColors.text,
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   Icon(
                     Icons.keyboard_arrow_right,
@@ -1943,6 +1948,138 @@ class _PaymentPageState extends State<PaymentPage> {
                                         if (image != null) {
                                           await uploadToFirebase(image);
                                           dynamic data;
+                                          List<TransactionDiscount>?
+                                              transactionDiscount;
+
+                                          int parsedPrice = int.tryParse(
+                                                  price!.replaceAll(',', '')) ??
+                                              0;
+                                          int total = 0;
+
+                                          if (isCourse! &&
+                                              memberType == 'Pro') {
+                                            int discountPrice =
+                                                parsedPrice * discount! ~/ 100;
+                                            int memberProPrice =
+                                                parsedPrice - discountPrice;
+                                            total = memberProPrice;
+                                            transactionDiscount = [
+                                              TransactionDiscount(
+                                                code: 'Membership Pro',
+                                                amount: discount,
+                                                discountedPrice:
+                                                    NumberFormat("#,###")
+                                                        .format(memberProPrice),
+                                              )
+                                            ];
+                                            if (couponData != null) {
+                                              if (couponData!['coupon'].type ==
+                                                  Coupons.percentageCoupon) {
+                                                int discountCoupon =
+                                                    memberProPrice *
+                                                        couponData!['coupon']
+                                                            .amount ~/
+                                                        100;
+                                                total = memberProPrice -
+                                                    discountCoupon;
+                                                transactionDiscount = [
+                                                  TransactionDiscount(
+                                                    code: 'Membership Pro',
+                                                    amount: discount,
+                                                    discountedPrice:
+                                                        NumberFormat("#,###")
+                                                            .format(
+                                                                memberProPrice),
+                                                  ),
+                                                  TransactionDiscount(
+                                                    code: couponData!['coupon']
+                                                        .code,
+                                                    couponType:
+                                                        couponData!['coupon']
+                                                            .type,
+                                                    amount:
+                                                        couponData!['coupon']
+                                                            .amount,
+                                                    discountedPrice:
+                                                        NumberFormat("#,###")
+                                                            .format(total),
+                                                  ),
+                                                ];
+                                              } else {
+                                                total = memberProPrice -
+                                                    couponData!['coupon']
+                                                        .amount as int;
+                                                transactionDiscount = [
+                                                  TransactionDiscount(
+                                                    code: 'Membership Pro',
+                                                    amount: discount,
+                                                    discountedPrice:
+                                                        NumberFormat("#,###")
+                                                            .format(
+                                                                memberProPrice),
+                                                  ),
+                                                  TransactionDiscount(
+                                                    code: couponData!['coupon']
+                                                        .code,
+                                                    couponType:
+                                                        couponData!['coupon']
+                                                            .type,
+                                                    amount:
+                                                        couponData!['coupon']
+                                                            .amount,
+                                                    discountedPrice:
+                                                        NumberFormat("#,###")
+                                                            .format(total),
+                                                  ),
+                                                ];
+                                              }
+                                            }
+                                          } else if (couponData != null) {
+                                            if (couponData!['coupon'].type ==
+                                                Coupons.percentageCoupon) {
+                                              int discountCoupon = parsedPrice *
+                                                  couponData!['coupon']
+                                                      .amount! ~/
+                                                  100;
+                                              total =
+                                                  parsedPrice - discountCoupon;
+                                              transactionDiscount = [
+                                                TransactionDiscount(
+                                                  code: couponData!['coupon']
+                                                      .code,
+                                                  couponType:
+                                                      couponData!['coupon']
+                                                          .type,
+                                                  amount: couponData!['coupon']
+                                                      .amount,
+                                                  discountedPrice:
+                                                      NumberFormat("#,###")
+                                                          .format(total),
+                                                ),
+                                              ];
+                                            } else {
+                                              total = parsedPrice -
+                                                  couponData!['coupon']
+                                                      .amount as int;
+                                              transactionDiscount = [
+                                                TransactionDiscount(
+                                                  code: couponData!['coupon']
+                                                      .code,
+                                                  couponType:
+                                                      couponData!['coupon']
+                                                          .type,
+                                                  amount: couponData!['coupon']
+                                                      .amount,
+                                                  discountedPrice:
+                                                      NumberFormat("#,###")
+                                                          .format(total),
+                                                ),
+                                              ];
+                                            }
+                                          } else {
+                                            total = parsedPrice;
+                                          }
+
                                           if (isCourse == true) {
                                             data = TransactionModel(
                                                 uid: uid,
@@ -1961,7 +2098,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 uniqueCode: totalPrice!
                                                     .substring(
                                                         totalPrice.length - 3),
-                                                reason: null);
+                                                reason: null,
+                                                discount: transactionDiscount);
                                           } else {
                                             data = TransactionModel(
                                                 uid: widget.user!.uid,
@@ -1977,7 +2115,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 invoice: downloadURL,
                                                 uniqueCode:
                                                     uniqueCode.toString(),
-                                                reason: null);
+                                                reason: null,
+                                                discount: transactionDiscount);
                                           }
                                           final exist = await firestoreService
                                               .checkTransaction(

@@ -175,6 +175,7 @@ class _ArticleListState extends State<ArticleList> {
                 final dynamic data = articleData['article'];
                 return data is Article;
               })
+              .where((articleData) => articleData['article'].isDraft == false)
               .where((articleData) => articleData['article']
                   .title
                   .toLowerCase()

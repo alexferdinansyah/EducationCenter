@@ -5,7 +5,9 @@ class Article {
   String? category;
   String? title;
   String? description;
+  String? createdBy;
   DateTime? date;
+  bool? isDraft;
   List<ArticleContent>? articleContent;
 
   Article({
@@ -13,7 +15,9 @@ class Article {
     required this.category,
     required this.title,
     required this.description,
+    this.createdBy,
     required this.date,
+    required this.isDraft,
     this.articleContent,
   });
 
@@ -30,7 +34,9 @@ class Article {
         category: data['category'],
         title: data['title'],
         description: data['description'],
+        createdBy: data['created_by'],
         date: data['date'].toDate(),
+        isDraft: data['is_draft'],
         articleContent: articleContents);
   }
 
@@ -40,7 +46,9 @@ class Article {
       'category': category,
       'title': title,
       'description': description,
+      'created_by': createdBy,
       'date': Timestamp.fromDate(date!),
+      'is_draft': isDraft,
       'article_content':
           articleContent?.map((content) => content.toFirestore()).toList()
     };
@@ -48,6 +56,7 @@ class Article {
 }
 
 class ArticleContent {
+  int? articleId;
   String? subTitle;
   String? image;
   String? subTitleDescription;
@@ -55,6 +64,7 @@ class ArticleContent {
   String? textUnderList;
 
   ArticleContent({
+    required this.articleId,
     required this.subTitle,
     this.image,
     required this.subTitleDescription,
@@ -65,6 +75,7 @@ class ArticleContent {
   // Convert Firestore data to ArticleContent object
   factory ArticleContent.fromFirestore(Map<String, dynamic> data) {
     return ArticleContent(
+      articleId: data['article_id'],
       subTitle: data['sub_title'],
       image: data['image'],
       subTitleDescription: data['sub_title_description'],
@@ -76,6 +87,7 @@ class ArticleContent {
   // Convert ArticleContent object to Firestore data
   Map<String, dynamic> toFirestore() {
     return {
+      'article_id': articleId,
       'sub_title': subTitle,
       'image': image,
       'sub_title_description': subTitleDescription,
