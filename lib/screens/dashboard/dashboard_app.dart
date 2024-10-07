@@ -14,9 +14,12 @@ import 'package:project_tc/screens/dashboard/help_page.dart';
 import 'package:project_tc/screens/dashboard/membership_info.dart';
 import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
+import 'package:project_tc/screens/dashboard/my_videoLearning.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
+import 'package:project_tc/screens/dashboard/produk.dart';
 import 'package:project_tc/screens/dashboard/setting.dart';
 import 'package:project_tc/screens/dashboard/transaction_table.dart';
+import 'package:project_tc/screens/dashboard/event.dart';
 import 'package:project_tc/screens/learning/payment_page.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -84,6 +87,14 @@ class _DashboardAppState extends State<DashboardApp> {
           return const Newsflash();
         case 'My Courses':
           return MyCourses(
+            user: user,
+          );
+        case 'Event':
+          return Event(
+            user: user,
+          );
+        case 'Produk':
+          return MyVideolearning(
             user: user,
           );
         case 'Transaction':
@@ -378,6 +389,8 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
   final List<SideItem> sidebarItems = [
     const SideItem(icon: IconlyBold.category, title: 'Newsflash'),
     const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
+    const SideItem(icon: IconlyBold.chart, title: 'Event'),
+    const SideItem(icon: IconlyBold.chart, title: 'Produk'),
     const SideItem(icon: IconlyBold.buy, title: 'Transaction'),
     // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),

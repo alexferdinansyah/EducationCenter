@@ -75,7 +75,8 @@ class _AdminLearnCourseState extends State<AdminLearnCourse> {
             final dataLearnCourse = dataMaps
                 .where((element) => element!['course_name'] == null)
                 .map((data) {
-              return {
+                  print(data);              
+                return {
                 'id': data!['id'],
                 'learn_course': data['learn_course'] as LearnCourse,
               };

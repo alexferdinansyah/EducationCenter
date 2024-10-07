@@ -1,4 +1,5 @@
 import 'package:auto_animated/auto_animated.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +15,7 @@ import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/firestore_service.dart';
+import 'package:project_tc/services/function.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -26,6 +28,65 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   List<bool> isHovered = [false, false, false];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showMyDialog(); // Automatically triggers the dialog
+    });
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.cancel_outlined),
+                    ),
+                  ],
+                ),
+                SafeArea(
+                  child: SizedBox(
+                    child: Image.asset('assets/images/certificate.png'),
+                    height: 430,
+                    width: 430,
+                  ),
+                ),
+                const Text('This is a demo alert dialog.'),
+                const Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Lihat'),
+              onPressed: () {
+                routeDetailWebinar;
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(CusColors.accentBlue),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+            ),
+          ],
+          backgroundColor: Colors.white,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +134,12 @@ class _LandingPageState extends State<LandingPage> {
     }
     return Column(children: [
       HeaderLandingPage(
-          width: width,
-          height: height,
-          mainHeader: mainHeader,
-          subHeader: subHeader),
+        width: width,
+        height: height,
+        mainHeader: mainHeader,
+        subHeader: subHeader,
+        pageLength: 6, // Assuming you have slides in your carousel
+      ),
       Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: Column(
@@ -103,7 +166,7 @@ class _LandingPageState extends State<LandingPage> {
                       Column(
                         children: [
                           Text(
-                            'Advantages join our education center',
+                            'Keuntungan bergabung dengan pusat pendidikan kami',
                             style: GoogleFonts.mulish(
                                 color: CusColors.header,
                                 fontSize: title,
@@ -126,7 +189,7 @@ class _LandingPageState extends State<LandingPage> {
                           SizedBox(
                             width: width / 1.5,
                             child: Text(
-                              'We provide to you the best choiches for you. Customize it according to your coding preferences, and ensure a seamless learning journey guided by our experienced instructors.',
+                              'Kami memberikan kepada Anda pilihan terbaik untuk Anda. Sesuaikan sesuai dengan preferensi pengkodean Anda, dan pastikan perjalanan pembelajaran lancar dipandu oleh instruktur kami yang berpengalaman.',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.mulish(
                                   color: CusColors.inactive,
@@ -144,6 +207,215 @@ class _LandingPageState extends State<LandingPage> {
             ),
             const AdvantageListResponsive(),
           ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Text(
+          'Testimoni',
+          style: GoogleFonts.mulish(
+              color: CusColors.header,
+              fontSize: title,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 30, left: 30, bottom: 100),
+          child: Row(
+            children: [
+              Container(
+                width: 220,
+                height: 280,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      14.0,
+                    ),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 1)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(14.0),
+                        child: Image.asset(
+                          'assets/images/Testimoni 1.png',
+                          width: 200,
+                          height:
+                              200, // Adjust this to fit the image within the container
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .start, // Aligns to the start (left)
+                        children: [
+                          Container(
+                            child: TextButton(
+                              child: const Text('Lihat'),
+                              onPressed: launchTestimoni1,
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        CusColors.accentBlue),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                              ),
+                            ),
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                10.0,
+                              ),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Container(
+                width: 220,
+                height: 280,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      14.0,
+                    ),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 1)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(14.0),
+                        child: Image.asset(
+                          'assets/images/Testimoni 2.png',
+                          width: 200,
+                          height:
+                              200, // Adjust this to fit the image within the container
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .start, // Aligns to the start (left)
+                        children: [
+                          Container(
+                            child: TextButton(
+                              child: const Text('Lihat'),
+                              onPressed: launchTestimoni2,
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        CusColors.accentBlue),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                              ),
+                            ),
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                10.0,
+                              ),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Container(
+                width: 220,
+                height: 280,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      14.0,
+                    ),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 1)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(14.0),
+                        child: Image.asset(
+                          'assets/images/Testimoni 3.png',
+                          width: 200,
+                          height:
+                              200, // Adjust this to fit the image within the container
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .start, // Aligns to the start (left)
+                        children: [
+                          Container(
+                            child: TextButton(
+                              child: const Text('Lihat'),
+                              onPressed: launchTestimoni3,
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        CusColors.accentBlue),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                              ),
+                            ),
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                10.0,
+                              ),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       StreamBuilder(
@@ -211,7 +483,7 @@ class _LandingPageState extends State<LandingPage> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 50),
                             child: Text(
-                              'Best Seller',
+                              'Penjual Terbaik',
                               style: GoogleFonts.mulish(
                                   color: CusColors.header,
                                   fontSize: title,
@@ -253,7 +525,7 @@ class _LandingPageState extends State<LandingPage> {
                         Column(
                           children: [
                             Text(
-                              'Latest Courses',
+                              'Kursus Terbaru',
                               style: GoogleFonts.mulish(
                                   color: CusColors.header,
                                   fontSize: title,
@@ -393,7 +665,7 @@ class _LandingPageState extends State<LandingPage> {
                                           ),
                                         ),
                                         child: Text(
-                                          'See More Courses',
+                                          'Lihat Kursus Lainnya',
                                           style: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w700,
                                               color: isHovered[1]
@@ -424,6 +696,64 @@ class _LandingPageState extends State<LandingPage> {
                       ],
                     ),
                   ),
+
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        'Partner',
+                        style: GoogleFonts.mulish(
+                            color: CusColors.header,
+                            fontSize: title,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          right: 30, left: 30, bottom: 100),
+                      child: Row(
+                        children: [
+                          Center(
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/banks/Logo_Darbi.png',
+                                ),
+                              ),
+                              width: 220,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14.0),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          // SizedBox(
+                          //   width: 16,
+                          // ),
+                          // Container(
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.all(10.0),
+                          //     child: Image.asset(
+                          //       'assets/banks/Logo_BCA.png',
+                          //     ),
+                          //   ),
+                          //   width: 200,
+                          //   height: 100,
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(14.0),
+                          //     color: Colors.black,
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.center,
                   //   children: [
@@ -611,158 +941,201 @@ class _LandingPageState extends State<LandingPage> {
               );
             }
           }),
-
-          const FAQSection(),
-
+      const FAQSection(),
       const Footer()
     ]);
   }
 }
 
-class HeaderLandingPage extends StatelessWidget {
+class HeaderLandingPage extends StatefulWidget {
   final double width;
   final double height;
   final double mainHeader;
   final double subHeader;
-  const HeaderLandingPage(
-      {super.key,
-      required this.width,
-      required this.height,
-      required this.mainHeader,
-      required this.subHeader});
+  final int pageLength;
+
+  const HeaderLandingPage({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.mainHeader,
+    required this.subHeader,
+    required this.pageLength,
+  });
+
+  @override
+  _HeaderLandingPageState createState() => _HeaderLandingPageState();
+}
+
+class _HeaderLandingPageState extends State<HeaderLandingPage> {
+  int currentIndexPage = 0;
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return ResponsiveBuilder(
       builder: (context, sizingInformation) {
         // Check the sizing information here and return your UI
         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
-          return _defaultHeader(context);
+          return Column(
+            children: [
+              _defaultHeader(context),
+              _buildDotsIndicator(), // Add this
+            ],
+          );
         }
         if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
-          return _defaultHeader(context);
+          return Column(
+            children: [
+              _defaultHeader(context),
+              _buildDotsIndicator(), // Add this
+            ],
+          );
         }
         if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 50),
-            child: CarouselSlider(
-              options: CarouselOptions(
-                  autoPlay: true,
-                  viewportFraction: 1,
-                  pageSnapping: true,
-                  aspectRatio: 16 / 13),
-              items: [
-                // Column(
-                //   children: [
-                //     AnimateIfVisible(
-                //       key: const Key('item.2'),
-                //       builder: (
-                //         BuildContext context,
-                //         Animation<double> animation,
-                //       ) =>
-                //           FadeTransition(
-                //         opacity: Tween<double>(
-                //           begin: 0,
-                //           end: 1,
-                //         ).animate(animation),
-                //         child: SvgPicture.asset(
-                //           'assets/svg/landing_page.svg',
-                //           width: width / 1.8,
-                //         ),
-                //       ),
-                //     ),
-                //     AnimateIfVisible(
-                //       key: const Key('item.1'),
-                //       builder: (
-                //         BuildContext context,
-                //         Animation<double> animation,
-                //       ) =>
-                //           FadeTransition(
-                //         opacity: Tween<double>(
-                //           begin: 0,
-                //           end: 1,
-                //         ).animate(animation),
-                //         child: Padding(
-                //           padding: const EdgeInsets.symmetric(vertical: 20),
-                //           child: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 'DAC Education Center',
-                //                 style: GoogleFonts.mulish(
-                //                     color: CusColors.header,
-                //                     fontSize: mainHeader,
-                //                     fontWeight: FontWeight.bold),
-                //               ),
-                //               Padding(
-                //                 padding:
-                //                     const EdgeInsets.only(top: 10, bottom: 15),
-                //                 child: Text(
-                //                   'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
-                //                   textAlign: TextAlign.center,
-                //                   style: GoogleFonts.mulish(
-                //                       color: CusColors.inactive,
-                //                       fontSize: subHeader,
-                //                       fontWeight: FontWeight.w300,
-                //                       height: 1.5),
-                //                 ),
-                //               ),
-                //               Container(
-                //                 height: 28,
-                //                 decoration: BoxDecoration(
-                //                     color: const Color(0xFF00C8FF),
-                //                     borderRadius: BorderRadius.circular(80),
-                //                     boxShadow: [
-                //                       BoxShadow(
-                //                           color: Colors.black.withOpacity(.25),
-                //                           spreadRadius: 0,
-                //                           blurRadius: 20,
-                //                           offset: const Offset(0, 4))
-                //                     ]),
-                //                 child: ElevatedButton(
-                //                   onPressed: () {
-                //                     Get.rootDelegate.toNamed(routeLogin);
-                //                   },
-                //                   style: ButtonStyle(
-                //                     shape: MaterialStateProperty.all<
-                //                         RoundedRectangleBorder>(
-                //                       RoundedRectangleBorder(
-                //                         borderRadius: BorderRadius.circular(8),
-                //                       ),
-                //                     ),
-                //                     backgroundColor: MaterialStateProperty.all(
-                //                         Colors.transparent),
-                //                     shadowColor: MaterialStateProperty.all(
-                //                         Colors.transparent),
-                //                   ),
-                //                   child: Text(
-                //                     'Start now',
-                //                     style: GoogleFonts.mulish(
-                //                       fontWeight: FontWeight.w700,
-                //                       color: Colors.white,
-                //                       fontSize: subHeader,
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                Image.asset(
-                  'assets/images/SLIDE 1.png',
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        currentIndexPage = index;
+                      });
+                    },
+                  ),
+                  items: [
+                    SafeArea(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              AnimateIfVisible(
+                                key: const Key('item.1'),
+                                builder: (BuildContext context,
+                                        Animation<double> animation) =>
+                                    FadeTransition(
+                                  opacity: Tween<double>(begin: 0, end: 1)
+                                      .animate(animation),
+                                  child: SizedBox(
+                                    width: widget.width / 2.5,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Digital Education Center',
+                                          style: GoogleFonts.mulish(
+                                              color: CusColors.header,
+                                              fontSize: widget.mainHeader,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 20),
+                                          child: Text(
+                                            'DEC(Digital Education Center) adalah platform pembelajaran yang berfokus pada pengembangan program pendidikan berbasis pemrograman. DEC berkomitmen untuk menyajikan pengalaman pembelajaran interaktif, mendalam, dan relevan bagi para pelajar yang ingin meningkatkan keterampilan dan pengetahuan mereka di bidang pemrograman.',
+                                            style: GoogleFonts.mulish(
+                                                color: CusColors.inactive,
+                                                fontSize: getValueForScreenType<
+                                                    double>(
+                                                  context: context,
+                                                  mobile: width * .013,
+                                                  tablet: width * .013,
+                                                  desktop: width * .01,
+                                                ),
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: widget.width * .09,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF00C8FF),
+                                            borderRadius:
+                                                BorderRadius.circular(80),
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Get.rootDelegate
+                                                  .toNamed(routeLogin);
+                                            },
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              padding: MaterialStateProperty
+                                                  .all<EdgeInsetsGeometry>(
+                                                EdgeInsets.symmetric(
+                                                    vertical:
+                                                        widget.height * 0.015),
+                                              ),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              shadowColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                            ),
+                                            child: Text(
+                                              'Mulai Sekarang',
+                                              style: GoogleFonts.mulish(
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
+                                                fontSize: widget.width * 0.01,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: height * .018,
+                                  tablet: height * .05,
+                                  desktop: height * .025,
+                                ),
+                              ),
+                              const Spacer(),
+                              AnimateIfVisible(
+                                key: const Key('item.2'),
+                                builder: (BuildContext context,
+                                        Animation<double> animation) =>
+                                    FadeTransition(
+                                  opacity: Tween<double>(begin: 0, end: 1)
+                                      .animate(animation),
+                                  child: SvgPicture.asset(
+                                    'assets/svg/landing_page.svg',
+                                    width: widget.width / 3.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Image.asset('assets/images/SLIDE 1.png'),
+                    Image.asset('assets/images/SLIDE 2.png'),
+                    Image.asset('assets/images/SLIDE 3.png'),
+                    Image.asset('assets/images/SLIDE 4.png'),
+                    Image.asset('assets/images/SLIDE 5.png'),
+                  ],
                 ),
-                Image.asset(
-                  'assets/images/SLIDE 2.png',
-                ),
-                Image.asset(
-                  'assets/images/SLIDE 3.png',
-                ),
-              ],
-            ),
+              ),
+              _buildDotsIndicator(), // Add this
+            ],
           );
         }
 
@@ -771,145 +1144,168 @@ class HeaderLandingPage extends StatelessWidget {
     );
   }
 
-  Widget _defaultHeader(context) {
+  Widget _defaultHeader(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(
-          top: 100,
-          bottom: getValueForScreenType<double>(
-            context: context,
-            mobile: 50,
-            tablet: 100,
-            desktop: 150,
-          ),
+      padding: EdgeInsets.only(
+        top: 100,
+        bottom: getValueForScreenType<double>(
+          context: context,
+          mobile: 50,
+          tablet: 100,
+          desktop: 150,
         ),
-        child: CarouselSlider(
-          options: CarouselOptions(
-            autoPlay: true,
-            viewportFraction: 1,
-            pageSnapping: true,
-            aspectRatio: getValueForScreenType<double>(
-              context: context,
-              mobile: 16 / 7,
-              tablet: 16 / 5.7,
-              desktop: 16 / 5.6,
-            ),
+      ),
+      child: CarouselSlider(
+        options: CarouselOptions(
+          scrollDirection: Axis.horizontal,
+          viewportFraction: 1,
+          pageSnapping: true,
+          aspectRatio: getValueForScreenType<double>(
+            context: context,
+            mobile: 16 / 7,
+            tablet: 16 / 5.7,
+            desktop: 16 / 5.6,
           ),
-          items: [
-            // Column(
-            //   children: [
-            //     Row(
-            //       children: [
-            //         AnimateIfVisible(
-            //           key: const Key('item.1'),
-            //           builder: (
-            //             BuildContext context,
-            //             Animation<double> animation,
-            //           ) =>
-            //               FadeTransition(
-            //             opacity: Tween<double>(
-            //               begin: 0,
-            //               end: 1,
-            //             ).animate(animation),
-            //             child: SizedBox(
-            //               width: width / 2.5,
-            //               child: Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Text(
-            //                     'DAC Education Center',
-            //                     style: GoogleFonts.mulish(
-            //                         color: CusColors.header,
-            //                         fontSize: mainHeader,
-            //                         fontWeight: FontWeight.bold),
-            //                   ),
-            //                   Padding(
-            //                     padding:
-            //                         const EdgeInsets.symmetric(vertical: 30),
-            //                     child: Text(
-            //                       'DEC (DAC Education Center) is a learning platform that focuses on developing programming-based educational programs. DEC is committed to delivering interactive, in-depth, and relevant learning experiences for learners who want to enhance their skills and knowledge in the field of programming.',
-            //                       style: GoogleFonts.mulish(
-            //                           color: CusColors.inactive,
-            //                           fontSize: subHeader,
-            //                           fontWeight: FontWeight.w300,
-            //                           height: 1.5),
-            //                     ),
-            //                   ),
-            //                   Container(
-            //                     width: width * .09,
-            //                     decoration: BoxDecoration(
-            //                       color: const Color(0xFF00C8FF),
-            //                       borderRadius: BorderRadius.circular(80),
-            //                     ),
-            //                     child: ElevatedButton(
-            //                       onPressed: () {
-            //                         Get.rootDelegate.toNamed(routeLogin);
-            //                       },
-            //                       style: ButtonStyle(
-            //                         shape: MaterialStateProperty.all<
-            //                             RoundedRectangleBorder>(
-            //                           RoundedRectangleBorder(
-            //                             borderRadius: BorderRadius.circular(8),
-            //                           ),
-            //                         ),
-            //                         padding: MaterialStateProperty.all<
-            //                             EdgeInsetsGeometry>(
-            //                           EdgeInsets.symmetric(
-            //                             vertical: height * 0.015,
-            //                           ),
-            //                         ),
-            //                         backgroundColor: MaterialStateProperty.all(
-            //                             Colors.transparent),
-            //                         shadowColor: MaterialStateProperty.all(
-            //                             Colors.transparent),
-            //                       ),
-            //                       child: Text(
-            //                         'Start now',
-            //                         style: GoogleFonts.mulish(
-            //                           fontWeight: FontWeight.w700,
-            //                           color: Colors.white,
-            //                           fontSize: width * 0.01,
-            //                         ),
-            //                       ),
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-            //         const Spacer(),
-            //         AnimateIfVisible(
-            //           key: const Key('item.2'),
-            //           builder: (
-            //             BuildContext context,
-            //             Animation<double> animation,
-            //           ) =>
-            //               FadeTransition(
-            //             opacity: Tween<double>(
-            //               begin: 0,
-            //               end: 1,
-            //             ).animate(animation),
-            //             child: SvgPicture.asset(
-            //               'assets/svg/landing_page.svg',
-            //               width: width / 2.5,
-            //             ),
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ],
-            // ),
-            Image.asset(
-              'assets/images/SLIDE 1.png',
-            ),
-            Image.asset(
-              'assets/images/SLIDE 2.png',
-            ),
-            Image.asset(
-              'assets/images/SLIDE 3.png',
-            ),
-          ],
-        ));
+          onPageChanged: (index, reason) {
+            setState(() {
+              currentIndexPage = index;
+            });
+          },
+        ),
+        items: [
+          Column(
+            children: [
+              Row(
+                children: [
+                  AnimateIfVisible(
+                    key: const Key('item.1'),
+                    builder:
+                        (BuildContext context, Animation<double> animation) =>
+                            FadeTransition(
+                      opacity:
+                          Tween<double>(begin: 0, end: 1).animate(animation),
+                      child: SizedBox(
+                        width: widget.width / 2.5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Digital Education Center',
+                              style: GoogleFonts.mulish(
+                                  color: CusColors.header,
+                                  fontSize: widget.mainHeader,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 30),
+                              child: Text(
+                                'DEC(Digital Education Center) adalah platform pembelajaran yang berfokus pada pengembangan program pendidikan berbasis pemrograman. DEC berkomitmen untuk menyajikan pengalaman pembelajaran interaktif, mendalam, dan relevan bagi para pelajar yang ingin meningkatkan keterampilan dan pengetahuan mereka di bidang pemrograman.',
+                                style: GoogleFonts.mulish(
+                                    color: CusColors.inactive,
+                                    fontSize: widget.subHeader,
+                                    fontWeight: FontWeight.w300,
+                                    height: 1.5),
+                              ),
+                            ),
+                            Container(
+                              width: widget.width * .09,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF00C8FF),
+                                borderRadius: BorderRadius.circular(80),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Get.rootDelegate.toNamed(routeLogin);
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(
+                                    EdgeInsets.symmetric(
+                                        vertical: widget.height * 0.015),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                  shadowColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                ),
+                                child: Text(
+                                  'Mulai Sekarang',
+                                  style: GoogleFonts.mulish(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    fontSize: widget.width * 0.01,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  AnimateIfVisible(
+                    key: const Key('item.2'),
+                    builder:
+                        (BuildContext context, Animation<double> animation) =>
+                            FadeTransition(
+                      opacity:
+                          Tween<double>(begin: 0, end: 1).animate(animation),
+                      child: SvgPicture.asset(
+                        'assets/svg/landing_page.svg',
+                        width: widget.width / 2.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: Image.asset('assets/images/SLIDE 1.png'),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: Image.asset('assets/images/SLIDE 2.png'),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: Image.asset('assets/images/SLIDE 3.png'),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: Image.asset('assets/images/SLIDE 4.png'),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: Image.asset('assets/images/SLIDE 5.png'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDotsIndicator() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: DotsIndicator(
+        dotsCount: widget.pageLength,
+        position: currentIndexPage.toDouble(),
+        decorator: DotsDecorator(
+          size: const Size.square(9.0),
+          activeSize: const Size(18.0, 9.0),
+          activeShape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        ),
+      ),
+    );
   }
 }
 

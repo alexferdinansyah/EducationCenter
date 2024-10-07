@@ -220,6 +220,75 @@ Widget cusPaymentWidgetOn(width, height, courseId, userId, isBundle, courseType,
   );
 }
 
+Widget cusPaymentWidgetVideoOn(
+    width, height, videoLearningId, userId, haveVideo,context) {
+  return Container(
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () async {
+        if (haveVideo == false) {
+           Get.rootDelegate.toNamed(
+              routeBuyVideo,
+              parameters: {'id': videoLearningId},
+            );
+        } else if (haveVideo == null) {
+          Get.rootDelegate.toNamed(
+            routeOfferLearnVideo,
+            parameters: {'id': videoLearningId},
+          );
+        } else {
+          Get.rootDelegate.toNamed(
+            routeLearnVideo,
+            parameters: {'id': videoLearningId},
+          );
+        }
+          
+        // Get.rootDelegate.toNamed(
+        //   routeLearnCourse,
+        //   parameters: {'id': videoLearningId},
+        // );
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        'Buy video learning',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .018,
+            tablet: width * .015,
+            desktop: width * .01,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 Widget cusPaymentWidgetOff(
     width, height, isBundle, courseId, courseType, context) {
   return Container(
@@ -264,6 +333,58 @@ Widget cusPaymentWidgetOff(
       ),
       child: Text(
         isBundle ? 'Buy Courses Bundle' : 'Buy Course',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .018,
+            tablet: width * .015,
+            desktop: width * .01,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget cusPaymentWidgetOffvideo(
+    width, height, videoLearningId, context) {
+  return Container(
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () {
+        Get.rootDelegate.toNamed(
+            routeBuyVideo,
+            parameters: {'id': videoLearningId},
+          );
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        'Buy video',
         style: GoogleFonts.mulish(
           fontWeight: FontWeight.w700,
           color: Colors.white,

@@ -14,11 +14,11 @@ class AdvantageModel {
 List<AdvantageModel> advantage = [
   AdvantageModel(
     svg: 'assets/svg/access_content.svg',
-    title: 'ACCESS CONTENT \n EVERYWHERE',
+    title: 'AKSES KONTEN \n DI MANA SAJA',
   ),
   AdvantageModel(
     svg: 'assets/svg/multiple_device.svg',
-    title: 'SUPPORT MULTIPLE \n DEVICE',
+    title: 'DUKUNGAN GANDA \n PERANGKAT',
   ),
   AdvantageModel(
     svg: 'assets/svg/study_case.svg',
@@ -26,15 +26,15 @@ List<AdvantageModel> advantage = [
   ),
   AdvantageModel(
     svg: 'assets/svg/certificate.svg',
-    title: 'EARN \n CERTIFICATE',
+    title: 'STUDI KASUS & \n PROYEK',
   ),
   AdvantageModel(
     svg: 'assets/svg/affordable.svg',
-    title: 'AFFORDABLE \n COURSE',
+    title: 'KURSUS \n TERJANGKAU',
   ),
   AdvantageModel(
     svg: 'assets/svg/instructor.svg',
-    title: 'EXPERIENCED \n INSTRUCTOR',
+    title: 'INSTRUKTUR \n BERPENGALAMAN',
   ),
 ];
 

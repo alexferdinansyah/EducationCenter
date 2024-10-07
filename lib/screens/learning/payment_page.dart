@@ -100,6 +100,8 @@ class _PaymentPageState extends State<PaymentPage> {
 
   final UserBankController bankController = Get.put(UserBankController());
   final DetailCourseController controller = Get.put(DetailCourseController());
+  final DetailVideoLearningController videocontroller =
+      Get.put(DetailVideoLearningController());
   final DetailMembershipUser membershipUser = Get.put(DetailMembershipUser());
 
   @override
@@ -202,19 +204,50 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           );
         });
+      } else if (route.contains('/checkout/video')) {
+        var argument = Get.rootDelegate.parameters;
+        id = argument['id']!;
+        videocontroller.fetchDocument(id);
+        return Obx(() {
+          final videolearning = videocontroller.documentSnapshot.value;
+
+          if (videolearning == null) {
+            return const Loading();
+          }
+
+          return Scaffold(
+            backgroundColor: CusColors.bg,
+            body: _defaultVideo(
+              width,
+              height,
+              subHeader,
+              titleFontSize,
+              header,
+              buttonText,
+              uid: user.uid,
+              videoLearningId: id,
+              isVideo: true,
+              title: videolearning.title,
+              price: videolearning.price,
+              memberType: membershipData.memberType,
+            ),
+          );
+        });
       }
-      return Container(
-        width: getValueForScreenType<double>(
-          context: context,
-          mobile: width * .86,
-          tablet: width * .79,
-          desktop: width * .83,
+
+      // Combine _default and _defaultVideo in a Column
+      return Scaffold(
+        backgroundColor: CusColors.bg,
+        body: Column(
+          children: [
+            _default(
+                width, height, subHeader, titleFontSize, header, buttonText,
+                isCourse: false, memberType: membershipData.memberType),
+            _defaultVideo(
+                width, height, subHeader, titleFontSize, header, buttonText,
+                isVideo: false, memberType: membershipData.memberType),
+          ],
         ),
-        height: height - 60,
-        color: CusColors.bg,
-        child: _default(
-            width, height, subHeader, titleFontSize, header, buttonText,
-            isCourse: false, memberType: membershipData.memberType),
       );
     });
   }
@@ -288,6 +321,80 @@ class _PaymentPageState extends State<PaymentPage> {
           title: title,
           price: price,
           type: type,
+          memberType: memberType,
+          discount: discount,
+          normalPrice: normalPrice,
+        );
+      }
+      return Container();
+    });
+  }
+
+  Widget _defaultVideo(
+      double width, double height, subHeader, titleFontSize, header, buttonText,
+      {String? videoLearningId,
+      String? uid,
+      bool? isVideo,
+      String? title,
+      String? price,
+      String? memberType,
+      int discount = 10}) {
+    String? normalPrice = widget.price ?? price;
+
+    return ResponsiveBuilder(builder: (context, sizingInformation) {
+      // Check the sizing information here and return your UI
+      if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
+        return defaultLayoutvideo(
+          width,
+          height,
+          subHeader,
+          titleFontSize,
+          header,
+          buttonText,
+          true,
+          uid: uid,
+          videoLearningId: id,
+          isVideo: isVideo,
+          title: title,
+          price: price,
+          memberType: memberType,
+          discount: discount,
+          normalPrice: normalPrice,
+        );
+      }
+      if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
+        return defaultLayoutvideo(
+          width,
+          height,
+          subHeader,
+          titleFontSize,
+          header,
+          buttonText,
+          true,
+          uid: uid,
+          videoLearningId: id,
+          isVideo: isVideo,
+          title: title,
+          price: price,
+          memberType: memberType,
+          discount: discount,
+          normalPrice: normalPrice,
+        );
+      }
+      if (sizingInformation.deviceScreenType == DeviceScreenType.mobile) {
+        return defaultLayoutvideo(
+          width,
+          height,
+          subHeader,
+          titleFontSize,
+          header,
+          buttonText,
+          false,
+          uid: uid,
+          videoLearningId: id,
+          isVideo: isVideo,
+          title: title,
+          price: price,
           memberType: memberType,
           discount: discount,
           normalPrice: normalPrice,
@@ -427,6 +534,144 @@ class _PaymentPageState extends State<PaymentPage> {
                         title: title,
                         price: price,
                         type: type,
+                        memberType: memberType,
+                        discount: discount,
+                        normalPrice: normalPrice,
+                      ),
+                    ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget defaultLayoutvideo(
+    double width,
+    double height,
+    subHeader,
+    titleFontSize,
+    header,
+    buttonText,
+    bool isRow, {
+    String? videoLearningId,
+    String? uid,
+    bool? isVideo,
+    String? title,
+    String? price,
+    String? memberType,
+    int? discount,
+    String? normalPrice,
+  }) {
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 30,
+              desktop: 40,
+            ),
+            vertical: getValueForScreenType<double>(
+              context: context,
+              mobile: 20,
+              tablet: 30,
+              desktop: 35,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment:
+                isVideo! ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            children: [
+              if (widget.title != 'Membership')
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.rootDelegate.toNamed(routeHome);
+                    },
+                    child: Image.asset(
+                      'assets/images/dec_logo2.png',
+                      width: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .1,
+                        tablet: width * .08,
+                        desktop: width * .06,
+                      ),
+                    ),
+                  ),
+                ),
+              Row(
+                children: [
+                  if (widget.title == 'Membership')
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: GestureDetector(
+                          onTap: () =>
+                              Get.rootDelegate.offNamed(routeMembershipUpgrade),
+                          child: Icon(
+                            Icons.arrow_back_rounded,
+                            size: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 18,
+                              tablet: 22,
+                              desktop: 24,
+                            ),
+                          )),
+                    ),
+                  Text(
+                    widget.title == 'Membership'
+                        ? 'Upgrade Membership'
+                        : 'Buy video learning',
+                    style: GoogleFonts.poppins(
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF1F384C),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              isRow
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: defaultWidgetPaymentvideo(
+                        width,
+                        height,
+                        subHeader,
+                        titleFontSize,
+                        header,
+                        buttonText,
+                        isRow,
+                        uid: uid,
+                        videoLearningId: id,
+                        isVideo: isVideo,
+                        title: title,
+                        price: price,
+                        memberType: memberType,
+                        discount: discount,
+                        normalPrice: normalPrice,
+                      ),
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: defaultWidgetPaymentvideo(
+                        width,
+                        height,
+                        subHeader,
+                        titleFontSize,
+                        header,
+                        buttonText,
+                        isRow,
+                        uid: uid,
+                        videoLearningId: id,
+                        isVideo: isVideo,
+                        title: title,
+                        price: price,
                         memberType: memberType,
                         discount: discount,
                         normalPrice: normalPrice,
@@ -1080,6 +1325,634 @@ class _PaymentPageState extends State<PaymentPage> {
     ];
   }
 
+  List<Widget> defaultWidgetPaymentvideo(
+    double width,
+    double height,
+    subHeader,
+    titleFontSize,
+    header,
+    buttonText,
+    isRow, {
+    String? videoLearningId,
+    String? uid,
+    bool? isVideo,
+    String? title,
+    String? price,
+    String? memberType,
+    int? discount,
+    String? normalPrice,
+  }) {
+    int parsedPrice = int.tryParse(normalPrice!.replaceAll(',', '')) ?? 0;
+    int total = 0;
+
+    if (isVideo! && memberType == 'Pro') {
+      int discountPrice = parsedPrice * discount! ~/ 100;
+      int memberProPrice = parsedPrice - discountPrice;
+      total = memberProPrice + uniqueCode!;
+      if (couponData != null) {
+        if (couponData!['coupon'].type == Coupons.percentageCoupon) {
+          int discountCoupon =
+              memberProPrice * couponData!['coupon'].amount ~/ 100;
+          total = (memberProPrice - discountCoupon) + uniqueCode!;
+        } else {
+          total = (memberProPrice - couponData!['coupon'].amount as int) +
+              uniqueCode!;
+        }
+      }
+    } else if (couponData != null) {
+      if (couponData!['coupon'].type == Coupons.percentageCoupon) {
+        int discountCoupon = parsedPrice * couponData!['coupon'].amount! ~/ 100;
+        total = (parsedPrice - discountCoupon) + uniqueCode!;
+      } else {
+        total =
+            (parsedPrice - couponData!['coupon'].amount as int) + uniqueCode!;
+      }
+    } else {
+      total = parsedPrice + uniqueCode!;
+    }
+
+    String totalPrice = NumberFormat("#,###").format(total);
+    return [
+      SizedBox(
+        width: getValueForScreenType<double>(
+          context: context,
+          mobile: isVideo ? width / 1.1 : width / 1.3,
+          tablet: width / 1.8,
+          desktop: width / 2,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(bottom: 15),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Colors.black12, width: 3),
+                ),
+              ),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'What you buy',
+                      style: GoogleFonts.poppins(
+                        fontSize: header,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF1F384C),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Title',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3),
+                              child: Text(
+                                'Type',
+                                style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w400,
+                                  color: CusColors.subHeader,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'Price',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${widget.title ?? title}',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w500,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                            Text(
+                              'Rp ${widget.price ?? price}',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w500,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ]),
+            ),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(bottom: 15),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'How to buy',
+                      style: GoogleFonts.poppins(
+                        fontSize: header,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF1F384C),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 12),
+                      child: Text(
+                        'Please transfer to this account and send the invoice of your transaction with the button below',
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w400,
+                          color: CusColors.subHeader,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              'assets/banks/Logo_BCA.png',
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 25,
+                                desktop: 30,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3),
+                              child: Text(
+                                'Account Number',
+                                style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w400,
+                                  color: CusColors.subHeader,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'Account Name',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: getValueForScreenType<double>(
+                                context: context,
+                                mobile: 20,
+                                tablet: 25,
+                                desktop: 30,
+                              ),
+                              child: Text(
+                                'Bank BCA',
+                                style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w500,
+                                  color: CusColors.subHeader,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3),
+                              child: Text(
+                                '4212518585',
+                                style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w500,
+                                  color: CusColors.subHeader,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'DAC SOLUTION INFORMATIKA',
+                              style: GoogleFonts.poppins(
+                                fontSize: subHeader,
+                                fontWeight: FontWeight.w500,
+                                color: CusColors.subHeader,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ]),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        width: getValueForScreenType<double>(
+          context: context,
+          mobile: width / 2.2,
+          tablet: width / 3,
+          desktop: width / 4,
+        ),
+        margin: const EdgeInsets.only(top: 20, left: 50),
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          GestureDetector(
+            onTap: () async {
+              final result = await showDialog(
+                  context: context,
+                  builder: (_) {
+                    return CouponRedeem(
+                      isProductCoupon: false,
+                      title: widget.title ?? title!,
+                    );
+                  });
+
+              if (result != false) {
+                setState(() {
+                  couponData = result;
+                });
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              height: 45,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    IconlyLight.discount,
+                    color: CusColors.accentBlue,
+                    size: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 20,
+                      tablet: 22,
+                      desktop: 24,
+                    ),
+                  ),
+                  if (couponData == null)
+                    Text(
+                      'Save more with promos',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w500,
+                        color: CusColors.text,
+                      ),
+                    ),
+                  if (couponData != null)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (couponData!['coupon'].description != '')
+                              Text(
+                                couponData!['coupon'].description!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w500,
+                                  color: CusColors.text,
+                                ),
+                              ),
+                            Text(
+                              '1 Coupon used',
+                              style: GoogleFonts.poppins(
+                                fontSize: buttonText,
+                                fontWeight: FontWeight.w400,
+                                color: CusColors.text,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                    size: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 20,
+                      tablet: 22,
+                      desktop: 24,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          if (couponData != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Discount items',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    getCouponFormatName(couponData!['coupon'].type!,
+                        couponData!['coupon'].amount!),
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w400,
+                      color: CusColors.subHeader,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Container(
+            height: 2,
+            width: double.infinity,
+            margin: const EdgeInsets.only(top: 10, bottom: 20),
+            color: CusColors.bgSideBar,
+          ),
+          Text(
+            'Payment summary',
+            style: GoogleFonts.poppins(
+              fontSize: header,
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFF1F384C),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Payment method',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      child: Text(
+                        widget.title == 'Membership'
+                            ? 'Membership Pro'
+                            : '$title',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w400,
+                          color: CusColors.subHeader,
+                        ),
+                      ),
+                    ),
+                    if (memberType == 'Pro')
+                      Text(
+                        'Discount Pro Member',
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w400,
+                          color: CusColors.subHeader,
+                        ),
+                      ),
+                    if (couponData != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        child: Text(
+                          'Coupon discount',
+                          style: GoogleFonts.poppins(
+                            fontSize: subHeader,
+                            fontWeight: FontWeight.w400,
+                            color: CusColors.subHeader,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (bankController.bankName == null)
+                    Text(
+                      'Select method first',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                  if (bankController.bankName != null)
+                    Row(
+                      children: [
+                        Text(
+                          bankController.bankName!,
+                          style: GoogleFonts.poppins(
+                            fontSize: subHeader,
+                            fontWeight: FontWeight.w400,
+                            color: CusColors.subHeader,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showBankListModal(width, subHeader, totalPrice);
+                          },
+                          child: Text(
+                            'Change..',
+                            style: GoogleFonts.poppins(
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .016,
+                                tablet: width * .013,
+                                desktop: width * .008,
+                              ),
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w400,
+                              color: CusColors.accentBlue,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Text(
+                      'Rp ${widget.price ?? price}',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                  ),
+                  if (memberType == 'Pro')
+                    Text(
+                      '$discount%',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w400,
+                        color: CusColors.subHeader,
+                      ),
+                    ),
+                  if (couponData != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      child: Text(
+                        getCouponFormatName(couponData!['coupon'].type!,
+                            couponData!['coupon'].amount!),
+                        style: GoogleFonts.poppins(
+                          fontSize: subHeader,
+                          fontWeight: FontWeight.w400,
+                          color: CusColors.subHeader,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+          Container(
+            height: 1,
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            color: Colors.grey,
+          ),
+          Row(
+            children: [
+              Column(
+                children: [
+                  Text(
+                    'Total payment',
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w500,
+                      color: CusColors.text,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Column(
+                children: [
+                  Text(
+                    'Rp $totalPrice',
+                    style: GoogleFonts.poppins(
+                      fontSize: subHeader,
+                      fontWeight: FontWeight.w500,
+                      color: CusColors.text,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Container(
+            height: getValueForScreenType<double>(
+              context: context,
+              mobile: 28,
+              tablet: 35,
+              desktop: 40,
+            ),
+            width: double.infinity,
+            margin: const EdgeInsets.only(top: 10),
+            child: ElevatedButton(
+              onPressed: () {
+                bankController.bankName == null
+                    ? showBankListModal(width, subHeader, totalPrice)
+                    : showBuyModal(
+                        width,
+                        height,
+                        header,
+                        subHeader,
+                        isRow,
+                        videoLearningId: videoLearningId,
+                        discount: discount,
+                        isVideo: isVideo,
+                        memberType: memberType,
+                        price: normalPrice,
+                        totalPrice: totalPrice,
+                        title: title,
+                        uid: uid,
+                      );
+              },
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(
+                    const Color(0xFF4351FF),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF4351FF),
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  )),
+              child: Text(
+                bankController.bankName == null ? 'Select method' : 'Buy',
+                style: GoogleFonts.poppins(
+                  fontSize: subHeader,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ]),
+      )
+    ];
+  }
+
   Widget bankImageList(String image, double height) {
     return Padding(
       padding: const EdgeInsets.only(right: 14),
@@ -1360,7 +2233,9 @@ class _PaymentPageState extends State<PaymentPage> {
       String? price,
       String? totalPrice,
       String? memberType,
-      int? discount}) {
+      int? discount,
+      bool? isVideo,
+      String? videoLearningId}) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
@@ -1378,8 +2253,10 @@ class _PaymentPageState extends State<PaymentPage> {
                         subHeader,
                         setStateDialog,
                         courseId: courseId,
+                        videoLearningId: videoLearningId,
                         discount: discount,
                         isCourse: isCourse,
+                        isVideo: isVideo,
                         memberType: memberType,
                         price: price,
                         totalPrice: totalPrice,
@@ -1396,8 +2273,10 @@ class _PaymentPageState extends State<PaymentPage> {
                           subHeader,
                           setStateDialog,
                           courseId: courseId,
+                          videoLearningId: videoLearningId,
                           discount: discount,
                           isCourse: isCourse,
+                          isVideo: isVideo,
                           memberType: memberType,
                           price: price,
                           totalPrice: totalPrice,
@@ -1429,7 +2308,9 @@ class _PaymentPageState extends State<PaymentPage> {
       String? price,
       String? totalPrice,
       String? memberType,
-      int? discount}) {
+      int? discount,
+      String? videoLearningId,
+      bool? isVideo}) {
     return [
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1957,6 +2838,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                           int total = 0;
 
                                           if (isCourse! &&
+                                              isVideo! &&
                                               memberType == 'Pro') {
                                             int discountPrice =
                                                 parsedPrice * discount! ~/ 100;
@@ -2085,6 +2967,26 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 uid: uid,
                                                 item: TransactionItem(
                                                   id: courseId,
+                                                  title: title,
+                                                  subTitle: type,
+                                                ),
+                                                invoiceDate: DateTime.now(),
+                                                date: DateTime.now(),
+                                                bankName:
+                                                    bankController.bankName,
+                                                price: price,
+                                                status: 'Pending',
+                                                invoice: downloadURL,
+                                                uniqueCode: totalPrice!
+                                                    .substring(
+                                                        totalPrice.length - 3),
+                                                reason: null,
+                                                discount: transactionDiscount);
+                                          } else if (isVideo == true) {
+                                            data = TransactionModel(
+                                                uid: uid,
+                                                item: TransactionItem(
+                                                  id: videoLearningId,
                                                   title: title,
                                                   subTitle: type,
                                                 ),

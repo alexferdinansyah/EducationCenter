@@ -60,7 +60,7 @@ class _SignInMobileState extends State<SignInMobile> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
-                          'Sign in',
+                          'Masuk',
                           style: GoogleFonts.quicksand(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
@@ -104,9 +104,9 @@ class _SignInMobileState extends State<SignInMobile> {
                           ),
                           validator: (val) {
                             if (val!.isEmpty) {
-                              return 'Enter an email';
+                              return 'Masukkan email';
                             } else if (!_auth.isValidEmail(val)) {
-                              return 'Enter a valid email';
+                              return 'Masukkan email yang valid';
                             }
                             return null;
                           },
@@ -156,7 +156,7 @@ class _SignInMobileState extends State<SignInMobile> {
                           ),
                           obscureText: showPassword ? false : true,
                           validator: (val) => val!.length < 6
-                              ? 'Enter an password 6 chars long'
+                              ? 'Masukkan kata sandi sepanjang 6 karakter'
                               : null,
                           onChanged: (val) {
                             setState(() => password = val);
@@ -172,7 +172,7 @@ class _SignInMobileState extends State<SignInMobile> {
                               onTap: () {
                                 Get.rootDelegate.toNamed(routeForgotPassword);
                               },
-                              child: Text('Forgot password ?',
+                              child: Text('Lupa kata sandi?',
                                   style: GoogleFonts.mulish(
                                     color: CusColors.mainColor,
                                     fontSize: width * .028,
@@ -240,7 +240,7 @@ class _SignInMobileState extends State<SignInMobile> {
                           child: loading
                               ? const CircularProgressIndicator() // Show loading indicator while loading is true
                               : Text(
-                                  'Sign in',
+                                  'Masuk',
                                   style: GoogleFonts.mulish(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
@@ -270,7 +270,7 @@ class _SignInMobileState extends State<SignInMobile> {
                             Flexible(
                                 flex: 1,
                                 child: Text(
-                                  "Or",
+                                  "Atau",
                                   style: GoogleFonts.mulish(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 11,
@@ -329,7 +329,7 @@ class _SignInMobileState extends State<SignInMobile> {
                                   width: 14,
                                 ),
                                 Text(
-                                  "Sign in with google",
+                                  "Masuk dengan google",
                                   style: GoogleFonts.mulish(
                                       color: CusColors.subHeader,
                                       fontWeight: FontWeight.w500,
@@ -348,14 +348,14 @@ class _SignInMobileState extends State<SignInMobile> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
-                              text: "New here? ",
+                              text: "Baru di sini?",
                               style: GoogleFonts.mulish(
                                 color: CusColors.subHeader.withOpacity(.5),
                                 fontSize: width * .035,
                               ),
                               children: <InlineSpan>[
                                 TextSpan(
-                                    text: "Register",
+                                    text: "Daftar",
                                     style: GoogleFonts.mulish(
                                         color: CusColors.mainColor,
                                         fontWeight: FontWeight.w700),

@@ -36,7 +36,7 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
       ),
       title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          'Reset your password',
+          'Setel ulang kata sandi Anda',
           style: GoogleFonts.poppins(
             fontSize: getValueForScreenType<double>(
               context: context,
@@ -50,7 +50,7 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
         ),
         const SizedBox(height: 10),
         Text(
-          "We will send you an email with a link to reset your password, please check if the email is correct.",
+          "Kami akan mengirimi Anda email berisi tautan untuk mengatur ulang kata sandi Anda, harap periksa apakah email tersebut benar.",
           style: GoogleFonts.poppins(
             fontSize: getValueForScreenType<double>(
               context: context,
@@ -88,7 +88,7 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
                     desktop: 16,
                   ),
                   horizontal: 18),
-              hintText: 'Enter an email',
+              hintText: 'Masukkan email',
               hintStyle: GoogleFonts.poppins(
                 fontSize: getValueForScreenType<double>(
                   context: context,
@@ -102,9 +102,9 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
             ),
             validator: (val) {
               if (val!.isEmpty) {
-                return 'Enter an email';
+                return 'Masukkan email';
               } else if (!_auth.isValidEmail(val)) {
-                return 'Enter a valid email';
+                return 'Masukkan email yang valid';
               }
               return null;
             },
@@ -118,7 +118,7 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
         GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Text(
-            'Cancel',
+            'Batalkan',
             style: GoogleFonts.poppins(
               fontSize: getValueForScreenType<double>(
                 context: context,
@@ -150,7 +150,7 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
                 setState(() {
                   if (result != null) {
                     Get.snackbar(
-                      'Success',
+                      'Berhasilan',
                       result,
                       snackbarStatus: (status) {
                         switch (status) {
@@ -163,8 +163,8 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
                     );
                   } else {
                     Get.snackbar(
-                      'Failed',
-                      'Email is not valid',
+                      'Gagal',
+                      'Email tidak valid',
                     );
                   }
                 });
@@ -193,7 +193,7 @@ class _ResetPasswordDialogState extends State<ResetPasswordDialog> {
                   ),
                 )),
             child: Text(
-              'Send link',
+              'Kirim tautan',
               style: GoogleFonts.poppins(
                 fontSize: getValueForScreenType<double>(
                   context: context,

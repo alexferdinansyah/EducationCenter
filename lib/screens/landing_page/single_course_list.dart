@@ -45,7 +45,7 @@ class SingleCourseList extends StatelessWidget {
                 if (snapshot.hasData) {
                   final List<Map> dataMaps = snapshot.data!;
                   final List<Map> singleCourses = dataMaps.where((courseMap) {
-                    final dynamic data = ['course'];
+                    final dynamic data = courseMap['course'];
                     return data is Course &&
                         data.isBundle == false &&
                         data.isDraft == false;

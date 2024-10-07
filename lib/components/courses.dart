@@ -140,7 +140,7 @@ class Courses extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             height: 1.5),
                       ),
-                      course.discount != ''
+                       course.discount != ''
                           ? Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),

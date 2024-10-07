@@ -72,6 +72,7 @@ class _AdminCourseState extends State<AdminCourse> {
     return StreamBuilder(
         stream: fireStore.allCourses,
         builder: (BuildContext context, snapshot) {
+          // print(snapshot);
           if (snapshot.connectionState == ConnectionState.active &&
               !initCourse) {
             initCourse = true;
@@ -92,7 +93,7 @@ class _AdminCourseState extends State<AdminCourse> {
               return element['course'].isBundle == false;
             }));
 
-            return Container(
+            return Container( 
               width: getValueForScreenType<double>(
                 context: context,
                 mobile: width * .86,

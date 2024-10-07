@@ -70,7 +70,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                       ),
                     ),
                     Text(
-                      'Welcome Back !',
+                      'Selamat Datang Kembali !',
                       style: GoogleFonts.mPlus1(
                           fontSize: getValueForScreenType<double>(
                             context: context,
@@ -85,7 +85,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                       height: 14,
                     ),
                     Text(
-                      'Start your education center faster and better',
+                      'Mulai pusat pendidikan Anda lebih cepat dan lebih baik',
                       style: GoogleFonts.mulish(
                           fontSize: getValueForScreenType<double>(
                             context: context,
@@ -193,9 +193,9 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                     ),
                                     validator: (val) {
                                       if (val!.isEmpty) {
-                                        return 'Enter an email';
+                                        return 'Masukkan email';
                                       } else if (!_auth.isValidEmail(val)) {
-                                        return 'Enter a valid email';
+                                        return 'Masukkan email yang valid';
                                       }
                                       return null;
                                     },
@@ -271,7 +271,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                     ),
                                     obscureText: showPassword ? false : true,
                                     validator: (val) => val!.length < 6
-                                        ? 'Enter an password 6 chars long'
+                                        ? 'Masukkan kata sandi sepanjang 6 karakter'
                                         : null,
                                     onChanged: (val) {
                                       setState(() => password = val);
@@ -310,7 +310,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                         onTap: () {
                                           Get.rootDelegate.toNamed(routeForgotPassword);
                                         },
-                                        child: Text('Forgot password ?',
+                                        child: Text('Lupa kata sandi?',
                                             style: GoogleFonts.mulish(
                                               color: CusColors.mainColor,
                                               fontSize:
@@ -401,7 +401,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                     child: loading
                                         ? const CircularProgressIndicator() // Show loading indicator while loading is true
                                         : Text(
-                                            'Sign in',
+                                            'Masuk',
                                             style: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white,
@@ -448,7 +448,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                       Flexible(
                                           flex: 1,
                                           child: Text(
-                                            "Or",
+                                            "Atau",
                                             style: GoogleFonts.mulish(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 11,
@@ -522,7 +522,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                             width: 14,
                                           ),
                                           Text(
-                                            "Sign in with google",
+                                            "Masuk dengan google",
                                             style: GoogleFonts.mulish(
                                               color: CusColors.subHeader,
                                               fontWeight: FontWeight.w500,
@@ -558,7 +558,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                   child: RichText(
                                     textAlign: TextAlign.left,
                                     text: TextSpan(
-                                        text: "New here? ",
+                                        text: "Baru di sini? ",
                                         style: GoogleFonts.mulish(
                                           color: CusColors.subHeader
                                               .withOpacity(.5),
@@ -572,7 +572,7 @@ class _SignInWebsiteState extends State<SignInWebsite> {
                                         ),
                                         children: <InlineSpan>[
                                           TextSpan(
-                                              text: "Register",
+                                              text: "Daftar",
                                               style: GoogleFonts.mulish(
                                                 color: CusColors.mainColor,
                                                 fontWeight: FontWeight.w700,

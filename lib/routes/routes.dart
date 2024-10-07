@@ -5,7 +5,16 @@ import 'package:project_tc/screens/auth/forgot_password.dart';
 import 'package:project_tc/screens/auth/register/register_responsive.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_article.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_detail_videoLearning.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_learn_course.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_learn_videoLearning.dart';
+import 'package:project_tc/screens/landing_page/EBook.dart';
+import 'package:project_tc/screens/landing_page/Portopolio.dart';
+import 'package:project_tc/screens/landing_page/detail_bootcamp.dart';
+import 'package:project_tc/screens/landing_page/detail_video_learning.dart';
+import 'package:project_tc/screens/landing_page/detail_webinar.dart';
+import 'package:project_tc/screens/landing_page/video_learningPage.dart';
+import 'package:project_tc/screens/landing_page/webinarPage.dart';
 import 'package:project_tc/screens/learning/learning_course.dart';
 import 'package:project_tc/screens/landing_page/app_view.dart';
 import 'package:project_tc/screens/landing_page/article_list.dart';
@@ -15,6 +24,7 @@ import 'package:project_tc/screens/landing_page/detail_article.dart';
 import 'package:project_tc/screens/landing_page/detail_single_course.dart';
 import 'package:project_tc/screens/landing_page/landing_page.dart';
 import 'package:project_tc/screens/landing_page/single_course_list.dart';
+import 'package:project_tc/screens/learning/learning_video.dart';
 import 'package:project_tc/screens/learning/payment_page.dart';
 import 'package:project_tc/screens/middleware/admin_middleware.dart';
 import 'package:project_tc/screens/wrapper.dart';
@@ -38,18 +48,30 @@ const String routeMembershipInfo = '/membership-info';
 const String routeMembershipUpgrade = '/membership-upgrade';
 const String routeMembershipUpgradePayment = '/membership-upgrade-payment';
 const String routeLearnCourse = '/learn-course';
+const String routeLearnVideo = '/learn-video';
 const String routeOfferLearnCourse = '/learn-course/offers';
+const String routeOfferLearnVideo = '/learn-video/offers';
 const String routeBuyCourse = '/checkout/course';
+const String routeBuyVideo = '/checkout/video';
 const String routeAdminDetailCourse = '/admin-detail-course';
 const String routeAdminLearnCourse = '/admin-learn-course';
+const String routeAdminDetailVideoLearning = '/admin-detail-videoLearning';
+const String routeAdminLearnVideolearning = '/admin-learn-video-learning';
+const String routeDetailVideoLearning = '/deatail-video-learning';
 const String routeAdminDetailArticle = '/admin-detail-article';
 const String routeAdminCoupon = '/admin-coupons';
 const String routeCreateCoupon = '/create-coupon';
 const String routeCreateFAQ = '/create-faq';
 const String routeFAQ = '/faq';
 const String routeBootcamp = '/bootcamp';
-const String routeDetailBootcamp = '$routeBootcamp/:id';
+const String routeVideoLearning = '/Video-Learning';
+const String routeWebinar = '/webinar';
+const String routePortopolio = '/portopolio';
+const String routeEBook = '/EBook';
+const String routeDetailBootcamp = '/detail-bootcamp';
 const String routeCreateBootcamp = '/create-bootcamp';
+const String routeCreateWebinar = '/create-webinar';
+const String routeDetailWebinar = '/Detail-webinar';
 const String routeEditCoupon = '/edit-coupon';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -89,11 +111,35 @@ final getPages = [
   ),
   GetPage(
     name: routeBootcamp,
-    page: () => wrapWithAppView(const BootcampPage()),
+    page: () => wrapWithAppView(const Bootcamppage()),
+  ),
+  GetPage(
+    name: routeVideoLearning,
+    page: () => wrapWithAppView(const VideoLearningpage()),
+  ),
+  GetPage(
+    name: routeDetailVideoLearning,
+    page: () => wrapWithAppView(const DetailVideoLearning()),
+  ),
+  GetPage(
+    name: routeWebinar,
+    page: () => wrapWithAppView(const Webinarpage()),
+  ),
+  GetPage(
+    name: routeDetailWebinar,
+    page: () => wrapWithAppView(const DetailWebinar()),
+  ),
+  GetPage(
+    name: routePortopolio,
+    page: () => wrapWithAppView(const Portopolio()),
+  ),
+  GetPage(
+    name: routeEBook,
+    page: () => wrapWithAppView(const Ebook()),
   ),
   GetPage(
     name: routeDetailBootcamp,
-    page: () => wrapWithAppView(const BootcampPage()),
+    page: () => wrapWithAppView(const DetailBootcamp()),
   ),
   // GetPage(
   //   name: routeBundleCourses,
@@ -148,6 +194,14 @@ final getPages = [
     page: () => const LearningCourse(),
   ),
   GetPage(
+    name: routeLearnVideo,
+    page: () => const LearningVideo(),
+  ),
+  GetPage(
+    name: routeOfferLearnVideo,
+    page: () => const LearningVideo(),
+  ),
+  GetPage(
     name: routeOfferLearnCourse,
     page: () => const LearningCourse(),
   ),
@@ -156,8 +210,16 @@ final getPages = [
     page: () => const PaymentPage(),
   ),
   GetPage(
+    name: routeBuyVideo,
+    page: () => const PaymentPage(),
+  ),
+  GetPage(
       name: routeAdminDetailCourse,
       page: () => const AdminDetailCourse(),
+      middlewares: [AdminMiddleware()]),
+      GetPage(
+      name: routeAdminDetailVideoLearning,
+      page: () => const AdminDetailVideolearning(),
       middlewares: [AdminMiddleware()]),
   GetPage(
       name: routeAdminDetailArticle,
@@ -166,6 +228,10 @@ final getPages = [
   GetPage(
       name: routeAdminLearnCourse,
       page: () => const AdminLearnCourse(),
+      middlewares: [AdminMiddleware()]),
+  GetPage(
+      name: routeAdminLearnVideolearning,
+      page: () => const AdminLearnVideolearning(),
       middlewares: [AdminMiddleware()]),
   GetPage(
     name: routeCreateCoupon,
@@ -177,6 +243,10 @@ final getPages = [
   ),
   GetPage(
     name: routeCreateBootcamp,
+    page: () => const Wrapper(),
+  ),
+  GetPage(
+    name: routeCreateWebinar,
     page: () => const Wrapper(),
   ),
   GetPage(

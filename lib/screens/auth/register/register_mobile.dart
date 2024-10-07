@@ -27,18 +27,18 @@ class _RegisterMobileState extends State<RegisterMobile> {
   String email = '';
   String noWhatsapp = '';
   String address = '';
-  String lastEducation = 'Select last education';
+  String lastEducation = 'Pilih pendidikan terakhir';
   List lastEducations = [
-    'Select last education',
+    'Pilih pendidikan terakhir',
     'SMA/SMK',
     'D3',
     'S1',
   ];
-  String workingStatus = 'Have been working?';
+  String workingStatus = 'Sudah bekerja?';
   List working = [
-    'Have been working?',
-    'Yes',
-    'No',
+    'Sudah bekerja?',
+    'Ya',
+    'Tidak',
   ];
   String reason = '';
   String password = '';
@@ -80,7 +80,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
-                          'Sign up',
+                          'Mendaftar',
                           style: GoogleFonts.quicksand(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
@@ -109,7 +109,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter an name' : null,
+                              val!.isEmpty ? 'Masukkan nama' : null,
                           onChanged: (val) {
                             setState(() => name = val);
                           },
@@ -144,11 +144,11 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           ),
                           validator: (val) {
                             if (val!.isEmpty) {
-                              return 'Enter a No. Whatsapp';
+                              return 'Masukkan No. Whatsapp';
                             } else if (val.length < 11 || val.length > 15) {
-                              return 'Number should be between 11 and 15 characters';
+                              return 'Nomor harus antara 11 dan 15 karakter';
                             } else if (!val.startsWith('08')) {
-                              return 'Number is invalid, example 08xxxxxxxx';
+                              return 'Nomor tidak valid, contoh 08xxxxxxx';
                             }
                             return null;
                           },
@@ -174,14 +174,14 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                 color: CusColors.mainColor,
                               ),
                             ),
-                            hintText: "Address",
+                            hintText: "Alamat",
                             hintStyle: GoogleFonts.mulish(
                               color: CusColors.subHeader.withOpacity(.5),
                               fontSize: width * .032,
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter an address' : null,
+                              val!.isEmpty ? 'Masukkan alamat' : null,
                           onChanged: (val) {
                             setState(() => address = val);
                           },
@@ -204,7 +204,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                 color: CusColors.mainColor,
                               ),
                             ),
-                            hintText: "Last education",
+                            hintText: "Pendidikan terakhir",
                             hintStyle: GoogleFonts.mulish(
                               color: CusColors.subHeader.withOpacity(.5),
                               fontSize: width * .032,
@@ -212,8 +212,8 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           ),
                           validator: (val) => val == null ||
                                   val.isEmpty ||
-                                  val == 'Select last education'
-                              ? 'Please select a education'
+                                  val == 'Pilih pendidikan terakhir'
+                              ? 'Silakan pilih pendidikan'
                               : null,
                           onChanged: (val) {
                             setState(() {
@@ -223,7 +223,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           items: lastEducations.map((education) {
                             return DropdownMenuItem<String>(
                               value: education,
-                              child: education == 'Select last education'
+                              child: education == 'Pilih pendidikan terakhir'
                                   ? Text(
                                       education,
                                       style: GoogleFonts.mulish(
@@ -256,7 +256,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                 color: CusColors.mainColor,
                               ),
                             ),
-                            hintText: "Have been working?",
+                            hintText: "Sudah bekerja?",
                             hintStyle: GoogleFonts.mulish(
                               color: CusColors.subHeader.withOpacity(.5),
                               fontSize: width * .032,
@@ -264,8 +264,8 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           ),
                           validator: (val) => val == null ||
                                   val.isEmpty ||
-                                  val == 'Have been working?'
-                              ? 'Please select working status'
+                                  val == 'Sudah bekerja?'
+                              ? 'Silakan pilih status kerja'
                               : null,
                           onChanged: (val) {
                             setState(() {
@@ -275,7 +275,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           items: working.map((work) {
                             return DropdownMenuItem<String>(
                               value: work,
-                              child: work == 'Have been working?'
+                              child: work == 'Sudah bekerja?'
                                   ? Text(
                                       work,
                                       style: GoogleFonts.mulish(
@@ -318,9 +318,9 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           ),
                           validator: (val) {
                             if (val!.isEmpty) {
-                              return 'Enter an email';
+                              return 'Masukkan email';
                             } else if (!_auth.isValidEmail(val)) {
-                              return 'Enter a valid email';
+                              return 'Masukkan email yang valid';
                             }
                             return null;
                           },
@@ -369,7 +369,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             ),
                           ),
                           validator: (val) => val!.length < 6
-                              ? 'Enter an password 6 chars long'
+                              ? 'Masukkan kata sandi sepanjang 6 karakter'
                               : null,
                           onChanged: (val) {
                             setState(() => password = val);
@@ -394,14 +394,14 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                 color: CusColors.mainColor,
                               ),
                             ),
-                            hintText: "Reason why join education center",
+                            hintText: "Alasan mengapa bergabung dengan pusat pendidikan",
                             hintStyle: GoogleFonts.mulish(
                               color: CusColors.subHeader.withOpacity(.5),
                               fontSize: width * .032,
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter an reason' : null,
+                              val!.isEmpty ? 'Masukkan alasannya' : null,
                           onChanged: (val) {
                             setState(() => reason = val);
                           },
@@ -415,26 +415,26 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
-                              text: "By signing up, you’re agree to our ",
+                              text: "Dengan mendaftar, Anda menyetujui kami ",
                               style: GoogleFonts.mulish(
                                 color: CusColors.subHeader.withOpacity(.5),
                                 fontSize: width * .026,
                               ),
                               children: <InlineSpan>[
                                 TextSpan(
-                                    text: "Terms & Conditions ",
+                                    text: "Syarat & Ketentuan ",
                                     style: GoogleFonts.mulish(
                                         color: CusColors.mainColor,
                                         fontWeight: FontWeight.w700)),
                                 TextSpan(
-                                  text: "and ",
+                                  text: "dan ",
                                   style: GoogleFonts.mulish(
                                     color: CusColors.subHeader.withOpacity(.5),
                                     fontSize: width * .026,
                                   ),
                                 ),
                                 TextSpan(
-                                    text: "Privacy Policy",
+                                    text: "Kebijakan Privasi",
                                     style: GoogleFonts.mulish(
                                         color: CusColors.mainColor,
                                         fontWeight: FontWeight.w700)),
@@ -506,7 +506,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                           child: loading
                               ? const CircularProgressIndicator() // Show loading indicator while loading is true
                               : Text(
-                                  'Continue',
+                                  'Melanjutkan',
                                   style: GoogleFonts.mulish(
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
@@ -533,7 +533,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             Flexible(
                                 flex: 1,
                                 child: Text(
-                                  "Or",
+                                  "Atau",
                                   style: GoogleFonts.mulish(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 11,
@@ -593,7 +593,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                                   width: 14,
                                 ),
                                 Text(
-                                  "Sign up with google",
+                                  "Daftar dengan Google",
                                   style: GoogleFonts.mulish(
                                       color: CusColors.subHeader,
                                       fontWeight: FontWeight.w500,
@@ -612,7 +612,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(
-                              text: "Joined us before? ",
+                              text: "Bergabung dengan kami sebelumnya? ",
                               style: GoogleFonts.mulish(
                                 color: CusColors.subHeader.withOpacity(.5),
                                 fontSize: width * .035,

@@ -71,7 +71,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Forgot password',
+                                  'Lupa kata sandi',
                                   style: GoogleFonts.mPlus1(
                                       fontSize: width * .015,
                                       fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 SizedBox(
                                   width: width / 3,
                                   child: Text(
-                                    'We will send you an email with a link to reset your password, please enter the email that associated with your account below.',
+                                    'Kami akan mengirimi Anda email berisi tautan untuk mengatur ulang kata sandi Anda, silakan masukkan email yang terkait dengan akun Anda di bawah.',
                                     style: GoogleFonts.mulish(
                                         fontSize: width * .01,
                                         color: CusColors.subHeader
@@ -130,9 +130,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     ),
                                     validator: (val) {
                                       if (val!.isEmpty) {
-                                        return 'Enter an email';
+                                        return 'Masukkan email';
                                       } else if (!_auth.isValidEmail(val)) {
-                                        return 'Enter a valid email';
+                                        return 'Masukkan email yang valid';
                                       }
                                       return null;
                                     },
@@ -178,7 +178,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                               setState(() {
                                                 if (result != null) {
                                                   Get.snackbar(
-                                                    'Success',
+                                                    'sukses',
                                                     result,
                                                     snackbarStatus: (status) {
                                                       switch (status) {
@@ -193,7 +193,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                                     },
                                                   );
                                                 } else {
-                                                  error = 'email is not valid';
+                                                  error = 'emailnya tidak valid';
                                                 }
                                                 loading =
                                                     false; // Set loading back to false
@@ -219,7 +219,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     child: loading
                                         ? const CircularProgressIndicator() // Show loading indicator while loading is true
                                         : Text(
-                                            'Confirm',
+                                            'Mengonfirmasi',
                                             style: GoogleFonts.mulish(
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white,

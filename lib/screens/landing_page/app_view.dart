@@ -1,5 +1,6 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/navigation_bar/navigation_bar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -130,13 +131,24 @@ class _AppViewWrapperState extends State<AppViewWrapper> {
 
   Widget _dekstopNav(child) {
     return Scaffold(
-      floatingActionButton: const FloatingActionButton(
-        onPressed: launchWhatsapp,
-        child: Icon(Icons.chat),
-        tooltip: 'Chat with Us',
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: AppView(child: child)
-      );
+        floatingActionButton: GestureDetector(
+          onTap: launchWhatsapp,
+          child: Container(
+            width: 70,
+            height: 70,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.lightGreen,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(17.0),
+              child: SvgPicture.asset(
+                'assets/svg/whatsapp.svg',
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        body: AppView(child: child));
   }
 }

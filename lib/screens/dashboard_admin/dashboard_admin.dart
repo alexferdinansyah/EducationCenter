@@ -11,12 +11,18 @@ import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_article.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_course.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_ebook.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_faq.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_bootcamp.dart';
+// import 'package:project_tc/screens/dashboard_admin/admin_learn_videoLearning.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_portopolio.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_videoLearning.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_webinar.dart';
 import 'package:project_tc/screens/dashboard_admin/coupon_pages.dart';
 import 'package:project_tc/screens/dashboard_admin/create_coupon.dart';
 import 'package:project_tc/screens/dashboard_admin/create_faq.dart';
 import 'package:project_tc/screens/dashboard_admin/create_bootcamp.dart';
+import 'package:project_tc/screens/dashboard_admin/create_webinar.dart';
 import 'package:project_tc/screens/dashboard_admin/user_transaction.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -54,12 +60,16 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         widget.optionalSelected = 'FAQ';
       } else if (currentRoute == '/faq') {
         widget.selected = 'FAQ';
-      } else if (currentRoute == '/create-bootcamp'){
+      } else if (currentRoute == '/create-bootcamp') {
         widget.selected = 'create-bootcamp';
         widget.optionalSelected = 'Bootcamp';
-      }
-      else if(currentRoute == '/bootcamp'){
+      } else if (currentRoute == '/bootcamp') {
         widget.selected = 'Bootcamp';
+      } else if (currentRoute =='/create-webinar') {
+        widget.selected = 'create-webinar';
+        widget.optionalSelected = 'Webinar';
+      } else if (currentRoute == '/webinar') {
+        widget.selected = 'Webinar';
       }
       if (widget.optionalSelected == null) {
         selectedSidebarItem = widget.selected;
@@ -86,6 +96,8 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           return const UserTransaction();
         case 'Courses':
           return const AdminCourse();
+        case 'Video Learning':
+          return const AdminVideolearning();
         case 'Articles':
           return const AdminArticle();
         case 'FAQ':
@@ -114,7 +126,18 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           } else {
             return const AdminBootcamp();
           }
+        case 'Webinar':
+          if (widget.selected == 'create-webinar') {
+            return const CreateWebinar();
+          } else {
+            return const AdminWebinar();
+          }
 
+        case 'Review Cv/\nPortopolio':
+          return const AdminPortopolio();
+
+        case 'E-Book':
+          return const AdminEbook();
         default:
           return Container(); // Handle the default case here
       }
@@ -138,213 +161,215 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserData? userData = snapshot.data;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: getValueForScreenType<double>(
-                            context: context,
-                            mobile: 20,
-                            tablet: 30,
-                            desktop: 40,
-                          ),
-                        ),
-                        height: getValueForScreenType<double>(
-                          context: context,
-                          mobile: 40,
-                          tablet: 50,
-                          desktop: 60,
-                        ),
-                        width: getValueForScreenType<double>(
-                          context: context,
-                          mobile: width * .86,
-                          tablet: width * .79,
-                          desktop: width * .83,
-                        ),
-                        decoration: BoxDecoration(
-                          color: CusColors.bg,
-                          border: const Border(
-                            bottom: BorderSide(
-                              width: 0.5,
-                              color: Color(0xFFC8CBD9),
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: getValueForScreenType<double>(
+                              context: context,
+                              mobile: 20,
+                              tablet: 30,
+                              desktop: 40,
                             ),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            //! Search bar that has no function
-                            // Container(
-                            //   width: width / 3,
-                            //   decoration: BoxDecoration(
-                            //       color: const Color(0xFFF6F6FB),
-                            //       borderRadius: BorderRadius.circular(5)),
-                            //   child: TextField(
-                            //     style: GoogleFonts.poppins(
-                            //         fontSize: width * .01,
-                            //         color: CusColors.sidebarInactive),
-                            //     decoration: InputDecoration(
-                            //       border: InputBorder.none,
-                            //       isDense: true,
-                            //       hintText: 'Search',
-                            //       hintStyle: GoogleFonts.poppins(
-                            //           fontSize: width * .01,
-                            //           color: const Color(0xFFb5bdc7)),
-                            //       contentPadding:
-                            //           const EdgeInsets.fromLTRB(15, 12, 5, 12),
-                            //       suffixIcon: const Icon(
-                            //         IconlyLight.search,
-                            //         size: 18,
-                            //       ),
-                            //       suffixIconColor: const Color(0xFFb5bdc7),
-                            //     ),
-                            //   ),
-                            // ),
-                            const Spacer(),
-                            Row(
-                              children: [
-                                Container(
-                                  width: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: 25,
-                                    tablet: 30,
-                                    desktop: 40,
-                                  ),
-                                  height: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: 25,
-                                    tablet: 30,
-                                    desktop: 40,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: NetworkImage(userData!.photoUrl),
-                                        fit: BoxFit.cover),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    userData.name,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: getValueForScreenType<double>(
-                                          context: context,
-                                          mobile: width * .018,
-                                          tablet: width * .015,
-                                          desktop: width * .01,
-                                        ),
-                                        color: const Color(0xFF1F384C)),
-                                  ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: getValueForScreenType<double>(
-                                        context: context,
-                                        mobile: 8,
-                                        tablet: 12,
-                                        desktop: 18,
-                                      ),
+                          height: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 40,
+                            tablet: 50,
+                            desktop: 60,
+                          ),
+                          width: getValueForScreenType<double>(
+                            context: context,
+                            mobile: width * .86,
+                            tablet: width * .79,
+                            desktop: width * .83,
+                          ),
+                          decoration: BoxDecoration(
+                            color: CusColors.bg,
+                            border: const Border(
+                              bottom: BorderSide(
+                                width: 0.5,
+                                color: Color(0xFFC8CBD9),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              //! Search bar that has no function
+                              // Container(
+                              //   width: width / 3,
+                              //   decoration: BoxDecoration(
+                              //       color: const Color(0xFFF6F6FB),
+                              //       borderRadius: BorderRadius.circular(5)),
+                              //   child: TextField(
+                              //     style: GoogleFonts.poppins(
+                              //         fontSize: width * .01,
+                              //         color: CusColors.sidebarInactive),
+                              //     decoration: InputDecoration(
+                              //       border: InputBorder.none,
+                              //       isDense: true,
+                              //       hintText: 'Search',
+                              //       hintStyle: GoogleFonts.poppins(
+                              //           fontSize: width * .01,
+                              //           color: const Color(0xFFb5bdc7)),
+                              //       contentPadding:
+                              //           const EdgeInsets.fromLTRB(15, 12, 5, 12),
+                              //       suffixIcon: const Icon(
+                              //         IconlyLight.search,
+                              //         size: 18,
+                              //       ),
+                              //       suffixIconColor: const Color(0xFFb5bdc7),
+                              //     ),
+                              //   ),
+                              // ),
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 25,
+                                      tablet: 30,
+                                      desktop: 40,
                                     ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        isDense: true,
-                                        customButton: Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: getValueForScreenType<double>(
+                                    height: getValueForScreenType<double>(
+                                      context: context,
+                                      mobile: 25,
+                                      tablet: 30,
+                                      desktop: 40,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(userData!.photoUrl),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      userData.name,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: getValueForScreenType<double>(
                                             context: context,
-                                            mobile: 20,
-                                            tablet: 22,
-                                            desktop: 24,
+                                            mobile: width * .018,
+                                            tablet: width * .015,
+                                            desktop: width * .01,
                                           ),
+                                          color: const Color(0xFF1F384C)),
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: 8,
+                                          tablet: 12,
+                                          desktop: 18,
                                         ),
-                                        items: [
-                                          ...MenuItems.firstItems.map(
-                                            (item) =>
-                                                DropdownMenuItem<MenuItem>(
-                                              value: item,
-                                              child: MenuItems.buildItem(
-                                                  item, context, width),
-                                            ),
-                                          ),
-                                          const DropdownMenuItem<Divider>(
-                                              enabled: false, child: Divider()),
-                                          ...MenuItems.secondItems.map(
-                                            (item) =>
-                                                DropdownMenuItem<MenuItem>(
-                                              value: item,
-                                              child: MenuItems.buildItem(
-                                                  item, context, width),
-                                            ),
-                                          ),
-                                        ],
-                                        onChanged: (value) {
-                                          MenuItems.onChanged(
-                                              context, value! as MenuItem);
-                                        },
-                                        dropdownStyleData: DropdownStyleData(
-                                          width: getValueForScreenType<double>(
+                                      ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton2(
+                                          isDense: true,
+                                          customButton: Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: getValueForScreenType<double>(
                                               context: context,
-                                              mobile: 100,
-                                              tablet: 130,
-                                              desktop: 160),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 6),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            border: Border.all(
-                                                color: const Color(0xFFCCCCCC),
-                                                width: 1),
-                                            color: Colors.white,
+                                              mobile: 20,
+                                              tablet: 22,
+                                              desktop: 24,
+                                            ),
                                           ),
-                                          offset: const Offset(0, 3),
-                                        ),
-                                        menuItemStyleData: MenuItemStyleData(
-                                          customHeights: [
-                                            ...List<double>.filled(
-                                              MenuItems.firstItems.length,
-                                              getValueForScreenType<double>(
-                                                context: context,
-                                                mobile: 28,
-                                                tablet: 35,
-                                                desktop: 48,
+                                          items: [
+                                            ...MenuItems.firstItems.map(
+                                              (item) =>
+                                                  DropdownMenuItem<MenuItem>(
+                                                value: item,
+                                                child: MenuItems.buildItem(
+                                                    item, context, width),
                                               ),
                                             ),
-                                            8,
-                                            ...List<double>.filled(
-                                              MenuItems.secondItems.length,
-                                              getValueForScreenType<double>(
-                                                context: context,
-                                                mobile: 28,
-                                                tablet: 35,
-                                                desktop: 48,
+                                            const DropdownMenuItem<Divider>(
+                                                enabled: false, child: Divider()),
+                                            ...MenuItems.secondItems.map(
+                                              (item) =>
+                                                  DropdownMenuItem<MenuItem>(
+                                                value: item,
+                                                child: MenuItems.buildItem(
+                                                    item, context, width),
                                               ),
                                             ),
                                           ],
-                                          padding: const EdgeInsets.only(
-                                              left: 16, right: 16),
+                                          onChanged: (value) {
+                                            MenuItems.onChanged(
+                                                context, value! as MenuItem);
+                                          },
+                                          dropdownStyleData: DropdownStyleData(
+                                            width: getValueForScreenType<double>(
+                                                context: context,
+                                                mobile: 100,
+                                                tablet: 130,
+                                                desktop: 160),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 6),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              border: Border.all(
+                                                  color: const Color(0xFFCCCCCC),
+                                                  width: 1),
+                                              color: Colors.white,
+                                            ),
+                                            offset: const Offset(0, 3),
+                                          ),
+                                          menuItemStyleData: MenuItemStyleData(
+                                            customHeights: [
+                                              ...List<double>.filled(
+                                                MenuItems.firstItems.length,
+                                                getValueForScreenType<double>(
+                                                  context: context,
+                                                  mobile: 28,
+                                                  tablet: 35,
+                                                  desktop: 48,
+                                                ),
+                                              ),
+                                              8,
+                                              ...List<double>.filled(
+                                                MenuItems.secondItems.length,
+                                                getValueForScreenType<double>(
+                                                  context: context,
+                                                  mobile: 28,
+                                                  tablet: 35,
+                                                  desktop: 48,
+                                                ),
+                                              ),
+                                            ],
+                                            padding: const EdgeInsets.only(
+                                                left: 16, right: 16),
+                                          ),
                                         ),
-                                      ),
-                                    )),
-                              ],
-                            ),
-                            Icon(
-                              Icons.notifications,
-                              color: const Color(0xFFB0C3CC),
-                              size: getValueForScreenType<double>(
-                                context: context,
-                                mobile: 20,
-                                tablet: 22,
-                                desktop: 24,
+                                      )),
+                                ],
                               ),
-                            )
-                          ],
+                              Icon(
+                                Icons.notifications,
+                                color: const Color(0xFFB0C3CC),
+                                size: getValueForScreenType<double>(
+                                  context: context,
+                                  mobile: 20,
+                                  tablet: 22,
+                                  desktop: 24,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      buildContent(),
-                    ],
+                        buildContent(),
+                      ],
+                    ),
                   );
                 } else {
                   return const Loading();
@@ -372,9 +397,13 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
   final List<SideItem> sidebarItems = [
     const SideItem(icon: IconlyBold.buy, title: 'User Transaction'),
     const SideItem(icon: IconlyBold.category, title: 'Courses'),
+    const SideItem(icon: IconlyBold.category, title: 'Video Learning'),
     const SideItem(icon: IconlyBold.discount, title: 'Coupons'),
     const SideItem(icon: IconlyBold.chat, title: 'FAQ'),
     const SideItem(icon: IconlyBold.category, title: 'Bootcamp'),
+    const SideItem(icon: IconlyBold.category, title: 'Webinar'),
+    const SideItem(icon: IconlyBold.category, title: 'Review Cv/\nPortopolio'),
+    const SideItem(icon: IconlyBold.bookmark, title: 'E-Book'),
     const SideItem(icon: IconlyBold.document, title: 'Articles'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];
@@ -413,7 +442,7 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
                 context: context,
                 mobile: 15,
                 tablet: 30,
-                desktop: 50,
+                desktop: 30,
               ),
             ),
             child: GestureDetector(

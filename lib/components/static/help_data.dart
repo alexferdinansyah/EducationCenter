@@ -2,25 +2,25 @@ import 'package:project_tc/models/help_model.dart';
 
 List<HelpModel> helps = [
   HelpModel(
-    question: 'How to register?',
-    answer: 'To register, just fill in the link provided.',
+    question: 'HBagaimana cara mendaftar?',
+    answer: 'Untuk mendaftar, cukup isi link yang tersedia.',
   ),
   HelpModel(
-    question: 'What is the payment system like?',
-    answer: 'The registration system can be paid in installments.',
+    question: 'Sistem pembayarannya seperti apa?',
+    answer: 'Sistem pendaftaran dapat dicicil.',
   ),
   HelpModel(
-    question: 'The registration system can be paid in installments.',
+    question: 'Sistem pendaftaran dapat dicicil.',
     answer:
-        'To register for an initial fee of 200.000, you have been added to the DEC partisipant list.',
+        'Untuk mendaftar dengan biaya awal 200.000, Anda telah ditambahkan ke daftar peserta DEC.',
   ),
   HelpModel(
-    question: 'If i work, can be i join DEC?',
-    answer: 'Yes, you can choose online or offline classes and flexible times.',
+    question: 'Jika saya bekerja, apakah saya bisa bergabung dengan DEC?',
+    answer: 'Ya, Anda bisa memilih kelas online atau offline dan waktunya fleksibel.',
   ),
   HelpModel(
-    question: 'Is it true that you will get an internship',
+    question: 'Benarkah kamu akan mendapat magang',
     answer:
-        'So true. Because DEC collaborates with several companies and there will be an interview test regarding the internship program.',
+        'Benar sekali. Sebab DEC bekerjasama dengan beberapa perusahaan dan akan ada tes wawancara terkait program magang.',
   ),
 ];

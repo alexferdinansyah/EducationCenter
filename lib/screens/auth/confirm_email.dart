@@ -92,8 +92,8 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                   ),
                   Text(
                     isVerify == true
-                        ? 'Success verify your account'
-                        : 'Verify your account',
+                        ? 'Berhasil memverifikasi akun Anda'
+                        : 'Verifikasi akun Anda',
                     style: GoogleFonts.mPlus1(
                         fontSize: getValueForScreenType<double>(
                           context: context,
@@ -116,8 +116,8 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                     ),
                     child: Text(
                       isVerify == true
-                          ? 'Thank you for verify your account, now you can get first three videos for free, please go to dashboard to check your courses'
-                          : 'Thank you for signing up, please verify your account to get first three videos for free. Click the button below to verify your account',
+                          ? 'Terima kasih telah memverifikasi akun Anda, sekarang Anda bisa mendapatkan tiga video pertama secara gratis, silakan buka dasbor untuk memeriksa kursus Anda'
+                          : 'Terima kasih telah mendaftar, harap verifikasi akun Anda untuk mendapatkan tiga video pertama secara gratis. Klik tombol di bawah untuk memverifikasi akun Anda',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.mulish(
                           fontSize: getValueForScreenType<double>(
@@ -133,7 +133,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                   if (Get.currentRoute.contains('learn-course') &&
                       isVerify == true)
                     Text(
-                      'Redirecting',
+                      'Mengarahkan',
                       style: GoogleFonts.mPlus1(
                           fontSize: getValueForScreenType<double>(
                             context: context,
@@ -217,7 +217,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                         Get.offAndToNamed(routeLogin);
                       },
                       child: Text(
-                        'Remind me later',
+                        'Ingatkan saya nanti',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.mulish(
                           fontSize: getValueForScreenType<double>(
@@ -262,7 +262,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
             child: Column(
               children: [
                 Text(
-                  'Email verification',
+                  'Verifikasi email',
                   style: GoogleFonts.poppins(
                     fontSize: getValueForScreenType<double>(
                       context: context,
@@ -291,7 +291,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                       color: const Color.fromRGBO(0, 0, 0, 1),
                     )),
                 Text(
-                  'Email verification has been sent to your email',
+                  'Verifikasi email telah dikirimkan ke email Anda',
                   style: GoogleFonts.poppins(
                     fontSize: getValueForScreenType<double>(
                       context: context,
@@ -326,7 +326,7 @@ class _ConfirmEmailState extends State<ConfirmEmail> {
                     FirebaseAuth.instance.currentUser?.sendEmailVerification();
                   },
                   child: Text(
-                    "Didn't get the email?, send it again",
+                    "Belum dapat emailnya?, kirim lagi",
                     style: GoogleFonts.poppins(
                       fontSize: getValueForScreenType<double>(
                         context: context,

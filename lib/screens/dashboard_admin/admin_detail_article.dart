@@ -655,10 +655,11 @@ class _AdminDetailArticleState extends State<AdminDetailArticle> {
                                         final FirestoreService firestore =
                                             FirestoreService(uid: user!.uid);
                                         if (article.isDraft!) {
-                                          await firestore.updateCourseEachField(
-                                              courseId: id,
-                                              fieldName: 'is_draft',
-                                              data: false);
+                                          await firestore
+                                              .updateArticleEachField(
+                                                  articleId: id,
+                                                  fieldName: 'is_draft',
+                                                  data: false);
                                         }
 
                                         Get.to(

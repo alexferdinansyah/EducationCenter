@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project_tc/components/videoLearnings.dart';
 import 'package:project_tc/models/article.dart';
+import 'package:project_tc/models/bootcamp.dart';
 import 'package:project_tc/models/coupon.dart';
 import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/course.dart';
 import 'package:project_tc/models/faq.dart';
-import 'package:project_tc/models/Bootcamp.dart';
+import 'package:project_tc/models/learning.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
+import 'package:project_tc/models/webinar.dart';
+import 'package:project_tc/screens/landing_page/EBook.dart';
 import 'package:project_tc/services/extension.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,10 +18,12 @@ import 'package:url_launcher/url_launcher.dart';
 class FirestoreService {
   final String uid;
   final String? courseId;
-  FirestoreService({required this.uid, this.courseId});
+  final String? videoLearningId;
+  FirestoreService({required this.uid, this.videoLearningId, this.courseId});
   FirestoreService.withoutUID()
       : uid = "",
-        courseId = "";
+        courseId = "",
+        videoLearningId = "";
 
   // collection reference
 
@@ -37,6 +43,10 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('faq');
   final CollectionReference BootcampCollection =
       FirebaseFirestore.instance.collection('bootcamp');
+  final CollectionReference webinarCollection =
+      FirebaseFirestore.instance.collection('webinar');
+  final CollectionReference videoLearningCollection =
+      FirebaseFirestore.instance.collection('videoLearning');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -143,8 +153,7 @@ class FirestoreService {
         return querySnapshot.docs.map((DocumentSnapshot document) {
           return {
             'id': document.id,
-            'faq':
-                Faq.fromFirestore(document.data() as Map<String, dynamic>)
+            'faq': Faq.fromFirestore(document.data() as Map<String, dynamic>)
           };
         }).toList();
       });
@@ -402,6 +411,129 @@ class FirestoreService {
     }
   }
 
+  Stream<List<Map>> webinarAndBootcampStream() {
+    final webinarStream = allWebinar;
+    final bootcampStream = allBootcamp;
+
+    return Rx.zip(
+      [webinarStream, bootcampStream],
+      (values) => values.first + values.last,
+    );
+  }
+
+  Stream<List<Map>> videoLearningAndEBookStream() {
+    final MyVideoLearningstream = allMyVideoLearnings;
+    
+
+    return Rx.zip(
+      [MyVideoLearningstream],
+      (values) => values.first! + values.last,
+    );
+  }
+
+  Stream<List<Map<String, dynamic>>?> get allProduk {
+    try {
+      final produkCollection = userCollection.doc(uid).collection('Produk');
+      return produkCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> produks = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          final String produkType = data['produkType']
+              as String; // Menyimpan tipe event (webinar/bootcamp)
+          final DocumentReference produkReference =
+              data['produk'] as DocumentReference; // Referensi ke dokumen event
+          final String status = data['status'] as String; // Status event
+
+          try {
+            if (produkType == 'videoLearning') {
+              // Mendapatkan data webinar berdasarkan referensi dokumen
+              final MyVideoLearning myVideoLearningdata = await getVideoLearningData(produkReference);
+              produks.add({
+                'id': produkReference.id, // ID dari dokumen webinar
+                'produk': myVideoLearningdata, // Data webinar setelah diproses
+                'status': status, // Status event
+                'prodakType': 'videoLearning' // Menandai event sebagai webinar
+              });
+            } 
+            // else if (produkType == 'ebook') {
+            //   // Mendapatkan data bootcamp berdasarkan referensi dokumen
+            //   final Ebook ebookData =
+            //       await getEBookData(produkReference);
+            //   events.add({
+            //     'id': produkReference.id, // ID dari dokumen bootcamp
+            //     'produk': ebookData, // Data bootcamp setelah diproses
+            //     'status': status, // Status event
+            //     'produk': 'ebook' // Menandai event sebagai bootcamp
+            //   });
+            // }
+          } catch (error) {
+            print('Error getting produk data: $error');
+          }
+        }
+
+        return produks; // Mengembalikan daftar events (webinar dan bootcamp)
+      });
+    } catch (error) {
+      print('Error streaming produk: $error');
+      return Stream.value(
+          []); // Kembalikan stream dengan list kosong jika terjadi error
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>?> get allEvent {
+    try {
+      final eventCollection = userCollection.doc(uid).collection('Event');
+      return eventCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> events = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          final String eventType = data['eventType']
+              as String; // Menyimpan tipe event (webinar/bootcamp)
+          final DocumentReference eventReference =
+              data['event'] as DocumentReference; // Referensi ke dokumen event
+          final String status = data['status'] as String; // Status event
+
+          try {
+            if (eventType == 'webinar') {
+              // Mendapatkan data webinar berdasarkan referensi dokumen
+              final Webinar webinarData = await getWebinarData(eventReference);
+              events.add({
+                'id': eventReference.id, // ID dari dokumen webinar
+                'event': webinarData, // Data webinar setelah diproses
+                'status': status, // Status event
+                'eventType': 'webinar' // Menandai event sebagai webinar
+              });
+            } else if (eventType == 'bootcamp') {
+              // Mendapatkan data bootcamp berdasarkan referensi dokumen
+              final Bootcamp bootcampData =
+                  await getBootcampData(eventReference);
+              events.add({
+                'id': eventReference.id, // ID dari dokumen bootcamp
+                'event': bootcampData, // Data bootcamp setelah diproses
+                'status': status, // Status event
+                'eventType': 'bootcamp' // Menandai event sebagai bootcamp
+              });
+            }
+          } catch (error) {
+            print('Error getting event data: $error');
+          }
+        }
+
+        return events; // Mengembalikan daftar events (webinar dan bootcamp)
+      });
+    } catch (error) {
+      print('Error streaming events: $error');
+      return Stream.value(
+          []); // Kembalikan stream dengan list kosong jika terjadi error
+    }
+  }
+
   Stream<List<Map>> get allArticle {
     try {
       return articleCollection.snapshots().map((QuerySnapshot querySnapshot) {
@@ -488,21 +620,288 @@ class FirestoreService {
   Stream<List<Map>> courseArticleStream() {
     final courseStream = allCourses;
     final articleStream = allArticle;
+    final webinarStream = allWebinar;
+    final bootcampStream = allBootcamp;
+    final videoLearningStream = allVideoLearning;
 
     return Rx.zip(
-      [courseStream, articleStream],
+      [
+        courseStream,
+        articleStream,
+        webinarStream,
+        bootcampStream,
+        videoLearningStream
+      ],
       (values) => values.first + values.last,
     );
   }
 
-   Stream<List<Map>> get allFaqs {
+  Stream<List<Map>> get allVideoLearning {
+    try {
+      return videoLearningCollection
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        return querySnapshot.docs.map((DocumentSnapshot document) {
+          return {
+            'id': document.id,
+            'videoLearning': VideoLearning.fromFirestore(
+                document.data() as Map<String, dynamic>)
+          };
+        }).toList();
+      });
+    } catch (e) {
+      print('error streaming video learning');
+      return Stream.value([]);
+    }
+  }
+
+  Future<List<String>> getAllVideoLearningTitles() async {
+    List<String> videoLearningTitles = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('videoLearnings')
+              .where('is_draft', isNotEqualTo: true)
+              .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var doc in querySnapshot.docs) {
+          var title = doc.data()['title'] as String?;
+          if (title != null) {
+            videoLearningTitles.add(title);
+          }
+        }
+      }
+    } catch (e) {
+      print('Error getting video learning data: $e');
+    }
+
+    return videoLearningTitles;
+  }
+
+  Future getVideoLearningData(DocumentReference videolearning) async {
+    final videoLearningDoc = await videolearning.get();
+    if (videoLearningDoc.exists) {
+      final videoLearningData = VideoLearning.fromFirestore(
+          videoLearningDoc.data() as Map<String, dynamic>);
+      return videoLearningData;
+    } else {
+      throw Exception('video learning not found');
+    }
+  }
+
+  Future<String> addVideoLearning(VideoLearning videoLearning) async {
+    try {
+      final result =
+          await videoLearningCollection.add(videoLearning.toFirestore());
+      return result.id;
+    } catch (e) {
+      print('Error adding video learning: $e');
+      return 'Error adding video learning';
+
+      // Handle the error as needed
+    }
+  }
+
+  Future<String> deleteVideoLearning(String videoLearningId) async {
+    try {
+      await videoLearningCollection.doc(videoLearningId).delete();
+      return 'Success delete video learning';
+    } catch (e) {
+      print('Error delete video learning: $e');
+      return 'Error delete video learning';
+
+      // Handle the error as needed
+    }
+  }
+
+  Future updateVideoLearningFewField({
+    String? videoLearningId,
+    String? title,
+    String? price,
+    String? description,
+    String? image,
+  }) async {
+    try {
+      await videoLearningCollection.doc(videoLearningId).update({
+        'title': title,
+        'price': price,
+        'desription': description,
+        'image': image
+      });
+    } catch (e) {
+      print('Error adding video learning');
+    }
+  }
+
+  Future updatelearningVideoDataEachField({
+    required String videoLearningId,
+    required String fieldName,
+    required dynamic data,
+  }) async {
+    try {
+      if (data is List<ChapterListVideo>) {
+        final List<Map<String, dynamic>> chapterListVideoData = data
+            .map((ChapterListVideo) => ChapterListVideo.toFirestore())
+            .toList();
+        await videoLearningCollection
+            .doc(videoLearningId)
+            .update({fieldName: chapterListVideoData});
+      } else {
+        await videoLearningCollection
+            .doc(videoLearningId)
+            .update({fieldName: data});
+      }
+    } catch (e) {
+      print('Error adding video learning: $e');
+    }
+  }
+
+  Future addLearningVideo({
+    required String videoLearningId,
+    required LearnVideo data,
+  }) async {
+    try {
+      await videoLearningCollection
+          .doc(videoLearningId)
+          .collection('learn_videoLearning')
+          .add(data.toFirestore());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future updateLearnVideo({
+    required String videoLearningId,
+    required String learnVideoId,
+    String? fieldName,
+    String? data,
+    required bool isUpdating,
+  }) async {
+    try {
+      if (isUpdating) {
+        await videoLearningCollection
+            .doc(videoLearningId)
+            .collection('learn_videoLearning')
+            .doc(learnVideoId)
+            .update({fieldName!: data});
+      } else {
+        await videoLearningCollection
+            .doc(videoLearningId)
+            .collection('learn_videoLearning')
+            .doc(learnVideoId)
+            .delete();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> addMyVideoLearning(
+      String videoLearningId, String userId, bool isPaid) async {
+    final myVideoLearningCollection =
+        userCollection.doc(userId).collection('my_videoLearning');
+    final videoLearningReference = videoLearningCollection.doc(videoLearningId);
+
+    final existingDocument = await myVideoLearningCollection
+        .where('videoLearning', isEqualTo: videoLearningReference)
+        .get();
+
+    if (existingDocument.docs.isNotEmpty) {
+      final documentId = existingDocument.docs.first.id;
+      await myVideoLearningCollection.doc(documentId).update({
+        'ispaid': isPaid,
+      });
+    } else {
+      await myVideoLearningCollection.add({
+        'videoLearning': videoLearningReference,
+        'isPaid': isPaid,
+        'status': 'not finished',
+      });
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>?> get allLearnVideo {
+    try {
+      final learnVideoCollection = videoLearningCollection
+          .doc(videoLearningId)
+          .collection('learn_videoLearning');
+      return learnVideoCollection
+          .orderBy('created_at', descending: false)
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> learnVideos = [];
+        final videoLearning =
+            await videoLearningCollection.doc(videoLearningId).get();
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          try {
+            learnVideos.add({
+              'id': document.id,
+              'learn_videoLearning': LearnVideo.fromFirebase(data),
+            });
+          } catch (error) {
+            print('error getting video learning data: $error');
+          }
+        }
+        learnVideos
+            .insert(0, {'videoLearning_name': videoLearning.get('title')});
+        //learnVideos.insert(0, {'id': videoLearning.get('id')});
+
+        return learnVideos;
+      });
+    } catch (error) {
+      print('error streaming learn course: $error');
+      return Stream.value([]);
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> get allMyVideoLearnings {
+    try {
+      final myVideosLearningCollection =
+          userCollection.doc(uid).collection('my_videoLearning');
+      return myVideosLearningCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> myVideosLearning = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          final videoLearningReference =
+              data['videoLearning'] as DocumentReference;
+          final isPaid = data['isPaid'] as bool;
+          final status = data['status'] as String;
+
+          try {
+            final VideoLearning videoLearningData =
+                await getVideoLearningData(videoLearningReference);
+            myVideosLearning.add({
+              'id': videoLearningReference.id,
+              'videoLearning': videoLearningData,
+              'isPaid': isPaid,
+              'status': status
+            });
+          } catch (error) {
+            print('Error getting video learning data: $error');
+          }
+        }
+
+        return myVideosLearning;
+      });
+    } catch (error) {
+      print('Error streaming my video learning: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Stream<List<Map>> get allFaqs {
     try {
       return faqCollection.snapshots().asyncMap((QuerySnapshot querySnapshot) {
         return querySnapshot.docs.map((DocumentSnapshot document) {
           return {
             'id': document.id,
-            'faq':
-                Faq.fromFirestore(document.data() as Map<String, dynamic>)
+            'faq': Faq.fromFirestore(document.data() as Map<String, dynamic>)
           };
         }).toList();
       });
@@ -530,27 +929,116 @@ class FirestoreService {
 
   //create faq
   Future<String> createFAQ(Faq faq) async {
-        try {
-          final DocumentReference docRef =
+    try {
+      final DocumentReference docRef =
           await faqCollection.add(faq.toFirestore());
-          return docRef.id;
-        } catch (e) {
-            print("Error: $e");
-            return "Failed to create FAQ: $e";
+      return docRef.id;
+    } catch (e) {
+      print("Error: $e");
+      return "Failed to create FAQ: $e";
+    }
+  }
 
-        }
+  Stream<List<Map>> get allBootcamp {
+    try {
+      return BootcampCollection.snapshots().map((QuerySnapshot querySnapshot) {
+        return querySnapshot.docs.map((DocumentSnapshot document) {
+          return {
+            'id': document.id,
+            'bootcamp':
+                Bootcamp.fromFirestore(document.data() as Map<String, dynamic>)
+          };
+        }).toList();
+      });
+    } catch (error) {
+      print('Error streaming bootcamp: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Future getBootcampData(DocumentReference bootcamp) async {
+    final bootcampDoc = await bootcamp.get();
+
+    if (bootcampDoc.exists) {
+      final bootcampData =
+          Bootcamp.fromFirestore(bootcampDoc.data() as Map<String, dynamic>);
+      return bootcampData;
+    } else {
+      throw Exception('Bootcamp not found.');
+    }
   }
 
   //create bootcamp
-  Future<String> createBootcamp(Bootcamp data) async {
-        try {
-          final DocumentReference docRef =
-          await BootcampCollection.add(data.toFirestore());
-          return docRef.id;
-        } catch (e) {
-            print("Error: $e");
-            return "Failed to create Boot: $e";
-        }
+  Future<String> CreateBootcamp(Bootcamp bootcamp) async {
+    try {
+      final result = await BootcampCollection.add(bootcamp.toFirestore());
+      return result.id;
+    } catch (e) {
+      print("Failed to create bootcamp: $e");
+      return "Failed to create bootcamp";
+    }
+  }
+
+  Future<String> deleteBootcamp(String bootcampId) async {
+    try {
+      await BootcampCollection.doc(bootcampId).delete();
+      return 'Success delete bootcamp';
+    } catch (e) {
+      print('Error delete bootcamp: $e');
+      return 'Error delete bootcamp';
+    }
+  }
+
+  Stream<List<Map>> get allWebinar {
+    try {
+      return webinarCollection.snapshots().map((QuerySnapshot querySnapshot) {
+        return querySnapshot.docs.map((DocumentSnapshot document) {
+          return {
+            'id': document.id,
+            'webinar':
+                Webinar.fromFirestore(document.data() as Map<String, dynamic>)
+          };
+        }).toList();
+      });
+    } catch (error) {
+      print('Error streaming webinar: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+  Future getWebinarData(DocumentReference webinar) async {
+    final webinarDoc = await webinar.get();
+
+    if (webinarDoc.exists) {
+      final webinarData =
+          Webinar.fromFirestore(webinarDoc.data() as Map<String, dynamic>);
+      return webinarData;
+    } else {
+      throw Exception('Webinar not found.');
+    }
+  }
+
+  //create webinar
+  Future<String> CreateWebinar(Webinar webinar) async {
+    try {
+      final result = await webinarCollection.add(webinar.toFirestore());
+      return result.id;
+    } catch (e) {
+      print("Failed to create webinar: $e");
+      return "Failed to create webinar";
+    }
+  }
+
+  Future<String> deleteWebinar(String webinarId) async {
+    try {
+      await webinarCollection.doc(webinarId).delete();
+      return 'Success delete webinar';
+    } catch (e) {
+      print('Error delete webinar: $e');
+      return 'Error delete webinar';
+
+      // Handle the error as needed
+    }
   }
 
   // create user transaction
@@ -688,8 +1176,12 @@ class FirestoreService {
           await transactionCollection
               .doc(transactionId)
               .update({'status': 'Success'});
+          await addMyVideoLearning(transaction.item!.id!, user.uid, true);
+          await transactionCollection
+              .doc(transactionId)
+              .update({'status': 'Success'});
         } catch (e) {
-          print('Error updating user my course data $e');
+          print('Error updating user my course data an my video learning $e');
         }
       }
     } catch (e) {
@@ -970,8 +1462,11 @@ class FirestoreService {
           final courseProduct =
               await courseCollection.where('title', isEqualTo: product).get();
           await addMyCourse(courseProduct.docs.first.id, uid, true);
+          final videoProduct =
+              await courseCollection.where('title', isEqualTo: product).get();
+          await addMyVideoLearning(videoProduct.docs.first.id, uid, true);
         } catch (e) {
-          print('Error updating user my course data $e');
+          print('Error updating user my course data and my video learning $e');
         }
       }
     } catch (e) {
@@ -1024,4 +1519,9 @@ class FirestoreService {
       print(e.toString());
     }
   }
+
+  void updateWebinarEachField(
+      {required String weId,
+      required String fieldName,
+      required String data}) {}
 }

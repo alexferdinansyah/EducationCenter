@@ -363,16 +363,62 @@ class _ContactUsState extends State<ContactUs> {
                 ),
               ),
               GestureDetector(
-                  onTap: launchWhatsapp,
-                  child: SvgPicture.asset(
-                    'assets/svg/whatsapp.svg',
+                onTap: launchWhatsapp,
+                child: SvgPicture.asset(
+                  'assets/svg/whatsapp.svg',
+                  height: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 15,
+                    tablet: 20,
+                    desktop: 20,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 6, left: 15),
+                child: GestureDetector(
+                  onTap: launchYoutube,
+                  child: Image.asset(
+                    'assets/images/youtube.png',
                     height: getValueForScreenType<double>(
                       context: context,
                       mobile: 15,
                       tablet: 20,
                       desktop: 20,
                     ),
-                  )),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 3, left: 15),
+                child: GestureDetector(
+                  onTap: launchTikTok,
+                  child: Image.asset(
+                    'assets/images/tik-tok.png',
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 15,
+                      tablet: 20,
+                      desktop: 20,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 15),
+                child: GestureDetector(
+                  onTap: launchLinkIn,
+                  child: Image.asset(
+                    'assets/images/linkedin.png',
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 15,
+                      tablet: 20,
+                      desktop: 20,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ],
