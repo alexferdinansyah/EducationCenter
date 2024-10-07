@@ -729,7 +729,7 @@ class _AdminDetailCourseState extends State<AdminDetailCourse> {
                                 ),
                               )),
                           child: Text(
-                            'Save as draf',
+                            'Save as draft',
                             style: GoogleFonts.poppins(
                               fontSize: getValueForScreenType<double>(
                                 context: context,
@@ -761,7 +761,7 @@ class _AdminDetailCourseState extends State<AdminDetailCourse> {
                             if (course.isDraft!) {
                               await firestore.updateCourseEachField(
                                   courseId: id,
-                                  fieldName: 'is_draf',
+                                  fieldName: 'is_draft',
                                   data: false);
                             }
 

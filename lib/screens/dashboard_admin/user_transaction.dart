@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/components/loading.dart';
+import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/services/extension.dart';
@@ -319,6 +320,7 @@ class _UserTransactionState extends State<UserTransaction> {
                           color: const Color(0xFF1F384C),
                         ),
                       ),
+
                       SizedBox(
                         height: getValueForScreenType<double>(
                           context: context,
@@ -520,6 +522,7 @@ class _UserTransactionState extends State<UserTransaction> {
           ),
           content: SingleChildScrollView(
               child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Unique code : ${transaction.uniqueCode}',
@@ -537,6 +540,88 @@ class _UserTransactionState extends State<UserTransaction> {
                   color: const Color(0xFF1F384C),
                 ),
               ),
+              if (transaction.discount != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Discount :',
+                      style: GoogleFonts.poppins(
+                        fontSize: subHeader,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF1F384C),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: transaction.discount!.map((discount) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                '\u2022',
+                                style: GoogleFonts.mulish(
+                                  fontSize: subHeader,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xFF1F384C),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Code : ${discount.code}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: subHeader,
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF1F384C),
+                                    ),
+                                  ),
+                                  if (discount.couponType == null)
+                                    Text(
+                                      'Amount : ${discount.amount}%',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: subHeader,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF1F384C),
+                                      ),
+                                    ),
+                                  if (discount.couponType != null)
+                                    Text(
+                                      'Amount : ${getCouponFormatName(discount.couponType!, discount.amount!)}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: subHeader,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF1F384C),
+                                      ),
+                                    ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Text(
+                                      'Discounted price : Rp ${discount.discountedPrice}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: subHeader,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF1F384C),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  ],
+                ),
               GestureDetector(
                 onTap: () {
                   final imageProvider = Image.network(imageUrl!).image;

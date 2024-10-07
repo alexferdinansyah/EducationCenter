@@ -212,8 +212,8 @@ class FirestoreService {
       await courseCollection.doc(courseId).delete();
       return 'Success delete course';
     } catch (e) {
-      print('Error adding course: $e');
-      return 'Error adding course';
+      print('Error delete course: $e');
+      return 'Error delete course';
 
       // Handle the error as needed
     }
@@ -420,11 +420,67 @@ class FirestoreService {
   }
 
   // Add a new Article document to Firestore
-  Future addArticle(Article article) async {
+  Future<String> addArticle(Article article) async {
     try {
-      await articleCollection.add(article.toFirestore());
+      final result = await articleCollection.add(article.toFirestore());
+      return result.id;
     } catch (e) {
-      print('Error adding course: $e');
+      print('Error adding article: $e');
+      return 'Error adding article';
+      // Handle the error as needed
+    }
+  }
+
+  // Add a new Course document to Firestore
+  Future<String> deleteArticle(String articleId) async {
+    try {
+      await articleCollection.doc(articleId).delete();
+      return 'Success delete article';
+    } catch (e) {
+      print('Error delete article: $e');
+      return 'Error delete article';
+
+      // Handle the error as needed
+    }
+  }
+
+  Future updateArticleFewField({
+    String? articleId,
+    String? title,
+    String? description,
+    String? category,
+    String? image,
+    DateTime? date,
+  }) async {
+    try {
+      await articleCollection.doc(articleId).update({
+        'title': title,
+        'description': description,
+        'category': category,
+        'image': image,
+        'date': Timestamp.fromDate(date!)
+      });
+    } catch (e) {
+      print('Error adding article: $e');
+      // Handle the error as needed
+    }
+  }
+
+  Future updateArticleEachField({
+    required String articleId,
+    required String fieldName,
+    required dynamic data,
+  }) async {
+    try {
+      if (data is List<ArticleContent>) {
+        final List<Map<String, dynamic>> contentData =
+            data.map((content) => content.toFirestore()).toList();
+        await articleCollection.doc(articleId).update({fieldName: contentData});
+      } else {
+        await articleCollection.doc(articleId).update({fieldName: data});
+      }
+    } catch (e) {
+      print('Error update article: $e');
       // Handle the error as needed
     }
   }

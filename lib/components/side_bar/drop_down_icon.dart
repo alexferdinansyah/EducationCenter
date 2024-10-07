@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/dashboard/dashboard_app.dart';
 import 'package:project_tc/services/auth_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 

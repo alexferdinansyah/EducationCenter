@@ -9,6 +9,7 @@ import 'package:project_tc/components/side_bar/drop_down_icon.dart';
 import 'package:project_tc/components/side_bar/side_item.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_article.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_course.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_faq.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_bootcamp.dart';
@@ -85,6 +86,8 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           return const UserTransaction();
         case 'Courses':
           return const AdminCourse();
+        case 'Articles':
+          return const AdminArticle();
         case 'FAQ':
           if (widget.selected == 'create-faq') {
             return const CreateFAQ();
@@ -372,7 +375,7 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
     const SideItem(icon: IconlyBold.discount, title: 'Coupons'),
     const SideItem(icon: IconlyBold.chat, title: 'FAQ'),
     const SideItem(icon: IconlyBold.category, title: 'Bootcamp'),
-    // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
+    const SideItem(icon: IconlyBold.document, title: 'Articles'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),
   ];
 

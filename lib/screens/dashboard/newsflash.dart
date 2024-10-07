@@ -28,7 +28,9 @@ class _NewsflashState extends State<Newsflash> {
           if (snapshot.hasData) {
             List<Map> articles = [];
             final List<Map> dataMaps = snapshot.data!;
-            final dataArticle = dataMaps.map((data) {
+            final dataArticle = dataMaps
+                .where((articleData) => articleData['article'].isDraft == false)
+                .map((data) {
               return {
                 'article': data['article'] as Article,
                 'id': data['id'],
