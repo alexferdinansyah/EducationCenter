@@ -79,6 +79,7 @@ class _CreateWebinarState extends State<CreateWebinar> {
     }
   }
 
+  
   Future<String?> uploadFile(Uint8List image) async {
     String postId = DateTime.now().millisecondsSinceEpoch.toString();
     var contentType = lookupMimeType('', headerBytes: image);
@@ -130,54 +131,45 @@ class _CreateWebinarState extends State<CreateWebinar> {
     double width = MediaQuery.of(context).size.width;
     final user = Provider.of<UserModel?>(context);
 
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-          getValueForScreenType<double>(
-            context: context,
-            mobile: 15,
-            tablet: 15,
-            desktop: 40,
-          ),
-          getValueForScreenType<double>(
-            context: context,
-            mobile: 15,
-            tablet: 15,
-            desktop: 40,
-          ),
-          getValueForScreenType<double>(
-            context: context,
-            mobile: 15,
-            tablet: 15,
-            desktop: 40,
-          ),
-          10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: GestureDetector(
-                    onTap: () => Get.rootDelegate.offNamed(routeWebinar),
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: getValueForScreenType<double>(
-                        context: context,
-                        mobile: 18,
-                        tablet: 22,
-                        desktop: 24,
-                      ),
-                    )),
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: Color(0xFFCCCCCC),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          children: [
+            Text(
+              widget.webinar == null ? 'Add webinar' : 'Edit wbinar',
+              style: GoogleFonts.poppins(
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .022,
+                  tablet: width * .019,
+                  desktop: width * .014,
+                ),
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF1F384C),
               ),
-              const Text('Create Webinar',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 15),
-            width: width * 0.7,
-            child: Form(
+            ),
+            const Spacer(),
+            GestureDetector(
+                onTap: () => Get.back(result: false),
+                child: const Icon(Icons.close))
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+          width: 400,
+        ),
+      ]),
+      content: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
+          child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -684,70 +676,165 @@ class _CreateWebinarState extends State<CreateWebinar> {
                   Align(
                     child: Align(
                       alignment: Alignment.bottomRight,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            await uploadToFirebase(image);
-                            final FirestoreService firestore =
-                                FirestoreService(uid: user!.uid);
-
-                            var model = Webinar(
-                                image: downloadURL,
-                                title: title,
-                                category: category,
-                                date: date,
-                                time: time,
-                                place: place,
-                                speaker: speaker,
-                                link: link,
-                                description: description);
-                            await firestore.CreateWebinar(model);
-                            Get.to(
-                                () => DashboardAdmin(
-                                      selected: 'Webinars',
-                                    ),
-                                routeName: '/login');
-                          }
-                        },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                horizontal: getValueForScreenType<double>(
-                                  context: context,
-                                  mobile: 15,
-                                  tablet: 20,
-                                  desktop: 25,
-                                ),
-                              ),
-                            ),
-                            foregroundColor: MaterialStateProperty.all(
-                              const Color(0xFF4351FF),
-                            ),
-                            backgroundColor: MaterialStateProperty.all(
-                              const Color(0xFF4351FF),
-                            ),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            )),
-                        child: Text(
-                          'submit',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ],
+              )),
+        ),
+      ),
+      actions: [
+        SizedBox(
+          height: getValueForScreenType<double>(
+            context: context,
+            mobile: 26,
+            tablet: 33,
+            desktop: 38,
+          ),
+          child: ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                await uploadToFirebase(image);
+                final FirestoreService firestore =
+                    FirestoreService(uid: user!.uid);
+
+                var model = Webinar(
+                    image: downloadURL,
+                    title: title,
+                    category: category,
+                    date: date,
+                    time: time,
+                    place: place,
+                    speaker: speaker,
+                    link: link,
+                    description: description);
+                await firestore.CreateWebinar(model);
+                Get.to(
+                    () => DashboardAdmin(
+                          selected: 'Webinars',
+                        ),
+                    routeName: '/login');
+              }
+            },
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(
+                    horizontal: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 15,
+                      tablet: 20,
+                      desktop: 25,
+                    ),
+                  ),
+                ),
+                foregroundColor: MaterialStateProperty.all(
+                  const Color(0xFF4351FF),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                  const Color(0xFF4351FF),
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                )),
+            child: Text(
+              'submit',
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        // SizedBox(
+        //     height: getValueForScreenType<double>(
+        //       context: context,
+        //       mobile: 26,
+        //       tablet: 33,
+        //       desktop: 38,
+        //     ),
+        //     child: ElevatedButton(
+        //       onPressed: () async {
+        //         if (_formKey.currentState!.validate()) {
+        //           final FirestoreService firestore =
+        //               FirestoreService(uid: user!.uid);
+        //           if (widget.webinar != null) {
+        //             await firestore.updateWebinarFewField(
+        //               webinarId: widget.webinarId,
+        //               title: title ?? widget.webinar!.title,
+        //               category: category ?? widget.webinar!.category,
+        //               description: description ?? widget.webinar!.description,
+        //               image: downloadURL,
+                     
+        //               time: time ?? widget.webinar!.time,
+        //               link: link ?? widget.webinar!.link,
+        //               speaker: speaker ?? widget.webinar!.speaker,
+        //             );
+        //           } else {
+        //             final Webinar data = Webinar(
+        //               image: downloadURL,
+        //               title: title,
+        //               category: category,
+        //               date: date,
+        //               time: time,
+        //               place: place,
+        //               speaker: speaker,
+        //               link: link,
+        //               description: description,
+        //             );
+
+        //             final result = await firestore.CreateWebinar(data);
+        //             Get.rootDelegate.toNamed(routeCreateWebinar,
+        //                 parameters: {'id': result});
+        //           }
+        //           if (widget.webinarId != null) {
+        //             Get.rootDelegate.toNamed(routeCreateWebinar,
+        //                 parameters: {'id': widget.webinarId!});
+        //           }
+        //           Get.back(result: false);
+        //         }
+        //       },
+        //       style: ButtonStyle(
+        //           padding: MaterialStateProperty.all(
+        //             EdgeInsets.symmetric(
+        //               horizontal: getValueForScreenType<double>(
+        //                 context: context,
+        //                 mobile: 20,
+        //                 tablet: 25,
+        //                 desktop: 30,
+        //               ),
+        //             ),
+        //           ),
+        //           foregroundColor: MaterialStateProperty.all(
+        //             const Color(0xFF4351FF),
+        //           ),
+        //           backgroundColor: MaterialStateProperty.all(
+        //             const Color(0xFF4351FF),
+        //           ),
+        //           shape: MaterialStateProperty.all(
+        //             RoundedRectangleBorder(
+        //               borderRadius: BorderRadius.circular(6),
+        //             ),
+        //           )),
+        //       child: Text(
+        //         'Continue',
+        //         style: GoogleFonts.poppins(
+        //           fontSize: getValueForScreenType<double>(
+        //             context: context,
+        //             mobile: width * .018,
+        //             tablet: width * .015,
+        //             desktop: width * .01,
+        //           ),
+        //           fontWeight: FontWeight.w500,
+        //           color: Colors.white,
+        //         ),
+        //       ),
+        //     ))
+      ],
     );
   }
 }

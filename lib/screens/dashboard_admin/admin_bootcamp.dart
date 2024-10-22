@@ -407,8 +407,18 @@ class _AdminBootcampState extends State<AdminBootcamp> {
                         bottom: 30,
                         right: 30,
                         child: FloatingActionButton(
-                          onPressed: () {
-                            Get.rootDelegate.toNamed(routeCreateBootcamp);
+                          onPressed: () async {
+                            final result = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return const CreateBootcamp();
+                              },
+                            );
+                            if (result != null) {
+                              setState(() {
+                                initBootcamp = result;
+                              });
+                            }
                           },
                           backgroundColor: CusColors.accentBlue,
                           child: const Icon(Icons.add),

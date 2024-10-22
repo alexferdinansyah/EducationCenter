@@ -123,61 +123,53 @@ class _CreateBootcampState extends State<CreateBootcamp> {
     }
   }
 
-  final DetailBootcampController controller = Get.put(DetailBootcampController());
+  final DetailBootcampController controller =
+      Get.put(DetailBootcampController());
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     final user = Provider.of<UserModel?>(context);
 
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-          getValueForScreenType<double>(
-            context: context,
-            mobile: 15,
-            tablet: 15,
-            desktop: 40,
-          ),
-          getValueForScreenType<double>(
-            context: context,
-            mobile: 15,
-            tablet: 15,
-            desktop: 40,
-          ),
-          getValueForScreenType<double>(
-            context: context,
-            mobile: 15,
-            tablet: 15,
-            desktop: 40,
-          ),
-          10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: GestureDetector(
-                    onTap: () => Get.rootDelegate.offNamed(routeBootcamp),
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: getValueForScreenType<double>(
-                        context: context,
-                        mobile: 18,
-                        tablet: 22,
-                        desktop: 24,
-                      ),
-                    )),
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: Color(0xFFCCCCCC),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          children: [
+            Text(
+              widget.bootcamp == null ? 'Add bootcamp' : 'Edit bootcamp',
+              style: GoogleFonts.poppins(
+                fontSize: getValueForScreenType<double>(
+                  context: context,
+                  mobile: width * .022,
+                  tablet: width * .019,
+                  desktop: width * .014,
+                ),
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF1F384C),
               ),
-              const Text('Create Bootcamp',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 15),
-            width: width * 0.7,
-            child: Form(
+            ),
+            const Spacer(),
+            GestureDetector(
+                onTap: () => Get.back(result: false),
+                child: const Icon(Icons.close))
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+          width: 400,
+        ),
+      ]),
+      content: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
+          child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -680,13 +672,20 @@ class _CreateBootcampState extends State<CreateBootcamp> {
                       description = val;
                     },
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Align(
                     child: Align(
                       alignment: Alignment.bottomRight,
-                      child: ElevatedButton(
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        SizedBox(
+          height: getValueForScreenType<double>(context: context, mobile: 26, tablet: 33, desktop: 38),
+          child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             await uploadToFirebase(image);
@@ -742,14 +741,9 @@ class _CreateBootcampState extends State<CreateBootcamp> {
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
+    
   }
 }

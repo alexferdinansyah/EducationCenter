@@ -105,6 +105,7 @@ class _LearningVideoState extends State<LearningVideo> {
       print(learnVideo);
 
       learnVideoTitle = List.from(learnVideo.map((learn) => learn.title));
+      
 
       if (route.contains('/learn-video/offers')) {
         return VideoOffer(
@@ -203,6 +204,7 @@ class _LearningVideoState extends State<LearningVideo> {
           ),
         );
       }
+      
       return YoutubePlayerScaffold(
           controller: _controller,
           builder: (context, player) {
@@ -295,11 +297,11 @@ class _LearningVideoState extends State<LearningVideo> {
   }
 
   Widget _defaultLayout(width, height, player, bool isMobile,
-      {List<LearnVideo>? learnVideo,
+      { learnVideo,
       bool? isPaid,
       String? memberType,
       String? videoLearningName,
-      String? noWhatsapp}) {
+      }) {
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: width * .03, vertical: height * .015),
@@ -444,7 +446,7 @@ class _LearningVideoState extends State<LearningVideo> {
 
   Widget _sideMenuMobile(width, height,
       {Function(int index)? onTap,
-      List<LearnVideo>? learnVideo,
+       learnVideo,
       bool? isPaid,
       String? memberType}) {
     return Container(
@@ -589,7 +591,7 @@ class _LearningVideoState extends State<LearningVideo> {
   }
 
   Widget _sideMenuDesktop(width, height,
-      {List<LearnVideo>? learnvideo, bool? isPaid, String? memberType}) {
+      { learnvideo, bool? isPaid, String? memberType}) {
     return Container(
       width: width * .17,
       height: height / 1.5,

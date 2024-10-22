@@ -181,16 +181,17 @@ class Videolearnings extends StatelessWidget {
                         );
                       },
                       style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
                       ),
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                    ),
                       child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -468,9 +469,9 @@ class MyVideoLearning extends StatelessWidget {
                                   );
                                 } else {
                                   Get.rootDelegate.toNamed(
-                                  routeOfferLearnVideo,
-                                  parameters: {'id': id},
-                                );
+                                    routeOfferLearnVideo,
+                                    parameters: {'id': id},
+                                  );
                                 }
                               }
                             },

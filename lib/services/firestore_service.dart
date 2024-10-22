@@ -1520,8 +1520,36 @@ class FirestoreService {
     }
   }
 
+  
+  Future updateWebinarFewField({
+    String? webinarId,
+    String? title,
+    String? description,
+    String? image,
+    String? category,
+    String? time,
+    String? place,
+    String? speaker,
+    String? link,
+    String? fieldName,
+    String? data,
+  }) async {
+    try {
+      await webinarCollection.doc(webinarId).update({
+        'title': title,
+        'description': description,
+        'category': category,
+        'image': image,
+        'date': Timestamp.fromDate(data! as DateTime)
+      });
+    } catch (e) {
+      print('Error adding webinar: $e');
+    }
+  }
+  
+
   void updateWebinarEachField(
-      {required String weId,
+      {required String webinarId,
       required String fieldName,
       required String data}) {}
 }

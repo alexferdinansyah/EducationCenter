@@ -413,8 +413,18 @@ class _AdminWebinarState extends State<AdminWebinar> {
                         bottom: 30,
                         right: 30,
                         child: FloatingActionButton(
-                          onPressed: () {
-                            Get.rootDelegate.toNamed(routeCreateWebinar);
+                          onPressed: () async {
+                            final result = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return const CreateWebinar();
+                              },
+                            );
+                            if (result != null) {
+                              setState(() {
+                                initWebinar = result;
+                              });
+                            }
                           },
                           backgroundColor: CusColors.accentBlue,
                           child: const Icon(Icons.add),
