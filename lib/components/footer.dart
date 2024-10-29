@@ -57,7 +57,7 @@ class Footer extends StatelessWidget {
                       children: [
                         Row(children: [
                           Image.asset(
-                            'assets/images/Logo DAC-Informatika.png',
+                            'assets/images/logo dec.png',
                             width: getValueForScreenType<double>(
                               context: context,
                               mobile: width * .24,
