@@ -5,6 +5,7 @@ import 'package:project_tc/models/bootcamp.dart';
 import 'package:project_tc/models/coupon.dart';
 import 'package:project_tc/models/coupons.dart';
 import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/ebook.dart';
 import 'package:project_tc/models/faq.dart';
 import 'package:project_tc/models/learning.dart';
 import 'package:project_tc/models/transaction.dart';
@@ -19,11 +20,13 @@ class FirestoreService {
   final String uid;
   final String? courseId;
   final String? videoLearningId;
-  FirestoreService({required this.uid, this.videoLearningId, this.courseId});
+  final String? ebookId;
+  FirestoreService({required this.uid, this.videoLearningId, this.courseId, this.ebookId});
   FirestoreService.withoutUID()
       : uid = "",
         courseId = "",
-        videoLearningId = "";
+        videoLearningId = "",
+        ebookId = "";
 
   // collection reference
 
@@ -47,6 +50,8 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('webinar');
   final CollectionReference videoLearningCollection =
       FirebaseFirestore.instance.collection('videoLearning');
+  final CollectionReference EbookCollection =
+      FirebaseFirestore.instance.collection('E-book');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -623,6 +628,7 @@ class FirestoreService {
     final webinarStream = allWebinar;
     final bootcampStream = allBootcamp;
     final videoLearningStream = allVideoLearning;
+    final ebookStream = allEbook;
 
     return Rx.zip(
       [
@@ -630,7 +636,8 @@ class FirestoreService {
         articleStream,
         webinarStream,
         bootcampStream,
-        videoLearningStream
+        videoLearningStream,
+        ebookStream
       ],
       (values) => values.first + values.last,
     );
@@ -1475,13 +1482,14 @@ class FirestoreService {
   }
 
   // Add a new meet request document to Firestore
-  Future addMeetRequest(MeetModel meet, String courseId, String uid) async {
+  Future addMeetRequest(MeetModel meet, String courseId, String uid, ) async {
     try {
       // Reference to the Firestore collection
 
       // Perform a query to count documents that match the criteria
       QuerySnapshot query = await meetRequestCollection
           .where('course_id', isEqualTo: courseId)
+         
           .where('uid', isEqualTo: uid)
           .get();
 
@@ -1552,4 +1560,205 @@ class FirestoreService {
       {required String webinarId,
       required String fieldName,
       required String data}) {}
+
+
+
+// ebook//
+
+  Stream<List<Map>> get allEbook{
+    try {
+      return EbookCollection.snapshots().map((QuerySnapshot querySnapshot) {
+        return querySnapshot.docs.map((DocumentSnapshot document) {
+          return {
+            'id': document.id,
+            'ebook': EbookModel.fromFirestore(document.data() as Map<String, dynamic>)
+          };
+        }).toList();
+      });
+    } catch (error) {
+      print('Error ebook: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+
+    Future<List<String>> getAllEbookTitles() async {
+    List<String> ebookTitles = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('ebook')
+              .where('is_draft', isNotEqualTo: true)
+              .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var doc in querySnapshot.docs) {
+          var title = doc.data()['title'] as String?;
+          if (title != null) {
+            ebookTitles.add(title);
+          }
+        }
+      }
+    } catch (e) {
+      print('Error ebook data: $e');
+    }
+
+    return ebookTitles;
+  }
+
+
+   Future getEbookData(DocumentReference ebook) async {
+    // Get Reference Courses Data
+    final ebookDoc = await ebook.get();
+
+    if (ebookDoc.exists) {
+      final ebookData =
+          EbookModel.fromFirestore(ebookDoc.data() as Map<String, dynamic>);
+      return ebookData;
+    } else {
+      throw Exception('ebook not found.');
+    }
+  }
+
+    Future<String> addEbook(EbookModel ebook) async {
+    try {
+      final result = await EbookCollection.add(ebook.toFirestore());
+      return result.id;
+    } catch (e) {
+      print('Error adding course: $e');
+      return 'Error adding course';
+
+      // Handle the error as needed
+    }
+  }
+
+
+    Future<String> deleteEbook(String ebookId) async {
+    try {
+      await EbookCollection.doc(ebookId).delete();
+      return 'Success delete ebook';
+    } catch (e) {
+      print('Error delete ebook: $e');
+      return 'Error delete ebook';
+
+      // Handle the error as needed
+    }
+  }
+
+
+  Future updateEbookFewField({
+    String? ebookId,
+    String? title,
+    // String? learnLimit,
+    String? description,
+    String? price,
+    String? ebookCategory,
+    String? ebookType,
+    DateTime? date,
+    String? image,
+  }) async {
+    try {
+      await EbookCollection.doc(ebookId).update({
+        'title': title,
+        // 'learn_limit': learnLimit,
+        'price': price,
+        'course_category': ebookCategory,
+        'description': description,
+        'ebook_type': ebookType,
+        'image': image,
+        'date': Timestamp.fromDate(date!)
+      });
+    } catch (e) {
+      print('Error adding ebook: $e');
+      // Handle the error as needed
+    }
+  }
+
+
+
+ Future updateEbookEachField({
+    required String ebookId,
+    required String fieldName,
+    required dynamic data,
+  }) async {
+    try {
+      if (data is List<ChapterList>) {
+        final List<Map<String, dynamic>> chapterData =
+            data.map((chapterList) => chapterList.toFirestore()).toList();
+        await EbookCollection.doc(courseId).update({fieldName: chapterData});
+      } else {
+        await EbookCollection.doc(courseId).update({fieldName: data});
+      }
+    } catch (e) {
+      print('Error adding ebook: $e');
+      // Handle the error as needed
+    }
+  }
+
+ Future<void> addMyEbook(String ebookId, String userId, bool isPaid) async {
+    final myEbookCollection =
+        userCollection.doc(userId).collection('my_ebooks');
+    final ebookReference = EbookCollection.doc(ebookId);
+
+    // Check if a document with the provided course reference exists in the sub-collection
+    final existingDocument = await myEbookCollection
+        .where('ebook', isEqualTo: ebookReference)
+        .get();
+
+    if (existingDocument.docs.isNotEmpty) {
+      // Document with the same course reference exists; update it
+      final documentId = existingDocument.docs.first.id;
+      await myEbookCollection.doc(documentId).update({
+        'isPaid': isPaid,
+        // You can update other fields as needed
+      });
+    } else {
+      // Document with the provided course reference does not exist; add it
+      await myEbookCollection.add({
+        'course': ebookReference,
+        'isPaid': isPaid,
+        'status': 'Not Finished',
+      });
+    }
+  }
+
+
+  Stream<List<Map<String, dynamic>>?> get allMyEbooks {
+    try {
+      final myEbookCollection =
+          userCollection.doc(uid).collection('my_ebooks');
+      return myEbookCollection
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> myEbook = [];
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+          final ebookReference = data['ebook'] as DocumentReference;
+          final isPaid = data['isPaid'] as bool;
+          final status = data['status'] as String;
+
+          try {
+            final Ebook ebookData = await getEbookData(ebookReference);
+            myEbook.add({
+              'id': ebookReference.id,
+              'ebook': ebookData,
+              'isPaid': isPaid,
+              'status': status
+            });
+          } catch (error) {
+            print('Error getting ebook data: $error');
+          }
+        }
+
+        return myEbook;
+      });
+    } catch (error) {
+      print('Error streaming my ebook: $error');
+      return Stream.value([]); // Return an empty list in case of an error
+    }
+  }
+
+
 }
