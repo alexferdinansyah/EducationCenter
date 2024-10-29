@@ -18,29 +18,27 @@ class CusNavigationBar extends StatefulWidget {
 class _CusNavigationBarState extends State<CusNavigationBar> {
   int index = 0;
   String? _selectedValue;
-  String? _selectedProduct;
+  // String? _selectedProduct;
   final List<String> _listLinks = [
     'Course',
     'Bootcamp',
     'Webinar',
     'Review Cv/Portopolio',
-    // 'E-Book'
   ];
   final List<String> _urlLinks = [
     routeCourses,
     routeBootcamp,
     routeWebinar,
     routePortopolio,
-    // routeEBook
   ];
-  final List<String> _listProduks = [
-    'Vidio Learning',
-    'E-Book'
-  ];
-  final List<String> _urlProduk = [
-      routeVideoLearning,
-      routeEBook,
-  ];
+  // final List<String> _listProduks = [
+  //   'Vidio Learning',
+  //   'E-Book'
+  // ];
+  // final List<String> _urlProduk = [
+  //     routeVideoLearning,
+  //     routeEBook,
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,29 +47,44 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
     final user = Provider.of<UserModel?>(context);
     final currentRoute = Get.rootDelegate.currentConfiguration!.location!;
 
+    
     if (_selectedValue != null) {
       _listLinks.asMap().forEach((index, link) {
         if (link == _selectedValue!) {
           print(index);
-          print('pindah ke route ' + _selectedValue!);
-          Get.rootDelegate.toNamed(_urlLinks[index]);
-        }
-      });
-    }
-    if (_selectedProduct != null) {
-      _listProduks.asMap().forEach((index, link) {
-        if (link == _selectedProduct!) {
-          print(index);
-          print('pindah ke route ' + _selectedProduct!);
-          Get.rootDelegate.toNamed(_urlProduk[index]);
+          print('Navigating to route ' + _selectedValue!);
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.rootDelegate.toNamed(_urlLinks[index]);
+
+            // Reset _selectedValue to avoid errors
+            setState(() {
+              _selectedValue = null;
+            });
+          });
         }
       });
     }
 
-    if (currentRoute.contains(routeDetailSingleCourse) ||
-        currentRoute.contains(routeDetailBundleCourse) ||
-        currentRoute == routeBundleCourses ||
-        currentRoute == routeCourses) {
+    // if (_selectedProduct != null) {
+    //   _listProduks.asMap().forEach((index, link) {
+    //     if (link == _selectedProduct!) {
+    //       print(index);
+    //       print('pindah ke route ' + _selectedProduct!);
+    //       Get.rootDelegate.toNamed(_urlProduk[index]);
+    //     }
+    //   });
+    // }
+
+    if
+        // (currentRoute.contains(routeDetailSingleCourse) ||
+        //     currentRoute.contains(routeDetailBundleCourse) ||
+        //     currentRoute == routeBundleCourses ||
+        //     currentRoute == routeCourses)
+        (currentRoute == routeEBook
+        //  ||
+        // currentRoute.contains(routeDetailArticle)
+        ) {
       setState(() {
         index = 1;
       });
@@ -93,8 +106,8 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
             Get.rootDelegate.toNamed(routeHome);
           },
           child: Image.asset(
-            'assets/images/dec_logo2.png',
-            width: width * .06,
+            'assets/images/logo dec.png',
+            width: width * .10,
           ),
         ),
         const Spacer(),
@@ -118,20 +131,18 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
               isExpanded: true,
               style: TextStyle(
                 fontSize: getValueForScreenType<double>(
-                  context: context,
-                  mobile: width * .04,
-                  desktop: width * .01,
-                  tablet: width * .024),
-                  fontWeight: FontWeight.bold,
+                    context: context,
+                    mobile: width * .04,
+                    desktop: width * .01,
+                    tablet: width * .024),
+                fontWeight: FontWeight.bold,
               ),
-              hint: Text(
-                'Program',
-                style: TextStyle(
-                  color: CusColors.inactive.withOpacity(0.4),
-                )
-                ),
+              hint: Text('Program',
+                  style: TextStyle(
+                    color: CusColors.inactive.withOpacity(0.4),
+                  )),
               value: _selectedValue,
-              icon: SizedBox.shrink(), // Remove the triangle icon
+              icon: const SizedBox.shrink(), // Remove the triangle icon
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedValue = newValue;
@@ -146,54 +157,12 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
             ),
           ),
         ),
-        Container(
-          width: 90,
-          padding: EdgeInsets.symmetric(
-              horizontal: getValueForScreenType<double>(
-                  context: context, mobile: 20, desktop: 10, tablet: 30),
-              vertical: getValueForScreenType<double>(
-                context: context,
-                mobile: 8,
-              )),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              isExpanded: true,
-              style: TextStyle(
-                fontSize: getValueForScreenType<double>(
-                  context: context,
-                  mobile: width * .04,
-                  desktop: width * .01,
-                  tablet: width * .024),
-                  fontWeight: FontWeight.bold,
-              ),
-              hint: Text(
-                'Produk',
-                style: TextStyle(
-                  color: CusColors.inactive.withOpacity(0.4),
-                )
-                ),
-              value: _selectedProduct,
-              icon: SizedBox.shrink(), // Remove the triangle icon
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedProduct = newValue;
-                });
-              },
-              items: _listProduks.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
+        NavigationItem(
+          selected: index == 1,
+          title: 'E-Book',
+          routeName: routeEBook,
+          onHighlight: onHighlight,
         ),
-        // NavigationItem(
-        //   selected: index == 1,
-        //   title: 'Courses',
-        //   routeName: routeCourses,
-        //   onHighlight: onHighlight,
-        // ),
         NavigationItem(
           selected: index == 2,
           title: 'Article',
@@ -256,7 +225,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
       case routeHome:
         changeHighlight(0);
         break;
-      case routeCourses:
+      case routeEBook:
         changeHighlight(1);
         break;
       case routeArticle:
@@ -292,10 +261,15 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final currentRoute = Get.rootDelegate.currentConfiguration!.location!;
-    if (currentRoute.contains(routeDetailSingleCourse) ||
-        currentRoute.contains(routeDetailBundleCourse) ||
-        currentRoute == routeBundleCourses ||
-        currentRoute == routeCourses) {
+    if
+        // (currentRoute.contains(routeDetailSingleCourse) ||
+        //     currentRoute.contains(routeDetailBundleCourse) ||
+        //     currentRoute == routeBundleCourses ||
+        //     currentRoute == routeCourses)
+        (currentRoute == routeEBook
+        //  ||
+        // currentRoute.contains(routeDetailArticle)
+        ) {
       setState(() {
         index = 1;
       });
@@ -350,12 +324,12 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
           routeName: routeHome,
           onHighlight: onHighlight,
         ),
-        // NavigationItem(
-        //   selected: index == 1,
-        //   title: 'Courses',
-        //   routeName: routeCourses,
-        //   onHighlight: onHighlight,
-        // ),
+        NavigationItem(
+          selected: index == 1,
+          title: 'E-Book',
+          routeName: routeEBook,
+          onHighlight: onHighlight,
+        ),
         NavigationItem(
           selected: index == 2,
           title: 'Articles',
@@ -421,7 +395,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
       case routeHome:
         changeHighlight(0);
         break;
-      case routeCourses:
+      case routeEBook:
         changeHighlight(1);
         break;
       case routeArticle:

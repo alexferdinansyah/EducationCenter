@@ -14,7 +14,7 @@ class Ebook extends StatelessWidget {
         Container(
             margin: EdgeInsets.only(top: 30),
             width: width * 0.8,
-            child: Image.asset('assets/images/SLIDE 5.png'))
+            child: Image.asset('assets/images/SLIDE 7.png'))
       ]),
       Padding(
         padding: EdgeInsets.only(

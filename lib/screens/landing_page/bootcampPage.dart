@@ -21,7 +21,7 @@ class Bootcamppage extends StatelessWidget {
         Container(
             margin: const EdgeInsets.only(top: 30),
             width: width * 0.8,
-            child: Image.asset('assets/images/SLIDE 5.png'))
+            child: Image.asset('assets/images/SLIDE 6.png'))
       ]),
       Padding(
         padding: EdgeInsets.only(
