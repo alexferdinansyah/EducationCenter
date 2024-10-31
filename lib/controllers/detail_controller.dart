@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:project_tc/models/article.dart';
 import 'package:project_tc/models/bootcamp.dart';
 import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/ebook.dart';
 import 'package:project_tc/models/learning.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/models/webinar.dart';
@@ -52,6 +53,21 @@ class DetailArticleController extends GetxController {
     }
   }
 }
+
+class DetailEBookController extends GetxController {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Rx<EbookModel?> documentSnapshot = Rx<EbookModel?>(null);
+
+  void fetchDocument(String id) async {
+    try {
+      final snapshot = await _firestore.collection('ebooks').doc(id).get();
+      documentSnapshot.value = EbookModel.fromFirestore(snapshot.data()!);
+    } catch (e) {
+      print('Error fetching document: $e');
+    }
+  }
+}
+
 
 class DetailBootcampController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
