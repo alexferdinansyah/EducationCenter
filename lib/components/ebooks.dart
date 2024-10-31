@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
@@ -67,28 +68,28 @@ class Ebooks extends StatelessWidget {
                 width: 1,
         ),
        ),
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            ebook.ebookCategory!,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.mulish(
-              color: const Color(0xFF2501FF),
-                    fontSize: getValueForScreenType<double>(
-                      context: context,
-                      mobile: width * .024,
-                      tablet: width * .014,
-                      desktop: width * .011,
-                    ),
-                    fontWeight: FontWeight.bold,
-            ),
+      //  child: Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   mainAxisSize: MainAxisSize.min,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Text(
+      //       ebook.ebookCategory!,
+      //       textAlign: TextAlign.center,
+      //       style: GoogleFonts.mulish(
+      //         color: const Color(0xFF2501FF),
+      //               fontSize: getValueForScreenType<double>(
+      //                 context: context,
+      //                 mobile: width * .024,
+      //                 tablet: width * .014,
+      //                 desktop: width * .011,
+      //               ),
+      //               fontWeight: FontWeight.bold,
+      //       ),
 
-          )
-        ],
-       ),
+      //     )
+      //   ],
+      //  ),
 
                 ),
 
@@ -203,10 +204,11 @@ class Ebooks extends StatelessWidget {
 class AdminEbooks extends StatelessWidget {
   final EbookModel ebook;
   final String id;
+  final bool isAdmin;
   final Function()? onPressed;
   final Function()? onDelete;
 
-  const AdminEbooks({super.key, required this.ebook, required this.id,
+  const AdminEbooks({super.key, required this.ebook, required this.id,required this.isAdmin,
   this.onPressed,
   this.onDelete});
 
@@ -261,27 +263,27 @@ class AdminEbooks extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  ebook.ebookCategory!,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.mulish(
-                    color: const Color(0xFF2501FF),
-                    fontSize: getValueForScreenType<double>(
-                      context: context,
-                      mobile: width * .024,
-                      tablet: width * .014,
-                      desktop: width * .011,
-                    ),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+            // child: Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   mainAxisSize: MainAxisSize.min,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       ebook.ebookCategory!,
+            //       textAlign: TextAlign.center,
+            //       style: GoogleFonts.mulish(
+            //         color: const Color(0xFF2501FF),
+            //         fontSize: getValueForScreenType<double>(
+            //           context: context,
+            //           mobile: width * .024,
+            //           tablet: width * .014,
+            //           desktop: width * .011,
+            //         ),
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ),
           ebook.image != ''
               ? ClipRRect(
@@ -384,7 +386,7 @@ class AdminEbooks extends StatelessWidget {
                                 MaterialStateProperty.all(Colors.transparent),
                           ),
                           child: Text(
-                            'Edit article',
+                            'Edit ebook',
                             style: GoogleFonts.mulish(
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
@@ -402,21 +404,24 @@ class AdminEbooks extends StatelessWidget {
                     const SizedBox(
                       width: 4,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        onDelete!();
-                      },
-                      child: Icon(
-                        IconlyLight.delete,
-                        color: const Color(0xFF86B1F2),
-                        size: getValueForScreenType<double>(
-                          context: context,
-                          mobile: 22,
-                          tablet: 24,
-                          desktop: 28,
+                    if (isAdmin)
+                      GestureDetector(
+                        onTap: () {
+                          if (isAdmin == true) {
+                            onDelete!();
+                          }
+                        },
+                        child: Icon(
+                          isAdmin ? IconlyLight.delete : IconlyLight.chat,
+                          color: const Color(0xFF86B1F2),
+                          size: getValueForScreenType<double>(
+                            context: context,
+                            mobile: 22,
+                            tablet: 24,
+                            desktop: 28,
+                          ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
               ],
@@ -428,21 +433,167 @@ class AdminEbooks extends StatelessWidget {
   }
 }
 
-// class EbookLists extends StatefulWidget {
-//   final EbookModel ebook;
-//   final String id;
-//   const EbookLists({super.key, required this.ebook, required this.id});
+class EbookLists extends StatefulWidget {
+  final EbookModel ebook;
+  final String id;
+  const EbookLists({super.key, required this.ebook, required this.id});
 
-//   @override
-//   State<EbookLists> createState() => _EbookListsState();
-// }
+  @override
+  State<EbookLists> createState() => _EbookListsState();
+}
 
-// class _EbookListsState extends State<EbookLists> {
-//   bool _hovering = false;
-//   @override
-//   Widget build(BuildContext context) {
-//   double width = MediaQuery.of(context).size.width;
-//     double height = MediaQuery.of(context).size.height;
-//     return
-//   }
-// }
+class _EbookListsState extends State<EbookLists> {
+  bool _hovering = false;
+  @override
+  Widget build(BuildContext context) {
+  double width = MediaQuery.of(context).size.width;
+  double height = MediaQuery.of(context).size.height;
+    return MouseRegion(
+       onEnter: (_) => _hovered(),
+      onExit: (_) => _hovered(),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragUpdate: (_){},
+        onTap: (){
+          // Get.rootDelegate.toNamed(
+          
+          // )
+        },
+        child: AnimatedContainer(
+          duration: const Duration(
+            milliseconds: 300
+          ),
+          width: width/2,
+          padding: EdgeInsets.symmetric(
+            horizontal: getValueForScreenType<double>(context: context, mobile: 15, desktop: 20, tablet: 20),
+            vertical: getValueForScreenType<double>(context: context, mobile: 15,tablet: 20,desktop: 20),
+          ),
+          margin: EdgeInsets.symmetric(
+            vertical: getValueForScreenType(context: context, mobile: 15, tablet: 15,desktop: 20),
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            border: Border.all(
+              color: const  Color(0xFFCCCCCC),
+              width: 1,
+            ),
+           boxShadow: [
+              _hovering
+                  ? BoxShadow(
+                      color: const Color(0xFFCCCCCC).withOpacity(.3),
+                      offset: const Offset(6, 6),
+                      blurRadius: 8)
+                  : const BoxShadow(
+                      color: Colors.transparent,
+                      offset: Offset(0, 0),
+                      blurRadius: 0)
+            ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, children: [
+                widget.ebook.image != '' ? IgnorePointer(
+                  child: Padding(padding: EdgeInsets.only(
+                    bottom: height * .03
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: widget.ebook.image!,
+                    height: height * .32,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                    ),
+                  ),
+                  ),
+                )
+                :const Text('No Image'),
+                Text(
+                  widget.ebook.title!,
+                  style: GoogleFonts.mulish(
+                    color: CusColors.title,
+                    fontSize: getValueForScreenType<double>(context: context, mobile: width * .032, tablet: width * .018, desktop: width *.016 ),
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+                Padding(padding: EdgeInsets.symmetric(
+                  vertical: height * .01
+                ),
+                child: Text(
+                  widget.ebook.description!.replaceAll('\\n', '\n'),
+                  maxLines: 2,
+                  style: GoogleFonts.mulish(
+                    color: CusColors.inactive,
+                    fontSize: getValueForScreenType(context: context, mobile: width * .023, tablet: width * .013,
+                      desktop: width * .01 ),
+                      fontWeight: FontWeight.w300,
+                      height: 1.5
+                  ),
+                  
+                ),
+                ),
+                // Container(
+                //   margin: const EdgeInsets.symmetric(horizontal: 8),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(14),
+                //     color: Colors.transparent,
+                //     border: Border.all(
+                //       color:  const Color(0xFF2501FF),
+                //   width: 1,
+                //     ),
+                //   ),
+                //   child: Row(
+                //    mainAxisSize: MainAxisSize.min,
+                //    mainAxisAlignment: MainAxisAlignment.center,
+                //    crossAxisAlignment: CrossAxisAlignment.center,
+                //    children: [
+                //     Text(widget.ebook.ebookCategory!, style: GoogleFonts.mulish(
+                //         color: const Color(0xFF2501FF),
+                //       fontSize: getValueForScreenType<double>(
+                //         context: context,
+                //         mobile: width * .023,
+                //         tablet: width * .013,
+                //         desktop: width * .01,
+                //       ),
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //     ),
+                //    ],
+                //   ),
+                // ),
+
+                Container(
+                  width: double.infinity,
+                  height: 1,
+                  margin: EdgeInsets.symmetric(
+                    vertical: height * .013
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFCCCCCC),
+                  ),
+                ),
+                Text(
+                  widget.ebook.date!.formatDate(),
+                  maxLines: 1,
+                  style: GoogleFonts.mulish(
+                    color: CusColors.inactive,
+                    fontSize: getValueForScreenType(context: context, mobile: width * .023,
+                    tablet: width * .013,
+                    desktop: width * .01,
+                    ),
+                    fontWeight: FontWeight.w400,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    
+  }
+    _hovered() {
+    setState(() {
+      _hovering = !_hovering;
+    });
+  }
+}

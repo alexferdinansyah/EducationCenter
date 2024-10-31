@@ -4,18 +4,17 @@ class EbookModel {
   String? image;
   String? title;
   String? description;
-  String? ebookCategory;
   String? createdBy;
   DateTime? date;
   bool? isDraft;
   String? price;
+  String? ebookLimit;
   String? discount;
   List<EbookContent>? ebookContent;
   List<String>? completionBenefits;
 
   EbookModel({
     required this.image,
-    required this.ebookCategory,
     required this.title,
     required this.description,
     this.createdBy,
@@ -23,6 +22,7 @@ class EbookModel {
     this.ebookContent,
     required this.date,
     required this.price,
+    required this.ebookLimit,
     this.discount = "",
     required this.completionBenefits,
   });
@@ -37,13 +37,13 @@ class EbookModel {
 
     return EbookModel(
       image: data['image'],
-      ebookCategory: data['ebook_category'],
       title: data['title'],
       description: data['description'],
       createdBy: data['created_by'],
       date: (data['date'] as Timestamp).toDate(),
       isDraft: data['is_draft'],
       ebookContent: ebookContents,
+      ebookLimit: data['ebook_limit'],
       price: data['price'],
       discount: data['discount'],
       completionBenefits:
@@ -55,7 +55,6 @@ class EbookModel {
   Map<String, dynamic> toFirestore() {
     return {
       'image': image,
-      'ebook_category': ebookCategory,
       'title': title,
       'description': description,
       'date': date != null ? Timestamp.fromDate(date!) : null,
@@ -64,6 +63,7 @@ class EbookModel {
       'ebook_content': ebookContent?.map((content) => content.toFirestore()).toList(),
       'completion_benefits': completionBenefits ?? [],
       'price': price,
+      'ebook_limit': ebookLimit,
       'discount': discount,
     };
   }
@@ -115,25 +115,25 @@ class EbookContent {
   }
 }
 
-class EbookCategories {
-  String? name;
-  DateTime? createdAt;
+// class EbookCategories {
+//   String? name;
+//   DateTime? createdAt;
 
-  EbookCategories({required this.name, required this.createdAt});
+//   EbookCategories({required this.name, required this.createdAt});
 
-  // Factory constructor to create an EbookCategories instance from Firestore data
-  factory EbookCategories.fromFirestore(Map<String, dynamic> data) {
-    return EbookCategories(
-      name: data['name'],
-      createdAt: (data['created_at'] as Timestamp).toDate(),
-    );
-  }
+//   // Factory constructor to create an EbookCategories instance from Firestore data
+//   factory EbookCategories.fromFirestore(Map<String, dynamic> data) {
+//     return EbookCategories(
+//       name: data['name'],
+//       createdAt: (data['created_at'] as Timestamp).toDate(),
+//     );
+//   }
 
-  // Method to convert EbookCategories instance to Firestore data
-  Map<String, dynamic> toFirestore() {
-    return {
-      'name': name,
-      'created_at': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
-    };
-  }
-}
+//   // Method to convert EbookCategories instance to Firestore data
+//   Map<String, dynamic> toFirestore() {
+//     return {
+//       'name': name,
+//       'created_at': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
+//     };
+//   }
+// }

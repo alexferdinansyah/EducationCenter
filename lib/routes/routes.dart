@@ -70,9 +70,11 @@ const String routePortopolio = '/portopolio';
 const String routeEBook = '/EBook';
 const String routeDetailBootcamp = '/detail-bootcamp';
 const String routeCreateBootcamp = '/create-bootcamp';
+const String routeCreateEBook = '/create-E-book';
 const String routeCreateWebinar = '/create-webinar';
 const String routeDetailWebinar = '/Detail-webinar';
 const String routeEditCoupon = '/edit-coupon';
+
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -243,6 +245,10 @@ final getPages = [
   ),
   GetPage(
     name: routeCreateBootcamp,
+    page: () => const Wrapper(),
+  ),
+   GetPage(
+    name: routeCreateEBook,
     page: () => const Wrapper(),
   ),
   GetPage(

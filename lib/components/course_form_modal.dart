@@ -540,7 +540,7 @@ class _CourseFormModalState extends State<CourseFormModal> {
                     learnLimit: learnLimit ?? widget.course!.learnLimit,
                     price: price ?? widget.course!.price,
                     courseCategory:
-                        courseCategory ?? widget.course!.courseCategory,
+                    courseCategory ?? widget.course!.courseCategory,
                     courseType: courseType ?? widget.course!.courseType,
                     isBundle: isBundle ?? widget.course!.isBundle,
                     isBestSales: isBestSales ?? widget.course!.isBestSales,

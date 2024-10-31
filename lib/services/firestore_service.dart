@@ -51,7 +51,7 @@ class FirestoreService {
   final CollectionReference videoLearningCollection =
       FirebaseFirestore.instance.collection('videoLearning');
   final CollectionReference EbookCollection =
-      FirebaseFirestore.instance.collection('E-book');
+      FirebaseFirestore.instance.collection('ebook');
 
   Future<Map<String, dynamic>> checkUser() async {
     try {
@@ -1626,8 +1626,8 @@ class FirestoreService {
       final result = await EbookCollection.add(ebook.toFirestore());
       return result.id;
     } catch (e) {
-      print('Error adding course: $e');
-      return 'Error adding course';
+      print('Error adding ebook: $e');
+      return 'Error adding ebook';
 
       // Handle the error as needed
     }
@@ -1650,7 +1650,7 @@ class FirestoreService {
   Future updateEbookFewField({
     String? ebookId,
     String? title,
-    // String? learnLimit,
+    String? ebookLimit,
     String? description,
     String? price,
     String? ebookCategory,
@@ -1661,9 +1661,9 @@ class FirestoreService {
     try {
       await EbookCollection.doc(ebookId).update({
         'title': title,
-        // 'learn_limit': learnLimit,
+        'ebook_limit': ebookLimit,
         'price': price,
-        'course_category': ebookCategory,
+        'ebook_category': ebookCategory,
         'description': description,
         'ebook_type': ebookType,
         'image': image,
@@ -1686,9 +1686,9 @@ class FirestoreService {
       if (data is List<ChapterList>) {
         final List<Map<String, dynamic>> chapterData =
             data.map((chapterList) => chapterList.toFirestore()).toList();
-        await EbookCollection.doc(courseId).update({fieldName: chapterData});
+        await EbookCollection.doc(ebookId).update({fieldName: chapterData});
       } else {
-        await EbookCollection.doc(courseId).update({fieldName: data});
+        await EbookCollection.doc(ebookId).update({fieldName: data});
       }
     } catch (e) {
       print('Error adding ebook: $e');
@@ -1716,7 +1716,7 @@ class FirestoreService {
     } else {
       // Document with the provided course reference does not exist; add it
       await myEbookCollection.add({
-        'course': ebookReference,
+        'ebook': ebookReference,
         'isPaid': isPaid,
         'status': 'Not Finished',
       });
@@ -1727,7 +1727,7 @@ class FirestoreService {
   Stream<List<Map<String, dynamic>>?> get allMyEbooks {
     try {
       final myEbookCollection =
-          userCollection.doc(uid).collection('my_ebooks');
+          EbookCollection.doc(uid).collection('my_ebooks');
       return myEbookCollection
           .snapshots()
           .asyncMap((QuerySnapshot querySnapshot) async {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
@@ -29,12 +30,15 @@ class _EbookFormModalState extends State<EbookFormModal> {
 String error ='';
 String? title;
 String? price;
+String? ebookLimit;
 String? ebookCategory;
 String? description;
 DateTime? date;
 String image ='';
 List ebookCategories = [];
 DateTime selectedDate = DateTime.now();
+
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -234,10 +238,10 @@ Future <void> fetchData() async {
                     description = val;
                   },
                 ),
-                Padding(
+                  Padding(
                   padding: const EdgeInsets.only(bottom: 8, top: 15),
                   child: Text(
-                    'E-Book  Category',
+                    'Ebook limit for basic user',
                     style: GoogleFonts.poppins(
                       fontSize: width * .009,
                       fontWeight: FontWeight.w600,
@@ -245,38 +249,53 @@ Future <void> fetchData() async {
                     ),
                   ),
                 ),
-                DropdownButtonFormField<String>(
-                  value: widget.ebookId!= null
-                      ? widget.ebook!.ebookCategory
-                      : null,
-                  icon: const Icon(IconlyLight.arrow_down_2),
+                TextFormField(
+                  initialValue:
+                      widget.ebookId != null ? widget.ebook!.ebookLimit : '3',
+                  style: GoogleFonts.poppins(
+                    fontSize: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width * .018,
+                      tablet: width * .015,
+                      desktop: width * .009,
+                    ),
+                    fontWeight: FontWeight.w500,
+                    color: CusColors.text,
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*')),
+                  ],
                   decoration: editProfileDecoration.copyWith(
-                    hintText: 'Course Category',
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: getValueForScreenType<double>(
+                          context: context,
+                          mobile: 13,
+                          tablet: 15,
+                          desktop: 16,
+                        ),
+                        horizontal: 18),
+                    hintText: 'Enter an learn limit',
                     hintStyle: GoogleFonts.poppins(
-                      fontSize: width * .009,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .018,
+                        tablet: width * .015,
+                        desktop: width * .009,
+                      ),
                       fontWeight: FontWeight.w500,
-                      color: CusColors.subHeader.withOpacity(0.5),
+                      color: CusColors.secondaryText,
                     ),
                   ),
-                  validator: (val) => val == null || val.isEmpty
-                      ? 'Please select a article category'
-                      : null,
-                  onChanged: (val) {
-                    ebookCategory = val!; // Update the selected value
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return 'Enter an learn limit';
+                    }
+                    return null;
                   },
-                  items: ebookCategories.map((EbookCategories) {
-                    return DropdownMenuItem<String>(
-                      value: ebookCategory,
-                      child: Text(
-                        ebookCategory!,
-                        style: GoogleFonts.poppins(
-                          fontSize: width * .009,
-                          fontWeight: FontWeight.w500,
-                          color: CusColors.text,
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                  onChanged: (val) {
+                    ebookLimit = val;
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8, top: 15),
@@ -415,8 +434,8 @@ Future <void> fetchData() async {
                   await firestore.updateEbookFewField(
                     ebookId: widget.ebookId,
                     title: title ?? widget.ebook!.title,
-                    ebookCategory: ebookCategory ?? widget.ebook!.ebookCategory,
                     date: date ?? widget.ebook!.date,
+                    ebookLimit: ebookLimit ?? widget.ebook!.ebookLimit,
                     price: price ?? widget.ebook!.price,
                     description: description ?? widget.ebook!.description,
                     image: image,
@@ -424,12 +443,12 @@ Future <void> fetchData() async {
                 } else {
                   final EbookModel data = EbookModel(
                     image: image,
-                    ebookCategory : ebookCategory,
                     title: title,
                     description: description,
                     date: date,
                     isDraft: true, 
                     price: price, 
+                    ebookLimit: ebookLimit ?? '3',
                     completionBenefits: [],
                   );
 
@@ -494,7 +513,8 @@ Future <void> fetchData() async {
                   await firestore.updateEbookFewField(
                     ebookId: widget.ebookId,
                     title: title ?? widget.ebook!.title,
-                    ebookCategory: ebookCategory ?? widget.ebook!.ebookCategory,
+                    ebookLimit: ebookLimit ?? widget.ebook!.ebookLimit,
+                    // ebookCategory: ebookCategory ?? widget.ebook!.ebookCategory,
                     date: date ?? widget.ebook!.date,
                     description: description ?? widget.ebook!.description,
                     image: image,
@@ -502,7 +522,7 @@ Future <void> fetchData() async {
                 } else {
                   final EbookModel data = EbookModel(
                     image: image,
-                    ebookCategory : ebookCategory,
+                    ebookLimit: ebookLimit ?? '3',
                     title: title,
                     description: description,
                     date: date,
