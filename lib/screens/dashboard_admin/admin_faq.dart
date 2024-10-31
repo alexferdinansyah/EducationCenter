@@ -21,6 +21,7 @@ class _AdminFaqState extends State<AdminFaq> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     final user = Provider.of<UserModel?>(context);
 
     return Padding(
@@ -224,7 +225,7 @@ class _AdminFaqState extends State<AdminFaq> {
               return Container(
                 margin: EdgeInsets.only(top: 10),
                 width: width * 0.7,
-                height: 200,
+                height: height,
                 child: DataTable2(
                   dataRowColor: MaterialStateProperty.all(Color(0xFFfcfcfc)),
                   border: TableBorder.symmetric(
