@@ -60,7 +60,7 @@ class DetailEBookController extends GetxController {
 
   void fetchDocument(String id) async {
     try {
-      final snapshot = await _firestore.collection('ebooks').doc(id).get();
+      final snapshot = await _firestore.collection('ebook').doc(id).get();
       documentSnapshot.value = EbookModel.fromFirestore(snapshot.data()!);
     } catch (e) {
       print('Error fetching document: $e');
