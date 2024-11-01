@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:auto_animated/auto_animated.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +116,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
 
         
 
-        imageUrl = ebook.image!;
+        imageUrl = ebook.image ?? "";
 
         return SizedBox(
           height: double.infinity,
@@ -259,8 +258,8 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                   ),
                                 ),
                                 BorderEbookFormList(
-                                  chapterListEbook: ebook.chapterListEbook!,
-                                  uid: user!.uid,
+                                  chapterListEbook: ebook.chapterListEbook ?? [],
+                                  uid: user?.uid?? 'default_uid',
                                   ebookId: id,
                                   fontSize: getValueForScreenType<double>(
                                     context: context,
@@ -343,7 +342,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                             ),
                                             BulletFormEbookList(
                                                 ebook.completionBenefits ?? [],
-                                                uid: user.uid,
+                                               uid: user?.uid?? 'default_uid',
                                                 ebookId: id,
                                                 padding:
                                                     getValueForScreenType<double>(
@@ -521,7 +520,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                               onChanged: (value) {
                                                 FirestoreService firestore =
                                                     FirestoreService(
-                                                        uid: user.uid);
+                                                         uid: user?.uid?? 'default_uid',);
 
                                                 firestore
                                                     .updateEbookEachField(
@@ -600,7 +599,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                               onChanged: (value) {
                                                 FirestoreService firestore =
                                                     FirestoreService(
-                                                        uid: user.uid);
+                                                        uid: user?.uid?? 'default_uid',);
 
                                                 firestore
                                                     .updateEbookEachField(
@@ -689,7 +688,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                           onPressed: () async {
                             Get.to(
                                 () => DashboardAdmin(
-                                      selected: 'ebook',
+                                      selected: 'E-Book',
                                     ),
                                 routeName: '/login');
                           },
@@ -744,7 +743,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             final FirestoreService firestore =
-                                FirestoreService(uid: user.uid);
+                                FirestoreService( uid: user?.uid?? 'default_uid',);
                             if (ebook.isDraft!) {
                               await firestore.updateEbookEachField(
                                   ebookId: id,
@@ -754,7 +753,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
 
                             Get.to(
                                 () => DashboardAdmin(
-                                      selected: 'ebook',
+                                      selected: 'E-Book',
                                     ),
                                 routeName: '/login');
                           }

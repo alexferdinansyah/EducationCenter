@@ -1727,7 +1727,7 @@ class FirestoreService {
   Stream<List<Map<String, dynamic>>?> get allMyEbooks {
     try {
       final myEbookCollection =
-          EbookCollection.doc(uid).collection('my_ebooks');
+          userCollection.doc(uid).collection('my_ebooks');
       return myEbookCollection
           .snapshots()
           .asyncMap((QuerySnapshot querySnapshot) async {

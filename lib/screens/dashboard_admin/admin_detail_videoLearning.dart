@@ -114,7 +114,7 @@ class _AdminDetailVideolearningState extends State<AdminDetailVideolearning> {
           return const Center(child: Text('Loading...'));
         }
 
-        imageUrl = videoLearning.image ?? "";
+         
 
         return SizedBox(
           height: double.infinity,

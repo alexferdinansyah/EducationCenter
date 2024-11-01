@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/ebook.dart';
-import 'package:project_tc/models/ebook.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -106,6 +105,7 @@ class BorderEbookList extends StatefulWidget {
   final FontWeight fontWeight;
   final double fontSize;
   final double subFontSize;
+
    const BorderEbookList({
     required this.chapterListEbook,
     this.padding = 5,
@@ -400,8 +400,8 @@ class _BulletFormEbookListState extends State<BulletFormEbookList> {
                           setState(() {
                             editedList.removeAt(index);
                           });
-                          firestore.updateCourseEachField(
-                            courseId: widget.ebookId,
+                          firestore.updateEbookEachField(
+                            ebookId: widget.ebookId,
                             fieldName: 'completion_benefits',
                             data: editedList,
                           );
@@ -980,8 +980,8 @@ class _BorderEbookFormListState extends State<BorderEbookFormList> {
                                                         ];
                                                       });
                                                       firestore
-                                                          .updateCourseEachField(
-                                                        courseId:
+                                                          .updateEbookEachField(
+                                                        ebookId:
                                                             widget.ebookId,
                                                         fieldName:
                                                             'chapter_list',

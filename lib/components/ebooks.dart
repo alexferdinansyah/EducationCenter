@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/ebook.dart';
+import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/screens/landing_page/EBook.dart';
 import 'package:project_tc/services/extension.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -394,9 +395,7 @@ class _EbookListsState extends State<EbookLists> {
         behavior: HitTestBehavior.translucent,
         onVerticalDragUpdate: (_) {},
         onTap: () {
-          // Get.rootDelegate.toNamed(
-
-          // )
+          Get.rootDelegate.toNamed(routeAdminDetailEbook, parameters: {'id': widget.id});
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
