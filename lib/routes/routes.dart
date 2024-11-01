@@ -8,6 +8,7 @@ import 'package:project_tc/screens/dashboard_admin/admin_detail_course.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_ebook.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_detail_videoLearning.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_learn_course.dart';
+import 'package:project_tc/screens/dashboard_admin/admin_learn_ebook.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_learn_videoLearning.dart';
 import 'package:project_tc/screens/landing_page/EBook.dart';
 import 'package:project_tc/screens/landing_page/Portopolio.dart';
@@ -60,6 +61,7 @@ const String routeAdminDetailVideoLearning = '/admin-detail-videoLearning';
 const String routeAdminLearnVideolearning = '/admin-learn-video-learning';
 const String routeDetailVideoLearning = '/deatail-video-learning';
 const String routeAdminDetailArticle = '/admin-detail-article';
+const String routeAdminLearnEbook= '/admin-learn-ebook';
 const String routeAdminDetailEbook = '/admin-detail-ebook';
 const String routeAdminCoupon = '/admin-coupons';
 const String routeCreateCoupon = '/create-coupon';
@@ -76,7 +78,6 @@ const String routeCreateEBook = '/create-E-book';
 const String routeCreateWebinar = '/create-webinar';
 const String routeDetailWebinar = '/Detail-webinar';
 const String routeEditCoupon = '/edit-coupon';
-
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -221,13 +222,17 @@ final getPages = [
       name: routeAdminDetailCourse,
       page: () => const AdminDetailCourse(),
       middlewares: [AdminMiddleware()]),
-      GetPage(
+  GetPage(
       name: routeAdminDetailVideoLearning,
       page: () => const AdminDetailVideolearning(),
       middlewares: [AdminMiddleware()]),
   GetPage(
       name: routeAdminDetailArticle,
       page: () => const AdminDetailArticle(),
+      middlewares: [AdminMiddleware()]),
+  GetPage(
+      name: routeAdminLearnEbook,
+      page: () => const AdminLearnEbook(),
       middlewares: [AdminMiddleware()]),
   GetPage(
       name: routeAdminDetailEbook,
@@ -253,7 +258,7 @@ final getPages = [
     name: routeCreateBootcamp,
     page: () => const Wrapper(),
   ),
-   GetPage(
+  GetPage(
     name: routeCreateEBook,
     page: () => const Wrapper(),
   ),
