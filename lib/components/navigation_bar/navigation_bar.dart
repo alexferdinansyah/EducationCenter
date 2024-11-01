@@ -18,7 +18,6 @@ class CusNavigationBar extends StatefulWidget {
 class _CusNavigationBarState extends State<CusNavigationBar> {
   int index = 0;
   String? _selectedValue;
-  // String? _selectedProduct;
   final List<String> _listLinks = [
     'Course',
     'Bootcamp',
@@ -30,21 +29,6 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
     routeBootcamp,
     routeWebinar,
     routePortopolio,
-  ];
-  // final List<String> _listProduks = [
-  //   'Vidio Learning',
-  //   'E-Book'
-  // ];
-  // final List<String> _urlProduk = [
-  //     routeVideoLearning,
-  //     routeEBook,
-  // ];
-  // final List<String> _listProduks = [
-  //   'Vidio Learning',
-  //   'E-Book'
-  // ];
-  final List<String> _urlProduk = [
-      routeEBook,
   ];
 
   @override
@@ -73,42 +57,20 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
       });
     }
 
-    // if (_selectedProduct != null) {
-    //   _listProduks.asMap().forEach((index, link) {
-    //     if (link == _selectedProduct!) {
-    //       print(index);
-    //       print('pindah ke route ' + _selectedProduct!);
-    //       Get.rootDelegate.toNamed(_urlProduk[index]);
-    //     }
-    //   });
-    // }
-
-    if
-        // (currentRoute.contains(routeDetailSingleCourse) ||
-        //     currentRoute.contains(routeDetailBundleCourse) ||
-        //     currentRoute == routeBundleCourses ||
-        //     currentRoute == routeCourses)
-        (currentRoute == routeEBook
-        //  ||
-        // currentRoute.contains(routeDetailArticle)
-        ) {
-      setState(() {
-        index = 1;
-      });
-    }  else if (currentRoute == routeEBook ||
+    if (currentRoute == routeEBook ||
         currentRoute.contains(routeEBook)) {
       setState(() {
-        index = 2;
+        index = 1;
       });
     } 
     else if (currentRoute == routeArticle ||
         currentRoute.contains(routeDetailArticle)) {
       setState(() {
-        index = 3;
+        index = 2;
       });
     } else if (currentRoute == routeContacts) {
       setState(() {
-        index = 4;
+        index = 3;
       });
     }
     return Row(
@@ -124,6 +86,7 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
           ),
         ),
         const Spacer(),
+        
         NavigationItem(
           selected: index == 0,
           title: 'Home',
@@ -178,18 +141,12 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
         ),
         NavigationItem(
           selected: index == 2,
-          title: 'E-Book',
-          routeName: routeEBook,
-          onHighlight: onHighlight,
-        ),
-        NavigationItem(
-          selected: index == 3,
           title: 'Article',
           routeName: routeArticle,
           onHighlight: onHighlight,
         ),
         NavigationItem(
-          selected: index == 4,
+          selected: index == 3,
           title: 'Contact',
           routeName: routeContacts,
           onHighlight: onHighlight,
@@ -247,14 +204,11 @@ class _CusNavigationBarState extends State<CusNavigationBar> {
       case routeEBook:
         changeHighlight(1);
         break;
-         case routeEBook:
+      case routeArticle:
         changeHighlight(2);
         break;
-      case routeArticle:
-        changeHighlight(3);
-        break;
       case routeContacts:
-        changeHighlight(4);
+        changeHighlight(3);
         break;
      
     }
@@ -284,33 +238,21 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final currentRoute = Get.rootDelegate.currentConfiguration!.location!;
-    if
-        // (currentRoute.contains(routeDetailSingleCourse) ||
-        //     currentRoute.contains(routeDetailBundleCourse) ||
-        //     currentRoute == routeBundleCourses ||
-        //     currentRoute == routeCourses)
-        (currentRoute == routeEBook
-        //  ||
-        // currentRoute.contains(routeDetailArticle)
-        ) {
-      setState(() {
-        index = 1;
-      });
-    } else if (currentRoute == routeEBook ||
+    if (currentRoute == routeEBook ||
         currentRoute.contains(routeEBook)) {
       setState(() {
-        index = 2;
+        index = 1;
       });
     }
      else if (currentRoute == routeArticle ||
         currentRoute.contains(routeDetailArticle)) {
       setState(() {
-        index = 3;
+        index = 2;
       });
     }    
      else if (currentRoute == routeContacts) {
       setState(() {
-        index = 4;
+        index = 3;
       });
     }
     return Column(
@@ -354,12 +296,7 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
           routeName: routeHome,
           onHighlight: onHighlight,
         ),
-        NavigationItem(
-          selected: index == 1,
-          title: 'E-Book',
-          routeName: routeEBook,
-          onHighlight: onHighlight,
-        ),
+        
         NavigationItem(
           selected: index == 1,
           title: 'E-Book',
@@ -434,14 +371,11 @@ class _CusNavigationBarMobileState extends State<CusNavigationBarMobile> {
       case routeEBook:
         changeHighlight(1);
         break;
-           case routeEBook:
+      case routeArticle:
         changeHighlight(2);
         break;
-      case routeArticle:
-        changeHighlight(3);
-        break;
       case routeContacts:
-        changeHighlight(4);
+        changeHighlight(3);
         break;
    
     }

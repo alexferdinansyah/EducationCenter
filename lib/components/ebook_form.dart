@@ -427,7 +427,7 @@ Future <void> fetchData() async {
               desktop: 38,
             ),
             child: ElevatedButton(
-              onPressed: () => Get.rootDelegate.toNamed(routeAdminLearnCourse,
+              onPressed: () => Get.rootDelegate.toNamed(routeAdminLearnEbook,
                   parameters: {'id': widget.ebookId!}),
               style: ButtonStyle(
                   padding: MaterialStateProperty.all(
@@ -452,7 +452,7 @@ Future <void> fetchData() async {
                     ),
                   )),
               child: Text(
-                'Edit learn course',
+                'Edit learn ebook',
                 style: GoogleFonts.poppins(
                   fontSize: getValueForScreenType<double>(
                     context: context,
@@ -503,7 +503,7 @@ Future <void> fetchData() async {
                     completionBenefits: [],
                   );
 
-                  // await firestore.addArticle(data);
+                  await firestore.addEbook(data);
                 }
                 Get.back(result: false);
               }

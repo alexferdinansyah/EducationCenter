@@ -94,7 +94,7 @@ class EbookContent {
   String? subTitleDescription;
   List<String>? bulletList;
   String? textUnderList;
-   String? price;
+  
 
   EbookContent({
     required this.ebookId,
@@ -103,7 +103,7 @@ class EbookContent {
     required this.subTitleDescription,
     this.bulletList,
     this.textUnderList,
-    required this.price,
+    
   });
 
   // Factory constructor to create an EbookContent instance from Firestore data
@@ -115,7 +115,7 @@ class EbookContent {
       subTitleDescription: data['sub_title_description'],
       bulletList: (data['bullet_list'] as List<dynamic>?)?.cast<String>(),
       textUnderList: data['text_under_list'],
-      price: data['price'],
+     
     );
   }
 
@@ -128,7 +128,7 @@ class EbookContent {
       'sub_title_description': subTitleDescription,
       'bullet_list': bulletList,
       'text_under_list': textUnderList,
-       'price': price,
+      
     };
   }
 }
