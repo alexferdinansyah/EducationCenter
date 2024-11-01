@@ -20,6 +20,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 class AdminDetailEbook extends StatefulWidget {
   const AdminDetailEbook({super.key});
+  
 
   @override
   State<AdminDetailEbook> createState() => _AdminDetailEbookState();
@@ -45,6 +46,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
       });
     }
   }
+  
   Future<String?> uploadFile(Uint8List image) async {
     String postId = DateTime.now().millisecondsSinceEpoch.toString();
     var contentType = lookupMimeType('', headerBytes: image);
@@ -112,6 +114,8 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
         if (ebook == null) {
           return const Center(child: Text('Loading...'));
         }
+
+        
 
         imageUrl = ebook.image!;
 
@@ -208,7 +212,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                           Column(
                                             children: [
                                               Text(
-                                                'What you will learn on this video learning',
+                                                'What you will learn on this ebook',
                                                 style: GoogleFonts.mulish(
                                                     color: CusColors.header,
                                                     fontSize:
@@ -322,7 +326,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                               padding: const EdgeInsets.only(
                                                   bottom: 50),
                                               child: Text(
-                                                'What you get after completing this video learning',
+                                                'What you get after completing this ebook',
                                                 style: GoogleFonts.mulish(
                                                     color: CusColors.header,
                                                     fontSize:
@@ -520,8 +524,8 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                                         uid: user.uid);
 
                                                 firestore
-                                                    .updatelearningVideoDataEachField(
-                                                  videoLearningId: id,
+                                                    .updateEbookEachField(
+                                                  ebookId: id,
                                                   fieldName: 'price',
                                                   data: value,
                                                 );
@@ -599,8 +603,8 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                                         uid: user.uid);
 
                                                 firestore
-                                                    .updatelearningVideoDataEachField(
-                                                  videoLearningId: id,
+                                                    .updateEbookEachField(
+                                                  ebookId: id,
                                                   fieldName: 'discount',
                                                   data: value,
                                                 );
@@ -685,7 +689,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                           onPressed: () async {
                             Get.to(
                                 () => DashboardAdmin(
-                                      selected: 'E-Book',
+                                      selected: 'ebook',
                                     ),
                                 routeName: '/login');
                           },
@@ -750,7 +754,7 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
 
                             Get.to(
                                 () => DashboardAdmin(
-                                      selected: 'E-Book',
+                                      selected: 'ebook',
                                     ),
                                 routeName: '/login');
                           }
@@ -854,8 +858,8 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                       FirestoreService firestore =
                           FirestoreService(uid: user!.uid);
 
-                      firestore.updatelearningVideoDataEachField(
-                        videoLearningId: id,
+                      firestore.updateEbookEachField(
+                        ebookId: id,
                         fieldName: 'title',
                         data: value,
                       );
@@ -898,8 +902,8 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                     onChanged: (value) {
                       FirestoreService firestore =
                           FirestoreService(uid: user!.uid);
-                      firestore.updatelearningVideoDataEachField(
-                        videoLearningId: id,
+                      firestore.updateEbookEachField(
+                        ebookId: id,
                         fieldName: 'description',
                         data: value,
                       );
