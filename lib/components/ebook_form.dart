@@ -583,11 +583,11 @@ Future <void> fetchData() async {
                   );
 
                   final result = await firestore.addEbook(data);
-                  Get.rootDelegate.toNamed(routeAdminDetailArticle,
+                  Get.rootDelegate.toNamed(routeAdminDetailEbook,
                       parameters: {'id': result});
                 }
                 if (widget.ebookId != null) {
-                  Get.rootDelegate.toNamed(routeAdminDetailArticle,
+                  Get.rootDelegate.toNamed(routeAdminDetailEbook,
                       parameters: {'id': widget.ebookId!});
                 }
               }

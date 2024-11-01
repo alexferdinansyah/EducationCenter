@@ -11,6 +11,8 @@ class EbookModel {
   String? ebookLimit;
   String? discount;
   List<EbookContent>? ebookContent;
+  List<ListEbook>? listEbook;
+  List<ChapterListEbook>? chapterList;
   List<String>? completionBenefits;
 
   EbookModel({
@@ -20,6 +22,8 @@ class EbookModel {
     this.createdBy,
     required this.isDraft,
     this.ebookContent,
+    this.listEbook,
+    this.chapterList,
     required this.date,
     required this.price,
     required this.ebookLimit,
@@ -30,6 +34,16 @@ class EbookModel {
   // Factory constructor to create an Ebook instance from Firestore data
   factory EbookModel.fromFirestore(Map<String, dynamic> data) {
     final List<dynamic>? ebookContentData = data['ebook_content'];
+    final List<dynamic>? ebookListData = data['list_ebook'];
+    final List<dynamic>? chapterListData = data['chapter_list'];
+
+   final List<ListEbook>? ebookLists =ebookListData?.map((ebookData) {
+      return ListEbook.fromFirestore(ebookData as Map<String, dynamic>);
+    }).toList();
+
+    final List<ChapterListEbook>? chapterLists = chapterListData?.map((chapterList) {
+      return ChapterListEbook.fromFirestore(chapterList as Map<String, dynamic>);
+    }).toList();
 
     final List<EbookContent>? ebookContents = ebookContentData?.map((content) {
       return EbookContent.fromFirestore(content as Map<String, dynamic>);
@@ -43,6 +57,8 @@ class EbookModel {
       date: (data['date'] as Timestamp).toDate(),
       isDraft: data['is_draft'],
       ebookContent: ebookContents,
+      listEbook: ebookLists,
+      chapterList: chapterLists,
       ebookLimit: data['ebook_limit'],
       price: data['price'],
       discount: data['discount'],
@@ -50,6 +66,8 @@ class EbookModel {
           (data['completion_benefits'] as List<dynamic>).cast<String>(),
     );
   }
+
+  get chapterListEbook => null;
 
   // Method to convert Ebook instance to Firestore data
   Map<String, dynamic> toFirestore() {
@@ -115,25 +133,63 @@ class EbookContent {
   }
 }
 
-// class EbookCategories {
-//   String? name;
-//   DateTime? createdAt;
 
-//   EbookCategories({required this.name, required this.createdAt});
+class ListEbook{
+  String? image;
+  String? title;
+  String? description;
+  String? price;
 
-//   // Factory constructor to create an EbookCategories instance from Firestore data
-//   factory EbookCategories.fromFirestore(Map<String, dynamic> data) {
-//     return EbookCategories(
-//       name: data['name'],
-//       createdAt: (data['created_at'] as Timestamp).toDate(),
-//     );
-//   }
+  ListEbook({
+    required this.image,
+    required this.title,
+    required this.description,
+    required this.price,
+  });
 
-//   // Method to convert EbookCategories instance to Firestore data
-//   Map<String, dynamic> toFirestore() {
-//     return {
-//       'name': name,
-//       'created_at': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
-//     };
-//   }
-// }
+  factory ListEbook.fromFirestore(Map<String, dynamic> data) {
+    return ListEbook(
+      image: data['image'],
+      title: data['title'],
+      description: data['description'],
+      price: data['price'],
+    );
+  }
+
+    Map<String, dynamic> toFirestore() {
+    return {
+      'image': image,
+      'title': title,
+      'description': description,
+      'price': price,
+    };
+  }
+}
+
+class ChapterListEbook {
+  String? chapter;
+  List<String>? subChapter;
+
+  ChapterListEbook({
+    required this.chapter,
+    List<String>? subChapter,
+  }) : subChapter = subChapter ?? [];
+
+  // Convert Firestore data to ChapterListEbook object
+  factory ChapterListEbook.fromFirestore(Map<String, dynamic> data) {
+    return ChapterListEbook(
+      chapter: data['chapter'],
+      subChapter: (data['sub_chapter'] as List<dynamic>)
+          .cast<String>(), // Ensure it's a List of Strings
+    );
+  }
+
+  // Convert ChapterList object to Firestore data
+  Map<String, dynamic> toFirestore() {
+    return {
+      'chapter': chapter,
+      'sub_chapter': subChapter ?? [],
+    };
+  }
+}
+

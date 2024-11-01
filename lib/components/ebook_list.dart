@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
-import 'package:project_tc/models/course.dart';
+import 'package:project_tc/models/ebook.dart';
+import 'package:project_tc/models/ebook.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class BulletList extends StatelessWidget {
-  final List<String> strings;
+class BulletEbookList extends StatelessWidget {
+  final List <String> strings;
   final bool border;
   final double padding;
   final Color textColor;
@@ -15,7 +16,7 @@ class BulletList extends StatelessWidget {
   final double fontSize;
   final double? cusWidth;
 
-  const BulletList(this.strings,
+  const BulletEbookList(this.strings,
       {super.key,
       required this.border,
       this.padding = 5,
@@ -24,13 +25,15 @@ class BulletList extends StatelessWidget {
       this.cusWidth,
       required this.fontSize});
 
+
+
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+  double width = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.centerLeft,
-      width: cusWidth ??
-          (border
+      width:  cusWidth?? 
+      (border
               ? width / 1.7
               : getValueForScreenType<double>(
                   context: context,
@@ -38,7 +41,7 @@ class BulletList extends StatelessWidget {
                   tablet: width * .18,
                   desktop: width * .13,
                 )),
-      child: Column(
+                 child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: strings.map((str) {
           return Container(
@@ -95,17 +98,16 @@ class BulletList extends StatelessWidget {
   }
 }
 
-class BorderList extends StatefulWidget {
-  final List<ChapterList> chapterList;
+class BorderEbookList extends StatefulWidget {
+  final List<ChapterListEbook> chapterListEbook;
   final double padding;
   final double subPadding;
   final Color textColor;
   final FontWeight fontWeight;
   final double fontSize;
   final double subFontSize;
-
-  const BorderList({
-    required this.chapterList,
+   const BorderEbookList({
+    required this.chapterListEbook,
     this.padding = 5,
     this.subPadding = 15,
     this.textColor = const Color(0xFF676767),
@@ -116,21 +118,20 @@ class BorderList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BorderList> createState() => _BorderListState();
+  State<BorderEbookList> createState() => _BorderEbookListState();
 }
 
-class _BorderListState extends State<BorderList> {
-  Map<int, bool> expandStates = {}; // Store expand states for each item
+class _BorderEbookListState extends State<BorderEbookList> {
+   Map<int, bool> expandStates = {}; // Store expand states for each item
   Map<int, bool> canExpand = {};
 
   @override
-  void initState() {
+    void initState() {
     super.initState();
 
-    // Initialize expandStates with default values for all indices
-    for (int i = 0; i < widget.chapterList.length; i++) {
+     for (int i = 0; i < widget.chapterListEbook.length; i++) {
       expandStates[i] = false;
-      if (widget.chapterList[i].subChapter!.isNotEmpty) {
+      if (widget.chapterListEbook[i].subChapter!.isNotEmpty) {
         // Set the expand state to true for items that meet the condition
         canExpand[i] = true;
       } else {
@@ -143,14 +144,14 @@ class _BorderListState extends State<BorderList> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Container(
+      return Container(
       alignment: Alignment.centerLeft,
       width: width / 1.5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: List.generate(widget.chapterList.length, (index) {
-          final String chapter = widget.chapterList[index].chapter!;
-          final List<String> subChapter = widget.chapterList[index].subChapter!;
+        children: List.generate(widget.chapterListEbook.length, (index) {
+          final String chapter = widget.chapterListEbook[index].chapter!;
+          final List<String> subChapter = widget.chapterListEbook[index].subChapter!;
 
           return canExpand[index]!
               ? GestureDetector(
@@ -207,7 +208,7 @@ class _BorderListState extends State<BorderList> {
                               padding: EdgeInsets.only(
                                   top: widget.subPadding,
                                   left: widget.subPadding),
-                              child: BulletList(
+                              child: BulletEbookList(
                                 subChapter,
                                 border: false,
                                 padding: 2,
@@ -262,32 +263,31 @@ class _BorderListState extends State<BorderList> {
   }
 }
 
-class BulletFormList extends StatefulWidget {
+class BulletFormEbookList extends StatefulWidget {
   final List<String> strings;
   final double padding;
   final Color textColor;
   final FontWeight fontWeight;
   final double fontSize;
   final String uid;
-  final String courseId;
+  final String ebookId;
 
-  const BulletFormList(this.strings,
+  const BulletFormEbookList(this.strings,
       {super.key,
       this.padding = 5,
       this.textColor = const Color(0xFF676767),
       this.fontWeight = FontWeight.w500,
       required this.fontSize,
       required this.uid,
-      required this.courseId});
+      required this.ebookId});
 
   @override
-  State<BulletFormList> createState() => _BulletFormListState();
+  State<BulletFormEbookList> createState() => _BulletFormEbookListState();
 }
 
-class _BulletFormListState extends State<BulletFormList> {
-  List<String> editedList = [];
-
-  @override
+class _BulletFormEbookListState extends State<BulletFormEbookList> {
+   List<String> editedList = [];
+    @override
   void initState() {
     super.initState();
     setState(() {
@@ -303,8 +303,8 @@ class _BulletFormListState extends State<BulletFormList> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return Container(
+      double width = MediaQuery.of(context).size.width;
+   return Container(
       alignment: Alignment.centerLeft,
       width: width / 1.7,
       child: Column(
@@ -368,8 +368,8 @@ class _BulletFormListState extends State<BulletFormList> {
                               FirestoreService firestore =
                                   FirestoreService(uid: widget.uid);
                               editedList[index] = value;
-                              firestore.updateCourseEachField(
-                                courseId: widget.courseId,
+                              firestore.updateEbookEachField(
+                                ebookId: widget.ebookId,
                                 fieldName: 'completion_benefits',
                                 data: editedList,
                               );
@@ -401,7 +401,7 @@ class _BulletFormListState extends State<BulletFormList> {
                             editedList.removeAt(index);
                           });
                           firestore.updateCourseEachField(
-                            courseId: widget.courseId,
+                            courseId: widget.ebookId,
                             fieldName: 'completion_benefits',
                             data: editedList,
                           );
@@ -469,8 +469,8 @@ class _BulletFormListState extends State<BulletFormList> {
                               setState(() {
                                 editedList = [value];
                               });
-                              firestore.updateCourseEachField(
-                                courseId: widget.courseId,
+                              firestore.updateEbookEachField(
+                                ebookId: widget.ebookId,
                                 fieldName: 'completion_benefits',
                                 data: editedList,
                               );
@@ -492,8 +492,9 @@ class _BulletFormListState extends State<BulletFormList> {
   }
 }
 
-class BorderFormList extends StatefulWidget {
-  final List<ChapterList> chapterList;
+
+class BorderEbookFormList extends StatefulWidget {
+  final List<ChapterListEbook> chapterListEbook;
   final double padding;
   final double subPadding;
   final Color textColor;
@@ -501,10 +502,10 @@ class BorderFormList extends StatefulWidget {
   final double fontSize;
   final double subFontSize;
   final String uid;
-  final String courseId;
+  final String ebookId;
 
-  const BorderFormList({
-    required this.chapterList,
+  const BorderEbookFormList({
+    required this.chapterListEbook,
     this.padding = 5,
     this.subPadding = 15,
     this.textColor = const Color(0xFF676767),
@@ -512,25 +513,25 @@ class BorderFormList extends StatefulWidget {
     required this.fontSize,
     required this.subFontSize,
     required this.uid,
-    required this.courseId,
-    Key? key, 
+    required this.ebookId,
+    Key? key,
   }) : super(key: key);
 
   @override
-  State<BorderFormList> createState() => _BorderFormListState();
+  State<BorderEbookFormList> createState() => _BorderEbookFormListState();
 }
 
-class _BorderFormListState extends State<BorderFormList> {
+class _BorderEbookFormListState extends State<BorderEbookFormList> {
   Map<int, bool> expandStates = {}; // Store expand states for each item
 
-  List<ChapterList> editedChapterList = [];
+  List<ChapterListEbook> editedChapterList = [];
 
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      editedChapterList = List.from(widget.chapterList);
+      editedChapterList = List.from(widget.chapterListEbook);
     });
 
     // Initialize expandStates with default values for all indices
@@ -607,14 +608,14 @@ class _BorderFormListState extends State<BorderFormList> {
                                     FirestoreService(uid: widget.uid);
                                 setState(() {
                                   editedChapterList.add(
-                                    ChapterList(
+                                    ChapterListEbook(
                                       chapter: value,
                                       subChapter: [],
                                     ),
                                   );
                                 });
-                                firestore.updateCourseEachField(
-                                  courseId: widget.courseId,
+                                firestore.updateEbookEachField(
+                                  ebookId: widget.ebookId,
                                   fieldName: 'chapter_list',
                                   data: editedChapterList,
                                 );
@@ -701,8 +702,8 @@ class _BorderFormListState extends State<BorderFormList> {
                                             FirestoreService(uid: widget.uid);
                                         editedChapterList[index].chapter =
                                             value;
-                                        firestore.updateCourseEachField(
-                                          courseId: widget.courseId,
+                                        firestore.updateEbookEachField(
+                                          ebookId: widget.ebookId,
                                           fieldName: 'chapter_list',
                                           data: editedChapterList,
                                         );
@@ -710,7 +711,7 @@ class _BorderFormListState extends State<BorderFormList> {
                                       onFieldSubmitted: (value) {
                                         setState(() {
                                           editedChapterList.add(
-                                            ChapterList(
+                                            ChapterListEbook(
                                               chapter: '',
                                               subChapter: [],
                                             ),
@@ -735,7 +736,7 @@ class _BorderFormListState extends State<BorderFormList> {
                                     onTap: () {
                                       setState(() {
                                         editedChapterList.add(
-                                          ChapterList(
+                                          ChapterListEbook(
                                             chapter: '',
                                             subChapter: [],
                                           ),
@@ -756,8 +757,8 @@ class _BorderFormListState extends State<BorderFormList> {
                                         FirestoreService(uid: widget.uid);
                                     deleteEditedList(index, editedChapterList);
 
-                                    firestore.updateCourseEachField(
-                                      courseId: widget.courseId,
+                                    firestore.updateEbookEachField(
+                                      ebookId: widget.ebookId,
                                       fieldName: 'chapter_list',
                                       data: editedChapterList,
                                     );
@@ -848,9 +849,9 @@ class _BorderFormListState extends State<BorderFormList> {
                                                       subChapter[subIndex] =
                                                           value;
                                                       firestore
-                                                          .updateCourseEachField(
-                                                        courseId:
-                                                            widget.courseId,
+                                                          .updateEbookEachField(
+                                                        ebookId:
+                                                            widget.ebookId,
                                                         fieldName:
                                                             'chapter_list',
                                                         data: editedChapterList,
@@ -887,8 +888,8 @@ class _BorderFormListState extends State<BorderFormList> {
                                                       subIndex, subChapter);
 
                                                   firestore
-                                                      .updateCourseEachField(
-                                                    courseId: widget.courseId,
+                                                      .updateEbookEachField(
+                                                    ebookId: widget.ebookId,
                                                     fieldName: 'chapter_list',
                                                     data: editedChapterList,
                                                   );
@@ -981,7 +982,7 @@ class _BorderFormListState extends State<BorderFormList> {
                                                       firestore
                                                           .updateCourseEachField(
                                                         courseId:
-                                                            widget.courseId,
+                                                            widget.ebookId,
                                                         fieldName:
                                                             'chapter_list',
                                                         data: editedChapterList,
