@@ -184,6 +184,7 @@ class Ebooks extends StatelessWidget {
 class AdminEbooks extends StatelessWidget {
   final EbookModel ebook;
   final String id;
+  final bool? isPaid;
   final bool isAdmin;
   final Function()? onPressed;
   final Function()? onDelete;
@@ -193,6 +194,7 @@ class AdminEbooks extends StatelessWidget {
       required this.ebook,
       required this.id,
       required this.isAdmin,
+        this.isPaid,
       this.onPressed,
       this.onDelete});
 
