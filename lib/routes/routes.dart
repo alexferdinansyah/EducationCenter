@@ -10,7 +10,7 @@ import 'package:project_tc/screens/dashboard_admin/admin_detail_videoLearning.da
 import 'package:project_tc/screens/dashboard_admin/admin_learn_course.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_learn_ebook.dart';
 import 'package:project_tc/screens/dashboard_admin/admin_learn_videoLearning.dart';
-import 'package:project_tc/screens/landing_page/EBook.dart';
+import 'package:project_tc/screens/landing_page/EBook_page.dart';
 import 'package:project_tc/screens/landing_page/Portopolio.dart';
 import 'package:project_tc/screens/landing_page/detail_bootcamp.dart';
 import 'package:project_tc/screens/landing_page/detail_video_learning.dart';
@@ -140,7 +140,7 @@ final getPages = [
   ),
   GetPage(
     name: routeEBook,
-    page: () => wrapWithAppView(const Ebook()),
+    page: () => wrapWithAppView(const EbookPage()),
   ),
   GetPage(
     name: routeDetailBootcamp,

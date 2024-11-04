@@ -7,7 +7,7 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/ebook.dart';
 import 'package:project_tc/routes/routes.dart';
-import 'package:project_tc/screens/landing_page/EBook.dart';
+import 'package:project_tc/screens/landing_page/EBook_page.dart';
 import 'package:project_tc/services/extension.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:transparent_image/transparent_image.dart';

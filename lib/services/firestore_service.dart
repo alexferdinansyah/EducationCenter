@@ -11,9 +11,10 @@ import 'package:project_tc/models/learning.dart';
 import 'package:project_tc/models/transaction.dart';
 import 'package:project_tc/models/user.dart';
 import 'package:project_tc/models/webinar.dart';
-import 'package:project_tc/screens/landing_page/EBook.dart';
+import 'package:project_tc/screens/landing_page/EBook_page.dart';
 import 'package:project_tc/services/extension.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:universal_html/js.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FirestoreService {
@@ -21,7 +22,8 @@ class FirestoreService {
   final String? courseId;
   final String? videoLearningId;
   final String? ebookId;
-  FirestoreService({required this.uid, this.videoLearningId, this.courseId, this.ebookId});
+  FirestoreService(
+      {required this.uid, this.videoLearningId, this.courseId, this.ebookId});
   FirestoreService.withoutUID()
       : uid = "",
         courseId = "",
@@ -428,7 +430,6 @@ class FirestoreService {
 
   Stream<List<Map>> videoLearningAndEBookStream() {
     final MyVideoLearningstream = allMyVideoLearnings;
-    
 
     return Rx.zip(
       [MyVideoLearningstream],
@@ -455,14 +456,15 @@ class FirestoreService {
           try {
             if (produkType == 'videoLearning') {
               // Mendapatkan data webinar berdasarkan referensi dokumen
-              final MyVideoLearning myVideoLearningdata = await getVideoLearningData(produkReference);
+              final MyVideoLearning myVideoLearningdata =
+                  await getVideoLearningData(produkReference);
               produks.add({
                 'id': produkReference.id, // ID dari dokumen webinar
                 'produk': myVideoLearningdata, // Data webinar setelah diproses
                 'status': status, // Status event
                 'prodakType': 'videoLearning' // Menandai event sebagai webinar
               });
-            } 
+            }
             // else if (produkType == 'ebook') {
             //   // Mendapatkan data bootcamp berdasarkan referensi dokumen
             //   final Ebook ebookData =
@@ -1482,14 +1484,17 @@ class FirestoreService {
   }
 
   // Add a new meet request document to Firestore
-  Future addMeetRequest(MeetModel meet, String courseId, String uid, ) async {
+  Future addMeetRequest(
+    MeetModel meet,
+    String courseId,
+    String uid,
+  ) async {
     try {
       // Reference to the Firestore collection
 
       // Perform a query to count documents that match the criteria
       QuerySnapshot query = await meetRequestCollection
           .where('course_id', isEqualTo: courseId)
-         
           .where('uid', isEqualTo: uid)
           .get();
 
@@ -1528,7 +1533,6 @@ class FirestoreService {
     }
   }
 
-  
   Future updateWebinarFewField({
     String? webinarId,
     String? title,
@@ -1554,25 +1558,22 @@ class FirestoreService {
       print('Error adding webinar: $e');
     }
   }
-  
 
   void updateWebinarEachField(
       {required String webinarId,
       required String fieldName,
       required String data}) {}
 
-
-
 // ebook//
 
-  Stream<List<Map>> get allEbook{
+  Stream<List<Map>> get allEbook {
     try {
       return EbookCollection.snapshots().map((QuerySnapshot querySnapshot) {
         return querySnapshot.docs.map((DocumentSnapshot document) {
           return {
             'id': document.id,
-            'ebook': 
-            EbookModel.fromFirestore(document.data() as Map<String, dynamic>)
+            'ebook': EbookModel.fromFirestore(
+                document.data() as Map<String, dynamic>)
           };
         }).toList();
       });
@@ -1582,8 +1583,7 @@ class FirestoreService {
     }
   }
 
-
-    Future<List<String>> getAllEbookTitles() async {
+  Future<List<String>> getAllEbookTitles() async {
     List<String> ebookTitles = [];
 
     try {
@@ -1608,8 +1608,7 @@ class FirestoreService {
     return ebookTitles;
   }
 
-
-   Future getEbookData(DocumentReference ebook) async {
+  Future getEbookData(DocumentReference ebook) async {
     // Get Reference Courses Data
     final ebookDoc = await ebook.get();
 
@@ -1622,7 +1621,7 @@ class FirestoreService {
     }
   }
 
-    Future<String> addEbook(EbookModel ebook) async {
+  Future<String> addEbook(EbookModel ebook) async {
     try {
       final result = await EbookCollection.add(ebook.toFirestore());
       return result.id;
@@ -1634,8 +1633,7 @@ class FirestoreService {
     }
   }
 
-
-    Future<String> deleteEbook(String ebookId) async {
+  Future<String> deleteEbook(String ebookId) async {
     try {
       await EbookCollection.doc(ebookId).delete();
       return 'Success delete ebook';
@@ -1646,7 +1644,6 @@ class FirestoreService {
       // Handle the error as needed
     }
   }
-
 
   Future updateEbookFewField({
     String? ebookId,
@@ -1676,9 +1673,7 @@ class FirestoreService {
     }
   }
 
-
-
- Future updateEbookEachField({
+  Future updateEbookEachField({
     required String ebookId,
     required String fieldName,
     required dynamic data,
@@ -1688,6 +1683,10 @@ class FirestoreService {
         final List<Map<String, dynamic>> chapterData =
             data.map((chapterList) => chapterList.toFirestore()).toList();
         await EbookCollection.doc(ebookId).update({fieldName: chapterData});
+      } else if (data is List<EbookContent>) {
+        final List<Map<String, dynamic>> contentData =
+            data.map((context) => context.toFirestore()).toList();
+        await EbookCollection.doc(ebookId).update({fieldName: contentData});
       } else {
         await EbookCollection.doc(ebookId).update({fieldName: data});
       }
@@ -1697,15 +1696,14 @@ class FirestoreService {
     }
   }
 
- Future<void> addMyEbook(String ebookId, String userId, bool isPaid) async {
+  Future<void> addMyEbook(String ebookId, String userId, bool isPaid) async {
     final myEbookCollection =
         userCollection.doc(userId).collection('my_ebooks');
     final ebookReference = EbookCollection.doc(ebookId);
 
     // Check if a document with the provided course reference exists in the sub-collection
-    final existingDocument = await myEbookCollection
-        .where('ebook', isEqualTo: ebookReference)
-        .get();
+    final existingDocument =
+        await myEbookCollection.where('ebook', isEqualTo: ebookReference).get();
 
     if (existingDocument.docs.isNotEmpty) {
       // Document with the same course reference exists; update it
@@ -1724,11 +1722,9 @@ class FirestoreService {
     }
   }
 
-
   Stream<List<Map<String, dynamic>>?> get allMyEbooks {
     try {
-      final myEbookCollection =
-          userCollection.doc(uid).collection('my_ebooks');
+      final myEbookCollection = userCollection.doc(uid).collection('my_ebooks');
       return myEbookCollection
           .snapshots()
           .asyncMap((QuerySnapshot querySnapshot) async {
@@ -1741,7 +1737,7 @@ class FirestoreService {
           final status = data['status'] as String;
 
           try {
-            final Ebook ebookData = await getEbookData(ebookReference);
+            final EbookModel ebookData = await getEbookData(ebookReference);
             myEbook.add({
               'id': ebookReference.id,
               'ebook': ebookData,
@@ -1760,6 +1756,4 @@ class FirestoreService {
       return Stream.value([]); // Return an empty list in case of an error
     }
   }
-
-
 }
