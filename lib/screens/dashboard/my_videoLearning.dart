@@ -428,7 +428,7 @@ class _MyVideolearningState extends State<MyVideolearning> {
                 ],
               ),
             );
-          }else if (snapshot.connectionState == ConnectionState.waiting) {
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loading();
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
@@ -439,7 +439,6 @@ class _MyVideolearningState extends State<MyVideolearning> {
               child: Text('kok iso.'),
             );
           }
-
         });
   }
 }

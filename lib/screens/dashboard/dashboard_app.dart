@@ -14,6 +14,7 @@ import 'package:project_tc/screens/dashboard/help_page.dart';
 import 'package:project_tc/screens/dashboard/membership_info.dart';
 import 'package:project_tc/screens/dashboard/membership_upgrade.dart';
 import 'package:project_tc/screens/dashboard/my_course.dart';
+import 'package:project_tc/screens/dashboard/my_ebook.dart';
 import 'package:project_tc/screens/dashboard/my_videoLearning.dart';
 import 'package:project_tc/screens/dashboard/newsflash.dart';
 import 'package:project_tc/screens/dashboard/produk.dart';
@@ -97,8 +98,8 @@ class _DashboardAppState extends State<DashboardApp> {
           return MyVideolearning(
             user: user,
           );
-        case 'E-Book':
-          return MyVideolearning(
+        case 'My E-Book':
+          return MyEbook(
             user: user,
           );
         case 'Transaction':

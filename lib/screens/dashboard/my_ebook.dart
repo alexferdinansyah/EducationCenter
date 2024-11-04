@@ -12,15 +12,15 @@ import 'package:project_tc/routes/routes.dart';
 import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class my_ebooks extends StatefulWidget {
+class MyEbook extends StatefulWidget {
   final UserModel user;
-  const my_ebooks({Key? key, required this.user}) : super(key: key);
+  const MyEbook({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<my_ebooks> createState() => _my_ebooksState();
+  State<MyEbook> createState() => _MyEbookState();
 }
 
-class _my_ebooksState extends State<my_ebooks> {
+class _MyEbookState extends State<MyEbook> {
   List<Map> ebooks = [];
   List<Map> filteredEbooks = [];
   bool initEbook = false;
@@ -36,13 +36,13 @@ class _my_ebooksState extends State<my_ebooks> {
     });
   }
 
-  List<bool> isHovered = [false, false, false, false];
-  List<bool> isSelected = [true, false, false, false];
+  List<bool> isHovered = [false];
+  List<bool> isSelected = [true];
   bool isHover = false;
 
   // Define the list of criteria and button labels
   List<String> filterCriteria = [
-    'All Ebook',
+    'All Ebooks',
   ];
 
   @override
@@ -56,7 +56,7 @@ class _my_ebooksState extends State<my_ebooks> {
               !initEbook) {
             initEbook = true;
             Future.delayed(const Duration(milliseconds: 300),
-                () => filterEbooks('All E-Book'));
+                () => filterEbooks('All Ebooks'));
           }
           if (snapshot.hasData) {
             final List<Map<String, dynamic>?> dataMaps = snapshot.data!;
@@ -266,7 +266,7 @@ class _my_ebooksState extends State<my_ebooks> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 15),
                                       child: Text(
-                                        "You don't have any courses, \n you can search for courses according to your needs",
+                                        "You don't have any book, \n you can search for book according to your needs",
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
                                           fontSize:
@@ -408,11 +408,9 @@ class _my_ebooksState extends State<my_ebooks> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return AdminEbooks(
-                                        ebook: filteredEbooks[index]
-                                            ['ebook'],
+                                        ebook: filteredEbooks[index]['ebook'],
                                         id: filteredEbooks[index]['id'],
-                                        isPaid:  filteredEbooks[index]
-                                            ['isPaid'],
+                                        isPaid: filteredEbooks[index]['isPaid'],
                                         isAdmin: false,
                                       );
                                     },
