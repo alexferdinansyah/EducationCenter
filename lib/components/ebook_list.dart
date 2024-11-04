@@ -566,66 +566,66 @@ class _BorderEbookFormListState extends State<BorderEbookFormList> {
                       ),
                     ),
                   ),
-                  child: SizedBox(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding:
-                                EdgeInsets.symmetric(vertical: widget.padding),
-                            child: TextFormField(
-                              initialValue: null,
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.mulish(
-                                color: CusColors.accentBlue,
-                                fontSize: widget.fontSize,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.zero,
-                                hintText: 'Enter an chapter',
-                                hintStyle: GoogleFonts.mulish(
-                                    color: CusColors.inactive,
-                                    fontSize: getValueForScreenType<double>(
-                                      context: context,
-                                      mobile: width * .02,
-                                      tablet: width * .017,
-                                      desktop: width * .012,
-                                    ),
-                                    fontWeight: FontWeight.w300,
-                                    height: 1.5),
-                              ),
-                              keyboardType: TextInputType.text,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Enter an chapter';
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                FirestoreService firestore =
-                                    FirestoreService(uid: widget.uid);
-                                setState(() {
-                                  editedChapterList.add(
-                                    ChapterListEbook(
-                                      chapter: value,
-                                      subChapter: [],
-                                    ),
-                                  );
-                                });
-                                firestore.updateEbookEachField(
-                                  ebookId: widget.ebookId,
-                                  fieldName: 'chapter_list',
-                                  data: editedChapterList,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // child: SizedBox(
+                  //   child: Row(
+                  //     children: [
+                  //       Expanded(
+                  //         child: Container(
+                  //           padding:
+                  //               EdgeInsets.symmetric(vertical: widget.padding),
+                  //           child: TextFormField(
+                  //             initialValue: null,
+                  //             textAlign: TextAlign.left,
+                  //             style: GoogleFonts.mulish(
+                  //               color: CusColors.accentBlue,
+                  //               fontSize: widget.fontSize,
+                  //               fontWeight: FontWeight.w500,
+                  //             ),
+                  //             decoration: InputDecoration(
+                  //               border: InputBorder.none,
+                  //               contentPadding: EdgeInsets.zero,
+                  //               hintText: 'Enter an chapter',
+                  //               hintStyle: GoogleFonts.mulish(
+                  //                   color: CusColors.inactive,
+                  //                   fontSize: getValueForScreenType<double>(
+                  //                     context: context,
+                  //                     mobile: width * .02,
+                  //                     tablet: width * .017,
+                  //                     desktop: width * .012,
+                  //                   ),
+                  //                   fontWeight: FontWeight.w300,
+                  //                   height: 1.5),
+                  //             ),
+                  //             keyboardType: TextInputType.text,
+                  //             validator: (val) {
+                  //               if (val!.isEmpty) {
+                  //                 return 'Enter an chapter';
+                  //               }
+                  //               return null;
+                  //             },
+                  //             onChanged: (value) {
+                  //               FirestoreService firestore =
+                  //                   FirestoreService(uid: widget.uid);
+                  //               setState(() {
+                  //                 editedChapterList.add(
+                  //                   ChapterListEbook(
+                  //                     chapter: value,
+                  //                     subChapter: [],
+                  //                   ),
+                  //                 );
+                  //               });
+                  //               firestore.updateEbookEachField(
+                  //                 ebookId: widget.ebookId,
+                  //                 fieldName: 'chapter_list',
+                  //                 data: editedChapterList,
+                  //               );
+                  //             },
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ),
               ]
             : List.generate(editedChapterList.length, (index) {

@@ -188,106 +188,106 @@ class _AdminDetailEbookState extends State<AdminDetailEbook> {
                                 desktop: 100,
                               ),
                             ),
-                            child: Column(
-                              children: [
-                                AnimateIfVisible(
-                                  key: const Key('item.3'),
-                                  builder: (BuildContext context,
-                                          Animation<double> animation) =>
-                                      FadeTransition(
-                                    opacity: Tween<double>(
-                                      begin: 0,
-                                      end: 1,
-                                    ).animate(animation),
-                                    child: SlideTransition(
-                                      position: Tween<Offset>(
-                                        begin: const Offset(0, 2),
-                                        end: Offset.zero,
-                                      ).animate(animation),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                'What you will learn on this ebook',
-                                                style: GoogleFonts.mulish(
-                                                    color: CusColors.header,
-                                                    fontSize:
-                                                        getValueForScreenType<
-                                                            double>(
-                                                      context: context,
-                                                      mobile: width * .028,
-                                                      tablet: width * .022,
-                                                      desktop: width * .018,
-                                                    ),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                    bottom:
-                                                        getValueForScreenType(
-                                                      context: context,
-                                                      mobile: 30,
-                                                      tablet: 50,
-                                                      desktop: 70,
-                                                    ),
-                                                    top: getValueForScreenType<
-                                                        double>(
-                                                      context: context,
-                                                      mobile: 10,
-                                                      tablet: 20,
-                                                      desktop: 26,
-                                                    )),
-                                                width: width * .05,
-                                                height: 2,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: const Color.fromRGBO(
-                                                      0, 0, 0, 1),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                BorderEbookFormList(
-                                  chapterListEbook: ebook.chapterListEbook ?? [],
-                                  uid: user?.uid?? 'default_uid',
-                                  ebookId: id,
-                                  fontSize: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: width * .02,
-                                    tablet: width * .017,
-                                    desktop: width * .012,
-                                  ),
-                                  subFontSize: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: width * .019,
-                                    tablet: width * .016,
-                                    desktop: width * .011,
-                                  ),
-                                  subPadding: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: 5,
-                                    tablet: 10,
-                                    desktop: 15,
-                                  ),
-                                  padding: getValueForScreenType<double>(
-                                    context: context,
-                                    mobile: 4,
-                                    tablet: 5,
-                                    desktop: 5,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // child: Column(
+                            //   children: [
+                            //     AnimateIfVisible(
+                            //       key: const Key('item.3'),
+                            //       builder: (BuildContext context,
+                            //               Animation<double> animation) =>
+                            //           FadeTransition(
+                            //         opacity: Tween<double>(
+                            //           begin: 0,
+                            //           end: 1,
+                            //         ).animate(animation),
+                            //         child: SlideTransition(
+                            //           position: Tween<Offset>(
+                            //             begin: const Offset(0, 2),
+                            //             end: Offset.zero,
+                            //           ).animate(animation),
+                            //           child: Row(
+                            //             mainAxisAlignment:
+                            //                 MainAxisAlignment.center,
+                            //             children: [
+                            //               Column(
+                            //                 children: [
+                            //                   Text(
+                            //                     'What you will learn on this ebook',
+                            //                     style: GoogleFonts.mulish(
+                            //                         color: CusColors.header,
+                            //                         fontSize:
+                            //                             getValueForScreenType<
+                            //                                 double>(
+                            //                           context: context,
+                            //                           mobile: width * .028,
+                            //                           tablet: width * .022,
+                            //                           desktop: width * .018,
+                            //                         ),
+                            //                         fontWeight:
+                            //                             FontWeight.bold),
+                            //                   ),
+                            //                   Container(
+                            //                     margin: EdgeInsets.only(
+                            //                         bottom:
+                            //                             getValueForScreenType(
+                            //                           context: context,
+                            //                           mobile: 30,
+                            //                           tablet: 50,
+                            //                           desktop: 70,
+                            //                         ),
+                            //                         top: getValueForScreenType<
+                            //                             double>(
+                            //                           context: context,
+                            //                           mobile: 10,
+                            //                           tablet: 20,
+                            //                           desktop: 26,
+                            //                         )),
+                            //                     width: width * .05,
+                            //                     height: 2,
+                            //                     decoration: BoxDecoration(
+                            //                       borderRadius:
+                            //                           BorderRadius.circular(5),
+                            //                       color: const Color.fromRGBO(
+                            //                           0, 0, 0, 1),
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     BorderEbookFormList(
+                            //       chapterListEbook: ebook.chapterListEbook ?? [],
+                            //       uid: user?.uid?? 'default_uid',
+                            //       ebookId: id,
+                            //       fontSize: getValueForScreenType<double>(
+                            //         context: context,
+                            //         mobile: width * .02,
+                            //         tablet: width * .017,
+                            //         desktop: width * .012,
+                            //       ),
+                            //       subFontSize: getValueForScreenType<double>(
+                            //         context: context,
+                            //         mobile: width * .019,
+                            //         tablet: width * .016,
+                            //         desktop: width * .011,
+                            //       ),
+                            //       subPadding: getValueForScreenType<double>(
+                            //         context: context,
+                            //         mobile: 5,
+                            //         tablet: 10,
+                            //         desktop: 15,
+                            //       ),
+                            //       padding: getValueForScreenType<double>(
+                            //         context: context,
+                            //         mobile: 4,
+                            //         tablet: 5,
+                            //         desktop: 5,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
