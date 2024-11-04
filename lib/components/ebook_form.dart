@@ -54,18 +54,18 @@ DateTime selectedDate = DateTime.now();
     }
   }
 
-Future <void> fetchData() async {
-  final snapshot =
-  await FirebaseFirestore.instance.collection('ebook_categories').get();
-  final List<String>data=snapshot.docs.map((doc) => doc['name'] as String).toList();
-  setState(() {
-    ebookCategories = data;
-  });
-}
+// Future <void> fetchData() async {
+//   final snapshot =
+//   await FirebaseFirestore.instance.collection('ebook_categories').get();
+//   final List<String>data=snapshot.docs.map((doc) => doc['name'] as String).toList();
+//   setState(() {
+//     ebookCategories = data;
+//   });
+// }
 
   @override
   void initState() {
-    fetchData();
+  
     if (widget.ebookId != null) {
       setState(() {
         _dateController.text = widget.ebook!.date?.formatDate() ?? '';

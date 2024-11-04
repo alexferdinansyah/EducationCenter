@@ -1571,7 +1571,8 @@ class FirestoreService {
         return querySnapshot.docs.map((DocumentSnapshot document) {
           return {
             'id': document.id,
-            'ebook': EbookModel.fromFirestore(document.data() as Map<String, dynamic>)
+            'ebook': 
+            EbookModel.fromFirestore(document.data() as Map<String, dynamic>)
           };
         }).toList();
       });
@@ -1755,7 +1756,7 @@ class FirestoreService {
         return myEbook;
       });
     } catch (error) {
-      print('Error streaming my ebook: $error');
+      print('Error  my ebook: $error');
       return Stream.value([]); // Return an empty list in case of an error
     }
   }
