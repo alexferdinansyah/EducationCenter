@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/learning/ebook_offer.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class CusColors {
@@ -288,6 +289,73 @@ Widget cusPaymentWidgetVideoOn(
     ),
   );
 }
+Widget cusPaymentWidgetEbookOn(width, height, ebookId, userId, haveEBook,context) {
+  return Container(
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () async {
+        if (haveEBook == false) {
+           Get.rootDelegate.toNamed(
+              routeBuyVideo,
+              parameters: {'id': ebookId},
+            );
+        } else if (haveEBook == null) {
+          Get.rootDelegate.toNamed(
+            routeOfferLearnEBook,
+            parameters: {'id': ebookId},
+          );
+        } else {
+          Get.rootDelegate.toNamed(
+            routeLearnVideo,
+            parameters: {'id': ebookId},
+          );
+        }
+          
+        // // Get.rootDelegate.toNamed(
+        // //   routeLearnCourse,
+        // //   parameters: {'id': videoLearningId},
+        // // );
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        'Buy e-book ',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .018,
+            tablet: width * .015,
+            desktop: width * .01,
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
 Widget cusPaymentWidgetOff(
     width, height, isBundle, courseId, courseType, context) {
@@ -372,6 +440,58 @@ Widget cusPaymentWidgetOffvideo(
         Get.rootDelegate.toNamed(
             routeBuyVideo,
             parameters: {'id': videoLearningId},
+          );
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: Text(
+        'Buy video',
+        style: GoogleFonts.mulish(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: getValueForScreenType<double>(
+            context: context,
+            mobile: width * .018,
+            tablet: width * .015,
+            desktop: width * .01,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget cusPaymentWidgetOffEBook(
+    width, height, ebookId, context) {
+  return Container(
+    width: getValueForScreenType<double>(
+      context: context,
+      mobile: double.infinity,
+      tablet: width * .2,
+      desktop: width * .2,
+    ),
+    height: getValueForScreenType<double>(
+      context: context,
+      mobile: 28,
+      tablet: 35,
+      desktop: 45,
+    ),
+    decoration: BoxDecoration(
+      color: const Color(0xFF86B1F2),
+      borderRadius: BorderRadius.circular(64),
+    ),
+    child: ElevatedButton(
+      onPressed: () {
+        Get.rootDelegate.toNamed(
+            routeBuyVideo,
+            parameters: {'id': ebookId},
           );
       },
       style: ButtonStyle(

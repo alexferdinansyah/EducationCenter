@@ -13,6 +13,7 @@ import 'package:project_tc/screens/dashboard_admin/admin_learn_videoLearning.dar
 import 'package:project_tc/screens/landing_page/EBook_page.dart';
 import 'package:project_tc/screens/landing_page/Portopolio.dart';
 import 'package:project_tc/screens/landing_page/detail_bootcamp.dart';
+import 'package:project_tc/screens/landing_page/detail_ebook.dart';
 import 'package:project_tc/screens/landing_page/detail_video_learning.dart';
 import 'package:project_tc/screens/landing_page/detail_webinar.dart';
 import 'package:project_tc/screens/landing_page/video_learningPage.dart';
@@ -26,6 +27,7 @@ import 'package:project_tc/screens/landing_page/detail_article.dart';
 import 'package:project_tc/screens/landing_page/detail_single_course.dart';
 import 'package:project_tc/screens/landing_page/landing_page.dart';
 import 'package:project_tc/screens/landing_page/single_course_list.dart';
+import 'package:project_tc/screens/learning/learning_ebook.dart';
 import 'package:project_tc/screens/learning/learning_video.dart';
 import 'package:project_tc/screens/learning/payment_page.dart';
 import 'package:project_tc/screens/middleware/admin_middleware.dart';
@@ -51,8 +53,10 @@ const String routeMembershipUpgrade = '/membership-upgrade';
 const String routeMembershipUpgradePayment = '/membership-upgrade-payment';
 const String routeLearnCourse = '/learn-course';
 const String routeLearnVideo = '/learn-video';
+const String routeLearnEBook = '/learn-ebook';
 const String routeOfferLearnCourse = '/learn-course/offers';
 const String routeOfferLearnVideo = '/learn-video/offers';
+const String routeOfferLearnEBook = '/learn-ebook/offers';
 const String routeBuyCourse = '/checkout/course';
 const String routeBuyVideo = '/checkout/video';
 const String routeAdminDetailCourse = '/admin-detail-course';
@@ -72,6 +76,7 @@ const String routeVideoLearning = '/Video-Learning';
 const String routeWebinar = '/webinar';
 const String routePortopolio = '/portopolio';
 const String routeEBook = '/EBook';
+const String routeDetailEbook = '/detail-ebook';
 const String routeDetailBootcamp = '/detail-bootcamp';
 const String routeCreateBootcamp = '/create-bootcamp';
 const String routeCreateEBook = '/create-E-book';
@@ -143,6 +148,11 @@ final getPages = [
     page: () => wrapWithAppView(const EbookPage()),
   ),
   GetPage(
+    name: routeDetailEbook,
+    page: () => wrapWithAppView(const DetailEbook()),
+  ),
+  
+  GetPage(
     name: routeDetailBootcamp,
     page: () => wrapWithAppView(const DetailBootcamp()),
   ),
@@ -205,6 +215,14 @@ final getPages = [
   GetPage(
     name: routeOfferLearnVideo,
     page: () => const LearningVideo(),
+  ),
+  GetPage(
+    name: routeLearnEBook,
+    page: () => const LearningEbook(),
+  ),
+  GetPage(
+    name: routeOfferLearnEBook,
+    page: () => const LearningEbook(),
   ),
   GetPage(
     name: routeOfferLearnCourse,

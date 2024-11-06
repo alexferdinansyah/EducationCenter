@@ -67,8 +67,6 @@ class EbookModel {
     );
   }
 
-  get chapterListEbook => null;
-
   // Method to convert Ebook instance to Firestore data
   Map<String, dynamic> toFirestore() {
     return {

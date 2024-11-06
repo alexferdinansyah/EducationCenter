@@ -20,6 +20,7 @@ class Ebooks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
       width: width / 4.5,
       decoration: BoxDecoration(
@@ -39,38 +40,38 @@ class Ebooks extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(
-                  getValueForScreenType<double>(
-                    context: context,
-                    mobile: 20,
-                    tablet: 15,
-                    desktop: 20,
-                  ),
-                  0,
-                  getValueForScreenType<double>(
-                    context: context,
-                    mobile: 15,
-                    tablet: 15,
-                    desktop: 20,
-                  ),
-                  10),
-              height: getValueForScreenType<double>(
-                context: context,
-                mobile: 20,
-                tablet: 24,
-                desktop: 28,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                color: Colors.transparent,
-                border: Border.all(
-                  color: const Color(0xFF2501FF),
-                  width: 1,
-                ),
-              ),
-            ),
+            // Container(
+            //   width: double.infinity,
+            //   margin: EdgeInsets.fromLTRB(
+            //       getValueForScreenType<double>(
+            //         context: context,
+            //         mobile: 20,
+            //         tablet: 15,
+            //         desktop: 20,
+            //       ),
+            //       0,
+            //       getValueForScreenType<double>(
+            //         context: context,
+            //         mobile: 15,
+            //         tablet: 15,
+            //         desktop: 20,
+            //       ),
+            //       10),
+            //   height: getValueForScreenType<double>(
+            //     context: context,
+            //     mobile: 20,
+            //     tablet: 24,
+            //     desktop: 28,
+            //   ),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(14),
+            //     color: Colors.transparent,
+            //     border: Border.all(
+            //       color: const Color(0xFF2501FF),
+            //       width: 1,
+            //     ),
+            //   ),
+            // ),
             ebook.image != ''
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -120,19 +121,84 @@ class Ebooks extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
+                      top: getValueForScreenType<double>(
+                        context: context,
+                        mobile: height * .01,
+                        tablet: height * .014,
+                        desktop: height * .022,
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Rp ${ebook.price!}',
+                          style: GoogleFonts.mulish(
+                              color: CusColors.title,
+                              fontSize: getValueForScreenType<double>(
+                                context: context,
+                                mobile: width * .024,
+                                tablet: width * .014,
+                                desktop: width * .011,
+                              ),
+                              fontWeight: FontWeight.bold,
+                              height: 1.5),
+                        ),
+                        ebook.discount != ''
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                    color: const Color(0xFF2501FF),
+                                    width: 1,
+                                  ),
+                                ),
+                                margin: EdgeInsets.only(left: height * .01),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: height * .005,
+                                    vertical: height * .004),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${ebook.discount}% Off',
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.inter(
+                                        color: const Color(0xFF2501FF),
+                                        fontSize: getValueForScreenType<double>(
+                                          context: context,
+                                          mobile: width * .016,
+                                          tablet: width * .01,
+                                          desktop: width * .009,
+                                        ),
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
                       top: getValueForScreenType(
                         context: context,
                         mobile: 10,
                         tablet: 15,
-                        desktop: 20,
+                        desktop: 3,
                       ),
                     ),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          // Get.rootDelegate.toNamed(route,
-                          //     parameters: {'id': id});
+                          Get.rootDelegate.toNamed(routeDetailEbook,
+                              parameters: {'id': id});
                         },
                         child: Text(
                           'Read more...',
