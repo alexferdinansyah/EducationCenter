@@ -1696,6 +1696,46 @@ class FirestoreService {
     }
   }
 
+  Future addLearnEBook({
+    required String ebookId,
+    required EbookContent data,
+  }) async {
+    try {
+      await EbookCollection
+          .doc(ebookId)
+          .collection('learn_ebook')
+          .add(data.toFirestore());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future updateLearnEBook({
+    required String ebookId,
+    required String learnEBookId,
+    String? fieldName,
+    String? data,
+    required bool isUpdating,
+  }) async {
+    try {
+      if (isUpdating) {
+        await EbookCollection
+            .doc(ebookId)
+            .collection('learn_ebook')
+            .doc(learnEBookId)
+            .update({fieldName!: data});
+      } else {
+        await courseCollection
+            .doc(courseId)
+            .collection('learn_ebook')
+            .doc(learnEBookId)
+            .delete();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> addMyEbook(String ebookId, String userId, bool isPaid) async {
     final myEbookCollection =
         userCollection.doc(userId).collection('my_ebooks');
@@ -1719,6 +1759,39 @@ class FirestoreService {
         'isPaid': isPaid,
         'status': 'Not Finished',
       });
+    }
+  }
+  Stream<List<Map<String, dynamic>>?> get allLearnEBook {
+    try {
+      final learnEbookCollection =
+          EbookCollection.doc(ebookId).collection('learn_eebook');
+      return learnEbookCollection
+          .orderBy('created_at', descending: false)
+          .snapshots()
+          .asyncMap((QuerySnapshot querySnapshot) async {
+        List<Map<String, dynamic>> learnEbooks = [];
+        final ebook = await EbookCollection.doc(ebookId).get();
+
+        for (final DocumentSnapshot document in querySnapshot.docs) {
+          final data = document.data() as Map<String, dynamic>;
+
+          try {
+            learnEbooks.add({
+              'id': document.id,
+              'learn_ebook': EbookContent.fromFirestore(data),
+            });
+          } catch (error) {
+            print('Error getting ebook data: $error');
+          }
+        }
+
+        learnEbooks.insert(0, {'ebook_name': ebook.get('title')});
+
+        return learnEbooks;
+      });
+    } catch (error) {
+      print('Error streaming learn ebook: $error');
+      return Stream.value([]); // Return an empty list in case of an error
     }
   }
 

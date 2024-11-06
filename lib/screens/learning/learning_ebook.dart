@@ -78,12 +78,12 @@ class _LearningEbookState extends State<LearningEbook> {
     controller.fetchDocument(id);
 
     return Obx(() {
-      final ebook = controller.documentSnapshot.value;
+      final data = controller.documentSnapshot.value;
 
-      if (ebook == null) {
+      if (data == null) {
         return const Center(child: Text('Loading...'));
       }
-      // final List<EbookContent> learnebook = ebook['learn_course'].toList();
+      // final List<EbookContent> learnebook = data['learn_ebook'].toList();
 
       // learnEBookTitle = List.from(learnebook.map((learn) => learn.subTitle));
 
@@ -112,7 +112,7 @@ class _LearningEbookState extends State<LearningEbook> {
               ),
             ),
             child: Text(
-              ebook.title!,
+              data.title!,
               style: GoogleFonts.mulish(
                   color: CusColors.header,
                   fontSize: getValueForScreenType<double>(
@@ -125,7 +125,7 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
           Text(
-            'Created by Admin - ${ebook.date?.formatDate()}',
+            'Created by Admin - ${data.date?.formatDate()}',
             style: GoogleFonts.mulish(
               color: CusColors.inactive,
               fontSize: getValueForScreenType<double>(
@@ -149,7 +149,7 @@ class _LearningEbookState extends State<LearningEbook> {
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: ebook.image!,
+                image: data.image!,
                 height: getValueForScreenType<double>(
                   context: context,
                   mobile: height / 3.7,
@@ -160,7 +160,7 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
           Text(
-            ebook.description!.replaceAll('\\n', '\n'),
+            data.description!.replaceAll('\\n', '\n'),
             style: GoogleFonts.mulish(
               color: CusColors.inactive,
               fontSize: getValueForScreenType<double>(
@@ -174,7 +174,7 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
           Column(
-            children: ebook.ebookContent!
+            children: data.ebookContent!
                 .map((ebook) => EbookContentWidget(
                       ebookContent: ebook,
                     ))

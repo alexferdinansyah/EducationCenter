@@ -59,6 +59,7 @@ const String routeOfferLearnVideo = '/learn-video/offers';
 const String routeOfferLearnEBook = '/learn-ebook/offers';
 const String routeBuyCourse = '/checkout/course';
 const String routeBuyVideo = '/checkout/video';
+const String routeBuyEbook = '/checkout/ebook';
 const String routeAdminDetailCourse = '/admin-detail-course';
 const String routeAdminLearnCourse = '/admin-learn-course';
 const String routeAdminDetailVideoLearning = '/admin-detail-videoLearning';
@@ -234,6 +235,10 @@ final getPages = [
   ),
   GetPage(
     name: routeBuyVideo,
+    page: () => const PaymentPage(),
+  ),
+  GetPage(
+    name: routeBuyEbook,
     page: () => const PaymentPage(),
   ),
   GetPage(

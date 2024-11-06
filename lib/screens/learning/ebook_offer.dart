@@ -329,7 +329,7 @@ class EbookOffer extends StatelessWidget {
                                 onPressed: () {
                                   Get.rootDelegate.toNamed(routeLearnEBook,
                                   
-                                  // Get.rootDelegate.toNamed(routeBuyVideo,
+                                  // Get.rootDelegate.toNamed(routeBuyEbook,
                                       parameters: {'id': id});
                                 },
                                 style: ButtonStyle(
