@@ -7,7 +7,7 @@ import 'package:project_tc/services/firestore_service.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class BulletEbookList extends StatelessWidget {
-  final List <String> strings;
+  final List<String> strings;
   final bool border;
   final double padding;
   final Color textColor;
@@ -24,15 +24,13 @@ class BulletEbookList extends StatelessWidget {
       this.cusWidth,
       required this.fontSize});
 
-
-
   @override
   Widget build(BuildContext context) {
-  double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.centerLeft,
-      width:  cusWidth?? 
-      (border
+      width: cusWidth ??
+          (border
               ? width / 1.7
               : getValueForScreenType<double>(
                   context: context,
@@ -40,7 +38,7 @@ class BulletEbookList extends StatelessWidget {
                   tablet: width * .18,
                   desktop: width * .13,
                 )),
-                 child: Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: strings.map((str) {
           return Container(
@@ -106,7 +104,7 @@ class BorderEbookList extends StatefulWidget {
   final double fontSize;
   final double subFontSize;
 
-   const BorderEbookList({
+  const BorderEbookList({
     required this.chapterListEbook,
     this.padding = 5,
     this.subPadding = 15,
@@ -122,14 +120,14 @@ class BorderEbookList extends StatefulWidget {
 }
 
 class _BorderEbookListState extends State<BorderEbookList> {
-   Map<int, bool> expandStates = {}; // Store expand states for each item
+  Map<int, bool> expandStates = {}; // Store expand states for each item
   Map<int, bool> canExpand = {};
 
   @override
-    void initState() {
+  void initState() {
     super.initState();
 
-     for (int i = 0; i < widget.chapterListEbook.length; i++) {
+    for (int i = 0; i < widget.chapterListEbook.length; i++) {
       expandStates[i] = false;
       if (widget.chapterListEbook[i].subChapter!.isNotEmpty) {
         // Set the expand state to true for items that meet the condition
@@ -144,14 +142,15 @@ class _BorderEbookListState extends State<BorderEbookList> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-      return Container(
+    return Container(
       alignment: Alignment.centerLeft,
       width: width / 1.5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: List.generate(widget.chapterListEbook.length, (index) {
           final String chapter = widget.chapterListEbook[index].chapter!;
-          final List<String> subChapter = widget.chapterListEbook[index].subChapter!;
+          final List<String> subChapter =
+              widget.chapterListEbook[index].subChapter!;
 
           return canExpand[index]!
               ? GestureDetector(
@@ -286,8 +285,8 @@ class BulletFormEbookList extends StatefulWidget {
 }
 
 class _BulletFormEbookListState extends State<BulletFormEbookList> {
-   List<String> editedList = [];
-    @override
+  List<String> editedList = [];
+  @override
   void initState() {
     super.initState();
     setState(() {
@@ -303,8 +302,8 @@ class _BulletFormEbookListState extends State<BulletFormEbookList> {
 
   @override
   Widget build(BuildContext context) {
-      double width = MediaQuery.of(context).size.width;
-   return Container(
+    double width = MediaQuery.of(context).size.width;
+    return Container(
       alignment: Alignment.centerLeft,
       width: width / 1.7,
       child: Column(
@@ -491,7 +490,6 @@ class _BulletFormEbookListState extends State<BulletFormEbookList> {
     );
   }
 }
-
 
 class BorderEbookFormList extends StatefulWidget {
   final List<ChapterListEbook> chapterListEbook;
@@ -850,8 +848,7 @@ class _BorderEbookFormListState extends State<BorderEbookFormList> {
                                                           value;
                                                       firestore
                                                           .updateEbookEachField(
-                                                        ebookId:
-                                                            widget.ebookId,
+                                                        ebookId: widget.ebookId,
                                                         fieldName:
                                                             'chapter_list',
                                                         data: editedChapterList,
@@ -981,8 +978,7 @@ class _BorderEbookFormListState extends State<BorderEbookFormList> {
                                                       });
                                                       firestore
                                                           .updateEbookEachField(
-                                                        ebookId:
-                                                            widget.ebookId,
+                                                        ebookId: widget.ebookId,
                                                         fieldName:
                                                             'chapter_list',
                                                         data: editedChapterList,

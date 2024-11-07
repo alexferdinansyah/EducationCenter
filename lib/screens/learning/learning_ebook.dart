@@ -93,103 +93,122 @@ class _LearningEbookState extends State<LearningEbook> {
           id: id,
         );
       }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              top: getValueForScreenType<double>(
-                context: context,
-                mobile: 25,
-                tablet: 40,
-                desktop: 100,
-              ),
-              bottom: getValueForScreenType<double>(
-                context: context,
-                mobile: 5,
-                tablet: 10,
-                desktop: 20,
-              ),
-            ),
-            child: Text(
-              data.title!,
-              style: GoogleFonts.mulish(
-                  color: CusColors.header,
-                  fontSize: getValueForScreenType<double>(
-                    context: context,
-                    mobile: width * .035,
-                    tablet: width * .024,
-                    desktop: width * .023,
-                  ),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Text(
-            'Created by Admin - ${data.date?.formatDate()}',
-            style: GoogleFonts.mulish(
-              color: CusColors.inactive,
-              fontSize: getValueForScreenType<double>(
-                context: context,
-                mobile: width * .019,
-                tablet: width * .016,
-                desktop: width * .011,
-              ),
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 5),
-            width: double.infinity,
-            height: 1,
-            color: CusColors.accentBlue,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: data.image!,
-                height: getValueForScreenType<double>(
-                  context: context,
-                  mobile: height / 3.7,
-                  tablet: height / 2.7,
-                  desktop: height / 1.6,
-                ),
-              ),
-            ),
-          ),
-          Text(
-            data.description!.replaceAll('\\n', '\n'),
-            style: GoogleFonts.mulish(
-              color: CusColors.inactive,
-              fontSize: getValueForScreenType<double>(
-                context: context,
-                mobile: width * .02,
-                tablet: width * .017,
-                desktop: width * .012,
-              ),
-              fontWeight: FontWeight.w300,
-              height: 1.5,
-            ),
-          ),
-          Column(
-            children: data.ebookContent!
-                .map((ebook) => EbookContentWidget(
-                      ebookContent: ebook,
-                    ))
-                .toList(),
-          ),
-          SizedBox(
-            height: getValueForScreenType<double>(
+      return ScrollConfiguration(
+         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: getValueForScreenType<double>(
               context: context,
               mobile: 25,
               tablet: 40,
-              desktop: 100,
+              desktop: 30,
+            ),
+            right: getValueForScreenType<double>(
+              context: context,
+              mobile: 5,
+              tablet: 10,
+              desktop: 20,
             ),
           ),
-          // const Footer(),
-        ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 25,
+                    tablet: 40,
+                    desktop: 20,
+                  ),
+                  bottom: getValueForScreenType<double>(
+                    context: context,
+                    mobile: 5,
+                    tablet: 10,
+                    desktop: 20,
+                  ),
+                ),
+                child: Text(
+                  data.title!,
+                  style: GoogleFonts.mulish(
+                      color: CusColors.header,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .035,
+                        tablet: width * .024,
+                        desktop: width * .023,
+                      ),
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Text(
+                'Created by Admin - ${data.date?.formatDate()}',
+                style: GoogleFonts.mulish(
+                  color: CusColors.inactive,
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .019,
+                    tablet: width * .016,
+                    desktop: width * .011,
+                  ),
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 5),
+                width: double.infinity,
+                height: 1,
+                color: CusColors.accentBlue,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: data.image!,
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: height / 3.7,
+                      tablet: height / 2.7,
+                      desktop: height / 1.6,
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                data.description!.replaceAll('\\n', '\n'),
+                style: GoogleFonts.mulish(
+                  color: CusColors.inactive,
+                  fontSize: getValueForScreenType<double>(
+                    context: context,
+                    mobile: width * .02,
+                    tablet: width * .017,
+                    desktop: width * .012,
+                  ),
+                  fontWeight: FontWeight.w300,
+                  height: 1.5,
+                ),
+              ),
+              Column(
+                children: data.ebookContent!
+                    .map((ebook) => EbookContentWidget(
+                          ebookContent: ebook,
+                        ))
+                    .toList(),
+              ),
+              SizedBox(
+                height: getValueForScreenType<double>(
+                  context: context,
+                  mobile: 25,
+                  tablet: 40,
+                  desktop: 100,
+                ),
+              ),
+              // const Footer(),
+            ],
+          ),
+        ),
       );
     });
     // return Obx(() {
