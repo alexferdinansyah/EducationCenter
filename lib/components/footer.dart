@@ -342,10 +342,9 @@ class Footer extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold)),
-                                SizedBox(height: 15),
-                                Text('Video Learning'),
-                                SizedBox(height: 15),
-                                Text('e-book'),
+                                        SizedBox(height: 15,),
+                                        Text('E-Book'),
+                            
                               ]),
                           SizedBox(
                             width: getValueForScreenType<double>(
@@ -364,6 +363,7 @@ class Footer extends StatelessWidget {
                                         fontWeight: FontWeight.bold)),
                                 SizedBox(height: 15),
                                 Text('FAQ'),
+                                Text('Article'),
                               ]),
                         ]),
                   ),
