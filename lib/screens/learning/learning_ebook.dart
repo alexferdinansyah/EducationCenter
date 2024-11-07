@@ -93,8 +93,7 @@ class _LearningEbookState extends State<LearningEbook> {
           id: id,
         );
       }
-      return ScrollConfiguration(
-         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      return SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
             left: getValueForScreenType<double>(
