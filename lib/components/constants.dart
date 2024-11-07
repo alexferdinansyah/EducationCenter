@@ -504,7 +504,7 @@ Widget cusPaymentWidgetOffEBook(
         shadowColor: MaterialStateProperty.all(Colors.transparent),
       ),
       child: Text(
-        'Buy video',
+        'Buy e-book',
         style: GoogleFonts.mulish(
           fontWeight: FontWeight.w700,
           color: Colors.white,
