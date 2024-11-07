@@ -78,9 +78,9 @@ class _LearningEbookState extends State<LearningEbook> {
     controller.fetchDocument(id);
 
     return Obx(() {
-      final data = controller.documentSnapshot.value;
+      final ebook = controller.documentSnapshot.value;
 
-      if (data == null) {
+      if (ebook == null) {
         return const Center(child: Text('Loading...'));
       }
       // final List<EbookContent> learnebook = data['learn_ebook'].toList();
@@ -112,7 +112,7 @@ class _LearningEbookState extends State<LearningEbook> {
               ),
             ),
             child: Text(
-              data.title!,
+              ebook.title!,
               style: GoogleFonts.mulish(
                   color: CusColors.header,
                   fontSize: getValueForScreenType<double>(
@@ -125,7 +125,7 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
           Text(
-            'Created by Admin - ${data.date?.formatDate()}',
+            'Created by Admin - ${ebook.date?.formatDate()}',
             style: GoogleFonts.mulish(
               color: CusColors.inactive,
               fontSize: getValueForScreenType<double>(
@@ -149,7 +149,7 @@ class _LearningEbookState extends State<LearningEbook> {
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: data.image!,
+                image: ebook.image!,
                 height: getValueForScreenType<double>(
                   context: context,
                   mobile: height / 3.7,
@@ -160,7 +160,7 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
           Text(
-            data.description!.replaceAll('\\n', '\n'),
+            ebook.description!.replaceAll('\\n', '\n'),
             style: GoogleFonts.mulish(
               color: CusColors.inactive,
               fontSize: getValueForScreenType<double>(
@@ -174,7 +174,7 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
           Column(
-            children: data.ebookContent!
+            children: ebook.ebookContent!
                 .map((ebook) => EbookContentWidget(
                       ebookContent: ebook,
                     ))
