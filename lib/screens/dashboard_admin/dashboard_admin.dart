@@ -460,7 +460,9 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
               ),
             ),
           ),
-          Column(
+          Expanded(child: 
+          SingleChildScrollView(
+child:  Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -593,6 +595,8 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
               // )
             ],
           ),
+          ))
+        
         ],
       ),
     );
