@@ -24,6 +24,7 @@ class _EbookPageState extends State<EbookPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -51,122 +52,113 @@ class _EbookPageState extends State<EbookPage> {
           ),
         ),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          StreamBuilder(
-              stream: FirestoreService.withoutUID().allEbook,
-              builder: (BuildContext context, snapshot) {
-                if (snapshot.hasData) {
-                  final List<Map> dataMaps = snapshot.data!;
-                  final List<Map> ebook = dataMaps.where((ebookMap) {
-                    final dynamic data = ebookMap['ebook'];
-                    return data is EbookModel?;
-                    
-                  }).map((ebookMap) {
-                    final EbookModel ebook = ebookMap['ebook'];
-                    final String id = ebookMap['id'];
-                    return {'ebook': ebook, 'id': id};
-                  }).toList();
-                  return Column(children: [
-                    Text(
-                      'Available E-book',
-                      style: GoogleFonts.mulish(
-                          color: CusColors.header,
-                          fontSize: getValueForScreenType<double>(
-                            context: context,
-                            mobile: width * .028,
-                            tablet: width * .022,
-                            desktop: width * .018,
-                          ),
-                          fontWeight: FontWeight.bold),
+          StreamBuilder<List<Map>>(
+            stream: FirestoreService.withoutUID().allEbook,
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                final List<Map> dataMaps = snapshot.data!;
+                final List<Map> ebook = dataMaps.where((ebookMap) {
+                  final dynamic data = ebookMap['ebook'];
+                  return data is EbookModel; // Corrected condition
+                }).map((ebookMap) {
+                  final EbookModel ebook = ebookMap['ebook'];
+                  final String id = ebookMap['id'];
+                  return {'ebook': ebook, 'id': id};
+                }).toList();
+
+                return Column(children: [
+                  Text(
+                    'Available E-book',
+                    style: GoogleFonts.mulish(
+                      color: CusColors.header,
+                      fontSize: getValueForScreenType<double>(
+                        context: context,
+                        mobile: width * .028,
+                        tablet: width * .022,
+                        desktop: width * .018,
+                      ),
+                      fontWeight: FontWeight.bold,
                     ),
-                    Container(
-                        margin: EdgeInsets.only(
-                            top: getValueForScreenType<double>(
-                              context: context,
-                              mobile: 10,
-                              tablet: 20,
-                              desktop: 26,
-                            ),
-                            bottom: getValueForScreenType<double>(
-                              context: context,
-                              mobile: 40,
-                              tablet: 50,
-                              desktop: 70,
-                            )),
-                        width: width * .05,
-                        height: 2,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                        )),
-                    SizedBox(
-                      // height: getValueForScreenType<double>(
-                      //   context: context,
-                      //   mobile: height / 3.3 * ebook.length,
-                      //   tablet: (height / 2.8) * (ebook.length / 2),
-                      //   desktop: (height / 1.5) * (ebook.length / 3),
-                      // ),
-                      // width: getValueForScreenType<double>(
-                      //   context: context,
-                      //   mobile: width / 2,
-                      //   tablet: width / 1.8,
-                      //   desktop: width / 1.7,
-                      // ),
-                      width: getValueForScreenType<double>(
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: getValueForScreenType<double>(
                         context: context,
-                        mobile: width / 1.3,
-                        tablet: width / 1.6,
-                        desktop: width / 1.6,
+                        mobile: 10,
+                        tablet: 20,
+                        desktop: 26,
                       ),
-                      height: getValueForScreenType<double>(
+                      bottom: getValueForScreenType<double>(
                         context: context,
-                        mobile: height * .64 * ebook.length,
-                        tablet: height * .64 * ebook.length + 150,
-                        desktop: height * .20 * ebook.length + 150,
+                        mobile: 40,
+                        tablet: 50,
+                        desktop: 70,
                       ),
-                      child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context)
-                            .copyWith(scrollbars: false),
-                        child: MasonryGridView.count(
-                          physics: const ScrollPhysics(
-                              parent: BouncingScrollPhysics()),
-                          crossAxisSpacing: width *
-                              .02, // Adjust spacing between items horizontally
-                          mainAxisSpacing:
-                              16.0, // Adjust spacing between rows vertically
-                          crossAxisCount: getValueForScreenType<int>(
-                            context: context,
-                            mobile: 1,
-                            tablet: 2,
-                            desktop: 3,
-                          ),
-                          itemCount: ebook.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Ebooks(
-                                ebook: ebook[index]['ebook'],
-                                id: ebook[index]['id']);
-                          },
+                    ),
+                    width: width * .05,
+                    height: 2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: const Color.fromRGBO(0, 0, 0, 1),
+                    ),
+                  ),
+                  SizedBox(
+                    width: getValueForScreenType<double>(
+                      context: context,
+                      mobile: width / 1.3,
+                      tablet: width / 1.6,
+                      desktop: width / 1.6,
+                    ),
+                    height: getValueForScreenType<double>(
+                      context: context,
+                      mobile: height * .64 * ebook.length,
+                      tablet: height * .64 * ebook.length + 150,
+                      desktop: height * .20 * ebook.length + 150,
+                    ),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: MasonryGridView.count(
+                        physics: const ScrollPhysics(
+                          parent: BouncingScrollPhysics(),
                         ),
+                        crossAxisSpacing: width * .02, // Adjust spacing
+                        mainAxisSpacing: 16.0, // Adjust spacing
+                        crossAxisCount: getValueForScreenType<int>(
+                          context: context,
+                          mobile: 1,
+                          tablet: 2,
+                          desktop: 3,
+                        ),
+                        itemCount: ebook.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Ebooks(
+                            ebook: ebook[index]['ebook'],
+                            id: ebook[index]['id'],
+                          );
+                        },
                       ),
                     ),
-                  ]);
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No ebook available.'),
-                  );
-                } else {
-                  return const Center(
-                    child: Text('kok iso.'),
-                  );
-                }
-              })
+                  ),
+                ]);
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('No ebook available.'),
+                );
+              } else {
+                return const Center(
+                  child: Text('kok iso.'),
+                );
+              }
+            },
+          ),
         ]),
       ),
-      const Footer()
+      const Footer(),
     ]);
   }
 }
