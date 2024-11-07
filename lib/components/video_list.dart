@@ -642,7 +642,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.fastLinearToSlowEaseIn,
                     child: Container(
-                      key: ValueKey(editedChapterListVideo[index].chapter!),
+                      key: ValueKey(editedChapterListVideo[index].chapter ?? ""),
                       padding: EdgeInsets.symmetric(vertical: widget.padding),
                       decoration: BoxDecoration(
                         border: Border(
@@ -667,7 +667,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                                       initialValue: chapter,
                                       textAlign: TextAlign.left,
                                       style: GoogleFonts.mulish(
-                                        color: expandStates[index]!
+                                        color: expandStates[index] != null
                                             ? CusColors.accentBlue
                                             : CusColors.subHeader,
                                         fontSize: widget.fontSize,
@@ -727,7 +727,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                                     ),
                                   ),
                                 ),
-                                expandStates[index]!
+                                expandStates[index]!= null
                                     ? const Icon(Icons.keyboard_arrow_up)
                                     : const Icon(Icons.keyboard_arrow_down),
                                 Padding(
@@ -770,7 +770,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                               ],
                             ),
                           ),
-                          if (expandStates[index]!)
+                          if (expandStates[index]!= null)
                             Container(
                               alignment: Alignment.centerLeft,
                               child: Column(
