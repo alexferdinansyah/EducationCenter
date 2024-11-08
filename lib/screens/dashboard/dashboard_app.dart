@@ -94,7 +94,7 @@ class _DashboardAppState extends State<DashboardApp> {
           return Event(
             user: user,
           );
-        case 'Produk':
+        case 'My Video Learning':
           return MyVideolearning(
             user: user,
           );
@@ -394,9 +394,9 @@ class _DashboardSideBarState extends State<DashboardSideBar> {
   final List<SideItem> sidebarItems = [
     const SideItem(icon: IconlyBold.category, title: 'Newsflash'),
     const SideItem(icon: IconlyBold.chart, title: 'My Courses'),
+    const SideItem(icon: IconlyBold.chart, title: 'My Video Learning'),
     const SideItem(icon: IconlyBold.chart, title: 'My E-Book'),
     const SideItem(icon: IconlyBold.chart, title: 'Event'),
-    const SideItem(icon: IconlyBold.chart, title: 'Produk'),
     const SideItem(icon: IconlyBold.buy, title: 'Transaction'),
     // const SideItem(icon: IconlyBold.document, title: 'Free Tutorial'),
     // const SideItem(icon: IconlyBold.chat, title: 'Review'),

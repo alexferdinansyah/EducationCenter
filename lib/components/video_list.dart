@@ -572,7 +572,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                             padding:
                                 EdgeInsets.symmetric(vertical: widget.padding),
                             child: TextFormField(
-                              initialValue: null,
+                              initialValue: "",
                               textAlign: TextAlign.left,
                               style: GoogleFonts.mulish(
                                 color: CusColors.accentBlue,
@@ -594,7 +594,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                                     fontWeight: FontWeight.w300,
                                     height: 1.5),
                               ),
-                              keyboardType: TextInputType.text,
+                             
                               validator: (val) {
                                 if (val!.isEmpty) {
                                   return 'Enter an chapter';
@@ -664,7 +664,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: widget.padding),
                                     child: TextFormField(
-                                      initialValue: chapter,
+                                      initialValue: "",
                                       textAlign: TextAlign.left,
                                       style: GoogleFonts.mulish(
                                         color: expandStates[index]!
@@ -937,7 +937,7 @@ class _BorderVideoFormListState extends State<BorderVideoFormList> {
                                               Expanded(
                                                 child: Container(
                                                   child: TextFormField(
-                                                    initialValue: null,
+                                                    initialValue: "",
                                                     textAlign: TextAlign.left,
                                                     style: GoogleFonts.mulish(
                                                       color: const Color(
