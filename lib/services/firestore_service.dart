@@ -1828,5 +1828,55 @@ class FirestoreService {
       print('Error  my ebook: $error');
       return Stream.value([]); // Return an empty list in case of an error
     }
+    
   }
+
+// update bootcamp
+ Future updateBootcampFewField({
+    String? bootcampId,
+    String? title,
+    String? description,
+    String? category,
+    String? image,
+    DateTime? date,
+  }) async {
+    try {
+      await BootcampCollection.doc(bootcampId).update({
+        'title': title,
+        'description': description,
+        'category': category,
+        'image': image,
+        'date': Timestamp.fromDate(date!)
+      });
+    } catch (e) {
+      print('Error adding bootcamp: $e');
+      // Handle the error as needed
+    }
+  }
+
+  
+  Future updateBootcampEachField({
+    required String bootcampId,
+    required String fieldName,
+    required dynamic data,
+  }) async {
+    try {
+      if (data is List<ArticleContent>) {
+        final List<Map<String, dynamic>> contentData =
+            data.map((content) => content.toFirestore()).toList();
+        await BootcampCollection.doc(bootcampId).update({fieldName: contentData});
+      } else {
+        await BootcampCollection.doc(bootcampId).update({fieldName: data});
+      }
+    } catch (e) {
+      print('Error update bootcamp: $e');
+      // Handle the error as needed
+    }
+  }
+
+
+
 }
+
+
+

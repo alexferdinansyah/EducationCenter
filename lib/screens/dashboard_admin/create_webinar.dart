@@ -143,7 +143,7 @@ class _CreateWebinarState extends State<CreateWebinar> {
         Row(
           children: [
             Text(
-              widget.webinar == null ? 'Add webinar' : 'Edit wbinar',
+              widget.webinar == null ? 'Add webinar' : 'Edit webinar',
               style: GoogleFonts.poppins(
                 fontSize: getValueForScreenType<double>(
                   context: context,
