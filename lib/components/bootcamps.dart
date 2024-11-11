@@ -6,6 +6,7 @@ import 'package:iconly/iconly.dart';
 import 'package:project_tc/components/constants.dart';
 import 'package:project_tc/models/bootcamp.dart';
 import 'package:project_tc/routes/routes.dart';
+import 'package:project_tc/screens/dashboard_admin/create_bootcamp.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -414,9 +415,18 @@ class AdminBootcamps extends StatelessWidget {
                           desktop: 38,
                         ),
                         child: ElevatedButton(
-                          onPressed: () {
-                            onPressed!();
-                          },
+                         onPressed: ()  async {
+                                              final result = await showDialog(
+                                                context: context,
+                                                builder: (_) {
+                                                  return CreateBootcamp(
+                                                    
+                                                  );
+                                                },
+                                              );
+
+                                             
+                                            },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
