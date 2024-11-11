@@ -113,7 +113,7 @@ class _LearningEbookState extends State<LearningEbook> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'You Dont Have This Course, please go back',
+                          'You Dont Have This E-Book, please go back',
                           style: GoogleFonts.poppins(
                             fontSize: getValueForScreenType<double>(
                               context: context,
@@ -188,7 +188,8 @@ class _LearningEbookState extends State<LearningEbook> {
             ],
           ),
         );
-      }
+      } else  if (data['isPaid'] == true) {
+
       return SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -298,150 +299,14 @@ class _LearningEbookState extends State<LearningEbook> {
             ),
           ),
         );
+      }
+      return Container();
   
 
     });
   }
 }
 
-// class learningebookdetail extends StatefulWidget {
-//   const learningebookdetail({super.key});
-
-//   @override
-//   State<learningebookdetail> createState() => _learningebookdetailState();
-// }
-
-// class _learningebookdetailState extends State<learningebookdetail> {
-//    String id = '';
-
-//     final DetailEBookController controller = Get.put(DetailEBookController());
-//   @override
-//   Widget build(BuildContext context) {
-//     double height = MediaQuery.of(context).size.height;
-//     double width = MediaQuery.of(context).size.width;
-//     var argument = Get.rootDelegate.parameters;
-//     id = argument['id']!;
-//     controller.fetchDocument(id);
-
-//     final data = controller.documentSnapshot.value;
-//       return Obx(() {
-
-//       if (data == null) {
-//         return const Center(child: Text('Loading...'));
-//       }
-//         return SingleChildScrollView(
-//           child: Padding(
-//             padding: EdgeInsets.symmetric(
-//               horizontal: getValueForScreenType<double>(
-//                 context: context,
-//                 mobile: 25,
-//                 tablet: 40,
-//                 desktop: 30,
-//               ),
-//             ),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.only(
-//                     top: getValueForScreenType<double>(
-//                       context: context,
-//                       mobile: 25,
-//                       tablet: 40,
-//                       desktop: 20,
-//                     ),
-//                     bottom: getValueForScreenType<double>(
-//                       context: context,
-//                       mobile: 5,
-//                       tablet: 10,
-//                       desktop: 20,
-//                     ),
-//                   ),
-//                   child: Text(
-//                     data.title ?? '',
-//                     style: GoogleFonts.mulish(
-//                       color: CusColors.header,
-//                       fontSize: getValueForScreenType<double>(
-//                         context: context,
-//                         mobile: width * .035,
-//                         tablet: width * .024,
-//                         desktop: width * .023,
-//                       ),
-//                       fontWeight: FontWeight.bold,
-//                       decoration:
-//                           TextDecoration.none, // Menghilangkan garis bawah
-//                     ),
-//                   ),
-//                 ),
-//                 Text(
-//                   'Created by Admin - ${data.date?.formatDate()}',
-//                   style: GoogleFonts.mulish(
-//                     color: CusColors.inactive,
-//                     fontSize: getValueForScreenType<double>(
-//                       context: context,
-//                       mobile: width * .019,
-//                       tablet: width * .016,
-//                       desktop: width * .011,
-//                     ),
-//                     fontWeight: FontWeight.w300,
-//                     decoration: TextDecoration.none, // Menghilangkan garis bawah
-//                   ),
-//                 ),
-//                 Divider(color: CusColors.accentBlue, thickness: 1),
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(vertical: 15),
-//                   child: ClipRRect(
-//                     borderRadius: BorderRadius.circular(10),
-//                     child: FadeInImage.memoryNetwork(
-//                       placeholder: kTransparentImage,
-//                       image: data.image ?? '',
-//                       height: getValueForScreenType<double>(
-//                         context: context,
-//                         mobile: height / 3.7,
-//                         tablet: height / 2.7,
-//                         desktop: height / 1.6,
-//                       ),
-//                       fit: BoxFit.cover,
-//                     ),
-//                   ),
-//                 ),
-//                 Text(
-//                   data.description?.replaceAll('\\n', '\n') ?? '',
-//                   style: GoogleFonts.mulish(
-//                     color: CusColors.inactive,
-//                     fontSize: getValueForScreenType<double>(
-//                       context: context,
-//                       mobile: width * .02,
-//                       tablet: width * .017,
-//                       desktop: width * .012,
-//                     ),
-//                     fontWeight: FontWeight.w300,
-//                     height: 1.5,
-//                     decoration: TextDecoration.none, // Menghilangkan garis bawah
-//                   ),
-//                 ),
-//                 Column(
-//                   children: data.ebookContent?.map((ebook) {
-//                         return EbookContentWidget(ebookContent: ebook);
-//                       }).toList() ??
-//                       [],
-//                 ),
-//                 SizedBox(
-//                   height: getValueForScreenType<double>(
-//                     context: context,
-//                     mobile: 25,
-//                     tablet: 40,
-//                     desktop: 100,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-  
-//   });
-//   }
-// }
 
 class EbookContentWidget extends StatelessWidget {
   final EbookContent ebookContent;
