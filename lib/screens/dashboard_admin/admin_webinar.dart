@@ -57,6 +57,7 @@ class _AdminWebinarState extends State<AdminWebinar> {
   ];
   @override
   Widget build(BuildContext context) {
+    
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final user = Provider.of<UserModel>(context);
@@ -249,6 +250,10 @@ class _AdminWebinarState extends State<AdminWebinar> {
                                 ],
                               ),
                             ),
+
+
+
+                            
                             SizedBox(
                               height: webinars.length / 5 > 1 &&
                                       webinars.length / 5 < 2
@@ -259,7 +264,8 @@ class _AdminWebinarState extends State<AdminWebinar> {
                                           (webinars.length / 5)
                                       : height / 1.6,
                               child: webinars.isEmpty
-                                  ? Center(
+                                  ? 
+                                  Center(
                                       child: Column(
                                       children: [
                                         SvgPicture.asset(
@@ -290,8 +296,10 @@ class _AdminWebinarState extends State<AdminWebinar> {
                                           ),
                                         ),
                                       ],
-                                    ))
-                                  : ScrollConfiguration(
+                                    ),
+                                    )
+                            
+                                   : ScrollConfiguration(
                                       behavior: ScrollConfiguration.of(context)
                                           .copyWith(scrollbars: false),
                                       child: MasonryGridView.count(
@@ -405,7 +413,12 @@ class _AdminWebinarState extends State<AdminWebinar> {
                                         },
                                       ),
                                     ),
-                            ),
+                                  ),
+
+
+
+
+
                           ],
                         ),
                       ),

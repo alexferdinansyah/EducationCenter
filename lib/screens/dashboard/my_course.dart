@@ -52,6 +52,7 @@ class _MyCoursesState extends State<MyCourses> {
     'Free Courses',
     'Premium',
     'Finished',
+    
   ];
 
   @override

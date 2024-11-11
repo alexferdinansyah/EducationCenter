@@ -181,7 +181,7 @@ class Bootcamps extends StatelessWidget {
             )
           ],
         ),
-      ),
+      ),  
     );
   }
 }
