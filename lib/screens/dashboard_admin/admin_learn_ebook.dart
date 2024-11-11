@@ -782,7 +782,12 @@ class AdminLearnEbookForm extends StatefulWidget {
   final String uid;
   final String ebookId;
   final List<Map> learnEbook;
-  const AdminLearnEbookForm({super.key, required this.uid, required this.ebookId, required this.learnEbook});
+ const AdminLearnEbookForm({
+    Key? key,
+    required this.uid,
+    required this.ebookId,
+    required this.learnEbook,
+  }) : super(key: key);
 
   @override
   State<AdminLearnEbookForm> createState() => _AdminLearnEbookFormState();
@@ -792,6 +797,7 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
     final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _dateController = TextEditingController();
+  
 
   String id = '';
 
@@ -799,6 +805,7 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
   bool showSave = true;
   bool loading = false;
   bool initEBook = false;
+  bool isDraft = true;
 
   Uint8List? image;
   String? downloadURL;
@@ -1429,7 +1436,7 @@ final DetailEBookController controller = Get.put(DetailEBookController());
                                                 .updateEbookEachField(
                                                     ebookId: id,
                                                     fieldName: 'is_draft',
-                                                    data: false);
+                                                    data: true,);
                                           }
 
                                           Get.to(
