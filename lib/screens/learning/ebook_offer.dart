@@ -327,9 +327,9 @@ class EbookOffer extends StatelessWidget {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Get.rootDelegate.toNamed(routeLearnEBook,
+                                  Get.rootDelegate.toNamed(routeLearnEBook,
                                   
-                                  Get.rootDelegate.toNamed(routeBuyEbook,
+                                  // Get.rootDelegate.toNamed(routeBuyEbook,
                                       parameters: {'id': id});
                                 },
                                 style: ButtonStyle(
