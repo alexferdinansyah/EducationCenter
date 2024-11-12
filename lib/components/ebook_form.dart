@@ -31,11 +31,9 @@ String error ='';
 String? title;
 String? price;
 String? ebookLimit;
-String? ebookCategory;
 String? description;
 DateTime? date;
 String image ='';
-List ebookCategories = [];
 DateTime selectedDate = DateTime.now();
 
 

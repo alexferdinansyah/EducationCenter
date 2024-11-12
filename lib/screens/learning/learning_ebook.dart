@@ -89,8 +89,11 @@ class _LearningEbookState extends State<LearningEbook> {
       }else if ( ebook == null) {
         return const Center(child: Text('Loading...'));
       }
+            var learnEbook = data['learn_ebook'].toList();
+     print(learnEbook);
 
-      final List<EbookContent> learnEbook = data['learn_ebook'].toList();
+      learnEBookTitle = List.from(learnEbook.map((learnEbook) => learnEbook.title));
+   
 
       if (route.contains('/learn-ebook/offers')) {
         return EbookOffer(
