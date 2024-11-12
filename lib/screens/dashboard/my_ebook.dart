@@ -46,6 +46,16 @@ class _MyEbookState extends State<MyEbook> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var _tst = Future(() async {
+      var ata = await FirestoreService(uid: widget.user.uid).allMyEbooks;
+      print("asasasa ${ata.length}");
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -60,6 +70,8 @@ class _MyEbookState extends State<MyEbook> {
           }
           if (snapshot.hasData) {
             final List<Map<String, dynamic>?> dataMaps = snapshot.data!;
+
+            print("ata book $dataMaps");
             final dataEbooks = dataMaps.map((data) {
               return {
                 'id': data!['id'],
@@ -407,7 +419,7 @@ class _MyEbookState extends State<MyEbook> {
                                     itemCount: filteredEbooks.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return AdminEbooks(
+                                      return MyEbooks(
                                         ebook: filteredEbooks[index]['ebook'],
                                         id: filteredEbooks[index]['id'],
                                         isPaid: filteredEbooks[index]['isPaid'],

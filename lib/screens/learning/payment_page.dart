@@ -5915,6 +5915,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                           }
 
                                           if (isEbook == true) {
+                                            print("book");
                                             data = TransactionModel(
                                                 uid: uid,
                                                 item: TransactionItem(
@@ -5934,6 +5935,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                         totalPrice.length - 3),
                                                 reason: null,
                                                 discount: transactionDiscount);
+                                            print("book ata ${data.item.title}");
                                           } else {
                                             data = TransactionModel(
                                                 uid: widget.user!.uid,

@@ -341,6 +341,7 @@ class _DetailEbookState extends State<DetailEbook> {
                 // Handle error
                 return Text('Error: ${snapshot.error}');
               } else {
+                print("usr i ${user.uid}");
                 return cusPaymentWidgetEbookOn(
                     width, height, id, user.uid, snapshot.data, context);
               }

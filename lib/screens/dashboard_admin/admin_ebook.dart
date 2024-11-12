@@ -69,6 +69,7 @@ class _AdminEbookState extends State<AdminEbook> {
           }
           if (snapshot.hasData) {
             final List<Map> dataMaps = snapshot.data!;
+            print("dataMaps $dataMaps");
             final dataEBooks = dataMaps.map((data) {
               return {
                 'id': data['id'],
