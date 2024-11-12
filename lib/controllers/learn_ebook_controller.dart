@@ -74,10 +74,14 @@ class LearnEbookController extends GetxController {
     CollectionReference myEbookCollection =
         userDoc.collection('my_ebook');
 
+    print("ebookDoc $ebookDoc");
     // Query to get the specific course document by ID
     QuerySnapshot querySnapshot = await myEbookCollection
         .where('ebook', isEqualTo: ebookDoc)
         .get();
+    
+    var a = await myEbookCollection.get();
+    print("a ${a.docs}");
 
     // Check if the document exists and return it
     if (querySnapshot.docs.isNotEmpty) {

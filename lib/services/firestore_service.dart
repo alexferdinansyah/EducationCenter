@@ -933,6 +933,9 @@ class FirestoreService {
   Future<String> createTransaction(TransactionModel transactionData) async {
     final DocumentReference docRef =
         await transactionCollection.add(transactionData.toFirestore());
+
+    print("docRef ${docRef.id}");
+
     return docRef.id;
   }
 
@@ -1054,6 +1057,7 @@ class FirestoreService {
   Future<void> updateUserTransaction(String transactionId) async {
     final CollectionReference transactionRef =
         userCollection.doc(uid).collection('transactions');
+
     final DocumentReference transactionDocRef =
         transactionCollection.doc(transactionId);
 
@@ -1117,6 +1121,7 @@ class FirestoreService {
         .where('transaction', isNotEqualTo: null)
         .get();
 
+    print("asasassas ${querySnapshot.docs.length}");
     // Check if any documents have the specified title within the 'transactions' collection
     for (final transactionDocument in querySnapshot.docs) {
       final data = transactionDocument.data() as Map<String, dynamic>;
@@ -1186,6 +1191,10 @@ class FirestoreService {
               .doc(transactionId)
               .update({'status': 'Success'});
           await addMyVideoLearning(transaction.item!.id!, user.uid, true);
+          await transactionCollection
+              .doc(transactionId)
+              .update({'status': 'Success'});
+          await addMyEbook(transaction.item!.id!, user.uid, true);
           await transactionCollection
               .doc(transactionId)
               .update({'status': 'Success'});
@@ -1701,8 +1710,7 @@ class FirestoreService {
     required EbookContent data,
   }) async {
     try {
-      await EbookCollection
-          .doc(ebookId)
+      await EbookCollection.doc(ebookId)
           .collection('learn_ebook')
           .add(data.toFirestore());
     } catch (e) {
@@ -1719,8 +1727,7 @@ class FirestoreService {
   }) async {
     try {
       if (isUpdating) {
-        await EbookCollection
-            .doc(ebookId)
+        await EbookCollection.doc(ebookId)
             .collection('learn_ebook')
             .doc(learnEBookId)
             .update({fieldName!: data});
@@ -1761,6 +1768,7 @@ class FirestoreService {
       });
     }
   }
+
   Stream<List<Map<String, dynamic>>?> get allLearnEBook {
     try {
       final learnEbookCollection =
@@ -1804,12 +1812,16 @@ class FirestoreService {
         List<Map<String, dynamic>> myEbook = [];
 
         for (final DocumentSnapshot document in querySnapshot.docs) {
+          // print("mybooks ${document.data()}");
           final data = document.data() as Map<String, dynamic>;
           final ebookReference = data['ebook'] as DocumentReference;
           final isPaid = data['isPaid'] as bool;
           final status = data['status'] as String;
 
           try {
+            var ss = await ebookReference.get();
+            // print("bbbjasnas ${ss.data()}");
+            // rror whn gt ata
             final EbookModel ebookData = await getEbookData(ebookReference);
             myEbook.add({
               'id': ebookReference.id,
@@ -1822,17 +1834,17 @@ class FirestoreService {
           }
         }
 
+        print("mbook $myEbook");
         return myEbook;
       });
     } catch (error) {
       print('Error  my ebook: $error');
       return Stream.value([]); // Return an empty list in case of an error
     }
-    
   }
 
 // update bootcamp
- Future updateBootcampFewField({
+  Future updateBootcampFewField({
     String? bootcampId,
     String? title,
     String? description,
@@ -1854,7 +1866,6 @@ class FirestoreService {
     }
   }
 
-  
   Future updateBootcampEachField({
     required String bootcampId,
     required String fieldName,
@@ -1864,7 +1875,8 @@ class FirestoreService {
       if (data is List<ArticleContent>) {
         final List<Map<String, dynamic>> contentData =
             data.map((content) => content.toFirestore()).toList();
-        await BootcampCollection.doc(bootcampId).update({fieldName: contentData});
+        await BootcampCollection.doc(bootcampId)
+            .update({fieldName: contentData});
       } else {
         await BootcampCollection.doc(bootcampId).update({fieldName: data});
       }
@@ -1873,10 +1885,4 @@ class FirestoreService {
       // Handle the error as needed
     }
   }
-
-
-
 }
-
-
-

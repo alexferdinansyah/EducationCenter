@@ -1,4 +1,5 @@
 import 'package:auto_animated/auto_animated.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -35,6 +36,15 @@ class _LandingPageState extends State<LandingPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showMyDialog(); // Automatically triggers the dialog
     });
+    // var tst = Future(() async {  
+    //     final CollectionReference transactionCollection = FirebaseFirestore.instance.collection('transactions');
+
+    //     var transactionDoc = await transactionCollection.where("uid", isEqualTo: "G1EWzCwT34bdrcSSflIZD3Kfruh1").get();
+
+    //     for (var v in transactionDoc.docs) {
+    //       v.reference.delete();
+    //     }
+    // });
   }
 
   Future<void> _showMyDialog() async {
