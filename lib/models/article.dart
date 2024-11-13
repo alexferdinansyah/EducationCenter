@@ -22,7 +22,7 @@ class Article {
   });
 
   factory Article.fromFirestore(Map<String, dynamic> data) {
-    final List<dynamic>? articleContentData = data['article_content'];
+    final List<dynamic>? articleContentData = data['article_  tent'];
 
     final List<ArticleContent>? articleContents =
         articleContentData?.map((content) {

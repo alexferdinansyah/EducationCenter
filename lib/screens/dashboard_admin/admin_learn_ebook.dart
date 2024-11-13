@@ -165,9 +165,614 @@ class _AdminLearnEbookState extends State<AdminLearnEbook> {
             );
           }
         });
-  }
 
-  @override
+  //   return Scaffold(
+  //     body: SizedBox(
+  //       height: double.infinity,
+  //       width: double.infinity,
+  //       child: Form(
+  //         key: _formKey,
+  //         child: ListView(
+  //           children: [
+  //             Container(
+  //                 padding: EdgeInsets.symmetric(
+  //                     horizontal: width * .045, vertical: height * .018),
+  //                 color: CusColors.bg,
+  //                 alignment: Alignment.centerLeft,
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Obx(() {
+  //                       final ebook = controller.documentSnapshot.value;
+
+  //                       if (ebook == null) {
+  //                         return const Center(child: Text('Loading...'));
+  //                       }
+
+  //                       if (!initEBook) {
+  //                         imageUrl = ebook.image!;
+  //                         _dateController.text = ebook.date?.formatDate() ?? '';
+  //                         ebookContents = ebook.ebookContent;
+  //                       }
+
+  //                       initEBook = true;
+
+  //                       return Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           Padding(
+  //                             padding: EdgeInsets.only(
+  //                               top: getValueForScreenType<double>(
+  //                                 context: context,
+  //                                 mobile: 25,
+  //                                 tablet: 40,
+  //                                 desktop: 100,
+  //                               ),
+  //                               bottom: getValueForScreenType<double>(
+  //                                 context: context,
+  //                                 mobile: 5,
+  //                                 tablet: 10,
+  //                                 desktop: 20,
+  //                               ),
+  //                             ),
+  //                             child: TextFormField(
+  //                               initialValue: ebook.title,
+  //                               style: GoogleFonts.mulish(
+  //                                   color: CusColors.header,
+  //                                   fontSize: getValueForScreenType<double>(
+  //                                     context: context,
+  //                                     mobile: width * .035,
+  //                                     tablet: width * .024,
+  //                                     desktop: width * .023,
+  //                                   ),
+  //                                   fontWeight: FontWeight.bold),
+  //                               decoration: const InputDecoration(
+  //                                   border: InputBorder.none,
+  //                                   contentPadding: EdgeInsets.zero),
+  //                               keyboardType: TextInputType.text,
+  //                               validator: (val) {
+  //                                 if (val!.isEmpty) {
+  //                                   return 'Enter an title';
+  //                                 }
+  //                                 return null;
+  //                               },
+  //                               onChanged: (value) async {
+  //                                 FirestoreService firestore =
+  //                                     FirestoreService(uid: widget.uid);
+
+  //                                 await firestore.addLearnEBook(
+  //                                     ebookId: widget.ebookId,
+  //                                     data: EbookContent(
+  //                                       subTitle: value,
+  //                                       subTitleDescription: '',
+  //                                     ));
+  //                               },
+  //                             ),
+  //                           ),
+  //                           Row(
+  //                             children: [
+  //                               Text(
+  //                                 'Created by ',
+  //                                 style: GoogleFonts.mulish(
+  //                                   color: CusColors.inactive,
+  //                                   fontSize: getValueForScreenType<double>(
+  //                                     context: context,
+  //                                     mobile: width * .019,
+  //                                     tablet: width * .016,
+  //                                     desktop: width * .011,
+  //                                   ),
+  //                                   fontWeight: FontWeight.w300,
+  //                                 ),
+  //                               ),
+  //                               Expanded(
+  //                                 child: TextFormField(
+  //                                   initialValue: ebook.createdBy ?? '',
+  //                                   style: GoogleFonts.mulish(
+  //                                     color: CusColors.inactive,
+  //                                     fontSize: getValueForScreenType<double>(
+  //                                       context: context,
+  //                                       mobile: width * .019,
+  //                                       tablet: width * .016,
+  //                                       desktop: width * .011,
+  //                                     ),
+  //                                     fontWeight: FontWeight.w300,
+  //                                   ),
+  //                                   decoration: InputDecoration(
+  //                                     border: InputBorder.none,
+  //                                     contentPadding: EdgeInsets.zero,
+  //                                     hintText: 'Input who created',
+  //                                     hintStyle: GoogleFonts.mulish(
+  //                                       color: CusColors.inactive,
+  //                                       fontSize: getValueForScreenType<double>(
+  //                                         context: context,
+  //                                         mobile: width * .019,
+  //                                         tablet: width * .016,
+  //                                         desktop: width * .011,
+  //                                       ),
+  //                                       fontWeight: FontWeight.w300,
+  //                                     ),
+  //                                   ),
+  //                                   keyboardType: TextInputType.text,
+  //                                   validator: (val) {
+  //                                     if (val!.isEmpty) {
+  //                                       return 'Enter an author';
+  //                                     }
+  //                                     return null;
+  //                                   },
+  //                                   onChanged: (value) {
+  //                                     FirestoreService firestore =
+  //                                         FirestoreService(uid: user!.uid);
+
+  //                                     firestore.updateEbookEachField(
+  //                                       ebookId: id,
+  //                                       fieldName: 'created_by',
+  //                                       data: value,
+  //                                     );
+  //                                   },
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           GestureDetector(
+  //                             onTap: () => _selectDate(context),
+  //                             child: TextFormField(
+  //                               controller: _dateController,
+  //                               enabled: false,
+  //                               style: GoogleFonts.mulish(
+  //                                 color: CusColors.inactive,
+  //                                 fontSize: getValueForScreenType<double>(
+  //                                   context: context,
+  //                                   mobile: width * .019,
+  //                                   tablet: width * .016,
+  //                                   desktop: width * .011,
+  //                                 ),
+  //                                 fontWeight: FontWeight.w300,
+  //                               ),
+  //                               keyboardType: TextInputType.text,
+  //                               decoration: InputDecoration(
+  //                                 border: InputBorder.none,
+  //                                 contentPadding: EdgeInsets.zero,
+  //                                 hintText: 'Select date',
+  //                                 hintStyle: GoogleFonts.mulish(
+  //                                   color: CusColors.inactive,
+  //                                   fontSize: getValueForScreenType<double>(
+  //                                     context: context,
+  //                                     mobile: width * .019,
+  //                                     tablet: width * .016,
+  //                                     desktop: width * .011,
+  //                                   ),
+  //                                   fontWeight: FontWeight.w300,
+  //                                 ),
+  //                               ),
+  //                               validator: (val) {
+  //                                 if (val!.isEmpty) {
+  //                                   return 'Enter an date';
+  //                                 }
+  //                                 return null;
+  //                               },
+  //                             ),
+  //                           ),
+  //                           Container(
+  //                             margin: const EdgeInsets.only(top: 5),
+  //                             width: double.infinity,
+  //                             height: 1,
+  //                             color: CusColors.accentBlue,
+  //                           ),
+  //                           Padding(
+  //                             padding: const EdgeInsets.symmetric(vertical: 15),
+  //                             child: image != null
+  //                                 ? GestureDetector(
+  //                                     onTap: selectImageFromGallery,
+  //                                     child: ClipRRect(
+  //                                         borderRadius:
+  //                                             BorderRadius.circular(20),
+  //                                         child: Stack(
+  //                                           alignment: Alignment.center,
+  //                                           children: [
+  //                                             Image.memory(image!,
+  //                                                 height: getValueForScreenType<
+  //                                                     double>(
+  //                                                   context: context,
+  //                                                   mobile: height / 3.7,
+  //                                                   tablet: height / 2.7,
+  //                                                   desktop: height / 1.6,
+  //                                                 )),
+  //                                             if (showSave)
+  //                                               Container(
+  //                                                 width: width * .09,
+  //                                                 height: 40,
+  //                                                 decoration: BoxDecoration(
+  //                                                     color: const Color(
+  //                                                         0xFF00C8FF),
+  //                                                     borderRadius:
+  //                                                         BorderRadius.circular(
+  //                                                             80),
+  //                                                     boxShadow: [
+  //                                                       BoxShadow(
+  //                                                           color: Colors.black
+  //                                                               .withOpacity(
+  //                                                                   .25),
+  //                                                           spreadRadius: 0,
+  //                                                           blurRadius: 20,
+  //                                                           offset:
+  //                                                               const Offset(
+  //                                                                   0, 4))
+  //                                                     ]),
+  //                                                 child: ElevatedButton(
+  //                                                   onPressed: loading
+  //                                                       ? null
+  //                                                       : () async {
+  //                                                           await deleteExistingPhoto();
+  //                                                           await uploadToFirebase(
+  //                                                               image);
+  //                                                           FirestoreService
+  //                                                               firestore =
+  //                                                               FirestoreService(
+  //                                                                   uid: user!
+  //                                                                       .uid);
+  //                                                           firestore
+  //                                                               .updateEbookEachField(
+  //                                                                   ebookId: id,
+  //                                                                   fieldName:
+  //                                                                       'image',
+  //                                                                   data:
+  //                                                                       downloadURL);
+  //                                                         },
+  //                                                   style: ButtonStyle(
+  //                                                     shape: MaterialStateProperty
+  //                                                         .all<
+  //                                                             RoundedRectangleBorder>(
+  //                                                       RoundedRectangleBorder(
+  //                                                         borderRadius:
+  //                                                             BorderRadius
+  //                                                                 .circular(8),
+  //                                                       ),
+  //                                                     ),
+  //                                                     backgroundColor:
+  //                                                         MaterialStateProperty
+  //                                                             .all(Colors
+  //                                                                 .transparent),
+  //                                                     shadowColor:
+  //                                                         MaterialStateProperty
+  //                                                             .all(Colors
+  //                                                                 .transparent),
+  //                                                   ),
+  //                                                   child: loading
+  //                                                       ? const CircularProgressIndicator()
+  //                                                       : Text(
+  //                                                           'Save Image',
+  //                                                           style: GoogleFonts
+  //                                                               .mulish(
+  //                                                             fontWeight:
+  //                                                                 FontWeight
+  //                                                                     .w700,
+  //                                                             color:
+  //                                                                 Colors.white,
+  //                                                             fontSize:
+  //                                                                 width * 0.01,
+  //                                                           ),
+  //                                                         ),
+  //                                                 ),
+  //                                               ),
+  //                                           ],
+  //                                         )),
+  //                                   )
+  //                                 : ebook.image != ''
+  //                                     ? GestureDetector(
+  //                                         onTap: selectImageFromGallery,
+  //                                         child: ClipRRect(
+  //                                           borderRadius:
+  //                                               BorderRadius.circular(10),
+  //                                           child: FadeInImage.memoryNetwork(
+  //                                             placeholder: kTransparentImage,
+  //                                             image: ebook.image!,
+  //                                             height:
+  //                                                 getValueForScreenType<double>(
+  //                                               context: context,
+  //                                               mobile: height / 3.7,
+  //                                               tablet: height / 2.7,
+  //                                               desktop: height / 1.6,
+  //                                             ),
+  //                                           ),
+  //                                         ),
+  //                                       )
+  //                                     : GestureDetector(
+  //                                         onTap: selectImageFromGallery,
+  //                                         child: Container(
+  //                                           width: 300,
+  //                                           height: 300,
+  //                                           decoration: BoxDecoration(
+  //                                               border: Border.all(
+  //                                                   color: Colors.grey,
+  //                                                   style: BorderStyle.solid),
+  //                                               borderRadius:
+  //                                                   BorderRadius.circular(15)),
+  //                                           child: const Icon(
+  //                                             Icons.camera_alt_outlined,
+  //                                             color: Colors.grey,
+  //                                             size: 72,
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                           ),
+  //                           TextFormField(
+  //                             initialValue: ebook.description ?? '',
+  //                             maxLines: null,
+  //                             textInputAction: TextInputAction.newline,
+  //                             style: GoogleFonts.mulish(
+  //                               color: CusColors.inactive,
+  //                               fontSize: getValueForScreenType<double>(
+  //                                 context: context,
+  //                                 mobile: width * .02,
+  //                                 tablet: width * .017,
+  //                                 desktop: width * .012,
+  //                               ),
+  //                               fontWeight: FontWeight.w300,
+  //                               height: 1.5,
+  //                             ),
+  //                             decoration: InputDecoration(
+  //                               border: InputBorder.none,
+  //                               contentPadding: EdgeInsets.zero,
+  //                               hintText: 'Input an description',
+  //                               hintStyle: GoogleFonts.mulish(
+  //                                 color: CusColors.inactive,
+  //                                 fontSize: getValueForScreenType<double>(
+  //                                   context: context,
+  //                                   mobile: width * .02,
+  //                                   tablet: width * .017,
+  //                                   desktop: width * .012,
+  //                                 ),
+  //                                 fontWeight: FontWeight.w300,
+  //                                 height: 1.5,
+  //                               ),
+  //                             ),
+  //                             validator: (val) {
+  //                               if (val!.isEmpty) {
+  //                                 return 'Enter an description';
+  //                               }
+  //                               return null;
+  //                             },
+  //                             onChanged: (value) {
+  //                               FirestoreService firestore =
+  //                                   FirestoreService(uid: user!.uid);
+
+  //                               firestore.updateEbookEachField(
+  //                                 ebookId: id,
+  //                                 fieldName: 'description',
+  //                                 data: value,
+  //                               );
+  //                             },
+  //                           ),
+  //                           if (ebookContents != null &&
+  //                               ebookContents!.isNotEmpty)
+  //                             EbookContentWidget(
+  //                               ebookContent: ebookContents!,
+  //                               id: id,
+  //                             ),
+  //                           if (ebookContents == null)
+  //                             Container(
+  //                               width: width * .09,
+  //                               height: 40,
+  //                               margin: const EdgeInsets.only(top: 20),
+  //                               decoration: BoxDecoration(
+  //                                   color: const Color(0xFF00C8FF),
+  //                                   borderRadius: BorderRadius.circular(80),
+  //                                   boxShadow: [
+  //                                     BoxShadow(
+  //                                         color: Colors.black.withOpacity(.25),
+  //                                         spreadRadius: 0,
+  //                                         blurRadius: 20,
+  //                                         offset: const Offset(0, 4))
+  //                                   ]),
+  //                               child: ElevatedButton(
+  //                                 onPressed: () async {
+  //                                   FirestoreService firestore =
+  //                                       FirestoreService(uid: user!.uid);
+
+  //                                   setState(() {
+  //                                     ebookContents = [
+  //                                       EbookContent(
+  //                                         ebookId: 1,
+  //                                         subTitle: '',
+  //                                         subTitleDescription: '',
+  //                                         textUnderList: '',
+  //                                         bulletList: [],
+  //                                       )
+  //                                     ];
+  //                                   });
+  //                                   await firestore.updateEbookEachField(
+  //                                     ebookId: id,
+  //                                     fieldName: 'ebook_content',
+  //                                     data: [
+  //                                       EbookContent(
+  //                                         ebookId: 1,
+  //                                         subTitle: '',
+  //                                         subTitleDescription: '',
+  //                                         textUnderList: '',
+  //                                         bulletList: [],
+  //                                       )
+  //                                     ],
+  //                                   );
+  //                                 },
+  //                                 style: ButtonStyle(
+  //                                   shape: MaterialStateProperty.all<
+  //                                       RoundedRectangleBorder>(
+  //                                     RoundedRectangleBorder(
+  //                                       borderRadius: BorderRadius.circular(8),
+  //                                     ),
+  //                                   ),
+  //                                   backgroundColor: MaterialStateProperty.all(
+  //                                       Colors.transparent),
+  //                                   shadowColor: MaterialStateProperty.all(
+  //                                       Colors.transparent),
+  //                                 ),
+  //                                 child: Text(
+  //                                   'Add content',
+  //                                   style: GoogleFonts.mulish(
+  //                                     fontWeight: FontWeight.w700,
+  //                                     color: Colors.white,
+  //                                     fontSize: width * 0.01,
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           const SizedBox(
+  //                             height: 100,
+  //                           ),
+  //                           Padding(
+  //                             padding:
+  //                                 const EdgeInsets.only(bottom: 40, right: 100),
+  //                             child: Row(
+  //                               mainAxisAlignment: MainAxisAlignment.end,
+  //                               children: [
+  //                                 if (ebook.isDraft != false)
+  //                                   SizedBox(
+  //                                     height: getValueForScreenType<double>(
+  //                                       context: context,
+  //                                       mobile: 26,
+  //                                       tablet: 33,
+  //                                       desktop: 38,
+  //                                     ),
+  //                                     child: ElevatedButton(
+  //                                       onPressed: () async {
+  //                                         Get.to(
+  //                                             () => DashboardAdmin(
+  //                                                   selected: 'E-Book',
+  //                                                 ),
+  //                                             routeName: '/login');
+  //                                       },
+  //                                       style: ButtonStyle(
+  //                                           padding: MaterialStateProperty.all(
+  //                                             EdgeInsets.symmetric(
+  //                                               horizontal:
+  //                                                   getValueForScreenType<
+  //                                                       double>(
+  //                                                 context: context,
+  //                                                 mobile: 20,
+  //                                                 tablet: 25,
+  //                                                 desktop: 30,
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           foregroundColor:
+  //                                               MaterialStateProperty.all(
+  //                                             const Color.fromARGB(
+  //                                                 255, 23, 221, 1),
+  //                                           ),
+  //                                           backgroundColor:
+  //                                               MaterialStateProperty.all(
+  //                                             const Color.fromARGB(
+  //                                                 255, 23, 221, 1),
+  //                                           ),
+  //                                           shape: MaterialStateProperty.all(
+  //                                             RoundedRectangleBorder(
+  //                                               borderRadius:
+  //                                                   BorderRadius.circular(6),
+  //                                             ),
+  //                                           )),
+  //                                       child: Text(
+  //                                         'Save as draft',
+  //                                         style: GoogleFonts.poppins(
+  //                                           fontSize:
+  //                                               getValueForScreenType<double>(
+  //                                             context: context,
+  //                                             mobile: width * .018,
+  //                                             tablet: width * .015,
+  //                                             desktop: width * .01,
+  //                                           ),
+  //                                           fontWeight: FontWeight.w500,
+  //                                           color: Colors.white,
+  //                                         ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 const SizedBox(
+  //                                   width: 5,
+  //                                 ),
+  //                                 SizedBox(
+  //                                   height: getValueForScreenType<double>(
+  //                                     context: context,
+  //                                     mobile: 26,
+  //                                     tablet: 33,
+  //                                     desktop: 38,
+  //                                   ),
+  //                                   child: ElevatedButton(
+  //                                     onPressed: () async {
+  //                                       if (_formKey.currentState!.validate()) {
+  //                                         final FirestoreService firestore =
+  //                                             FirestoreService(uid: user!.uid);
+  //                                         if (ebook.isDraft!) {
+  //                                           await firestore
+  //                                               .updateEbookEachField(
+  //                                                   ebookId: id,
+  //                                                   fieldName: 'is_draft',
+  //                                                   data: false);
+  //                                         }
+
+  //                                         Get.to(
+  //                                             () => DashboardAdmin(
+  //                                                   selected: 'E-Book',
+  //                                                 ),
+  //                                             routeName: '/login');
+  //                                       }
+  //                                     },
+  //                                     style: ButtonStyle(
+  //                                         padding: MaterialStateProperty.all(
+  //                                           EdgeInsets.symmetric(
+  //                                             horizontal:
+  //                                                 getValueForScreenType<double>(
+  //                                               context: context,
+  //                                               mobile: 20,
+  //                                               tablet: 25,
+  //                                               desktop: 30,
+  //                                             ),
+  //                                           ),
+  //                                         ),
+  //                                         foregroundColor:
+  //                                             MaterialStateProperty.all(
+  //                                           const Color(0xFF4351FF),
+  //                                         ),
+  //                                         backgroundColor:
+  //                                             MaterialStateProperty.all(
+  //                                           const Color(0xFF4351FF),
+  //                                         ),
+  //                                         shape: MaterialStateProperty.all(
+  //                                           RoundedRectangleBorder(
+  //                                             borderRadius:
+  //                                                 BorderRadius.circular(6),
+  //                                           ),
+  //                                         )),
+  //                                     child: Text(
+  //                                       ebook.isDraft! ? 'Publish' : 'Save',
+  //                                       style: GoogleFonts.poppins(
+  //                                         fontSize:
+  //                                             getValueForScreenType<double>(
+  //                                           context: context,
+  //                                           mobile: width * .018,
+  //                                           tablet: width * .015,
+  //                                           desktop: width * .01,
+  //                                         ),
+  //                                         fontWeight: FontWeight.w500,
+  //                                         color: Colors.white,
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           )
+  //                         ],
+  //                       );
+  //                     })
+  //                   ],
+  //                 ))
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  }
+   @override
   void dispose() {
     super.dispose();
   }
@@ -209,6 +814,8 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
   List<EbookContent>? ebookContents;
 
   DateTime selectedDate = DateTime.now();
+  
+  get user => null;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -232,7 +839,7 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
       setState(() {
         image = file;
         showSave = true;
-      });
+      });    
     }
   }
 
@@ -366,8 +973,7 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       ebookId: widget.ebookId,
                                       data: EbookContent(
                                         subTitle: value,
-                                        subTitleDescription: '',
-                                        ebookId: null,
+                                        subTitleDescription: '', ebookId: null,
                                       ));
                                 },
                               ),
@@ -423,17 +1029,17 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       return null;
                                     },
                                     onChanged: (value) async {
-                                      FirestoreService firestore =
-                                          FirestoreService(uid: widget.uid);
+                                  FirestoreService firestore =
+                                      FirestoreService(uid: widget.uid);
 
-                                      await firestore.addLearnEBook(
-                                          ebookId: widget.ebookId,
-                                          data: EbookContent(
-                                            ebookId: null,
-                                            subTitle: value,
-                                            subTitleDescription: '',
-                                          ));
-                                    },
+                                  await firestore.addLearnEBook(
+                                      ebookId: widget.ebookId,
+                                      data: EbookContent(
+                                        ebookId: null,
+                                        subTitle: value,
+                                        subTitleDescription: '',
+                                      ));
+                                },
                                   ),
                                 ),
                               ],
@@ -708,17 +1314,9 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       ];
                                     });
                                     await firestore.updateEbookEachField(
-                                      ebookId: id,
+                                      ebookId: widget.ebookId,
                                       fieldName: 'ebook_content',
-                                      data: [
-                                        EbookContent(
-                                          ebookId: 1,
-                                          subTitle: '',
-                                          subTitleDescription: '',
-                                          textUnderList: '',
-                                          bulletList: [],
-                                        )
-                                      ],
+                                      data: ebookContents,
                                     );
                                   },
                                   style: ButtonStyle(
@@ -762,6 +1360,16 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       ),
                                       child: ElevatedButton(
                                         onPressed: () async {
+                                          // print(ebookContents.first.subTitle);
+                                          final FirestoreService firestore =
+                                              FirestoreService(
+                                                  uid: widget!.uid);
+                                          await firestore
+                                                .updateEbookEachField(
+                                              ebookId: widget.ebookId,
+                                              fieldName: 'ebook_content',
+                                              data: ebookContents,
+                                                );
                                           Get.to(
                                               () => DashboardAdmin(
                                                     selected: 'E-Book',
@@ -797,7 +1405,7 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                                     BorderRadius.circular(6),
                                               ),
                                             )),
-                                        child: Text(
+                                        child: Text(  
                                           'Save as draft',
                                           style: GoogleFonts.poppins(
                                             fontSize:
@@ -823,20 +1431,22 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       tablet: 33,
                                       desktop: 38,
                                     ),
+                                    
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()) {
+                                          print('masuk');
+                                          isDraft =true;
                                           final FirestoreService firestore =
                                               FirestoreService(
                                                   uid: widget!.uid);
-                                          if (ebook.isDraft!) {
-                                            await firestore
+                                          
+                                          await firestore
                                                 .updateEbookEachField(
-                                              ebookId: id,
-                                              fieldName: 'is_draft',
-                                              data: true,
-                                            );
-                                          }
+                                              ebookId: widget.ebookId,
+                                              fieldName: 'ebook_content',
+                                              data: ebookContents,
+                                                );
 
                                           Get.to(
                                               () => DashboardAdmin(
