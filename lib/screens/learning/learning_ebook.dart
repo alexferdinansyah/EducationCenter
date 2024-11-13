@@ -43,6 +43,7 @@ class _LearningEbookState extends State<LearningEbook> {
       });
     }
   }
+
   final DetailEBookController controller = Get.put(DetailEBookController());
   final LearnEbookController controllerLearn = Get.put(LearnEbookController());
 
@@ -66,7 +67,7 @@ class _LearningEbookState extends State<LearningEbook> {
     double width = MediaQuery.of(context).size.width;
 
     var parameter = Get.rootDelegate.parameters;
-    var route = Get.rootDelegate.currentConfiguration!.location!;
+    var route = Get.rootDelegate.currentConfiguration!.location;
     id = parameter['id']!;
 
     if (user == null) {
@@ -78,19 +79,17 @@ class _LearningEbookState extends State<LearningEbook> {
     }
 
     controllerLearn.fetchDocument(id, user.uid);
+    controller.fetchDocument(id);
 
     return Obx(() {
       final data = controllerLearn.documentSnapshot.value;
       final ebook = controller.documentSnapshot.value;
 
-
-      if (data  == null) {
-        return const Center(child: Text('Loading...'));
-      }else if ( ebook == null) {
+      if (data == null || ebook == null) {
         return const Center(child: Text('Loading...'));
       }
 
-      final List<EbookContent> learnEbook = data['learn_ebook'].toList();
+      // final List<EbookContent> learnEbook = data['learn_ebook'].toList();
 
       if (route.contains('/learn-ebook/offers')) {
         return EbookOffer(
@@ -188,9 +187,8 @@ class _LearningEbookState extends State<LearningEbook> {
             ],
           ),
         );
-      } else  if (data['isPaid'] == true) {
-
-      return SingleChildScrollView(
+      } else if (data['isPaid'] == true) {
+        return SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: getValueForScreenType<double>(
@@ -219,7 +217,7 @@ class _LearningEbookState extends State<LearningEbook> {
                     ),
                   ),
                   child: Text(
-                    ebook.title ?? '',
+                    ebook.title!,
                     style: GoogleFonts.mulish(
                       color: CusColors.header,
                       fontSize: getValueForScreenType<double>(
@@ -245,17 +243,23 @@ class _LearningEbookState extends State<LearningEbook> {
                       desktop: width * .011,
                     ),
                     fontWeight: FontWeight.w300,
-                    decoration: TextDecoration.none, // Menghilangkan garis bawah
+                    decoration:
+                        TextDecoration.none, // Menghilangkan garis bawah
                   ),
                 ),
-                Divider(color: CusColors.accentBlue, thickness: 1),
+                Container(
+                  margin: const EdgeInsets.only(top: 5),
+                  width: double.infinity,
+                  height: 1,
+                  color: CusColors.accentBlue,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image: ebook.image ?? '',
+                      image: ebook.image!,
                       height: getValueForScreenType<double>(
                         context: context,
                         mobile: height / 3.7,
@@ -267,7 +271,7 @@ class _LearningEbookState extends State<LearningEbook> {
                   ),
                 ),
                 Text(
-                  ebook.description?.replaceAll('\\n', '\n') ?? '',
+                  ebook.description!.replaceAll('\\n', '\n'),
                   style: GoogleFonts.mulish(
                     color: CusColors.inactive,
                     fontSize: getValueForScreenType<double>(
@@ -278,14 +282,11 @@ class _LearningEbookState extends State<LearningEbook> {
                     ),
                     fontWeight: FontWeight.w300,
                     height: 1.5,
-                    decoration: TextDecoration.none, // Menghilangkan garis bawah
                   ),
                 ),
                 Column(
-                  children: ebook.ebookContent?.map((ebook) {
-                        return EbookContentWidget(ebookContent: ebook);
-                      }).toList() ??
-                      [],
+                  children: ebook.ebookContent!.map((ebook) => EbookContentWidget(ebookContent: ebook),
+                      ).toList() ,
                 ),
                 SizedBox(
                   height: getValueForScreenType<double>(
@@ -301,12 +302,9 @@ class _LearningEbookState extends State<LearningEbook> {
         );
       }
       return Container();
-  
-
     });
   }
 }
-
 
 class EbookContentWidget extends StatelessWidget {
   final EbookContent ebookContent;

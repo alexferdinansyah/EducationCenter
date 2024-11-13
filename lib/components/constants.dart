@@ -311,7 +311,7 @@ Widget cusPaymentWidgetEbookOn(width, height, ebookId, userId, haveEBook,context
       onPressed: () async {
         if (haveEBook == false) {
            Get.rootDelegate.toNamed(
-              routeBuyVideo,
+              routeBuyEbook,
               parameters: {'id': ebookId},
             );
         } else if (haveEBook == null) {
@@ -321,7 +321,7 @@ Widget cusPaymentWidgetEbookOn(width, height, ebookId, userId, haveEBook,context
           );
         } else {
           Get.rootDelegate.toNamed(
-            routeLearnVideo,
+            routeLearnEBook,
             parameters: {'id': ebookId},
           );
         }
