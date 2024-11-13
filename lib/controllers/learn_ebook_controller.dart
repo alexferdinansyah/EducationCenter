@@ -22,7 +22,7 @@ class LearnEbookController extends GetxController {
 
       DocumentReference userDoc = usersCollection.doc(userId);
       // Reference to the my_ebook subcollection
-      CollectionReference myEbookCollection = userDoc.collection('my_ebook');
+      CollectionReference myEbookCollection = userDoc.collection('my_ebooks');
 
       QuerySnapshot querySnapshot = await myEbookCollection
           .where('ebook', isEqualTo: ebook)
