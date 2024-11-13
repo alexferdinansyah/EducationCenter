@@ -1687,10 +1687,12 @@ class FirestoreService {
     required String fieldName,
     required dynamic data,
   }) async {
+    // print("ebook: $ebookId");
+    // print("tes $data");
     try {
-      if (data is List<ChapterList>) {
+      if (data is List<ChapterListEbook>) {
         final List<Map<String, dynamic>> chapterData =
-            data.map((chapterList) => chapterList.toFirestore()).toList();
+            data.map((ChapterListEbook) => ChapterListEbook.toFirestore()).toList();
         await EbookCollection.doc(ebookId).update({fieldName: chapterData});
       } else if (data is List<EbookContent>) {
         final List<Map<String, dynamic>> contentData =

@@ -1314,17 +1314,9 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       ];
                                     });
                                     await firestore.updateEbookEachField(
-                                      ebookId: id,
+                                      ebookId: widget.ebookId,
                                       fieldName: 'ebook_content',
-                                      data: [
-                                        EbookContent(
-                                          ebookId: 1,
-                                          subTitle: '',
-                                          subTitleDescription: '',
-                                          textUnderList: '',
-                                          bulletList: [],
-                                        )
-                                      ],
+                                      data: ebookContents,
                                     );
                                   },
                                   style: ButtonStyle(
@@ -1368,6 +1360,16 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                       ),
                                       child: ElevatedButton(
                                         onPressed: () async {
+                                          // print(ebookContents.first.subTitle);
+                                          final FirestoreService firestore =
+                                              FirestoreService(
+                                                  uid: widget!.uid);
+                                          await firestore
+                                                .updateEbookEachField(
+                                              ebookId: widget.ebookId,
+                                              fieldName: 'ebook_content',
+                                              data: ebookContents,
+                                                );
                                           Get.to(
                                               () => DashboardAdmin(
                                                     selected: 'E-Book',
@@ -1403,7 +1405,7 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                                     BorderRadius.circular(6),
                                               ),
                                             )),
-                                        child: Text(
+                                        child: Text(  
                                           'Save as draft',
                                           style: GoogleFonts.poppins(
                                             fontSize:
@@ -1433,18 +1435,18 @@ class _AdminLearnEbookFormState extends State<AdminLearnEbookForm> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()) {
+                                          print('masuk');
                                           isDraft =true;
                                           final FirestoreService firestore =
                                               FirestoreService(
                                                   uid: widget!.uid);
-                                          if (ebook.isDraft!) {
-                                            await firestore
+                                          
+                                          await firestore
                                                 .updateEbookEachField(
-                                              ebookId: id,
-                                              fieldName: 'is_draft',
-                                              data: true,
-                                            );
-                                          }
+                                              ebookId: widget.ebookId,
+                                              fieldName: 'ebook_content',
+                                              data: ebookContents,
+                                                );
 
                                           Get.to(
                                               () => DashboardAdmin(
