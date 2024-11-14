@@ -315,7 +315,7 @@ class _AdminBootcampState extends State<AdminBootcamp> {
                                                   return CreateBootcamp(
                                                     bootcamp:
                                                         bootcamps[index]
-                                                            ['webinar'],
+                                                            ['bootcamp'],
                                                     bootcampId:
                                                         bootcamps[index]
                                                             ['id'],

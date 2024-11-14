@@ -415,17 +415,8 @@ class AdminBootcamps extends StatelessWidget {
                           desktop: 38,
                         ),
                         child: ElevatedButton(
-                         onPressed: ()  async {
-                                              final result = await showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return CreateBootcamp(
-                                                    
-                                                  );
-                                                },
-                                              );
-
-                                             
+                         onPressed: () {
+                          onPressed!();
                                             },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<

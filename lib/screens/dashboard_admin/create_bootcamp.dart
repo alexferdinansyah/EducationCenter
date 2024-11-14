@@ -684,66 +684,70 @@ class _CreateBootcampState extends State<CreateBootcamp> {
       ),
       actions: [
         SizedBox(
-          height: getValueForScreenType<double>(context: context, mobile: 26, tablet: 33, desktop: 38),
+          height: getValueForScreenType<double>(
+            context: context,
+            mobile: 26,
+            tablet: 33,
+            desktop: 38,
+          ),
           child: ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            await uploadToFirebase(image);
-                            final FirestoreService firestore =
-                                FirestoreService(uid: user!.uid);
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                await uploadToFirebase(image);
+                final FirestoreService firestore =
+                    FirestoreService(uid: user!.uid);
 
-                            var model = Bootcamp(
-                                image: downloadURL,
-                                title: title,
-                                category: category,
-                                date: date,
-                                time: time,
-                                place: place,
-                                speaker: speaker,
-                                link: link,
-                                description: description);
-                            await firestore.CreateBootcamp(model);
-                            Get.to(
-                                () => DashboardAdmin(
-                                      selected: 'Bootcamps',
-                                    ),
-                                routeName: '/login');
-                          }
-                        },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                horizontal: getValueForScreenType<double>(
-                                  context: context,
-                                  mobile: 15,
-                                  tablet: 20,
-                                  desktop: 25,
-                                ),
-                              ),
-                            ),
-                            foregroundColor: MaterialStateProperty.all(
-                              const Color(0xFF4351FF),
-                            ),
-                            backgroundColor: MaterialStateProperty.all(
-                              const Color(0xFF4351FF),
-                            ),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            )),
-                        child: Text(
-                          'submit',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
+                var model = Bootcamp(
+                    image: downloadURL,
+                    title: title,
+                    category: category,
+                    date: date,
+                    time: time,
+                    place: place,
+                    speaker: speaker,
+                    link: link,
+                    description: description);
+                await firestore.CreateBootcamp(model);
+                Get.to(
+                    () => DashboardAdmin(
+                          selected: 'Bootcamps',
                         ),
-                      ),
+                    routeName: '/login');
+              }
+            },
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(
+                    horizontal: getValueForScreenType<double>(
+                      context: context,
+                      mobile: 15,
+                      tablet: 20,
+                      desktop: 25,
+                    ),
+                  ),
+                ),
+                foregroundColor: MaterialStateProperty.all(
+                  const Color(0xFF4351FF),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                  const Color(0xFF4351FF),
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                )),
+            child: Text(
+              'submit',
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
         )
       ],
     );
-    
   }
 }
