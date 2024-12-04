@@ -81,7 +81,7 @@ void launchTikTok() async {
 
 void launchWhatsapp() async {
   final Uri params =
-      Uri(scheme: 'https', host: 'wa.me', path: '+6287742812548');
+      Uri(scheme: 'https', host: 'wa.me', path: '+6285179943367');
   if (await canLaunchUrl(params)) {
     await launchUrl(params, mode: LaunchMode.inAppWebView);
   } else {

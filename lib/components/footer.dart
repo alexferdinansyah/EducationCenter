@@ -149,7 +149,7 @@ class Footer extends StatelessWidget {
                                       padding: EdgeInsets.only(
                                           left: 10, right: width * .05),
                                       child: Text(
-                                        '+62-21-7721-0358',
+                                        '+6285179943367',
                                         style: GoogleFonts.assistant(
                                           fontWeight: FontWeight.w500,
                                           color: const Color(0xFF0A142F),

@@ -282,6 +282,8 @@ class _LearningEbookState extends State<LearningEbook> {
                     ),
                     fontWeight: FontWeight.w300,
                     height: 1.5,
+                    decoration:
+                          TextDecoration.none,
                   ),
                 ),
                 Column(
@@ -360,6 +362,7 @@ class EbookContentWidget extends StatelessWidget {
                 desktop: height / 2.5,
               ),
               fit: BoxFit.cover,
+              
             ),
           ),
         Padding(
